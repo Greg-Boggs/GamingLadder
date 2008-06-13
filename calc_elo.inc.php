@@ -9,8 +9,6 @@ This code uses the current webl_games table to grab a list of all ladder games p
 based on the elo forumla. The file sets several Constalt values to allow the ranking system to be easily altered. 
 
 */
-//include 'config.php';
-//include 'opendb.php';
 
     $loserStats = GetRating($loser, $playerstable);
     $winnerStats = GetRating($winner, $playerstable);
