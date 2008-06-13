@@ -1,0 +1,720 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<title>RSS Feed Generator for PHP - Documentation</title>
+
+</head>
+
+<body>
+
+<a name="top"></a>
+<h1>RSS Feed Generator for PHP - Documentation</h1>
+
+This document was based on RSS 2.0 specification which can be found at
+<a href="http://blogs.law.harvard.edu/tech/rss">http://blogs.law.harvard.edu/tech/rss</a>.
+
+<h2>Classes</h2>
+
+<ul>
+<li><a href="#rss">rssGenerator_rss</a></li>
+<li><a href="#channel">rssGenerator_channel</a></li>
+<li><a href="#image">rssGenerator_image</a></li>
+<li><a href="#textInput">rssGenerator_textInput</a></li>
+<li><a href="#item">rssGenerator_item</a></li>
+</ul>
+
+<hr size="5" />
+
+<a name="rss"></a>
+<h2>class rssGenerator_rss</h2>
+
+Parameters:
+<ul>
+<li><a href="#rss_version">rss_version</a></li>
+<li><a href="#rss_encoding">rss_encoding</a></li>
+</ul>
+Methods:
+<ul>
+<li><a href="#cData">cData()</a></li>
+<li><a href="#createFeed">createFeed()</a></li>
+</ul>
+
+<p>[ <a href="#top">Top</a> ]</p>
+
+<hr />
+
+<a name="rss_version"></a>
+<h3>string rss_version</h3>
+The version of RSS that the document conforms to. Required, default - '2.0'.
+<br /><br /><i>Example:</i><br />
+<pre>$rss_feed->version = '2.0';</pre>
+
+<p>[ <a href="#top">Top</a> ] [ <a href="#rss">rssGenerator_rss</a> ]</p>
+
+<hr />
+
+<a name="rss_encoding"></a>
+<h3>string rss_encoding</h3>
+The XML encoding. Optional, not used by default.
+<br /><br /><i>Example:</i><br />
+<pre>$rss_feed->encoding = 'UTF-8';</pre>
+
+<p>[ <a href="#top">Top</a> ] [ <a href="#rss">rssGenerator_rss</a> ]</p>
+
+<hr />
+
+<a name="cData"></a>
+<h3>string cData(string str)</h3>
+Static method. Returns the string in &lt;![CDATA[ ... ]]&gt; parentheses.
+<br /><br /><i>Example:</i><br />
+<pre>
+  $rss_channel->description = rssGenerator_rss::cData('Here is a &lt;a href="http://example.com/"&gt;link&lt;/a&gt;.');
+</pre>
+
+<p>[ <a href="#top">Top</a> ] [ <a href="#rss">rssGenerator_rss</a> ]</p>
+
+<hr />
+
+<a name="createFeed"></a>
+<h3>string createFeed(rssGenerator_channel channel)</h3>
+Generates XML code based on applied channel data.
+<br /><br /><i>Example:</i><br />
+<pre>
+&lt;?php
+  require_once 'rss_generator.inc.php';
+
+  $rss_channel = new rssGenerator_channel();
+  $rss_channel->title = 'My News';
+  $rss_channel->link = 'http://mysite.com/news.php';
+  $rss_channel->description = 'The latest news about web-development.';
+  $rss_channel->language = 'en-us';
+  $rss_channel->generator = 'PHP RSS Feed Generator';
+  $rss_channel->managingEditor = 'editor@mysite.com';
+  $rss_channel->webMaster = 'webmaster@mysite.com';
+
+  $item = new rssGenerator_item();
+  $item->title = 'New website launched';
+  $item->description = 'Today I finaly launch a new website.';
+  $item->link = 'http://newsite.com';
+  $item->pubDate = 'Tue, 07 Mar 2006 00:00:01 GMT';
+  $rss_channel->items[] = $item;
+
+  $item = new rssGenerator_item();
+  $item->title = 'Another website launched';
+  $item->description = 'Just another website launched.';
+  $item->link = 'http://anothersite.com';
+  $item->pubDate = 'Wen, 08 Mar 2006 00:00:01 GMT';
+  $rss_channel->items[] = $item;
+
+  $rss_feed = new rssGenerator_rss();
+  $rss_feed->version = '2.0';
+  header('Content-Type: text/xml');
+  echo $rss_feed->createFeed($rss_channel);
+?></pre>
+
+<p>[ <a href="#top">Top</a> ] [ <a href="#rss">rssGenerator_rss</a> ]</p>
+
+<hr size="5" />
+
+<a name="channel"></a>
+<h2>class rssGenerator_channel</h2>
+
+Parameters:
+<ul>
+<li><a href="#ch_title">title</a></li>
+<li><a href="#ch_link">link</a></li>
+<li><a href="#ch_description">description</a></li>
+<li><a href="#ch_language">language</a></li>
+<li><a href="#ch_copyright">copyright</a></li>
+<li><a href="#ch_managingEditor">managingEditor</a></li>
+<li><a href="#ch_webMaster">webMaster</a></li>
+<li><a href="#ch_pubDate">pubDate</a></li>
+<li><a href="#ch_lastBuildDate">lastBuildDate</a></li>
+<li><a href="#ch_categories">categories</a></li>
+<li><a href="#ch_generator">generator</a></li>
+<li><a href="#ch_docs">docs</a></li>
+<li><a href="#ch_ttl">ttl</a></li>
+<li><a href="#ch_image">image</a></li>
+<li><a href="#ch_textInput">textInput</a></li>
+<li><a href="#ch_skipHours">skipHours</a></li>
+<li><a href="#ch_skipDays">skipDays</a></li>
+<li><a href="#ch_cloud_domain">cloud_domain</a></li>
+<li><a href="#ch_cloud_port">cloud_port</a></li>
+<li><a href="#ch_cloud_path">cloud_path</a></li>
+<li><a href="#ch_cloud_registerProcedure">cloud_registerProcedure</a></li>
+<li><a href="#ch_cloud_protocol">cloud_protocol</a></li>
+<li><a href="#ch_items">items</a></li>
+<li><a href="#ch_extraXML">extraXML</a></li>
+</ul>
+
+<p>[ <a href="#top">Top</a> ]</p>
+
+<hr />
+
+<a name="ch_title"></a>
+<h3>string title</h3>
+The name of the channel. It's how people refer to your service. If you have an
+HTML website that contains the same information as your RSS file, the title of
+your channel should be the same as the title of your website. Required.
+<br /><br /><i>Example:</i><br />
+<pre>$rss_channel->title = 'MySite.com News Headlines';</pre>
+
+<p>[ <a href="#top">Top</a> ] [ <a href="#channel">rssGenerator_channel</a> ]</p>
+
+<hr />
+
+<a name="ch_link"></a>
+<h3>string link</h3>
+The URL to the HTML website corresponding to the channel. Required.
+<br /><br /><i>Example:</i><br />
+<pre>$rss_channel->link = 'http://www.mysite.com/';</pre>
+
+<p>[ <a href="#top">Top</a> ] [ <a href="#channel">rssGenerator_channel</a> ]</p>
+
+<hr />
+
+<a name="ch_description"></a>
+<h3>string description</h3>
+Phrase or sentence describing the channel. Required.
+<br /><br /><i>Example:</i><br />
+<pre>$rss_channel->description = 'The latest news from MySite.com.';</pre>
+
+<p>[ <a href="#top">Top</a> ] [ <a href="#channel">rssGenerator_channel</a> ]</p>
+
+<hr />
+
+<a name="ch_language"></a>
+<h3>string language</h3>
+The language the channel is written in. This allows aggregators to group all
+Italian language sites, for example, on a single page. A list of allowable values
+for this element, as provided by Netscape, is
+<a href="http://blogs.law.harvard.edu/tech/stories/storyReader$15">here</a>.
+You may also use
+<a href="http://www.w3.org/TR/REC-html40/struct/dirlang.html#langcodes">values
+defined</a> by the W3C. Optional.
+<br /><br /><i>Example:</i><br />
+<pre>$rss_channel->language = 'en-us';</pre>
+
+<p>[ <a href="#top">Top</a> ] [ <a href="#channel">rssGenerator_channel</a> ]</p>
+
+<hr />
+
+<a name="ch_copyright"></a>
+<h3>string copyright</h3>
+Copyright notice for content in the channel. Optional.
+<br /><br /><i>Example:</i><br />
+<pre>$rss_channel->copyright = 'Copyright 2006, Vagharsh Tozalakyan';</pre>
+
+<p>[ <a href="#top">Top</a> ] [ <a href="#channel">rssGenerator_channel</a> ]</p>
+
+<hr />
+
+<a name="ch_managingEditor"></a>
+<h3>string managingEditor</h3>
+Email address for person responsible for editorial content. Optional.
+<br /><br /><i>Example:</i><br />
+<pre>$rss_channel->managingEditor = 'editor@mysite.com';</pre>
+
+<p>[ <a href="#top">Top</a> ] [ <a href="#channel">rssGenerator_channel</a> ]</p>
+
+<hr />
+
+<a name="ch_webMaster"></a>
+<h3>string webMaster</h3>
+Email address for person responsible for technical issues relating to channel.
+Optional.
+<br /><br /><i>Example:</i><br />
+<pre>$rss_channel->webMaster = 'webmaster@mysite.com';</pre>
+
+<p>[ <a href="#top">Top</a> ] [ <a href="#channel">rssGenerator_channel</a> ]</p>
+
+<hr />
+
+<a name="ch_pubDate"></a>
+<h3>string pubDate</h3>
+The publication date for the content in the channel. For example, the New York
+Times publishes on a daily basis, the publication date flips once every 24 hours.
+That's when the pubDate of the channel changes. All date-times in RSS conform to
+the Date and Time Specification of
+<a href="http://asg.web.cmu.edu/rfc/rfc822.html">RFC 822</a>, with the exception
+that the year may be expressed with two characters or four characters
+(four preferred). Optional.
+<br /><br /><i>Example:</i><br />
+<pre>$rss_channel->pubDate = date('r');</pre>
+
+<p>[ <a href="#top">Top</a> ] [ <a href="#channel">rssGenerator_channel</a> ]</p>
+
+<hr />
+
+<a name="ch_lastBuildDate"></a>
+<h3>string lastBuildDate</h3>
+The last time the content of the channel changed. Optional.
+<br /><br /><i>Example:</i><br />
+<pre>$rss_channel->lastBuildDate = 'Tue, 07 Mar 2006 08:00:00 GMT';</pre>
+
+<p>[ <a href="#top">Top</a> ] [ <a href="#channel">rssGenerator_channel</a> ]</p>
+
+<hr />
+
+<a name="ch_categories"></a>
+<h3>array categories</h3>
+Specify categories that the channel belongs to. Each element is itself an array
+of name and optional domain. Optional.
+<br /><br /><i>Example:</i><br />
+<pre>$rss_channel->categories[] = array('name'=>'Newspapers', 'domain'=>'');
+$rss_channel->categories[] = array('name'=>'Journals', 'domain'=>'');</pre>
+
+<p>[ <a href="#top">Top</a> ] [ <a href="#channel">rssGenerator_channel</a> ]</p>
+
+<hr />
+
+<a name="ch_generator"></a>
+<h3>string generator</h3>
+A string indicating the program used to generate the channel. Optional.
+<br /><br /><i>Example:</i><br />
+<pre>$rss_channel->generator = 'PHP RSS Feed Generator';</pre>
+
+<p>[ <a href="#top">Top</a> ] [ <a href="#channel">rssGenerator_channel</a> ]</p>
+
+<hr />
+
+<a name="ch_docs"></a>
+<h3>string docs</h3>
+A URL that points to the documentation for the format used in the RSS file. It's
+for people who might stumble across an RSS file on a Web server 25 years from now
+and wonder what it is. Optional.
+<br /><br /><i>Example:</i><br />
+<pre>$rss_channel->docs = 'http://blogs.law.harvard.edu/tech/rss';</pre>
+
+<p>[ <a href="#top">Top</a> ] [ <a href="#channel">rssGenerator_channel</a> ]</p>
+
+<hr />
+
+<a name="ch_ttl"></a>
+<h3>string ttl</h3>
+Stands for time to live. It's a number of minutes that indicates how long a
+channel can be cached before refreshing from the source. Optional.
+<br /><br /><i>Example:</i><br />
+<pre>$rss_channel->ttl = '60';</pre>
+
+<p>[ <a href="#top">Top</a> ] [ <a href="#channel">rssGenerator_channel</a> ]</p>
+
+<hr />
+
+<a name="ch_image"></a>
+<h3>rssGenerator_image image</h3>
+Specifies a GIF, JPEG or PNG image that can be displayed with the channel. See
+also <a href="#image">rssGenerator_image</a> class. Optional.
+<br /><br /><i>Example:</i><br />
+<pre>$rss_image = new rssGenerator_image();
+$rss_image->url = 'http://mysite.com/images/logo.png';
+$rss_image->title = '';
+$rss_image->link = '';
+$rss_image->width = 88;
+$rss_image->height = 31;
+$rss_image->description = '';
+...
+$rss_channel->image = $rss_image;</pre>
+
+<p>[ <a href="#top">Top</a> ] [ <a href="#channel">rssGenerator_channel</a> ]</p>
+
+<hr />
+
+<a name="ch_textInput"></a>
+<h3>rssGenerator_textInput textInput</h3>
+Specifies a text input box that can be displayed with the channel. See also
+<a href="#textInput">rssGenerator_textInput</a> class. Optional.
+<br /><br /><i>Example:</i><br />
+<pre>$rss_textInput = new rssGenerator_textInput();
+$rss_textInput->title = 'Subscribe';
+$rss_textInput->description = 'Enter your e-mail address, please';
+$rss_textInput->name = 'email';
+$rss_textInput->link = 'http://mysite.com/subscribe.php';
+...
+$rss_channel->textInput = $rss_textInput;</pre>
+
+<p>[ <a href="#top">Top</a> ] [ <a href="#channel">rssGenerator_channel</a> ]</p>
+
+<hr />
+
+<a name="ch_skipHours"></a>
+<h3>array skipHours</h3>
+An array that contains up to 24 elements whose value is a number between 0 and 23,
+representing a time in GMT, when aggregators, if they support the feature, may
+not read the channel on hours listed in the skipHours array. The hour beginning
+at midnight is hour zero. Optional.
+<br /><br /><i>Example:</i><br />
+<pre>$rss_channel->skipHours = array(0, 15, 22);</pre>
+
+<p>[ <a href="#top">Top</a> ] [ <a href="#channel">rssGenerator_channel</a> ]</p>
+
+<hr />
+
+<a name="ch_skipDays"></a>
+<h3>string skipDays</h3>
+An array that contains up to seven elements whose value is Monday, Tuesday,
+Wednesday, Thursday, Friday, Saturday or Sunday. Aggregators may not read the
+channel during days listed in the skipDays array. Optional.
+<br /><br /><i>Example:</i><br />
+<pre>$rss_channel->skipDays = array('Monday', 'Friday');</pre>
+
+<p>[ <a href="#top">Top</a> ] [ <a href="#channel">rssGenerator_channel</a> ]</p>
+
+<hr />
+
+<a name="ch_cloud_doamin"></a>
+<h3>string cloud_domain</h3>
+The domain name or IP address of the cloud. Optional, but required if any of
+cloud parameters defined.
+<br /><br /><i>Example:</i><br />
+<pre>$rss_channel->cloud_domain = 'rpc.sys.com';</pre>
+
+<p>[ <a href="#top">Top</a> ] [ <a href="#channel">rssGenerator_channel</a> ]</p>
+
+<hr />
+
+<a name="ch_cloud_port"></a>
+<h3>string cloud_port</h3>
+The TCP port that the cloud is running on. Optional, but required if any of
+cloud parameters defined.
+<br /><br /><i>Example:</i><br />
+<pre>$rss_channel->cloud_port = '80';</pre>
+
+<p>[ <a href="#top">Top</a> ] [ <a href="#channel">rssGenerator_channel</a> ]</p>
+
+<hr />
+
+<a name="ch_cloud_path"></a>
+<h3>string cloud_path</h3>
+The location of its responder. Optional, but required if any of
+cloud parameters defined.
+<br /><br /><i>Example:</i><br />
+<pre>$rss_channel->cloud_path = '/RPC2';</pre>
+
+<p>[ <a href="#top">Top</a> ] [ <a href="#channel">rssGenerator_channel</a> ]</p>
+
+<hr />
+
+<a name="ch_cloud_registerProcedure"></a>
+<h3>string cloud_registerProcedure</h3>
+The name of the procedure to call to request notification. Optional, but required
+if any of cloud parameters defined.
+<br /><br /><i>Example:</i><br />
+<pre>$rss_channel->cloud_registerProcedure = 'myCloud.rssPleaseNotify';</pre>
+
+<p>[ <a href="#top">Top</a> ] [ <a href="#channel">rssGenerator_channel</a> ]</p>
+
+<hr />
+
+<a name="ch_cloud_protocol"></a>
+<h3>string cloud_protocol</h3>
+Xml-rpc, soap or http-post (case-sensitive), indicating which protocol is to be
+used. Optional, but required if any of cloud parameters defined.
+<br /><br /><i>Example:</i><br />
+<pre>$rss_channel->cloud_protocol = 'xml-rpc';</pre>
+
+<p>[ <a href="#top">Top</a> ] [ <a href="#channel">rssGenerator_channel</a> ]</p>
+
+<hr />
+
+<a name="ch_items"></a>
+<h3>array items</h3>
+An array of item objects. See also <a href="#item">rssGenerator_item</a> class.
+<br /><br /><i>Example:</i><br />
+<pre>...
+$rss_item = new rssGenerator_item();
+$rss_item->title = 'New website launched';
+$rss_item->description = 'Today I finaly launch a new website.';
+$rss_item->link = 'http://newsite.com';
+$rss_item->pubDate = 'Tue, 07 Mar 2006 00:00:01 GMT';
+$rss_channel->items[] = $item;</pre>
+
+<p>[ <a href="#top">Top</a> ] [ <a href="#channel">rssGenerator_channel</a> ]</p>
+
+<hr />
+
+<a name="ch_extraXML"></a>
+<h3>string extraXML</h3>
+Any additional XML code that can be included to channel element. Optional.
+
+<p>[ <a href="#top">Top</a> ] [ <a href="#channel">rssGenerator_channel</a> ]</p>
+
+<hr size="5" />
+
+<a name="image"></a>
+<h2>class rssGenerator_image</h2>
+
+Parameters:
+<ul>
+<li><a href="#img_url">url</a></li>
+<li><a href="#img_title">title</a></li>
+<li><a href="#img_link">link</a></li>
+<li><a href="#img_width">width</a></li>
+<li><a href="#img_height">height</a></li>
+<li><a href="#img_description">description</a></li>
+</ul>
+
+<p>[ <a href="#top">Top</a> ]</p>
+
+<hr />
+
+<a name="img_url"></a>
+<h3>string url</h3>
+The URL of a GIF, JPEG or PNG image that represents the channel. Required.
+
+<p>[ <a href="#top">Top</a> ] [ <a href="#image">rssGenerator_image</a> ]</p>
+
+<hr />
+
+<a name="img_title"></a>
+<h3>string title</h3>
+Describes the image, it's used in the ALT attribute of the HTML &lt;img> tag when
+the channel is rendered in HTML. Required.
+
+<p>[ <a href="#top">Top</a> ] [ <a href="#image">rssGenerator_image</a> ]</p>
+
+<hr />
+
+<a name="img_link"></a>
+<h3>string link</h3>
+The URL of the site, when the channel is rendered, the image is a link to the
+site. (Note, in practice the image &lt;title> and &lt;link> should have the same
+value as the channel's &lt;title> and &lt;link>. Required.
+
+<p>[ <a href="#top">Top</a> ] [ <a href="#image">rssGenerator_image</a> ]</p>
+
+<hr />
+
+<a name="img_width"></a>
+<h3>string width</h3>
+Number, indicating the width of the image in pixels. Maximum value for width is
+144, default value is 88. Optional.
+
+<p>[ <a href="#top">Top</a> ] [ <a href="#image">rssGenerator_image</a> ]</p>
+
+<hr />
+
+<a name="img_height"></a>
+<h3>string height</h3>
+Number, indicating the height of the image in pixels. Maximum value for height
+is 400, default value is 31. Optional.
+
+<p>[ <a href="#top">Top</a> ] [ <a href="#image">rssGenerator_image</a> ]</p>
+
+<hr />
+
+<a name="img_description"></a>
+<h3>string description</h3>
+The text that is included in the TITLE attribute of the link formed around the
+image in the HTML rendering. Optional.
+
+<p>[ <a href="#top">Top</a> ] [ <a href="#image">rssGenerator_image</a> ]</p>
+
+<hr size="5" />
+
+<a name="textInput"></a>
+<h2>class rssGenerator_textInput</h2>
+Parameters:
+<ul>
+<li><a href="#txt_title">string title</a></li>
+<li><a href="#txt_description">string description</a></li>
+<li><a href="#txt_name">string name</a></li>
+<li><a href="#txt_link">string link</a></li>
+</ul>
+
+<p>[ <a href="#top">Top</a> ]</p>
+
+<hr />
+
+<a name="txt_title"></a>
+<h3>string title</h3>
+The label of the Submit button in the text input area. Required.
+
+<p>[ <a href="#top">Top</a> ] [ <a href="#textInput">rssGenerator_textInput</a> ]</p>
+
+<hr />
+
+<a name="txt_description"></a>
+<h3>string description</h3>
+Explains the text input area. Required.
+
+<p>[ <a href="#top">Top</a> ] [ <a href="#textInput">rssGenerator_textInput</a> ]</p>
+
+<hr />
+
+<a name="txt_name"></a>
+<h3>string name</h3>
+The name of the text object in the text input area. Required.
+
+<p>[ <a href="#top">Top</a> ] [ <a href="#textInput">rssGenerator_textInput</a> ]</p>
+
+<hr />
+
+<a name="txt_link"></a>
+<h3>string link</h3>
+The URL of the CGI script that processes text input requests. Required.
+
+<p>[ <a href="#top">Top</a> ] [ <a href="#textInput">rssGenerator_textInput</a> ]</p>
+
+<hr size="5" />
+
+<a name="item"></a>
+<h2>class rssGenerator_item</h2>
+<ul>
+<li><a href="#itm_title">title</a></li>
+<li><a href="#itm_link">link</a></li>
+<li><a href="#itm_description">description</a></li>
+<li><a href="#itm_author">author</a></li>
+<li><a href="#itm_pubDate">pubDate</a></li>
+<li><a href="#itm_comments">comments</a></li>
+<li><a href="#itm_guid">guid</a></li>
+<li><a href="#itm_guid_isPermaLink">guid_isPermaLink</a></li>
+<li><a href="#itm_source">source</a></li>
+<li><a href="#itm_source_url">source_url</a></li>
+<li><a href="#itm_enclosure_url">enclosure_url</a></li>
+<li><a href="#itm_enclosure_length">enclosure_length</a></li>
+<li><a href="#itm_enclosure_type">enclosure_type</a></li>
+<li><a href="#itm_categories">categories</a></li>
+</ul>
+
+<p>[ <a href="#top">Top</a> ]</p>
+
+<hr />
+
+<a name="itm_title"></a>
+<h3>string title</h3>
+The title of the item. Optional.
+<br /><br /><i>Example:</i><br />
+<pre>$rss_item->title = 'Venice Film Festival Tries to Quit Sinking';</pre>
+
+<p>[ <a href="#top">Top</a> ] [ <a href="#item">rssGenerator_item</a> ]</p>
+
+<hr />
+
+<a name="itm_link"></a>
+<h3>string link</h3>
+The URL of the item. Optional.
+<br /><br /><i>Example:</i><br />
+<pre>$rss_item->link = 'http://nytimes.com/2004/12/07FEST.html';</pre>
+
+<p>[ <a href="#top">Top</a> ] [ <a href="#item">rssGenerator_item</a> ]</p>
+
+<hr />
+
+<a name="itm_description"></a>
+<h3>string description</h3>
+The item synopsis. Optional.
+<br /><br /><i>Example:</i><br />
+<pre>$rss_item->description = 'Some of the most heated chatter at the Venice
+Film Festival this week was about the way that the arrival of the stars at the
+Palazzo del Cinema was being staged.';</pre>
+
+<p>[ <a href="#top">Top</a> ] [ <a href="#item">rssGenerator_item</a> ]</p>
+
+<hr />
+
+<a name="itm_author"></a>
+<h3>string author</h3>
+Email address of the author of the item. Optional.
+
+<p>[ <a href="#top">Top</a> ] [ <a href="#item">rssGenerator_item</a> ]</p>
+
+<hr />
+
+<a name="itm_pubDate"></a>
+<h3>string pubDate</h3>
+Indicates when the item was published. Optional.
+
+<p>[ <a href="#top">Top</a> ] [ <a href="#item">rssGenerator_item</a> ]</p>
+
+<hr />
+
+<a name="itm_comments"></a>
+<h3>string comments</h3>
+URL of a page for comments relating to the item. Optional.
+
+<p>[ <a href="#top">Top</a> ] [ <a href="#item">rssGenerator_item</a> ]</p>
+
+<hr />
+
+<a name="itm_guid"></a>
+<h3>string guid</h3>
+A string that uniquely identifies the item. Optional.
+
+<p>[ <a href="#top">Top</a> ] [ <a href="#item">rssGenerator_item</a> ]</p>
+
+<hr />
+
+<a name="itm_guid_isPermaLink"></a>
+<h3>string guid_isPermaLink</h3>
+isPermaLink is optional, its default value is true. If its value is false, the
+guid may not be assumed to be a url, or a url to anything in particular.
+
+<p>[ <a href="#top">Top</a> ] [ <a href="#item">rssGenerator_item</a> ]</p>
+
+<hr />
+
+<a name="itm_source"></a>
+<h3>string source</h3>
+The RSS channel that the item came from. Optional.
+<br /><br /><i>Example:</i><br />
+<pre>$rss_item->source = 'Tomalak\'s Realm';
+$rss_item->source_url = 'http://www.tomalak.org/links2.xml';</pre>
+
+<p>[ <a href="#top">Top</a> ] [ <a href="#item">rssGenerator_item</a> ]</p>
+
+<hr />
+
+<a name="itm_source_url"></a>
+<h3>string source_url</h3>
+The URL that links to the XMLization of the source. Optional, but required if
+source defined.
+
+<p>[ <a href="#top">Top</a> ] [ <a href="#item">rssGenerator_item</a> ]</p>
+
+<hr />
+
+<a name="itm_enclosure_url"></a>
+<h3>string enclosure_url</h3>
+Describes a media object that is attached to the item. It says where the enclosure
+is located. Optional, but required if any of enclosure parameters defined.
+
+<p>[ <a href="#top">Top</a> ] [ <a href="#item">rssGenerator_item</a> ]</p>
+
+<hr />
+
+<a name="itm_enclosure_length"></a>
+<h3>string enclosure_length</h3>
+Describes a media object that is attached to the item. It says how big it is in bytes.
+Optional, but required if any of enclosure parameters defined.
+
+<p>[ <a href="#top">Top</a> ] [ <a href="#item">rssGenerator_item</a> ]</p>
+
+<hr />
+
+<a name="itm_enclosure_type"></a>
+<h3>string enclosure_type</h3>
+Describes a media object that is attached to the item. It says what its type is -
+a standard MIME type. Optional, but required if any of enclosure parameters defined.
+
+<p>[ <a href="#top">Top</a> ] [ <a href="#item">rssGenerator_item</a> ]</p>
+
+<hr />
+
+<a name="itm_categories"></a>
+<h3>string categories</h3>
+Includes the item in one or more categories. See also the
+<a href="#ch_categories">categories</a> property of
+<a href="#channel">rssGenerator_channel</a> class.
+
+<p>[ <a href="#top">Top</a> ] [ <a href="#item">rssGenerator_item</a> ]</p>
+
+<hr />
+
+</body>
+
+</html>

@@ -1,0 +1,43 @@
+<?php 
+
+// NOTICE: This specific code isnt used in the ladder any more. We now use constants from the config file, and the below is just an example of how elo works. 
+
+$higherrated = 1544;
+$lowerrated = 1479;
+
+
+echo "If the higher ranked player ($higherrated) wins against the lower ranked ($lowerrated ) he gets: <b>" . EloMasterWins($higherrated,$lowerrated) . "</b> p. If the lower ranked player wins against the higher he gets <b>". EloNewbWins($higherrated,$lowerrated) . "</b> p.";
+
+
+		
+function EloNewbWins($oldratingloser, $oldratingwinner) {			
+		
+		$constant = 24;	
+		$rw1 = $oldratingwinner - $oldratingloser;
+		$rw2 = -$rw1/400;		
+		$rw3 = pow(10,$rw2);		
+		$rw4 = $rw3 + 1;		
+		$rw5 = 1/$rw4;		
+		$rw6 = 1 - $rw5;		
+		$rw7 = $constant * $rw6;		
+		return round($rw7); // hur många p man får, $ratingdifferent
+
+}
+
+function EloMasterWins($oldratingloser, $oldratingwinner) {			
+		
+		$constant = 24;	
+		$rw1 = $oldratingloser - $oldratingwinner;
+		$rw2 = -$rw1/400;		
+		$rw3 = pow(10,$rw2);		
+		$rw4 = $rw3 + 1;		
+		$rw5 = 1/$rw4;		
+		$rw6 = 1 - $rw5;		
+		$rw7 = $constant * $rw6;		
+		return round($rw7); // hur många p man får, $ratingdifferent
+
+}
+
+
+
+?>

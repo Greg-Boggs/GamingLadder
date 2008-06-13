@@ -1,0 +1,14 @@
+Date: Fri, 2 Nov 2007 15:49:10 +0100
+Return-Path: unit_test@phpmailer.sf.net
+To: Test User <eyerouge@gmail.com>
+From: Unit Tester <unit_test@phpmailer.sf.net>
+Reply-to: Reply Guy <no_reply@phpmailer.sf.net>
+Subject: Unit Test: AltBody + Attachment
+Message-ID: <8ba66c4b3ea57d6c8dcfdbddef8d0880@chaosrealm.net>
+X-Priority: 3
+X-Mailer: PHPMailer [version 1.73]
+MIME-Version: 1.0
+Content-Type: multipart/mixed;
+	boundary="b1_8ba66c4b3ea57d6c8dcfdbddef8d0880"
+
+

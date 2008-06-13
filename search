@@ -1,0 +1,38 @@
+<?php
+
+
+// Ladder of Wesnoth Search
+// v.0.01
+
+?>
+
+<table>
+
+<tr><td><p class="text"><b>Win %</b></p></td>
+
+<td>&nbsp;<select size="1" name="rfrom" style="background-color: <?php echo"$color5" ?>; border: 1 solid <?php echo"$color1" ?>" class="text">
+<option>>=</option>
+<option><=</option>
+</select></td>
+
+
+<td>
+
+<ption size="1" name="rfrom" style="background-color: <?php echo"$color5" ?>; border: 1 solid <?php echo"$color1" ?>" class="text">
+<option></option>
+<option>10%</option>
+<option>20%</option>
+<option>30%</option>
+<option>40%</option>
+<option>50%</option>
+<option>60%</option>
+<option>70%</option>
+<option>80%</option>
+<option>90%</option>
+</select>
+</td>
+
+
+</tr>
+
+</table>
