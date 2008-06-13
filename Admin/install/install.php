@@ -1,11 +1,13 @@
-<?
-if ($_POST[submit]) {
+<?php
+if ($_POST['submit']) {
 ?>
 Creating tables...<br><br>
-<?
-include "conf/variables.php";
+<?php
+require_once '../../conf/variables.php';
+
 $db = mysql_connect($databaseserver, $databaseuser, $databasepass);
 mysql_select_db($databasename,$db);
+
 if ($db==false) die("Failed to connect to MySQL server<br>\n");
 
 $sql = "CREATE TABLE $playerstable (player_id int(10) NOT NULL auto_increment, name varchar(255) NOT NULL, passworddb varchar(255), approved  varchar(10) DEFAULT 'no', mail varchar(50), icq varchar(15), aim varchar(40), msn varchar (100), country varchar(40), rating int(10) DEFAULT '1500', games int(10) DEFAULT '0', wins int(10) DEFAULT '0', losses int(10) DEFAULT '0', points int(10) DEFAULT '0', totalwins int(10) DEFAULT '0', totallosses int(10) DEFAULT '0', totalpoints int(10) DEFAULT '0', totalgames int(10) DEFAULT '0', rank int(10) DEFAULT '0', streakwins int(10) DEFAULT '0', streaklosses int(10) DEFAULT '0', ip varchar(100), PRIMARY KEY (player_id))";
@@ -30,17 +32,13 @@ $sql = "CREATE TABLE $pagestable (page_id int(10) NOT NULL auto_increment, title
 mysql_query($sql,$db);
 echo"Pages table<br>";
 
-$sql = "CREATE TABLE $varstable (vars_id int(10) NOT NULL auto_increment, color1 varchar(20), color2 varchar (20), color3 varchar (20), color4 varchar (20), color5 varchar (20), color6 varchar(20), color7 varchar(20), font varchar(80), fontweight varchar(40), fontsize varchar(20), numgamespage int(10), numplayerspage int(10),  statsnum int(10), standingsnogames varchar(10), hotcoldnum varchar(10), gamesmaxdayplayer int(10), gamesmaxday int(10), approve varchar(10), approvegames varchar(10), system varchar (20), pointswin int(10), pointsloss int(10), report varchar (20), leaguename varchar (100), titlebar varchar (100), newsitems int(10), copyright varchar(200), PRIMARY KEY (vars_id))";
-mysql_query($sql,$db);
-echo"Vars table<br><br>";
-
 $date = date("M d, Y.");
 echo"Inserting default values<br>";
-$sql = "INSERT INTO $newstable (news, title, date) VALUES ('Congratulations, you have successfully installed WebLeague.<br><br>[Be happy here.]<br><br>Enjoy. :)', 'Glory!', '$date')";
+$sql = "INSERT INTO $newstable (news, title, date) VALUES ('Congratulations, you have successfully installed Competitive Gaming Ladder.<br><br>[Be happy here.]<br><br>Enjoy. :)', 'Glory!', '$date')";
 mysql_query($sql,$db);
 echo"Inserting news<br>";
 
-$sql = "INSERT INTO $admintable (name, password) VALUES ('$_POST[name]','$_POST[password]')";
+$sql = "INSERT INTO $admintable (name, password) VALUES ('".mysql_escape_string($_POST['name'])."','".mysql_escape_string($_POST['password'])."')";
 $result = mysql_query($sql);
 echo"Creating admin account.<br><br>";
 echo"Done.";
@@ -66,6 +64,6 @@ Create an admin account:
 <p align="center">
 <input type="Submit" name="submit" value="Submit.">
 </form>
-<?
+<?php
 }
 ?>
