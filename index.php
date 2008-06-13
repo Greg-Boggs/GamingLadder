@@ -2,8 +2,7 @@
 // Version 1.13
 $page = "index";
 $time=time();
-require('variables.php');
-require('variablesdb.php');
+require('conf/variables.php');
 ?>
 <?php
 if ($_POST[user] AND $_POST[pass]) {

@@ -9,8 +9,7 @@ ini_set('display_errors', true);
 
 // v 1.03
 $page = "standings";
-require('variables.php');
-require('variablesdb.php');
+require('conf/variables.php');
 require('top.php');
 
 // First we extract the info from the cookies... There are 2 of them, one containing username, other one the password.

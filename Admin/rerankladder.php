@@ -2,8 +2,7 @@
 session_start();
 echo "session: ". $_SESSION['username'];
 
-require('../variables.php');
-require('../variablesdb.php');
+require('../conf/variables.php');
 
 //Replace with admin login
 //require('ladder_cookie.inc.php');

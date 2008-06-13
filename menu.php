@@ -4,8 +4,7 @@
 
 // Get to know if a player is logged in or not...
 
-require('variables.php');
-require('variablesdb.php');
+require('conf/variables.php');
 
 if (isset($_COOKIE["LadderofWesnoth1"]) AND isset($_COOKIE["LadderofWesnoth2"])) {
 		//DEB echo "2 Cookies are set..."; 

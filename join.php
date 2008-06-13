@@ -1,8 +1,7 @@
 <?
 // v.1.05
 $page = "join";
-require('variables.php');
-require('variablesdb.php');
+require('conf/variables.php');
 require('top.php');
 ?>
 <p class="header">Join.</p>

@@ -1,7 +1,6 @@
 <?
 // v 1.01 Ladder Login Check 
-require('variables.php');
-require('variablesdb.php');
+require('conf/variables.php');
 ?>
 <p class="text">
 <?php 

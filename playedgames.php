@@ -1,8 +1,7 @@
 <?
 // v 1.01
 $page = "playedgames";
-require('variables.php');
-require('variablesdb.php');
+require('conf/variables.php');
 require('top.php');
 ?>
 <p class="header">Played games.</p>

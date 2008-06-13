@@ -3,8 +3,7 @@
 // v. 1.07
 
 $page = "edit";
-require('variables.php');
-require('variablesdb.php');
+require('conf/variables.php');
 require('top.php');
 ?>
 

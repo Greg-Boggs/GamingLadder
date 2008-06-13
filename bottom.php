@@ -39,4 +39,3 @@ echo "<br>Loaded in $totaltime seconds.";
 
 </body>
 </html>
-/html>

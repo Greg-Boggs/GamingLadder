@@ -5,8 +5,7 @@
 // file to mark them all as friends...
 
 $page = "playedgames";
-require('variables.php');
-require('variablesdb.php');
+require('conf/variables.php');
 require('top.php');
 ?>
 <h1>Friends List</h1>

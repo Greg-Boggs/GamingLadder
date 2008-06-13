@@ -1,6 +1,5 @@
 <?
-require('variables.php');
-require('variablesdb.php');
+require('conf/variables.php');
 require('top.php');
 
 mysql_select_db($databasename,$db);

@@ -1,7 +1,6 @@
 <?
 $page = "faq";
-require('variables.php');
-require('variablesdb.php');
+require('conf/variables.php');
 require('top.php');
 ?>
 <i>Rules v.0.14 - 18 April 2008</i><br>

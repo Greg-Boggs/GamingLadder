@@ -1,7 +1,6 @@
 <?php 
 
-require('variables.php');
-require('variablesdb.php');
+require('conf/variables.php');
 $sql="set @num  = 0";
 $result=mysql_query($sql,$db);
 $sql="select * from (

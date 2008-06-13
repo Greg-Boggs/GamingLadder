@@ -2,8 +2,7 @@
 $starttime = microtime();
 $startarray = explode(" ", $starttime);
 $starttime = $startarray[1] + $startarray[0];
-require('variables.php');
-require('variablesdb.php');
+require('conf/variables.php');
 require('ladder_cookie.inc.php');
 
 ?>

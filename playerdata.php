@@ -1,6 +1,5 @@
 <?php
-require('variables.php');
-require('variablesdb.php');
+require('conf/variables.php');
 require('top.php');
  require('ladder_cookie.inc.php');
 // v 1.01

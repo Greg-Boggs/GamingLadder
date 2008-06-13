@@ -1,9 +1,8 @@
 <?
 session_start();
 $page = "addadmin";
-require('./../variables.php');
-require('./../variablesdb.php');
-require('./../top.php');
+require('../conf/variables.php');
+require('../top.php');
 ?>
 <?
 $sql="SELECT * FROM $admintable WHERE name = '$_SESSION[username]' AND password = '$_SESSION[password]'";

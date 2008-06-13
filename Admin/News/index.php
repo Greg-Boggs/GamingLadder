@@ -1,8 +1,7 @@
 <?PHP
 session_start();
 $page = "news";
-require('./../../variables.php');
-require('./../../variablesdb.php');
+require('./../../conf/variables.php');
 require('./../../top.php');
 
 $sql="SELECT * FROM $admintable WHERE name = '$_SESSION[username]' AND password = '$_SESSION[password]'";

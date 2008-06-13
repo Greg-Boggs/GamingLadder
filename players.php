@@ -1,8 +1,7 @@
 <?
 
 $page = "players";
-require('variables.php');
-require('variablesdb.php');
+require('conf/variables.php');
 require('top.php');
 ?>
 <p class="header">Players.</p>

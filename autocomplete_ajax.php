@@ -1,6 +1,5 @@
 <?php
-include ('variables.php');
-include ('variablesdb.php');
+include ('conf/variables.php');
 
 $q = strtolower($_GET["q"]);
 if (!$q) return;

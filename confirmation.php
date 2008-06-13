@@ -1,7 +1,6 @@
 <?
 $page = "index";
-require('variables.php');
-require('variablesdb.php');
+require('conf/variables.php');
 require('top.php');
 
 // $query = mysql_query("SELECT * FROM student");

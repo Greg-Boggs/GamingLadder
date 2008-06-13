@@ -6,8 +6,7 @@
 
 
 // include ("logincheck.inc.php");
-require('variables.php');
-require('variablesdb.php');
+require('conf/variables.php');
 $page = "search";
 
 ?>

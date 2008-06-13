@@ -2,8 +2,7 @@
 //session_start();
 //echo "session: ". $_SESSION['username'];
 $page = "ip";
-require('variables.php');
-require('variablesdb.php');
+require('conf/variables.php');
 require('top.php');
 
 //if ( isset($_SESSION['username']) ) {

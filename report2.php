@@ -1,8 +1,7 @@
 <?
 // v 1.02
 $page = "report";
-require('variables.php');
-require('variablesdb.php');
+require('conf/variables.php');
 ?>
 <p class="text">
 <?php 

@@ -61,6 +61,35 @@ $ladderminelod2 = 1499;
 $gamestorankd2 = 2;
 
 
+// Variableis that used to be stored in the database.  They have been unified in this one configuration file.
+$color1 = '#373E46';
+$color2 = '#E7D9C0';
+$color3 = '#E7D9C0';
+$color4 = '#E7D9C0';
+$color5 = '#E7D9C0';
+$color6 = '#373E46';
+$color7 = '#FFFBF0';
+$font   =  'Verdana';
+$fontweight = 'normal';
+$fontsize   = '1';
+$header   = $fontsize + 2;
+$numgamespage = 100;
+$numplayerspage = 100;
+$statsnum = 200;
+$standingsnogames = 0;
+$pctnum = 0;
+$hotcoldnum = 5;
+$gamesmaxday = 30;
+$gamesmaxdayplayer = 10;
+$approve = 'no';
+$approvegames = 'no';
+$system = 'elorating';
+$pointswin = 2;
+$pointsloss = -1;
+$report = 'winner';
+$leaguename = 'Ladder of Wesnoth';
+$newsitems = 3;
+$copyright = 'powered by: <a href=\"http://www.worms-league.com/WebLeague\">WebLeague</a>'
 
 //finish
 ?>

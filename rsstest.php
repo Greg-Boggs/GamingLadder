@@ -2,8 +2,7 @@
 
 $page = "rssfeed";
 $time=time();
-require('variables.php');
-require('variablesdb.php');
+require('conf/variables.php');
 // require_once 'rss_generator.inc.php';
 
 

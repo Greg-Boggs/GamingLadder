@@ -1,8 +1,7 @@
 <?
 session_start();
 $page = "login";
-require('./../variables.php');
-require('./../variablesdb.php');
+require('./../conf/variables.php');
 require('./../top.php');
 ?>
 <p class="header">Admin section.</p>

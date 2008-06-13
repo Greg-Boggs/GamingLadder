@@ -3,7 +3,7 @@ if ($_POST[submit]) {
 ?>
 Creating tables...<br><br>
 <?
-include "variables.php";
+include "conf/variables.php";
 $db = mysql_connect($databaseserver, $databaseuser, $databasepass);
 mysql_select_db($databasename,$db);
 if ($db==false) die("Failed to connect to MySQL server<br>\n");
@@ -39,10 +39,6 @@ echo"Inserting default values<br>";
 $sql = "INSERT INTO $newstable (news, title, date) VALUES ('Congratulations, you have successfully installed WebLeague.<br><br>[Be happy here.]<br><br>Enjoy. :)', 'Glory!', '$date')";
 mysql_query($sql,$db);
 echo"Inserting news<br>";
-
-$sql = "INSERT INTO $varstable (color1, color2, color3, color4, color5, color6, color7, font, fontweight, fontsize,  numgamespage, numplayerspage, statsnum,  hotcoldnum, gamesmaxdayplayer, gamesmaxday, approve, approvegames, system, pointswin, pointsloss, report, leaguename, titlebar, newsitems, copyright) VALUES ('#000000', '#FFFFFF', '#66CC66', '#339933', '#EEEEEE', '#000000', '#FFFFFF', 'Tahoma', 'normal', '12', '20', '30', '10', '5', '2', '10', 'no', 'no', 'elorating', '2', '-1', 'winner', 'Web<i>League</i>', 'WebLeague', '3', 'powered by: <a href=\"http://www.worms-league.com/WebLeague\">WebLeague</a>')";
-mysql_query($sql,$db);
-echo"Inserting vars<br><br>";
 
 $sql = "INSERT INTO $admintable (name, password) VALUES ('$_POST[name]','$_POST[password]')";
 $result = mysql_query($sql);

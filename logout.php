@@ -2,8 +2,7 @@
 // v 1.01
 
 $page = "logout";
-require('variables.php');
-require('variablesdb.php');
+require('conf/variables.php');
 
 // Set cookies so that they expire.
 			

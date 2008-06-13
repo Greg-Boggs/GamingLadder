@@ -1,8 +1,7 @@
 <?
 // v 1.03
 $page = "standings";
-require('variables.php');
-require('variablesdb.php');
+require('conf/variables.php');
 require('top.php');
 
 require('ladder_cookie.inc.php');
