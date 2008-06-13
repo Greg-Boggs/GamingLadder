@@ -62,7 +62,7 @@ if($result1){
 		?>
 		
 		<br>
-		<img align="center" src="activated.jpg">
+		<img align="center" src="graphics/activated.jpg">
 		
 		<?php
 		

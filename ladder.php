@@ -20,7 +20,7 @@ function init_sort()
 </script>
 <p><p><p>
 <div id="waiting"><p align="center">
-<img src="baby.gif" /><br/>Please wait while the ladder loads...</p>
+<img src="graphics/baby.gif" /><br/>Please wait while the ladder loads...</p>
 
 </div>
 <?php
