@@ -56,7 +56,7 @@ font-size: 12 px;
 <div align="center">
 
   <table border="0" cellpadding="2" color="red" cellspacing="0" width="800px" height="100%">
-  <div align="center"><a href="<?php echo "$directory"; ?>"><img border="0" align="center" src="logo.gif"></a></div>
+  <div align="center"><a href="<?php echo "$directory"; ?>"><img border="0" align="center" src="graphics/logo.gif"></a></div>
   <td width="100%">
     <?
     require('menu.php');
