@@ -98,7 +98,6 @@ $confirm_code=md5(uniqid(rand()));
 
 // Salt for the md5...
 // Lets generate the encrypted pass... we do it by applying the salt and hashing it twice.
-$salt = "Reinfeldt är ett borgarsvin som förtjänar ett evigt lidande.";
 $emailthispass = $passworddb;
 $passworddb = $salt.$passworddb;
 $passworddb = md5($passworddb); 

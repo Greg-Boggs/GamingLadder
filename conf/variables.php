@@ -89,7 +89,12 @@ $pointsloss = -1;
 $report = 'winner';
 $leaguename = 'Ladder of Wesnoth';
 $newsitems = 3;
-$copyright = 'powered by: <a href=\"http://www.worms-league.com/WebLeague\">WebLeague</a>'
+$copyright = 'powered by: <a href=\"http://www.worms-league.com/WebLeague\">WebLeague</a>';
 
 //finish
+
+// variabledb.php used to connect to the database, I've added a temporary hack here to do that in the config file, it should be
+// moved somewhere more appropriate
+$db = mysql_connect($databaseserver, $databaseuser, $databasepass);
+mysql_select_db($databasename,$db);
 ?>
