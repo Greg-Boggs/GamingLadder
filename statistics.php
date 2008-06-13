@@ -95,7 +95,7 @@ $totalpercentage = $row[totalwins] / $row[games];
 }
 ?>
 <tr>
-<td bordercolor="<?echo"$color7" ?>" align="left" nowrap><p class='text'>&nbsp;<?echo "<img src='flags/$row[country].bmp' align='absmiddle' border='1'>&nbsp;<a href='profile.php?name=$row[name]'><font color='$color1'>$namepage</font></a>"?>&nbsp;</p></td>
+<td bordercolor="<?echo"$color7" ?>" align="left" nowrap><p class='text'>&nbsp;<?echo "<img src='graphics/flags/$row[country].bmp' align='absmiddle' border='1'>&nbsp;<a href='profile.php?name=$row[name]'><font color='$color1'>$namepage</font></a>"?>&nbsp;</p></td>
 
 <?php if ($_POST[stat] != "Newcomers") { ?>
 

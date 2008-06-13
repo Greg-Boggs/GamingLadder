@@ -84,7 +84,7 @@ while ($row = mysql_fetch_array($result)) {
 
 ?>
 <tr>
-<td width="20%" bordercolor="<?echo"$color7" ?>" align="left" nowrap><p class='text'><?echo "<img src='flags/$row[country].bmp' align='absmiddle' border='1'>&nbsp;<a href='profile.php?name=$row[name]'><font color='$color1'>$namepage</font></a>"?></p></td>
+<td width="20%" bordercolor="<?echo"$color7" ?>" align="left" nowrap><p class='text'><?echo "<img src='graphics/flags/$row[country].bmp' align='absmiddle' border='1'>&nbsp;<a href='profile.php?name=$row[name]'><font color='$color1'>$namepage</font></a>"?></p></td>
 <td width="20%" bordercolor="<?echo"$color7" ?>" nowrap><p class="text"><?echo "$games" ?></p></td>
 <td width="20%" bordercolor="<?echo"$color7" ?>" nowrap><p class="text"><?echo "$wins" ?></p></td>
 <td width="20%" bordercolor="<?echo"$color7" ?>" nowrap><p class="text"><?echo "$losses" ?></p></td>
