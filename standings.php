@@ -260,11 +260,11 @@ $odd = 1;
 </table>
 <div id="pager" class="pager">
 	<form>
-		<img src="lib/first.png" class="first"/>
-		<img src="lib/prev.png" class="prev"/>
+		<img src="jquery/tablesorter/icons/first.png" class="first"/>
+		<img src="jquery/tablesorter/icons/prev.png" class="prev"/>
 		<input type="text" class="pagedisplay"/>
-		<img src="lib/next.png" class="next"/>
-		<img src="lib/last.png" class="last"/>
+		<img src="jquery/tablesorter/icons/next.png" class="next"/>
+		<img src="jquery/tablesorter/icons/last.png" class="last"/>
 		<select class="pagesize">
 			<option selected="selected"  value="10">10</option>
 

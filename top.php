@@ -4,10 +4,10 @@
 <head>
 <title><?php echo $titlebar; ?></title>
 <meta name="keywords" content="wesnoth, league, ladder, elo, open source">
-<script type="text/javascript" src="lib/jquery.js"></script>
-<script type='text/javascript' src='lib/jquery.autocomplete.js'></script>
-<script type="text/javascript" src="lib/jquery.tablesorter.min.js"></script>
-<script type="text/javascript" src="lib/jquery.tablesorter.pager.js"></script>
+<script type="text/javascript" src="jquery/jquery-1.2.6.pack.js"></script>
+<script type='text/javascript' src='jquery/jquery.autocomplete.js'></script>
+<script type="text/javascript" src="jquery/tablesorter/jquery.tablesorter.js"></script>
+<script type="text/javascript" src="jquery/tablesorter/jquery.tablesorter.pager.js"></script>
 <link rel="stylesheet" type="text/css" href="sorter.css" />
 <link rel="stylesheet" type="text/css" href="jquery.autocomplete.css" />
 
