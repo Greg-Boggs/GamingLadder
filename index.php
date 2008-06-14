@@ -319,17 +319,62 @@ echo "</ol><br><div align='left'><a href='friends.php'><img border='0' src='grap
 
 echo "</ol><br><div align='left'><a href='http://chaosrealm.net/wesnoth/index.php?readnews=-1'><img border='0' src='graphics/mod.jpg'></a></div><br />";
 	
-	$sql=mysql_query("SELECT * FROM $playerstable");
-	$number=mysql_num_rows($sql);
-	echo "<br /><br /><b>Players:</b> $number";
+// Show  number of registered CONFIRMED users
+$sql=mysql_query("SELECT * FROM $playerstable WHERE Confirmation = \"Ok\" OR Confirmation = ''");
+$number=mysql_num_rows($sql);
+echo "<br /><br /><b>Confirmed Players:</b> $number";
 
-	$sql=mysql_query("SELECT * FROM  $gamestable");
-	$number=mysql_num_rows($sql);
-	echo "<br /><b>Games:</b> $number";
+// Show number of games played (excluding deleted ones since they're in another table)
+$sql=mysql_query("SELECT * FROM  $gamestable");
+$number2=mysql_num_rows($sql);
+echo "<br /><b>Played Games:</b> $number2";
+
+// Display average number of games per user...
+echo "<br /><b>Games/Player: </b>". round($number2/$number,2);
+	
+	
+// Display number of games played within x amount of days...
+
+$sql="SELECT date FROM $gamestable ORDER BY game_id DESC LIMIT 0,200";
+$result = mysql_query($sql,$db);
+	
+	$daysthismonth = date("t") ; // number of days in the current month 
+	if ($daysthismonth == 31) { $dayspreviousmonth = 30; } else {$dayspreviousmonth = 31 ;}
+	$currentmonth = date("m") ;// number of this month
+	
+	if ($currentmonth == 03) {$dayspreviousmonth = 28;} //fix for februari.. this will be broken every 4th year with a day..
+	
+	$currentdate =  date("d") ;// current date
+	
+
+	
+	while ($row = mysql_fetch_array($result)) {
+		// The dates of each game are stored as folloes in the db: 21:44 12-06-08  ... hence we need to rip out the date and the month to compare with the date & montj of today
+		$dateofgame = substr($row[date], 6, 2);
+		$monthofgame = substr($row[date], 9, 2);
+			
+	// Now we take count eery game that was played within the same month, not on todays date, and within the x most recent days.
+	// This of course presents a problem when we're on the 1:st of a month and want the games for the 5 most recent days, as none would be counted.
+			if ( ($currentmonth == $monthofgame ) && ($currentdate != $dateofgame) && ($dateofgame >= ($currentdate - COUNT_GAMES_OF_LATEST_DAYS))) {
+					$recentgames++;
+			}
+			
+	// Lets fix theproblem with the change of the month...
+	// The below fix should work but hasn't been tested yet. Please check it out on the 1;st or 2:nd the coming month and adjust accordingly...
+	
+	if ( ($currentdate - COUNT_GAMES_OF_LATEST_DAYS <= 0) && ( ($monthofgame == ($currentmonth-1) ) || ($monthofgame == 12 && $currentmonth == 1) ) && ($dateofgame >= ($dayspreviousmonth + ($currentdate - COUNT_GAMES_OF_LATEST_DAYS))) ) {
+		$recentgames++;
+	}
+
+}
+// Display x amount of games played the	most recent y days...
+	
+	if ($recentgames >= MIN_COUNT_GAMES_OF_LATEST_DAYS) { echo "<br><b>Games latest ". COUNT_GAMES_OF_LATEST_DAYS ." days: </b>". $recentgames; }
+	
+
 	
 	
 // Show x  deleted games...
-
 	
 	$sql ="SELECT winner, loser, date, elo_change FROM $deletedgames ORDER BY game_id DESC LIMIT 0,$numindexdeled";
 	$result = mysql_query($sql,$db);

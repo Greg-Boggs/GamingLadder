@@ -33,6 +33,8 @@ $numindexhiscore = 10; //number of people listed in the hiscore in the index sid
 $numindexnews = 10; // news items displayed at index bottom...
 $newsitems = 3; //news items to show full text of...this needs to be fixed - index shows 3 even if it says 5 in here.. lol
 $numindexdeled = 5; // how many deleted games are shown at index.
+define("COUNT_GAMES_OF_LATEST_DAYS", 1); // amount of days we're gonne count the most recent played games in to display in index sidebar
+define("MIN_COUNT_GAMES_OF_LATEST_DAYS", 1); // minimum amount of games that need to have been played within the x most recent days to show the amount of games the x most recent days
 
 // redundant... remove if all works as it should: $kvalue = 32; // Which is the K-value in the Elo formula?
 
