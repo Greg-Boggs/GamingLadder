@@ -150,8 +150,6 @@ if (($_GET['del'] == $nameincookie) && ($loggedin == 1)) {
 ?>
 
 
-<link rel="stylesheet" type="text/css" href="style.css" />
-
 <br />
 <table border=0 width="100%" style="smallinfo">
 	<tr>

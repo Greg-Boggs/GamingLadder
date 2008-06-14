@@ -8,8 +8,9 @@
 <script type='text/javascript' src='jquery/jquery.autocomplete.js'></script>
 <script type="text/javascript" src="jquery/tablesorter/jquery.tablesorter.js"></script>
 <script type="text/javascript" src="jquery/tablesorter/jquery.tablesorter.pager.js"></script>
-<link rel="stylesheet" type="text/css" href="sorter.css" />
-<link rel="stylesheet" type="text/css" href="jquery.autocomplete.css" />
+<link rel="stylesheet" type="text/css" href="css/wesnoth-main.css" />
+<link rel="stylesheet" type="text/css" href="css/sorter.css" />
+<link rel="stylesheet" type="text/css" href="css/jquery.autocomplete.css" />
 
 
 <style type=text/css>
@@ -47,26 +48,19 @@ font-size: 12 px;
 
 </head>
 
-<body bgcolor="<? echo"$color7" ?>" topmargin="0" rightmargin="0" bottommargin="0" leftmargin="0">
+<body>
 <?php 
 	$starttime = microtime();
 	$startarray = explode(" ", $starttime);
 	$starttime = $startarray[1] + $startarray[0];
 ?>
-<div align="center">
-
-  <table border="0" cellpadding="2" color="red" cellspacing="0" width="800px" height="100%">
-  <div align="center"><a href="<?php echo "$directory"; ?>"><img border="0" align="center" src="graphics/logo.gif"></a></div>
-  <td width="100%">
-    <?
+<div id="header">
+  <div id="logo">
+    <img alt="Ladder logo" src="graphics/wesnoth-logo.jpg" /> <span style="font-size: 24px; color: yellow">Ladder</span>
+  </div>
+<?php
     require('menu.php');
-    ?>
-  </td>
-  </tr>
-  <tr>
-    <td width="100%" height="100%" bgcolor="<? echo"$color7" ?>" valign="top">
-  <div align="center">
-  
-  <table border="0" cellpadding="5" cellspacing="0" width="100%">
-  <tr>
-  <td width="100%" valign="top">
+?>
+</div>
+
+<div style="background-color: <?php echo"$color7" ?>; width: 800px; margin-left: auto; margin-right: auto">

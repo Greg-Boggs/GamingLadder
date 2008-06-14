@@ -1,5 +1,3 @@
-<p class="textalt">
-
 <?php 
 
 // Get to know if a player is logged in or not...
@@ -31,9 +29,8 @@ if (isset($_COOKIE["LadderofWesnoth1"]) AND isset($_COOKIE["LadderofWesnoth2"]))
 			} else { $loggedin = 0; }
 		}
 ?>
-
-<div class="menu">
-<ul>
+<div id="nav">
+  <ul>
 	<?php if ( $loggedin == 0 ) { ?>
 	<li><a href=join.php>Join</a></li>
 	<?php } ?>
@@ -48,6 +45,12 @@ if (isset($_COOKIE["LadderofWesnoth1"]) AND isset($_COOKIE["LadderofWesnoth2"]))
 	<li><a href="edit.php">My Profile</a></li>
 	<li><a href="faq.php">FAQ</a></li>
 	<li><a href="ip.php">Dupe Check</a></li>
+  </ul>
+</div>
+
+
+<div class="menu">
+<ul>
 </ul>
 </div>
 

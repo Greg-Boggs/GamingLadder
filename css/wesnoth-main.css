@@ -1,61 +1,59 @@
 /*
- # MediaWiki 'glamdrol' style sheet
- # Copyright (C) 2005 by Jordà Polo <jorda AT ettin DOT org>
- #
- # Based on 'monobook', by Gabriel Wicke
- #
- # This style sheet is free software; you can redistribute it and/or
- # modify it under the terms of the GNU General Public License.
- # This style is distributed in the hope that it will be useful,
- # but WITHOUT ANY WARRANTY.
- #
- # See http://www.gnu.org/copyleft/gpl.html for more details
- */
+ *  # MediaWiki 'glamdrol' style sheet
+ *   # Copyright (C) 2005 by Jordà Polo <jorda AT ettin DOT org>
+ *    #
+ *     # Based on 'monobook', by Gabriel Wicke
+ *      #
+ *       # This style sheet is free software; you can redistribute it and/or
+ *        # modify it under the terms of the GNU General Public License.
+ *         # This style is distributed in the hope that it will be useful,
+ *          # but WITHOUT ANY WARRANTY.
+ *           #
+ *            # See http://www.gnu.org/copyleft/gpl.html for more details
+ *             */
 
 /*
- # Table of Contents:
- #
- # 1 General styles (links, lists, titles, tables...)
- # 2 Header
- # 3 Navigation
- # 4 Main
- # 5 Footer
- # 6 Mediawiki specific styles
- # 7 Other/Unknow
- */
+ *  # Table of Contents:
+ *   #
+ *    # 1 General styles (links, lists, titles, tables...)
+ *     # 2 Header
+ *      # 3 Navigation
+ *       # 4 Main
+ *        # 5 Footer
+ *         # 6 Mediawiki specific styles
+ *          # 7 Other/Unknow
+ *           */
 
 /*
- # Order:
- #
- # example {
- #   display
- #   position
- #   width
- #   height
- #   margin
- #   padding
- #   background
- #   color
- #   font
- #   text
- #   line-height
- #   border
- # }
- */
+ *  # Order:
+ *   #
+ *    # example {
+ *     #   display
+ *      #   position
+ *       #   width
+ *        #   height
+ *         #   margin
+ *          #   padding
+ *           #   background
+ *            #   color
+ *             #   font
+ *              #   text
+ *               #   line-height
+ *                #   border
+ *                 # }
+ *                  */
 
 
 /*
- * 1. General styles
- */
+ *  * 1. General styles
+ *   */
 
 body {
   margin: 0;
   padding: 0;
   background: #FFFBF0;
   color: #111;
-  font-family: verdana, helvetic, sans-serif;
-font-size: 80%  ;
-  
+  font: 0.88em sans-serif;
 }
 
 #global {
@@ -74,18 +72,6 @@ img {
   border: none;
   vertical-align: middle;
 }
-
-img.alignright {
-	margin: 0 0 2px 7px;
-	display: inline;
-	float: right;
-	}
-
-.alignright {
-	margin: 0 0 2px 7px;
-	display: inline;
-	float: right;
-	}
 
 p img {
   margin: 0;
@@ -106,12 +92,12 @@ a {
 }
 
 /*
-a:visited {
-  color: #959;
-  color: #755499;
-  color: #5F5399;
-}
-*/
+ * a:visited {
+ *   color: #959;
+ *     color: #755499;
+ *       color: #5F5399;
+ *       }
+ *       */
 
 a.new {
   color: #BA3311;
@@ -272,8 +258,8 @@ blockquote {
 
 
 /*
- * 3. Header
- */
+ *  * 3. Header
+ *   */
 
 #header {
   margin: 0;
@@ -304,8 +290,8 @@ blockquote {
 
 
 /*
- * 3. Navigation
- */
+ *  * 3. Navigation
+ *   */
 
 #nav {
   margin: 0;
@@ -340,8 +326,8 @@ blockquote {
 
 
 /*
- * 4. Main
- */
+ *  * 4. Main
+ *   */
 
 #main {
   margin: 0 8% 0 8%;
@@ -508,8 +494,8 @@ html>body #main {
 
 
 /*
- * 5. Footer
- */
+ *  * 5. Footer
+ *   */
 
 #footer {
   margin: 10px 22px; 
@@ -550,8 +536,8 @@ div.navtemplate {
 }
 
 /*
- * 6. Mediawiki specific styles
- */
+ *  * 6. Mediawiki specific styles
+ *   */
 
 .visualClear {
   clear: both;
@@ -599,10 +585,10 @@ div.navtemplate {
 }
 
 /*
-#bodyContent a.external {
-  color: #BB6633;
-}
-*/
+ * #bodyContent a.external {
+ *   color: #BB6633;
+ *   }
+ *   */
 
 /* disable interwiki styling */
 
@@ -615,11 +601,11 @@ div.navtemplate {
 /* this can be used in the content area to switch off special external link styling */
 
 /*
-#bodyContent .plainlinks a {
-  padding: 0;
-  background: none !important;
-}
-*/
+ * #bodyContent .plainlinks a {
+ *   padding: 0;
+ *     background: none !important;
+ *     }
+ *     */
 
 /* emulate center */
 
@@ -1156,8 +1142,8 @@ div.gallerytext {
 
 
 /*
- * 7. Other/Unknow
- */
+ *  * 7. Other/Unknow
+ *   */
 
 #ca-unprotect a {
   text-transform: capitalize;

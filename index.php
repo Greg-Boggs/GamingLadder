@@ -71,8 +71,6 @@ require('top.php');
 ?> 
 
 
-<link rel="stylesheet" type="text/css" href="style.css" />
-
 <br />
 <table border=0 width="100%" style="smallinfo">
 	<tr>
