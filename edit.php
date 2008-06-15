@@ -224,12 +224,11 @@ $row = mysql_fetch_array($result);
 <td><p class="text">Country:</p></td>
 <td><select size="1" name="country" style="background-color: <?echo"$color5" ?>; border: 1 solid <?echo"$color1" ?>" class="text">
 <option selected><?php echo "$row[country]" ?></option>
-<option>No country</option>
-<?php include ("countries.inc"); ?>
+<?php include ("countries.inc.php"); ?>
 </select></td>
 </tr><tr><td><p class="text">Avatar:</p></td>
 <td>&nbsp;<select size="1" name="avatar" style="background-color: <?php echo"$color5" ?>; border: 1 solid <?php echo"$color1" ?>" class="text"><option selected><?php echo "$row[Avatar]" ?></option>
-<?php include 'avatars.inc'; ?>
+<?php include 'avatars.inc.php'; ?>
 </select></td></tr>
 
 

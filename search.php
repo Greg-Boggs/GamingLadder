@@ -92,7 +92,7 @@ if ($_GET[submit]) {
 <tr><TD>Country:</TD>
 <td>
 <select size="1" name="Country" style="background-color: <?php echo"$color5" ?>; border: 1 solid <?php echo"$color1" ?>" class="text">
-<option><?php include ("countries.inc"); ?></option>
+<?php include ("countries.inc.php"); ?>
 </select>
 </td>
 </tr>

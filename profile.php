@@ -169,9 +169,8 @@ if ( $row["LastGame"]  != "" ) {
 <td valign="top">
 <img src='avatars/<? echo "$row[Avatar].gif'>"; ?>
 <?php 
-If ($row['country'] != "No country") { 
 	echo "<br/> <p class='text'><img src='graphics/flags/$row[country].bmp' align='absmiddle' border='1'> $row[country] </p>"; 
-} ?>
+?>
 </td>
 </tr>
 </table>
@@ -559,7 +558,3 @@ if ($odd == true) { $odd = false; } else { $odd = true; }
 echo "</table>";
 require('bottom.php');
 ?>
-
-');
-?>
-
