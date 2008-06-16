@@ -90,7 +90,6 @@ $pointswin = 2;
 $pointsloss = -1;
 $report = 'winner';
 $leaguename = 'Ladder of Wesnoth';
-$newsitems = 3;
 $copyright = 'powered by: <a href=\"http://www.worms-league.com/WebLeague\">WebLeague</a>';
 
 //finish

@@ -1,5 +1,4 @@
 <?
-// Version 1.13
 $page = "index";
 $time=time();
 require('conf/variables.php');
@@ -94,6 +93,7 @@ print("
 ");
 
 }else{
+	
 $sql="SELECT * FROM $newstable ORDER BY news_id DESC LIMIT 0, $newsitems";
 $result=mysql_query($sql,$db);
 while ($row = mysql_fetch_array($result)) {
@@ -114,8 +114,26 @@ print("
 <p class=text>
 ");
 
-$sql="SELECT * FROM $newstable ORDER BY news_id DESC LIMIT $newsitems, $numindexnews";
-$result=mysql_query($sql,$db);
+
+/* If the user has clicked on a specific news he only sees that one and we need to change the list of old news below it,
+   so it shows news that are older than the news item he is viewing. So, if he reads newsitem 45, we want a list below it with
+   news with a lower id than 45. That's what the following does, and we simply alter the sql query depending on if he views the
+  index page or if he has clicked a specific news item...
+*/
+if ($_GET[readnews]) {
+
+$query = "SELECT COUNT(*) FROM $newstable"; 
+$result = mysql_query($query,$db) or die(mysql_error());
+$row = mysql_fetch_array($result);
+// Let's count the number of news items in the database. Rumors say this is a faster method than getrows, but I don't know.
+$numindexnews2 = $row['COUNT(*)'] - $_GET[readnews];
+
+$sql="SELECT * FROM $newstable ORDER BY news_id DESC LIMIT $numindexnews2, $numindexnews";
+	} else {
+		// This is what happens when he hasn't clicked a specific news item, not complicated at all, the variables are all in the config file.
+	$sql="SELECT * FROM $newstable ORDER BY news_id DESC LIMIT $newsitems, $numindexnews"; }
+
+	$result=mysql_query($sql,$db);
 while ($row = mysql_fetch_array($result)) {
 echo"<a href='index.php?readnews=$row[news_id]'><font color='$color1'>$row[date] - $row[title]</font></a><br>";
 }
