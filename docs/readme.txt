@@ -2,30 +2,36 @@
 // tribal bliss
    the elo webladder system for competetive gaming
 
-   v.0.1 of this document
+   v.0.1.1 of this document
 
 
-	php written by: chains, eyerouge and whoever more.
+	php written by: chains, eyerouge, mr-russ and whoever more.
 
 	This project is a derivation of Peter Hendrix & Danny Hendrix webladder 
 	projected called "WebLeague". We've converted it into GPL v3 with written
 	permission.
 
 	tribal bliss is licensed under GNU GPL v3 - please see the last section of
-	this document for more info about GPL or visit fsf.org.
+	this document for the license and visit fsf.org for more info.
 
-	In order to run tribal bliss you'll also have to use some included classes,
-	that we picked up on the internet in order to avoid coding what's already
-	around. Examples: rss_generator and phpMailer. These are not written by us
-	and could have separate or other licenses than the  the tribal bliss
-	code has. All these classes and functions have very liberal licenses,
-	probably some version of GPL in most cases. More info about them can be 
-	found in their files. Please understand that we don't claim to have
-	written or licensed them. Also make sure you follow each license.
+	In order to run tribal bliss we use some included classes, that we picked 
+	up on the internet in order to avoid coding what's already around. After all
+	that's the beauty with the free software community ; )
+	Examples: rss_generator, virtualcron and phpMailer. These are not written 
+	by us and could have separate or other licenses than the  the tribal bliss
+	code has. All these classes and functions have however very liberal licenses,
+	probably some version of GPL or LGPL in most cases, and they are all
+	compatible with tribal bliss in the sense that they can be used legally
+	alongside tribal bliss. They are not a part of tribal bliss and our license
+	is only valid for our own code, meaning everything except those classes. 
+	More info about them and their authors can be found in their files.
+	Please understand that we don't claim to have written or licensed them. 
+	Also make sure you respect and follow each license, as they are legally
+	binding.
 
 	The included art is either produced by us, or, in most cases, 
-	edited art from an excellent game called Wesnoth and it's community.
-	It's licensed under GPL unless the author(s) claim otherwise.
+	edited or orginial art from an excellent game called Wesnoth and it's
+	fine community. It's licensed under GPL unless the author(s) claim otherwise.
 
 
 Tribal Bliss is a webleague system written in php & mysql that allows you to 
