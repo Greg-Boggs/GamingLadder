@@ -1,8 +1,8 @@
 <?
 session_start();
-$page = "view";
 require('./../conf/variables.php');
 require('./../top.php');
+include ('./../include/smileys.inc.php');
 
 $sql="SELECT * FROM $admintable WHERE name = '$_SESSION[username]' AND password = '$_SESSION[password]'";
 $result=mysql_query($sql,$db);
@@ -16,7 +16,7 @@ $sql="SELECT * FROM $pagestable WHERE page_id = '$read'ORDER BY page_id DESC";
 $result=mysql_query($sql,$db);
 $row = mysql_fetch_array($result);
 $content = nl2br($row["page"]);
-include ('./../smileys.php');
+$content = addSmileys($content);
 ?>
 <p class="text"><b><?echo"$row[title]" ?></b></p>
 <p class="text"><?echo"$content" ?></p>

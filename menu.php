@@ -53,23 +53,3 @@ if (isset($_COOKIE["LadderofWesnoth1"]) AND isset($_COOKIE["LadderofWesnoth2"]))
 <ul>
 </ul>
 </div>
-
-<?php
-/*
-
-$sql="SELECT * FROM $pagestable ORDER BY page_id DESC";
-$result=mysql_query($sql,$db);
-$num = mysql_num_rows($result);
-$cur = 1;
-while ($row = mysql_fetch_array($result)) {
-$title = strtolower($row["title"]);
-
-if ($_GET[number] =="$row[page_id]") {
-echo"<a href=pages.php?number=$row[page_id]><img border=0 src=\"hfaq.gif\"></a>";
-}else{
-echo"<a href=pages.php?number=$row[page_id]><img border=0 src=\"faq.gif\"></a>";
-}
-}
-*/
-
-?>

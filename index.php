@@ -2,6 +2,7 @@
 $page = "index";
 $time=time();
 require('conf/variables.php');
+require('include/smileys.inc.php');
 ?>
 <?php
 if ($_POST[user] AND $_POST[pass]) {
@@ -84,7 +85,7 @@ $sql="SELECT * FROM $newstable WHERE news_id = '$_GET[readnews]' ORDER BY news_i
 $result=mysql_query($sql,$db);
 $row = mysql_fetch_array($result);
 $news = nl2br($row["news"]);
-include ('smileys.php');
+$news = addSmileys($news);
 
 print("
 <p class=header>$row[title]</p>
@@ -98,7 +99,7 @@ $sql="SELECT * FROM $newstable ORDER BY news_id DESC LIMIT 0, $newsitems";
 $result=mysql_query($sql,$db);
 while ($row = mysql_fetch_array($result)) {
 $news = nl2br($row["news"]);
-include ('smileys.php');
+$news = addSmileys($news);
 
 print("
 <p class=header>$row[title]</p>

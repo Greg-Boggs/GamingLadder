@@ -3,6 +3,7 @@
 $page = "join";
 require('conf/variables.php');
 require('top.php');
+include 'include/avatars.inc.php';
 ?>
 <p class="header">Join.</p>
 <p class="text">
@@ -240,13 +241,23 @@ else{
 <tr>
 <td><p class="text">Country:</p></td>
 <td>&nbsp;<select size="1" name="country" style="background-color: <?php echo"$color5" ?>; border: 1 solid <?php echo"$color1" ?>" class="text">
-<?php include ("countries.inc.php"); ?>
+<?php include ("include/countries.inc.php"); ?>
 </select></td>
 </tr>
 
 <tr><td><p class="text">Avatar:</p></td>
 <td>&nbsp;<select size="1" name="avatar" style="background-color: <?php echo"$color5" ?>; border: 1 solid <?php echo"$color1" ?>" class="text">
-<?php include 'avatars.inc.php'; ?>
+<?php
+// Force No avatar to the top
+echo "<option>No avatar</option>";
+$avatars = avatarList();
+asort($avatars);
+foreach ($avatars as $key => $data) {
+    if ($key !== "No avatar") {
+        echo '<option value="'.htmlentities($key).'">'.htmlentities($key)."</option>\n";
+    }
+}
+?>
 </select></td>
 
 <tr><td><p class="text"><b>My version of Wesnoth:</b></p></td>

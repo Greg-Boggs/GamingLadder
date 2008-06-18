@@ -2,9 +2,9 @@
 
 // v. 1.07
 
-$page = "edit";
 require('conf/variables.php');
 require('top.php');
+include 'include/avatars.inc.php';
 ?>
 
 <?php 
@@ -224,11 +224,21 @@ $row = mysql_fetch_array($result);
 <td><p class="text">Country:</p></td>
 <td><select size="1" name="country" style="background-color: <?echo"$color5" ?>; border: 1 solid <?echo"$color1" ?>" class="text">
 <option selected><?php echo "$row[country]" ?></option>
-<?php include ("countries.inc.php"); ?>
+<?php include ("include/countries.inc.php"); ?>
 </select></td>
 </tr><tr><td><p class="text">Avatar:</p></td>
 <td>&nbsp;<select size="1" name="avatar" style="background-color: <?php echo"$color5" ?>; border: 1 solid <?php echo"$color1" ?>" class="text"><option selected><?php echo "$row[Avatar]" ?></option>
-<?php include 'avatars.inc.php'; ?>
+<?php
+// Force No avatar to the top
+echo "<option>No avatar</option>";
+$avatars = avatarList();
+asort($avatars);
+foreach ($avatars as $key => $data) {
+    if ($key !== "No avatar") {
+        echo '<option value="'.htmlentities($key).'">'.htmlentities($key)."</option>\n";
+    }
+}
+?>
 </select></td></tr>
 
 
