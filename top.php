@@ -49,7 +49,7 @@ font-size: 12 px;
 ?>
 <div id="header">
   <div id="logo">
-    <img alt="Ladder logo" src="graphics/wesnoth-logo.jpg" /> <span style="font-size: 24px; color: yellow">Ladder</span>
+    <img alt="Ladder logo" src="graphics/wesnoth-logo.png" />
   </div>
 <?php
     require('menu.php');
