@@ -2,10 +2,10 @@
 // tribal bliss
    the elo webladder system for competetive gaming
 
-   v.0.1.1 of this document
+   v.0.1.2 of this document
 
 
-	php written by: chains, eyerouge, mr-russ and whoever more.
+	php written by: chains, eyerouge, hendrixes, mr-russ and whoever more.
 
 	This project is a derivation of Peter Hendrix & Danny Hendrix webladder 
 	projected called "WebLeague". We've converted it into GPL v3 with written
@@ -17,7 +17,7 @@
 	In order to run tribal bliss we use some included classes, that we picked 
 	up on the internet in order to avoid coding what's already around. After all
 	that's the beauty with the free software community ; )
-	Examples: rss_generator, virtualcron and phpMailer. These are not written 
+	Examples: rss_generator and virtualcron. These are not written 
 	by us and could have separate or other licenses than the  the tribal bliss
 	code has. All these classes and functions have however very liberal licenses,
 	probably some version of GPL or LGPL in most cases, and they are all

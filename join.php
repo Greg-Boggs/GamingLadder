@@ -18,6 +18,7 @@ if ($_POST[submit]) {
 	$mail = trim(strip_tags($_POST[mail]));
 	$WesVersion = $_POST[version];
 	$MsgMeToPlay = $_POST[msgme];
+	$length = strlen($name);
 	
 	if ($_POST[MonM] != "") {$CanPlay = "$CanPlay $_POST[MonM]";}
 	if ($_POST[MonN] != "") {$CanPlay = "$CanPlay $_POST[MonN]";}
@@ -68,133 +69,104 @@ if ($_POST[submit]) {
 	}
 	
 	
-	else if ($passworddb != $passworddb2) {
-	echo "Passwords don't match. Please retype the passwords..<br>";
-	}
+	else if ($passworddb != $passworddb2) {	echo "Passwords don't match. Please retype the passwords..<br>";	}
 	
-	else if ($mail == "") {
-	echo "Please enter a valid email. An activation link will be sent to it.<br>";
-	}
+	else if ($mail == "") { echo "Please enter a valid email. An activation link will be sent to it.<br>"; }
 	
-	else if ( $WesVersion == "") {
-	echo "You must specify what version(s) of Wensoth you're using...<br>";
-	}
+	else if ( $WesVersion == "") { echo "You must specify what version(s) of Wensoth you're using...<br>"; }
 	
-	else if ($name == "") {
-	echo "Please enter a nickname.";
-	}
+	else if ($name == "") { echo "Please enter a nickname."; }
 	
-	else if (!preg_match("/^[a-zA-Z0-9\-\_]+$/i", $name)) {
-	echo "You're only allowed to use standard aA-zZ 0-9 alfanumerical characters and the - and _ signs. <br>Please enter a valid Wesnoth multiplayer nickname.";
-	}
+	else if (($length > REG_MAX_NICKLENGTH) || ($length < REG_MIN_NICKLENGTH)) { echo "The name you entered is invalid. It must be ".  REG_MIN_NICKLENGTH ." to ". REG_MAX_NICKLENGTH ." characters long.<br />Please go back to correct the error by selecting a different username."; }
+	
+	else if (!preg_match("/^[a-zA-Z0-9\-\_]+$/i", $name)) { echo "You're only allowed to use standard aA-zZ 0-9 alfanumerical characters and the - and _ signs. <br>Please enter a valid Wesnoth multiplayer nickname.";	}
 	
 	
+	// If we pass the errorchecking this happens:
 	else {
 	
-	
-	
-	
-	// Random confirmation code
-$confirm_code=md5(uniqid(rand()));
-
-// Salt for the md5...
-// Lets generate the encrypted pass... we do it by applying the salt and hashing it twice.
-$emailthispass = $passworddb;
-$passworddb = $salt.$passworddb;
-$passworddb = md5($passworddb); 
-$passworddb = md5($passworddb); 	
-	
-		$length = strlen($name);
-		if ($length <= 20) {
-		$sql="SELECT * FROM $playerstable WHERE name = '$name'";
-		$result=mysql_query($sql,$db);
-		$samenick = mysql_num_rows($result);
-		if ($samenick < 1) {
-		if ($approve == 'yes') {
-		$approved = 'no';
-		}
-		else {
-		$approved = 'yes';
-		}
-		if (getenv("HTTP_X_FORWARDED_FOR"))
-		{
-		$ip = getenv("HTTP_X_FORWARD_FOR");
-		}
-		else
-		{
-		$ip = getenv("REMOTE_ADDR");
-		}
-		$sql = "INSERT INTO $playerstable (name, passworddb, mail, icq, aim, msn, country, approved, ip, avatar, HaveVersion, MsgMe, Confirmation, CanPlay) VALUES ('$name', '$passworddb', '$mail','$icq','$aim', '$msn', '$_POST[country]', '$approved', '$ip', '$_POST[avatar]', '$WesVersion', '$MsgMeToPlay', '$confirm_code', '$CanPlay')";
-		$result = mysql_query($sql);
-		echo "An activation mail has been sent to your mail. To activate your account <b>you must click the link</b> that is within it. <br /><br />If you have not recieved the mail within an hour <b>please check your spam box</b> or contact us.";
-		
-		
-		
-		
-		
-		
-		// if suceesfully inserted data into database, send confirmation link to email
-if($result){
-
-// ---------------- SEND MAIL FORM ----------------
-
-// send e-mail to ...
-$to = $mail;
-
-// Your subject
-$subject = "Ladder of Wesnoth activation link";
-
-
-// Your message
-$body="Welcome to the Ladder of Wesnoth. This is your activation mail. \r\n";
-$body.="Click the link below to activate your account: \r\n";
-$body.="http://ladder.subversiva.org/confirmation.php?passkey=$confirm_code \r\n";
-$body.="If it doesnt work you can try to copy & pass it into your browser instead.\r\n";
-$body.="\r\n";
-$body.="Your username and password is: $name / $emailthispass\r\n";
-$body.="Save the info! We can't give it to you if you lose it.\r\n";
-$body.="\r\n";
-$body.="\r\n";
-$body.="As a new player you start with a rating of 1500. That is the average rating that a player who knows the game fairly will have. Players that are new to the game are expected to get a much lower rating after a couple of games, while veterans are expected to get a higher.\r\n";
-$body.="\r\n";
-$body.="Dont quit if you get low rating - it is fully normal and expected while you learn the game, and Wesnoth takes quite some time to master. The rating is, first and foremost, a personal measure to track your own skills for your own sake. Play to have fun and use the ladder as a tool for information. Use it to find players that have about the same skills as you, thats when the game is most fun to play.\r\n";
-$body.="\r\n";
-$body.="\r\n";
-$body.="Please read the FAQ & Rules before you play a ladder game. Also, feel free to contact us if you need help or have suggestions.\r\n";
-$body.="\r\n";
-$body.="See you in Wesnoth...\n";
-
-// send email
-// OLD way $sentmail = mail($to,$subject,$message,$header);
-
-$sentmail = send_mail($to, $body, $subject, "eyerouge@gmail.com", "Ladder of Wesnoth");
-
- // $mail_sent;
- 
-}
-
-// if not found
-else {
-echo "Your mail wasn't found in our database.";
-}
-
-// if your email succesfully sent
-	if($sentmail){
-		//deb echo "Your Confirmation link Has Been Sent To Your Email Address.";
+	if (REG_MAILVERIFICATION == 1) {
+		// Random confirmation code
+		$confirm_code=md5(uniqid(rand()));
+	} else {
+		$confirm_code = "Ok"; 
+		// if we dont have mail confirmation enabled in the config we will "autoverify" the user by setting him to "Ok" in the Confirmation rown in the players table.
 	}
-	else {
-		echo "Failed to send activation link to your e-mail address. Contact admin if the problem remains tomorrow.";
-	}
+
+	// Lets generate the encrypted pass... we do it by applying the salt and hashing it twice.
+	$emailthispass = $passworddb;
+	$passworddb = $salt.$passworddb;
+	$passworddb = md5($passworddb); 
+	$passworddb = md5($passworddb); 	
+	
 		
-				}
 		
-		else {
-		echo "The name you entered already exists.";
-		}
-		}
-		else {
-			echo "The name you entered is too long.";
-		}
+	$sql="SELECT * FROM $playerstable WHERE name = '$name'";
+	$result=mysql_query($sql,$db);
+	$samenick = mysql_num_rows($result);
+			
+			// If we didnt find a user with the same nick the following happens:
+			
+			if ($samenick < 1) {
+				
+				if ($approve == 'yes') { $approved = 'no'; }
+				else { $approved = 'yes'; }
+				
+				if (getenv("HTTP_X_FORWARDED_FOR")) { $ip = getenv("HTTP_X_FORWARD_FOR"); }
+				else { $ip = getenv("REMOTE_ADDR"); }
+				
+				$sql = "INSERT INTO $playerstable (name, passworddb, mail, icq, aim, msn, country, approved, ip, avatar, HaveVersion, MsgMe, Confirmation, CanPlay) VALUES ('$name', '$passworddb', '$mail','$icq','$aim', '$msn', '$_POST[country]', '$approved', '$ip', '$_POST[avatar]', '$WesVersion', '$MsgMeToPlay', '$confirm_code', '$CanPlay')";
+				$result = mysql_query($sql);
+				
+				if (REG_MAILVERIFICATION == 1) {
+					echo "An activation mail has been sent to your mail. To activate your account <b>you must click the link</b> that is within it. <br /><br />If you have not recieved the mail within an hour <b>please check your spam box</b> or contact us.";
+							
+					// if suceesfully inserted data into database, send confirmation link to email
+					if($result){
+						// ---------------- SEND MAIL FORM ----------------
+
+						// send e-mail to ...
+						$to = $mail;
+
+						// Your subject
+						$subject = "Ladder of Wesnoth activation link";
+
+						// Your message
+						$body="Welcome to the Ladder of Wesnoth. This is your activation mail. \r\n";
+						$body.="Click the link below to activate your account: \r\n";
+						$body.="http://ladder.subversiva.org/confirmation.php?passkey=$confirm_code \r\n";
+						$body.="If it doesnt work you can try to copy & pass it into your browser instead.\r\n";
+						$body.="\r\n";
+						$body.="Your username and password is: $name / $emailthispass\r\n";
+						$body.="Save the info! We can't give it to you if you lose it.\r\n";
+						$body.="\r\n";
+						$body.="\r\n";
+						$body.="As a new player you start with a rating of 1500. That is the average rating that a player who knows the game fairly will have. Players that are new to the game are expected to get a much lower rating after a couple of games, while veterans are expected to get a higher.\r\n";
+						$body.="\r\n";
+						$body.="Dont quit if you get low rating - it is fully normal and expected while you learn the game, and Wesnoth takes quite some time to master. The rating is, first and foremost, a personal measure to track your own skills for your own sake. Play to have fun and use the ladder as a tool for information. Use it to find players that have about the same skills as you, thats when the game is most fun to play.\r\n";
+						$body.="\r\n";
+						$body.="\r\n";
+						$body.="Please read the FAQ & Rules before you play a ladder game. Also, feel free to contact us if you need help or have suggestions.\r\n";
+						$body.="\r\n";
+						$body.="See you in Wesnoth...\n";
+
+						// send email
+						$sentmail = send_mail($to, $body, $subject, $laddermailsender, $titlebar);
+					}
+				
+
+				// if not found
+				else { echo "Your mail wasn't found in our database."; }
+
+			// if your email succesfully sent
+				if($sentmail){}
+				else { echo "Failed to send activation link to your e-mail address. Contact admin if the problem remains tomorrow."; }
+				
+				} else if ( REG_MAILVERIFICATION == 0) { echo "<br /> <img align='center' src='graphics/activated.jpg' />"; }
+			
+			} else { echo "The name you entered already exists. Please select another name."; }
+		
+
 	}
 }
 else{
@@ -206,7 +178,7 @@ else{
 <table border="0" cellpadding="0">
 <tr>
 <td><p class="text"><b>Nickname:</b></p></td>
-<td>&nbsp;<input type="Text" name="name" style="background-color: <?php echo"$color5" ?>; border: 1 solid <?php echo"$color1" ?>" class="text"> (20 char. max, <i>must</i> be same as in the game)</td>
+<td>&nbsp;<input type="Text" name="name" style="background-color: <?php echo"$color5" ?>; border: 1 solid <?php echo"$color1" ?>" class="text"> (<?php echo REG_MIN_NICKLENGTH . " - " . REG_MAX_NICKLENGTH . " ";?> char, <i>must</i> be same as in the game)</td>
 </tr>
 <tr>
 <td><p class="text"><b>Password:</b></p></td>
@@ -377,7 +349,7 @@ function send_mail($to, $body, $subject, $fromaddress, $fromname)
   $headers .= "Reply-To: ".$fromname."<".$fromaddress.">".$eol;
   $headers .= "Return-Path: ".$fromname."<".$fromaddress.">".$eol;    // these two to set reply address
   $headers .= "Message-ID: <".time()."-".$fromaddress.">".$eol;
-  $headers .= "X-Mailer: PHP v".phpversion().$eol;          // These two to help avoid spam-filters
+  $headers .= "X-Mailer: Thunderbird".$eol;          // These two to help avoid spam-filters
 
   # Boundry for marking the split & Multitype Headers
   $headers .= 'MIME-Version: 1.0'.$eol;
