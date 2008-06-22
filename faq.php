@@ -11,10 +11,10 @@ require('top.php');
 </ol>
 
 <p>
-<b>Notice:</b> The ladder is <i>not</i> in any way associated with the official Wesnoth forum, it's moderators and/or the developers of Wesnoth. Please don't use the forum to start new ladder threads and don't contact the Wesnoth staff about ladder related issues.<br>
+<b>Notice:</b> The ladder is <i>not</i> in any way associated with the official Wesnoth forum, it's moderators and/or the developers of Wesnoth. Please don't use the forum to start new ladder threads and don't contact the Wesnoth staff about ladder related issues.
 </p>
 
-<a name="mrules"><h2>Rules</h2></a>
+<a name="mrules"></a><h2>Rules</h2>
 <h3>Ladder Rating & Ranking</h3>
 <ol>
     <li>To be <em>rated</em> you just need to play a game. The more games you play against different opponents, the more accurate your rating becomes. All players that have played one or more games always have a rating.</li>
@@ -27,8 +27,8 @@ require('top.php');
     <ol>
         <li>have a rating that's <?php echo "$ladderminelo"; ?> or above, <b>and</b></li>
         <li>have played at least one game the recent <?php echo "$passivedays";?> days <b>and</b></li>
-        <li>played at least  <?php echo "$gamestorank" ?> games in total. You can read the <A href="faq.php#passive">details here</a></li>.
-    </ol>
+        <li>played at least  <?php echo "$gamestorank" ?> games in total. You can read the <a href="faq.php#passive">details here</a>.</li>
+    </ol></li>
 </ol>
 
 <h3>Game setup</h3>
@@ -42,7 +42,13 @@ require('top.php');
 <li>The only legit era is the <i>Default</i> one. No other eras are accepted.</li>
 <li>All official 2 player maps associated with the specific game version and that come with the game are allowed if they're made for a 1vs1 common game duel. Notice that survival maps are not allowed. Neither are the following maps: Wesbowl.</li> 
 <li>Use map settings: On</li>
-<li>Time limits <em>must be activated</em> and set according to the following.<ul><LI>Reservoir: 270</LI> <LI>Init. Limit: 270</LI><LI>Turn Bonus: 200</LI><LI>Action Bonus: 20</LI></ul>These are the lowest values allowed unless you <I>agree</I> on another higher or lower setting with your opponent <i>before</i> the game starts. (If you're an apprentice be warned: <i>For many total newcomers to the world of Wesnoth the recomended time setting can be harsh.</i> You have to eat many Wose roots before you can play the game skillfully under the perils of time. Try to agree on more time before starting the game if you're worried about this.)</li> 
+<li>Time limits <em>must be activated</em> and set according to the following.
+    <ul>
+        <li>Reservoir: 270</li>
+        <li>Init. Limit: 270</li>
+        <li>Turn Bonus: 200</li>
+        <li>Action Bonus: 20</li>
+    </ul>These are the lowest values allowed unless you <i>agree</i> on another higher or lower setting with your opponent <i>before</i> the game starts. (If you're an apprentice be warned: <i>For many total newcomers to the world of Wesnoth the recomended time setting can be harsh.</i> You have to eat many Wose roots before you can play the game skillfully under the perils of time. Try to agree on more time before starting the game if you're worried about this.)</li> 
 <li>Settings within the game lobby: Use your <i>exact ladder</i> name. Be in different teams, have the map default amount of gold and default income.</li>
 <li>Observers: It's encouraged that you allow observers, but you have the right to play ladder games with observers turned off. If at least one player requests that observers are turned off then observers must be turned off. A player who enters a game with observers on <em>automatically agrees</em> on allowing observers. Notice: If you allow observers your opponent or his friends can observe your moves with another instance of Wesnoth. In general people don't cheat.</li>
 
@@ -66,7 +72,7 @@ require('top.php');
 <li>If both players agree that a situation that isn't covered by the rules arises they can, <em>if they agree on the solution</em>, decide themself how it should be handled. If the players don't agree on how it should be handled then the game is declared a draw and the result is not reported to the ladder. Whenever any of this happens the players must contact the ladder admin with an explanation of what happend.</li>
 </ol>
 
-<a name="magreement"><h2>Agreement</h2></a>
+<a name="magreement"></a><h2>Agreement</h2>
 <ol>
 <li>By registering or using the ladder you agree to follow all rules and regulations.</li>
 <li>You swear that you won't ever cheat, report false results or fail to report correct ones, abuse or exploit this system in any way.</li>
@@ -107,7 +113,7 @@ require('top.php');
     <li><a href="faq.php#graphics">Where's the graphics from?</a></li>
     <li><a href="faq.php#aboutofficial">Why is the ladder not an official part of the Wesnoth community?</a></li>
 </ul>
-<br>
+<br />
 <a name="what"></a><h4>What is this site?</h4>
 <p>
 It's a site that helps you keep track of your skills in the excellent open source game Battle for Wesnoth (wesnoth.org). By playing against others who also use the site you can report the results of your games and get a rating. You can also use the system to find players of simillar skill. All you have to do to start participating is to Join, play a game against another person that uses the ladder, and then let the winner report the result of the game.
@@ -137,13 +143,13 @@ I've written a more extensive answer to this one <a href="http://www.wesnoth.org
 <a name="logins"></a><h4>I can't log in...</h4>
 <p>
 These are the reasons for why you can't log in. You;
+</p>
 <ol>
 <li>Haven't registered: The site requires that you're a registered user to enter it.</li>
 <li>Registered but haven't activated your account: When you register you get an e-mail with an activation link. Find the e-mail, check your spam in, and click the activation link. If you haven't activated your account the site <i>will tell you</i> this when you try to log in.</li>
 <li>Registered, activated your account, but get a wrong username/password error: You enter the wrong username and/or password. Check your info in the welcome e-mail, we included it there for you to remember it better.</li>
 <li>Registered, activated your account, but nothing at all happens when you ty to log in - you don't even get an error message: This is a common problem and depends on your browser not accepting cookies. Please change your browser settings so it accepts our cookies. If you use Internet Explorer you could also try to add <i>http://chaosrealm.net</i> and  <i>http://chaosrealm.net/wesnoth</i> and <i>http://ladder.subversiva.org</i> to your trusted sites list within IE. We do however strongly suggest that you abandon the use of Internet Explorer and go with an open source browser instead, like for example Firefox.</li>
 </ol>
-</p>
 
 <a name="friends"></a><h4>Is there an easy way to add all ladder members as friends in-game?</h4>
 <p>
@@ -155,17 +161,18 @@ Yes. Amazing you asked that question ;) Use our always up to date <a href="frien
 Many players that are not familiar with Elo's Rating System believe that 1500 is a newcomers rating. Understand this: <em>It is not the case!</em> When a player registers at the ladder he/she gets a rating of 1500, but, that rating is really the expected rating of an <em>average player</em> and not of a newcomer to the game. This means that people that are new to the game or still learning it are <em>expected</em> to have a rating thats way lower than 1500. It's normal. A player who has been around for a while and knows the game is expected to be average and have around 1500, while a really skilled veteran would have a higher. As a reference, players that have around 2000 are considered strong, and those beyond 2500 grandmasters.
 </p>
 <p>
-Whatever your rating is, it <i>doesn't suck</i>. The rating is a measure of your skills, <em>in relation to the other players</em> on the ladder. It gets better and more accurate the more you play the game and the more different people you meet. Becoming good at Wesnoth takes very long time and a lot of patience. If you lack either your Wesnoth career will be short. Use the ladder as a personal measure tool, to see your own development and to find players that are about the same skill level as you are - that's when the game is most fun to play. Please <em>don't</em> see it as competition until you are truly ready for it and know you can handle the heat. And never lose faith because the rating says you are a newcomer skill wise or rank low on the ladder. After all, you are supposed to until you start mastering the game. With time your skills will grow, and so will your rating.<br><br>
+Whatever your rating is, it <i>doesn't suck</i>. The rating is a measure of your skills, <em>in relation to the other players</em> on the ladder. It gets better and more accurate the more you play the game and the more different people you meet. Becoming good at Wesnoth takes very long time and a lot of patience. If you lack either your Wesnoth career will be short. Use the ladder as a personal measure tool, to see your own development and to find players that are about the same skill level as you are - that's when the game is most fun to play. Please <em>don't</em> see it as competition until you are truly ready for it and know you can handle the heat. And never lose faith because the rating says you are a newcomer skill wise or rank low on the ladder. After all, you are supposed to until you start mastering the game. With time your skills will grow, and so will your rating.
 </p>
 
 <a name="passive"></a><h4>What does passive rank mode mean?</h4>
 <p>
-In order to keep the ladder meaningfull, up to date and to encourage activity we have a rule that says that you must have played at least one game within <?php echo "$passivedays";?> days if you wish to be listed as a valid contender in the ladder. If you don't play a game for <?php print $passivedays + 1;?> days your account will be set in <em>passive rating mode</em>. While beeing in a passive rating mode you won't get listed as competing in the ladder and you'll temporarily lose your place in it <em>until</em> you play a new game. You'll then be considered to be an active player again and you will be automatically removed from the passive rating mode. You will of course also <i>regain your proper rating</i>, taking the new game into account, as usual. And to answer the question everybody fears: No, you <em>won't lose</em> rating while beeing in passive rating mode. If you had 1500 when you were put in the passive mode, was passive for 3 months and then play a game where you win 10 points, you would then be an active player again, but now with 1510 points.<br><br>
+In order to keep the ladder meaningfull, up to date and to encourage activity we have a rule that says that you must have played at least one game within <?php echo "$passivedays";?> days if you wish to be listed as a valid contender in the ladder. If you don't play a game for <?php print $passivedays + 1;?> days your account will be set in <em>passive rating mode</em>. While beeing in a passive rating mode you won't get listed as competing in the ladder and you'll temporarily lose your place in it <em>until</em> you play a new game. You'll then be considered to be an active player again and you will be automatically removed from the passive rating mode. You will of course also <i>regain your proper rating</i>, taking the new game into account, as usual. And to answer the question everybody fears: No, you <em>won't lose</em> rating while beeing in passive rating mode. If you had 1500 when you were put in the passive mode, was passive for 3 months and then play a game where you win 10 points, you would then be an active player again, but now with 1510 points.
 </p>
 
 <a name="elochange"></a><h4>Help! My Elo points changed for no reason!</h4>
 <p>
 Nothing ever happens without reason, and if it does then the ladder needs some fixing. These are the only times your Elo points will change:
+</p>
 <ul>
 <li>You have undone one or several games you reported. When doing so you will still have the points from the game(s) for a while. In the not distant future they will however disappear, as they should, giving you your real Elo rating.</li>
 <li>For a simillar reason your Elo might change without you ever undoing a game: If you play against Donald, and he, before you two play, has made a false or wrong report, then Donald will have a higher Elo rating then he really has when you play against him. This means that if you win over Donald, that maybe had an Elo of 1600, you win too many points since he really never had that many to begin with.  Later on, after you have played Donald,  his rating get's corrected by him/us undoing some of his wrongfully reported games he played before he met you. Thus, the points you won when you beat Donald could be lowered to be correct. The points you will get for winning over Donald are whatever his correct Elo would give you, at the time you played.</li>
@@ -174,11 +181,10 @@ Nothing ever happens without reason, and if it does then the ladder needs some f
 <li>Somebody reported a game which you supposedly played. Check your profiles game history to see the most recent games. If somebody reported a false game, please contact that person and ask him/her to undo it. If you get no response then contact us and we'll take care of it. Never contact us directly without trying to get in touch with that person.</li>
 <li>Once in a while we upgrade the ladders rating system and in particular the forumulas we use to calculate you Elo. In such a rare case it would be announced by us as news, and the effect would be global on the ladder, so all other players would get equal changes in Elo points as you. Typically we adjust the K-values and ranges where they're valid. However, all such changes have retroactive effects in the name of fairness.</li>
 </ul>
-</p>
 
 <a name="countdown"></a><h4>What is the countdown in days for in my profile?</h4>
 <p>
-It shows you how many days you have left until you're put in passive rank mode. You can only see this if you're logged in and view your own profile.<br><br>
+It shows you how many days you have left until you're put in passive rank mode. You can only see this if you're logged in and view your own profile.
 </p>
 
 <a name="avgp"></a><h4>Wtf is Average P W/L/T in the profile?</h4>
@@ -189,7 +195,7 @@ The Average P WLT shows x / y / z, which translates to the average points the pl
 The higher average win points a player has, the more higher rated players she plays (and wins) against. If a player always plays with opponents that have about the same rating as her she would have a an average win point of 12. The higher win point, the tougher opponents the player challenged and won over, and vice versa.
 </p>
 <p>
-As for the average loss points, the opposite is the case: The lower average loss point (remember it's a negative number, so -11 is lower than -10) a player has the more ass whooping she got from players that have a lower rating than herself. Again, if this number is somewhere around -12, then the player usually loses against other players that had about the same rating as herself when the game took place.<br><br>
+As for the average loss points, the opposite is the case: The lower average loss point (remember it's a negative number, so -11 is lower than -10) a player has the more ass whooping she got from players that have a lower rating than herself. Again, if this number is somewhere around -12, then the player usually loses against other players that had about the same rating as herself when the game took place.
 </p><p>
 The average points in total is the less usable of the 3 numbers: It displays all the points you have earned - the points you have lost / the total amount of games you have played. With other words, it tells you how many points you get or lose in an average game. In reality though this average game can never exist and the other two figures are way better pointers towards that end.
 </p>
@@ -209,13 +215,13 @@ Somebody is bound to feel tha way, but it's not really interesting unless you ca
 <a name="playnowlist"></a><h4>What is the stuff next to the players nick in the waiting for game list?</h4>
 <p>
 When a player puts him/her self in the waiting for game list the following info is seen in the entry:
+</p>
 <ol>
     <li>Nickname - the name of the player looking for a game.</li>
     <li>(rating) - this is the elo rating of the player.</li>
     <li>time - the amount of time that the player is still available.</li>
     <li>dev / sta / im - where to meet the player: If he/she is already waiting in the lobby of the development or stable version or if you should make contact by using an instant messenger.</li>
 </ol>
-</p>
 
 <a name="elo"></a><h4>How is the rating calculated?</h4>
 <p>
