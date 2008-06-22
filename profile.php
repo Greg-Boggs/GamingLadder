@@ -1,7 +1,6 @@
 <?php
 
 include ("logincheck.inc.php");
-// v 1.03
 
 $sql="set @num  = 0";
 $result=mysql_query($sql,$db) or die ("failed to set num");
@@ -144,7 +143,19 @@ $streak = 0;
 <table width="100%" cellpadding="1px">
 <tr>
 <td valign="top">
-<h1><?php echo "$row[name] $blocked" ?></h1>
+
+<h1><?php
+
+
+if (($loggedin == 1) && ($nameincookie == $_GET[name])) {
+	echo "<a href='edit.php'>$row[name] $blocked</a>";
+	} else {
+	echo "$row[name] $blocked";
+	}
+?>
+</h1>
+
+
 <?php 
 // Show the players title if he has one...
 if ( $row["Titles"]  != "" ) {
@@ -164,6 +175,9 @@ if ( $row["LastGame"]  != "" ) {
 	echo " ($daysleft days left)";
     }
 } 
+
+
+
 ?>
 </td>
 <td valign="top">

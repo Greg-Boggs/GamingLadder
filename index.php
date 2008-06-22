@@ -175,7 +175,6 @@ echo"<a href='index.php?readnews=$row[news_id]'><font color='$color1'>$row[date]
 		//DEB echo "bajsplayerid: $bajs[name] $bajs[player_id]";
 		
 			if ($bajs[player_id] > 0) { 
-				echo "<div align='right'>//<a href=\"profile.php?name=$bajs[name]\">$nameincookie</a></div>";
 				$loggedin = 1;
 			} else { $loggedin = 0; }
 		}

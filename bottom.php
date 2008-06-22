@@ -1,5 +1,5 @@
 <p align="center" class="copyleft">the ladder is not in any way associated with the official wesnoth forum, it's moderators and/or the developers of Wesnoth.
-<br /><a href="rss.php">rss</a> / power <a href="https://sourceforge.net/projects/gamingladder">tribal bliss</a> / <a href="https://sourceforge.net/pm/?group_id=224204">to-do</a><br />contact: spam (x) eyerouge (y) com</p>
+<br /><a href="ip.php">dupe check</a> / <a href="rss.php">rss</a> / power <a href="https://sourceforge.net/projects/gamingladder">tribal bliss</a> / <a href="https://sourceforge.net/pm/?group_id=224204">to-do</a><br />contact: spam (x) eyerouge (y) com</p>
 
 <?php
 $endtime = microtime();

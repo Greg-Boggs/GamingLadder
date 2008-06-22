@@ -1,5 +1,4 @@
 <?
-// v.1.05
 $page = "join";
 require('conf/variables.php');
 require('top.php');
@@ -71,7 +70,11 @@ if ($_POST[submit]) {
 	
 	else if ($passworddb != $passworddb2) {	echo "Passwords don't match. Please retype the passwords..<br>";	}
 	
-	else if ($mail == "") { echo "Please enter a valid email. An activation link will be sent to it.<br>"; }
+	else if ($mail == "") { 
+		if (REG_MAILVERIFICATION == 1) {	echo "Please enter a valid email. An activation link will be sent to it.<br>"; } else {
+				echo "Please enter a valid email. No spam will be sent.<br>";
+			}
+	}
 	
 	else if ( $WesVersion == "") { echo "You must specify what version(s) of Wensoth you're using...<br>"; }
 	
@@ -194,7 +197,8 @@ else{
 
 <tr>
 <td><p class="text"><b>Mail:</b></p></td>
-<td>&nbsp;<input type="Text" name="mail" value="" style="background-color: <?php echo"$color5" ?>; border: 1 solid <?php echo"$color1" ?>" class="text"> A verification mail will be sent.</td>
+<td>&nbsp;<input type="Text" name="mail" value="" style="background-color: <?php echo"$color5" ?>; border: 1 solid <?php echo"$color1" ?>" class="text"> <?php if (REG_MAILVERIFICATION == 1) {	echo "Please enter a valid email. An activation link will be sent to it.<br>"; } else {
+				echo "Please enter a valid email. No spam will be sent.<br>"; } ?></td>
 </tr>
 <tr>
 <td>

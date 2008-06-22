@@ -40,10 +40,16 @@ if (isset($_COOKIE["LadderofWesnoth1"]) AND isset($_COOKIE["LadderofWesnoth2"]))
 
 	<li><a href="playedgames.php?startplayed=0&amp;finishplayed=<?php echo $numgamespage; ?>">Game History</a></li>
 	<?php if ($loggedin == 1) { ?>
-	<li><a href="playerdata.php">My Stats</a></li>
+	<li><a href="playerdata.php">My Ladder</a></li>
 	<?php } ?>
-	<li><a href="edit.php">My Profile</a></li>
+
+	<?php if ( $loggedin == 1 ) { echo "<li><font align='right'><a href=\"profile.php?name=$bajs[name]\">$nameincookie</a></font></li>"; }?>
 	<li><a href="faq.php">FAQ</a></li>
-	<li><a href="ip.php">Dupe Check</a></li>
-  </ul>
+	
+	
+	
+	</ul>
 </div>
+
+
+
