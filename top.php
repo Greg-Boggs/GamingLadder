@@ -1,9 +1,9 @@
-<html>
-<!-- v 1.01 -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" dir="ltr">
 
 <head>
 <title><?php echo $titlebar; ?></title>
-<meta name="keywords" content="wesnoth, league, ladder, elo, open source">
+<meta name="keywords" content="wesnoth, league, ladder, elo, open source" />
 <script type="text/javascript" src="jquery/jquery-1.2.6.pack.js"></script>
 <script type='text/javascript' src='jquery/jquery.autocomplete.js'></script>
 <script type="text/javascript" src="jquery/tablesorter/jquery.tablesorter.js"></script>
@@ -13,7 +13,7 @@
 <link rel="stylesheet" type="text/css" href="css/jquery.autocomplete.css" />
 
 
-<style type=text/css>
+<style type='text/css'>
 <!--
 a 	     { color: #7B0045; font-family: <?php echo"$font" ?>; font-size: 12 px; font-weight: <?php echo"$fontweight" ?>; text-decoration: none}
 a:link       { color: #7B0045; font-family: <?php echo"$font" ?>; font-size: 12 px; font-weight: <?php echo"$fontweight" ?>; text-decoration: none}
@@ -37,15 +37,8 @@ font-family: "san serif", verdana, arial;
 font-size: 12 px;
 
 }
-
-
 -->
-
-
 </style>
-
-
-
 </head>
 
 <body>

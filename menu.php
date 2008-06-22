@@ -32,24 +32,18 @@ if (isset($_COOKIE["LadderofWesnoth1"]) AND isset($_COOKIE["LadderofWesnoth2"]))
 <div id="nav">
   <ul>
 	<?php if ( $loggedin == 0 ) { ?>
-	<li><a href=join.php>Join</a></li>
+	<li><a href="join.php">Join</a></li>
 	<?php } ?>
 	<li><a href="report.php">Report</a></li>
 	<li><a href="ladder.php">Ladder</a></li>
-	<li><a href="players.php?startplayers=0&finishplayers=<?php echo $numplayerspage; ?>">Players</a>
+	<li><a href="players.php?startplayers=0&amp;finishplayers=<?php echo $numplayerspage; ?>">Players</a></li>
 
-	<li><a href="playedgames.php?startplayed=0&finishplayed=<?php echo $numgamespage; ?>">Game History</a></li>
-	<?php if ( $loggedin == 1 ) { ?>
+	<li><a href="playedgames.php?startplayed=0&amp;finishplayed=<?php echo $numgamespage; ?>">Game History</a></li>
+	<?php if ($loggedin == 1) { ?>
 	<li><a href="playerdata.php">My Stats</a></li>
 	<?php } ?>
 	<li><a href="edit.php">My Profile</a></li>
 	<li><a href="faq.php">FAQ</a></li>
 	<li><a href="ip.php">Dupe Check</a></li>
   </ul>
-</div>
-
-
-<div class="menu">
-<ul>
-</ul>
 </div>
