@@ -1,67 +1,85 @@
-<?
-// v 1.02
-$page = "report";
+<?php
 require('conf/variables.php');
-?>
-<p class="text">
-<?php 
 
-// Lets check to see if there are Ladder cookies to see if the user is logged in. If so, we wont show the login box....
-
-
-// First we extract the info from the cookies... There are 2 of them, one containing username, other one the password.
-
-require('ladder_cookie.inc.php');
-
-require('top.php');
-
-if  ($loggedin == 0) {
-	
-	echo "<h1>Access denied.</h1><br><p>Please <a href=\"index.php\">log in</a> to report a game. " .
-	"Only members of the ladder can make reports. <a href=\"join.php\">Become one</a> and compete today!</p>";
-	require('bottom.php');
-	exit;
+// We have ajax lower down on the page, we handle it here and then exit.
+// This keeps the ajax code with the page that is calling it.
+// Unfortunately we are stuck with 'q' as the query variable as it's hardcoded into the jquery autocomplete module.
+if (isset($_GET['q'])) {
+    $q = strtolower($_GET["q"]);
+    $query = "SELECT player_id, name from $playerstable WHERE name like '$q%' ORDER BY name";
+    $result = mysql_query($query) or die("fail");
+    while ($row = mysql_fetch_array($result)) {
+	    echo $row['name'] . "|" . $row ['player_id'] . "\n";
+    }
+    exit;
 }
 
+
+// Lets check to see if there are Ladder cookies to see if the user is logged in. If so, we wont show the login box....
+// First we extract the info from the cookies... There are 2 of them, one containing username, other one the password.
+require('ladder_cookie.inc.php');
+require('top.php');
+
+if ($loggedin == 0) {
+    echo "<h1>Access denied.</h1><br><p>Please <a href=\"index.php\">log in</a> to report a game. " .
+    "Only members of the ladder can make reports. <a href=\"join.php\">Become one</a> and compete today!</p>";
+    require('bottom.php');
+    exit;
+}
+
+if (isset($_POST['report'])) {
 ?>
+<h3>Report Game Results</h3>
+<?php    
+    $current_player = $nameincookie;
+    $sql = "SELECT * FROM $playerstable WHERE name = '$current_player'";
+    $result = mysql_query($sql, $db);
+    $row = mysql_fetch_array($result);
 
-
-<?php
-
-if ( isset ($_POST['report']) ) {
-
-	$current_player = $nameincookie;
-	$sql="SELECT * FROM $playerstable WHERE name = '$current_player'";
-	$result=mysql_query($sql,$db);
-	$row = mysql_fetch_array($result);
-
-	//Make sure the user selected a loser, this should be done in javascript.
+	// Make sure the user selected a loser, this should be done in javascript.
 	if ($_POST[losername] == "") {
-		echo "<b>You must select the name of the loser! </b>";
-		echo '<a href="report.php">Go back.</a>';
+		echo "<p><b>You must select the name of the loser!</b></p><p>Please return the the <a href='report.php'>report</a> page and select a name.</p>";
 		require('bottom.php');
 		exit;
-	}	
+	}
 	$winner = $current_player;
 	$loser = $_POST['losername'];
 	if ($winner == $loser) { 
 		echo "No playing against yourself! ";
 		echo '<a href="report.php">Go back.</a>';
-		require('bottom.php');
-		
+		require('bottom.php');	
 	}
 	require('calc_elo.inc.php');
-
 ?>
-Congradulations <?php echo $current_player; ?> you have defeated <?php echo $loser; ?>!<p>
+<p>Congratulations <?php echo $current_player; ?> you have defeated <?php echo $loser; ?>!</p>
 
 <table border="1" cellpadding="5" cellspacing="0">
-    <tr><td>Your rating change was: <?php echo $winnerChange; ?> points.</td><td>Your opponent's rating change was: <?php echo $loserChange; ?> points.</td></tr>
-    <tr><td>Your old rating was: <?php echo $winnerStats[0]; ?>.</td> <td>Your opponent was: <?php echo $loserStats[0]; ?>. </td></tr>
-
-    <tr><td>Your new rating is: <?php echo $winnerRating; ?>.</td><td>Your opponent's new rating is: <?php echo $loserRating; ?>. </td></tr>
+	<tr>
+        <th></th>
+        <th><?php echo $current_player; ?></th>
+        <th><?php echo $loser; ?></th>
+	</tr>
+	<tr>
+        <td>Provisional Player</td>
+        <td><?php echo $winnerStats[1] ? "Yes" : "No"; ?></td>
+        <td><?php echo $loserStats[1] ? "Yes" : "No"; ?></td>
+    </tr>
+    <tr>
+        <td>Rating change</td>
+        <td><?php echo $winnerChange; ?></td>
+        <td><?php echo $loserChange; ?></td>
+    </tr>
+    <tr>
+        <td>Old Ratings</td>
+        <td><?php echo $winnerStats[0]; ?></td>
+        <td><?php echo $loserStats[0]; ?></td>
+    </tr>
+    <tr>
+        <td>New Ratings</td>
+        <td><?php echo $winnerRating; ?></td>
+        <td><?php echo $loserRating; ?></td>
+    </tr>
     </table>
-<p>
 
 <?php
 	require('update_player.inc.php');
@@ -70,26 +88,20 @@ Congradulations <?php echo $current_player; ?> you have defeated <?php echo $los
 	//echo "game: $sql <br/>";
 	$result = mysql_query($sql) or die ("failed to insert game");
 
-	echo "Thank you! Information entered. Check your <a href=\"playerdata.php\">current position.</a>";
+	echo "<p>Thank you! Information entered. Check your <a href=\"playerdata.php\">current position.</a></p>";
 } else {
 ?>
-<form name="form1" method="post" >
+<form name="form1" method="post" action="report.php">
 <h3>Report Game</h3>
-<table border="0" cellpadding="3" spacing="3">
-
-<tr><td>
-		<?php echo $nameincookie; ?> won over 
-		<input type="text" name="losername" id="CityAjax" value="" style="width: 200px;" /></td><td>
-		<input type="submit" name="report" value="Report Game" onclick="lookupAjax();" style="background-color: <?echo"$color5" ?>; border: 1 solid <?echo"$color1" ?>"/>
-</td></tr>
-<tr>
-</table>
-
-<b>Warning: If you cheat you will be banned.</b><br>If <i>accidentally</i> reported a false result 
+<p>
+    <?php echo $nameincookie; ?> won over 
+    <input type="text" name="losername" id="CityAjax" value="" style="width: 200px;" />
+    <input type="submit" name="report" value="Report Game" onclick="lookupAjax();" style="background-color: <?echo"$color5" ?>; border: 1 solid <?echo"$color1" ?>"/>
+</p>
+<b>Warning: If you cheat you will be banned.</b><br />If <i>accidentally</i> reported a false result 
 
 <a href="undogame.php" onclick="return confirm('Delete your last win?');"> undo it!</a> 
 </form>
-</p>
 <?
 }
 ?>
@@ -137,7 +149,7 @@ function lookupLocal(){
 
 $(document).ready(function() {
 	$("#CityAjax").autocomplete(
-		"autocomplete_ajax.php",
+		"report.php",
 		{
 			delay:10,
 			minChars:2,

@@ -41,7 +41,6 @@ function GetRating($player, $playerstable) {
     }
     if ($row['games'] < PROVISIONAL) {
 	$protection = PROVISIONAL - $row['games']-1; //current game hasn't yet been deducted.
-	echo "One of you is provisional. The protection ends in $protection more games.<br>";
 	$stats[1] = true;
     }
     else {
