@@ -49,7 +49,7 @@ font-size: 12 px;
 ?>
 <div id="header">
   <div id="logo">
-    <a href="<?php echo $directory;?>"<img alt="Ladder logo" src="graphics/wesnoth-logo.png" /></a>
+    <a href="<?php echo $directory;?>"><img alt="Ladder logo" src="graphics/wesnoth-logo.png" /></a>
   </div>
 <?php
     require('menu.php');

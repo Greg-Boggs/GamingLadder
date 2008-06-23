@@ -43,7 +43,7 @@ if (isset($_COOKIE["LadderofWesnoth1"]) AND isset($_COOKIE["LadderofWesnoth2"]))
 	<li><a href="playerdata.php">My Ladder</a></li>
 	<?php } ?>
 
-	<?php if ( $loggedin == 1 ) { echo "<li><font align='right'><a href=\"profile.php?name=$bajs[name]\">$nameincookie</a></font></li>"; }?>
+	<?php if ( $loggedin == 1 ) { echo "<li><a href=\"profile.php?name=$bajs[name]\">$nameincookie</a></li>"; }?>
 	<li><a href="faq.php">FAQ</a></li>
 	
 	
