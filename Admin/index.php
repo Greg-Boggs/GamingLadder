@@ -1,31 +1,35 @@
 <?
 session_start();
-$page = "login";
+if (isset($_GET['logout'])) {
+    $_SESSION = array();
+}
+$GLOBALS['prefix'] = "../";
 require('./../conf/variables.php');
 require('./../top.php');
 ?>
 <p class="header">Admin section.</p>
-<?
-$sql="SELECT * FROM $admintable WHERE name = '$_POST[username]' AND password = '$_POST[password]'";
-$result=mysql_query($sql,$db);
-$number = mysql_num_rows($result);
-echo $number;
-if ($number == "1") {
-	$_SESSION['username'] = 1;
+<?php
+if (isset($_POST['username']) && isset($_POST['password'])) {
+    $sql = "SELECT name FROM $admintable WHERE name = '$_POST[username]' AND password = '$_POST[password]'";
+    $result = mysql_query($sql,$db);
+    $number = mysql_num_rows($result);
+    if ($number == 1) {
+        $_SESSION['username'] = $_POST['username'];
+    }
 }
+
 if(isset($_SESSION['username']) ) {
 ?>
-<p class='text'>You are logged in as <b><?echo "$_SESSION[username]" ?></b>.</p>
-<?
-}
-else {
-if($_POST[submit]) {
+<p class='text'>You are logged in as <b><?php echo $_SESSION['username'] ?></b>.</p>
+<?php
+} else {
+    if (isset($_POST['submit']) && $_POST['submit'] == "Log in.") {
 ?>
 <p class='text'>Login failed.</p>
-<?
-}
+<?php
+    }
 ?>
-<form method="post">
+<form method="post" action="index.php">
 <table border="0" cellpadding="0">
 <tr>
 <td><p class='text'>Name:</p></td>
@@ -40,10 +44,10 @@ if($_POST[submit]) {
 </tr>
 </table>
 </form>
-<?
-}
+<?php
+} // Display login form if failed, or not logged in.
 ?>
-<?
+<?php
 require ('./maintenance.php');
 require('./../bottom.php');
 ?>

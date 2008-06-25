@@ -1,6 +1,7 @@
 <?php
-$sql = "select name, LastGame from $playerstable where active = 1";
+$sql = "select name, LastGame from $playerstable where active = 1 ORDER BY name";
 $result = mysql_query($sql,$db) or die ("Failed to  select players");
+$inList = false;
 
 while ($row = mysql_fetch_array($result)) {
 	// Okey, let's convert the crap we store in the database into nice digits, putting the hour, sec, day, month and year in one variable 
@@ -14,6 +15,10 @@ while ($row = mysql_fetch_array($result)) {
 	$month = substr($rawdata, 9,2);
 	$year = substr($rawdata, 12,2);
 
+    if (!is_numeric($hour) || !is_numeric($minute) || !is_numeric($day) || !is_numeric($month) || !is_numeric($year)) {
+        // If all of the game time data isn't actually numbers representing a time, then ignore this game/player.
+        continue;
+    }
 	// To get the number of days that has passed since the latest played game we first need to convert the latest-played-game-date into unix epoch seconds. That's easy since we already have all the numbers from the database tucked into nice $variables....
 
 	$unixedlatest = mktime($hour, $minute, 1, $month, $day, $year);
@@ -28,9 +33,17 @@ while ($row = mysql_fetch_array($result)) {
 	$daysleft = $passivedays - $daysago;
 
 	if ($daysleft <= 0) {
-		echo "inactive removed $row[name]";
+        if (!$inList) {
+           echo "<p>The following players have been set to an inactive state as they have not played recently enough.</p>";
+           echo "<ul>";
+           $inList = true;
+        }
+		echo "<li>$row[name]</li>";
 		$sql = "update $playerstable SET active = 0 WHERE name = '" . $row['name'] . "'";
 		$resultr = mysql_query($sql,$db);
 	}
+}
+if ($inList) {
+    echo "</ul>";
 }
 ?>

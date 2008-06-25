@@ -31,13 +31,6 @@ CREATE TABLE `webl_news` (
   PRIMARY KEY  (`news_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
-CREATE TABLE `webl_pages` (
-  `page_id` int(10) NOT NULL auto_increment,
-  `title` varchar(100) default NULL,
-  `page` text,
-  PRIMARY KEY  (`page_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
-
 CREATE TABLE `webl_players` (
   `player_id` int(10) NOT NULL auto_increment,
   `name` varchar(255) NOT NULL default '',

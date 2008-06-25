@@ -28,10 +28,6 @@ $sql = "CREATE TABLE $newstable (news_id int(10) NOT NULL auto_increment, title 
 mysql_query($sql,$db);
 echo"News table<br>";
 
-$sql = "CREATE TABLE $pagestable (page_id int(10) NOT NULL auto_increment, title varchar (100), page text, PRIMARY KEY (page_id))";
-mysql_query($sql,$db);
-echo"Pages table<br>";
-
 $date = date("M d, Y.");
 echo"Inserting default values<br>";
 $sql = "INSERT INTO $newstable (news, title, date) VALUES ('Congratulations, you have successfully installed Competitive Gaming Ladder.<br><br>[Be happy here.]<br><br>Enjoy. :)', 'Glory!', '$date')";

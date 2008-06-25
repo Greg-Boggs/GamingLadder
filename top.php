@@ -1,16 +1,22 @@
+<?php	
+    // If we didn't receive the variable $GLOBALS['prefix'], set it to ""
+    if (!isset($GLOBALS['prefix'])) {
+        $GLOBALS['prefix'] = "";
+    }
+?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" dir="ltr">
 
 <head>
 <title><?php echo $titlebar; ?></title>
 <meta name="keywords" content="wesnoth, league, ladder, elo, open source" />
-<script type="text/javascript" src="jquery/jquery-1.2.6.pack.js"></script>
-<script type='text/javascript' src='jquery/jquery.autocomplete.js'></script>
-<script type="text/javascript" src="jquery/tablesorter/jquery.tablesorter.js"></script>
-<script type="text/javascript" src="jquery/tablesorter/jquery.tablesorter.pager.js"></script>
-<link rel="stylesheet" type="text/css" href="css/wesnoth-main.css" />
-<link rel="stylesheet" type="text/css" href="css/sorter.css" />
-<link rel="stylesheet" type="text/css" href="css/jquery.autocomplete.css" />
+<script type="text/javascript" src="<?php echo $GLOBALS['prefix'] ?>jquery/jquery-1.2.6.pack.js"></script>
+<script type='text/javascript' src='<?php echo $GLOBALS['prefix'] ?>jquery/jquery.autocomplete.js'></script>
+<script type="text/javascript" src="<?php echo $GLOBALS['prefix'] ?>jquery/tablesorter/jquery.tablesorter.js"></script>
+<script type="text/javascript" src="<?php echo $GLOBALS['prefix'] ?>jquery/tablesorter/jquery.tablesorter.pager.js"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo $GLOBALS['prefix'] ?>css/wesnoth-main.css" />
+<link rel="stylesheet" type="text/css" href="<?php echo $GLOBALS['prefix'] ?>css/sorter.css" />
+<link rel="stylesheet" type="text/css" href="<?php echo $GLOBALS['prefix'] ?>css/jquery.autocomplete.css" />
 
 
 <style type='text/css'>
@@ -43,13 +49,13 @@ font-size: 12 px;
 
 <body>
 <?php 
-	$starttime = microtime();
-	$startarray = explode(" ", $starttime);
-	$starttime = $startarray[1] + $startarray[0];
+    $starttime = microtime();
+    $startarray = explode(" ", $starttime);
+    $starttime = $startarray[1] + $startarray[0];
 ?>
 <div id="header">
   <div id="logo">
-    <a href="<?php echo $directory;?>"><img alt="Ladder logo" src="graphics/wesnoth-logo.png" /></a>
+    <a href="<?php echo $directory;?>"><img alt="Ladder logo" src="<?php echo $GLOBALS['prefix'] ?>graphics/wesnoth-logo.png" /></a>
   </div>
 <?php
     require('menu.php');
