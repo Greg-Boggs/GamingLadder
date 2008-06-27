@@ -1,9 +1,7 @@
-<?
-// v 1.01 Ladder Login Check 
-require('conf/variables.php');
-?>
-<p class="text">
 <?php 
+require('conf/variables.php');
+
+
 
 // Lets check to see if there are Ladder cookies to see if the user is logged in.
 
