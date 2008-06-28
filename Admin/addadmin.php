@@ -7,37 +7,41 @@ require('../top.php');
 ?>
 <p class="header">Add Admin User</p>
 <?php
-if ($_POST['submit']) {
-    $sql = "SELECT * FROM $admintable WHERE name = '$_POST[name]'";
+if (isset($_POST['submit']) && $_POST['submit'] == "Add Admin") {
+    $sql = "UPDATE $playerstable SET is_admin = true WHERE name = '$_POST[name]'";
     $result = mysql_query($sql,$db);
-    $samenick = mysql_num_rows($result);
 
-    if ($samenick < 1) {
-        $sql = "INSERT INTO $admintable (name, password) VALUES ('$_POST[name]','$_POST[password]')";
-        $result = mysql_query($sql);
+    if (mysql_affected_rows() == 1) {
         echo "<p class='text'>Thank you! Information entered.</p><p><a href='addadmin.php'>Add another admin</a></p>";
     } else {
-        echo "<p class='text'>The name you entered already exist.</p>";
+        echo "<p class='text'>The name you entered is already an admin.</p>";
     }
 } else {
 ?>
+<p>Administrators must already be members of the ladder.  It's not nessecary for them to participate in the ladder, but they must have an account.</p>
 <form method="post">
 <table border="0" cellpadding="0">
 <tr>
 <td><p class="text">Name:</p></td>
 <td><input type="Text" name="name" style="background-color: <?echo"$color5" ?>; border: 1 solid <?echo"$color1" ?>" class="text"></td>
 </tr>
-<tr>
-<td><p class="text">Password:</p></td>
-<td><input type="password" name="password" style="background-color: <?echo"$color5" ?>; border: 1 solid <?echo"$color1" ?>" class="text"></td>
-</tr>
 </table>
 <p align="left">
-<input type="Submit" name="submit" value="Submit." style="background-color: <?echo"$color5" ?>; border: 1 solid <?echo"$color1" ?>" class="text"><br><br>
+<input type="Submit" name="submit" value="Add Admin" style="background-color: <?echo"$color5" ?>; border: 1 solid <?echo"$color1" ?>" class="text"><br><br>
 </form>
 </p>
+<p>This these are the current ladder administrators</p>
+<ul>
 <?php
+// Display a list of all the current admin users
+$sql = "SELECT name from $playerstable WHERE is_admin = true";
+$result = mysql_query($sql, $db);
+
+while ($row = mysql_fetch_array($result)) {
+    echo "<li>".$row['name']."</li>";
+}
+echo "</ul>";
+
 }
 require('./../bottom.php');
 ?>
-

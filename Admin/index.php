@@ -10,7 +10,11 @@ require('./../top.php');
 <p class="header">Admin section.</p>
 <?php
 if (isset($_POST['username']) && isset($_POST['password'])) {
-    $sql = "SELECT name FROM $admintable WHERE name = '$_POST[username]' AND password = '$_POST[password]'";
+    $passworddb = $salt.$_POST['password'];
+    $passworddb = md5($passworddb);
+    $passworddb = md5($passworddb);
+
+	$sql = "SELECT name FROM $playerstable WHERE name='$_POST[username]' AND passworddb='$passworddb' AND is_admin = true";
     $result = mysql_query($sql,$db);
     $number = mysql_num_rows($result);
     if ($number == 1) {
@@ -48,6 +52,5 @@ if(isset($_SESSION['username']) ) {
 } // Display login form if failed, or not logged in.
 ?>
 <?php
-require ('./maintenance.php');
 require('./../bottom.php');
 ?>

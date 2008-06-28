@@ -20,6 +20,7 @@ if ($_GET['read']) {
 <?php
 }
 ?>
+<p><a href="news-post.php">Post News</a></p>
 <table border="1" cellspacing="1" cellpadding="2" bgcolor="<?echo"$color5" ?>" bordercolor="<?echo"$color1" ?>">
 <tr>
 <td align='center'>View</td>
