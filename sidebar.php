@@ -1,6 +1,6 @@
 <?php
 // We dont want to show the login form if we're logged in alread, so:
-If ($loggedin == 0) {
+if (!isset($_SESSION['username']))  {
 ?>
 
 
@@ -11,6 +11,22 @@ If ($loggedin == 0) {
 	</form>
 
 <?php } 
+
+function TimeConvert($ToConvert) 
+{
+    $min = floor($ToConvert/60);
+    $h = floor($min/60);
+    $min2 = $min;
+
+    if ($h >= 1) {$min2 = ($min - ($h * 60));}
+
+    if ($h >= 1) {
+        return $h."h ".$min2."min";
+    } else {
+        return $min2."min";
+    }
+}
+
 ?>
   <div class="border_left"><div class="border_right"><div class="border_bottom">
   <div class="corner_bottomleft"><div class="corner_bottomright">
@@ -54,7 +70,7 @@ $result=mysql_query($sql,$db);
 
 // If nobody at all is looking for a game at this moment we want a special teazer pic to show up...
 
-if ((mysql_num_rows($result)==0) && ($loggedin == 1)) {
+if ((mysql_num_rows($result)==0) && isset($_SESSION['username'])) {
 
 echo "<div align='left'><a href='playnow.php'><img border='0' src='graphics/waiting.gif'></a></div><br />";
 
@@ -66,27 +82,22 @@ echo "<div align='left'><a href='playnow.php'><img border='0' src='graphics/wait
 	while ($row = mysql_fetch_array($result)) {
 	
 		$timeleft = $row[entered]-(time()-(60*60*$row[time]));
-	
-	
-	TimeConvert("$timeleft");
-	
-	
-		print("<li><a href=\"profile.php?name=$row[username]\">$row[username]</a> ($row[rating])<br> $beenconverted - $row[meetingplace]</li>
+		print("<li><a href=\"profile.php?name=$row[username]\">$row[username]</a> ($row[rating])<br> ".TimeConvert($timeleft)." - $row[meetingplace]</li>
 		");
 	}
 	echo "</ol><br />";
 	
 	// Let's display proper edit / del links if the user is in the waiting list and then show them below it..,..
 	
-	$sql = "SELECT id FROM $waitingtable WHERE username = '$nameincookie'";
+	$sql = "SELECT id FROM $waitingtable WHERE username = '".$_SESSION['username']."'";
 	$intable = mysql_query($sql);
 	
 		if (mysql_num_rows($intable)!=0) {
-		echo "<div align='right'><a href='playnow.php'>edit</a> | <a href='playnow.php?del=$nameincookie'>del</a></div><br>";
+		echo "<div align='right'><a href='playnow.php'>edit</a> | <a href='playnow.php?del=".$_SESSION['username']."'>del</a></div><br>";
 		
 		} else {
 		
-		if ($loggedin == 1) {
+	    if (isset($_SESSION['username']))  {
 			echo "<div align='right'><a href='playnow.php'>add me </a></div>";
 			}
 		}
@@ -97,7 +108,7 @@ echo "<div align='left'><a href='playnow.php'><img border='0' src='graphics/wait
 	
 // Show latest played games:	
 	
-	$sql ="SELECT winner, loser, date FROM $gamestable ORDER BY game_id DESC LIMIT 0,$numindexresults";
+	$sql ="SELECT winner, loser FROM $gamestable WHERE withdrawn = 0 and contested_by_loser = 0 ORDER BY reported_on DESC LIMIT $numindexresults";
 	$result = mysql_query($sql,$db);
 	//$bajs = mysql_fetch_array($result); 
 	
@@ -116,7 +127,7 @@ echo "<div align='left'><a href='playnow.php'><img border='0' src='graphics/wait
 
 	
 	// $sql ="SELECT name FROM $playerstable ORDER BY player_id DESC";
-	$sql ="SELECT name FROM $playerstable WHERE Confirmation = 'Ok' ORDER BY player_id DESC LIMIT 0,$numindexnewbs";
+	$sql ="SELECT name FROM $playerstable WHERE Confirmation = 'Ok' ORDER BY player_id DESC LIMIT $numindexnewbs";
 	$result = mysql_query($sql,$db);
 
 	echo "<br><b>Newcomers</b><br><ol>";
@@ -135,11 +146,17 @@ echo "<div align='left'><a href='playnow.php'><img border='0' src='graphics/wait
 	
 
 	// Only get the payers that show in the ladder.... its defined by the minimum amount of games they have to played and a minimal rating
-
-	$sql="SELECT * FROM $playerstable WHERE games >= $gamestorank AND rating >= $ladderminelo and active = 1 ORDER BY rating DESC, games DESC  LIMIT 0,$numindexhiscore";
-	//old $sql ="SELECT * FROM $playerstable ORDER BY rating DESC, totalgames DESC";
-	$result = mysql_query($sql,$db);
 	
+    $sql = "select * from (select a.name, g.reported_on, 
+       CASE WHEN g.winner = a.name THEN g.winner_elo ELSE g.loser_elo END as rating,
+       CASE WHEN g.winner = a.name THEN g.winner_wins ELSE g.loser_wins END as wins,
+       CASE WHEN g.winner = a.name THEN g.winner_losses ELSE g.loser_losses END as losses,
+       CASE WHEN g.winner = a.name THEN g.winner_games ELSE g.loser_games END as games,
+       CASE WHEN g.winner = a.name THEN g.winner_streak ELSE g.loser_streak END as streak
+       FROM (select name, max(reported_on) as latest_game FROM $playerstable JOIN $gamestable ON (name = winner OR name = loser) WHERE contested_by_loser = 0 AND withdrawn = 0 GROUP BY 1) a JOIN $gamestable g ON (g.reported_on = a.latest_game)) standings join $playerstable USING (name) WHERE
+       reported_on > now() - interval $passivedays day AND rating >= $ladderminelo AND games >= $gamestorank ORDER BY 3 desc, 6 desc LIMIT 10";
+
+	$result = mysql_query($sql,$db);
 
 	while ($row = mysql_fetch_array($result)) {
 		echo "<li><a href=\"profile.php?name=$row[name]\">$row[name]</a> ($row[rating])</li>"; 
@@ -159,8 +176,7 @@ $sql=mysql_query("SELECT * FROM $playerstable WHERE Confirmation = \"Ok\" OR Con
 $number=mysql_num_rows($sql);
 echo "<br /><br /><b>Confirmed Players:</b> $number";
 
-// Show number of games played (excluding deleted ones since they're in another table)
-$sql=mysql_query("SELECT * FROM  $gamestable");
+$sql=mysql_query("SELECT * FROM $gamestable WHERE withdrawn = 0 AND contested_by_loser = 0");
 $number2=mysql_num_rows($sql);
 echo "<br /><b>Played Games:</b> $number2";
 
@@ -169,62 +185,30 @@ echo "<br /><b>Games/Player: </b>". round($number2/$number,2);
 	
 	
 // Display number of games played within x amount of days...
-
-$sql="SELECT date FROM $gamestable ORDER BY game_id DESC LIMIT 0,200";
+$sql="SELECT count(*) FROM $gamestable WHERE cast(reported_on as date) >= cast(now() as date) - ".COUNT_GAMES_OF_LATEST_DAYS." AND withdrawn = 0 AND contested_by_loser = 0";
 $result = mysql_query($sql,$db);
-	
-	$daysthismonth = date("t") ; // number of days in the current month 
-	if ($daysthismonth == 31) { $dayspreviousmonth = 30; } else {$dayspreviousmonth = 31 ;}
-	$currentmonth = date("m") ;// number of this month
-	
-	if ($currentmonth == 03) {$dayspreviousmonth = 28;} //fix for februari.. this will be broken every 4th year with a day..
-	
-	$currentdate =  date("d") ;// current date
-	
+$recentgames = mysql_fetch_row($result);
 
-	
-	while ($row = mysql_fetch_array($result)) {
-		// The dates of each game are stored as folloes in the db: 21:44 12-06-08  ... hence we need to rip out the date and the month to compare with the date & montj of today
-		$dateofgame = substr($row[date], 6, 2);
-		$monthofgame = substr($row[date], 9, 2);
-			
-	// Now we take count eery game that was played within the same month, not on todays date, and within the x most recent days.
-	// This of course presents a problem when we're on the 1:st of a month and want the games for the 5 most recent days, as none would be counted.
-			if ( ($currentmonth == $monthofgame ) && ($currentdate != $dateofgame) && ($dateofgame >= ($currentdate - COUNT_GAMES_OF_LATEST_DAYS))) {
-					$recentgames++;
-			}
-			
-	// Lets fix theproblem with the change of the month...
-	// The below fix should work but hasn't been tested yet. Please check it out on the 1;st or 2:nd the coming month and adjust accordingly...
-	
-	if ( ($currentdate - COUNT_GAMES_OF_LATEST_DAYS <= 0) && ( ($monthofgame == ($currentmonth-1) ) || ($monthofgame == 12 && $currentmonth == 1) ) && ($dateofgame >= ($dayspreviousmonth + ($currentdate - COUNT_GAMES_OF_LATEST_DAYS))) ) {
-		$recentgames++;
-	}
-
+if ($recentgames[0] >= 1) {
+    echo "<br><b>Games latest ". COUNT_GAMES_OF_LATEST_DAYS ." days: </b>". $recentgames[0]; 
 }
-// Display x amount of games played the	most recent y days...
-	
-	if ($recentgames >= MIN_COUNT_GAMES_OF_LATEST_DAYS) { echo "<br><b>Games latest ". COUNT_GAMES_OF_LATEST_DAYS ." days: </b>". $recentgames; }
-	
-
-	
 	
 // Show x  deleted games...
 	
-	$sql ="SELECT winner, loser, date, elo_change FROM $deletedgames ORDER BY game_id DESC LIMIT 0,$numindexdeled";
+	$sql ="SELECT winner, loser, reported_on FROM $gamestable WHERE contested_by_loser <> 0 OR withdrawn <> 0 ORDER BY reported_on DESC LIMIT $numindexresults";
 	$result = mysql_query($sql,$db);
 
 	echo "<br /><br><b>Deleted reports</b><br><ol>";
 	
 	while ($bajs = mysql_fetch_array($result)) { 
 	
-		echo "<li><a href=\"profile.php?name=$bajs[0]\">$bajs[0]</a> beats <a href=\"profile.php?name=$bajs[1]\">$bajs[1]</a><br>$bajs[date] / $bajs[elo_change] p.</li>";
+		echo "<li><a href=\"profile.php?name=$bajs[0]\">$bajs[0]</a> beats <a href=\"profile.php?name=$bajs[1]\">$bajs[1]</a><br>$bajs[2]</li>";
 	}
 	echo "</ol>";
 
 	
-	If ($loggedin == 1)  {
-		echo "<br><br><a href='logout.php'>Log out</a>";	
+	If (isset($_SESSION['username']))  {
+		echo "<br /><br /><a href='logout.php'>Log out</a>";	
 	}
 	
 	?>

@@ -1,43 +1,37 @@
 <?php
-// v.1.01
-
+session_start();
 // Login check & boot if not in...
+require_once 'autologin.inc.php';
+require_once 'logincheck.inc.php';
 
-include('logincheck.inc.php');
-$page = "challenge";
-
-if  ($loggedin == 0) {
-	echo "<h1>Access denied..</h1><br><p>Yeash, guess what? You have to be logged in to challenge another player.</p>";
-	include('bottom.php');
-	exit;
-} 
-
+require 'top.php';
 
 // If he presses the form button... 
-
-
-
 if ($_POST["sent"]) {
-		$amail= trim(strip_tags($_POST["sent"]));
-	
-	
-		// Start with checking for empty field... theres a problem here with the checking, totaly blank field will be sent. Don tknow how to solve it...
-		if (strlen($amail) <= 5){
-				echo "<h1>Oops..</h1><br>It's rude not to write something in the message. At least tell him/her when you think you should play.";
-				include('bottom.php');
-				exit;
-				} else {
-					
-					
+    $amail = trim(strip_tags($_POST["sent"]));
+
+    // Start with checking for empty field... theres a problem here with the checking, totaly blank field will be sent. Don tknow how to solve it...
+    if (strlen($amail) <= 5) {
+        echo "<h1>Oops..</h1><br>It's rude not to write something in the message. At least tell him/her when you think you should play.";
+        include('bottom.php');
+        exit;
+    } else {
 		// If there is a message we proceed with the email sending....
 				
 		// Get challenger info again
-		$sql="SELECT * FROM $playerstable WHERE name = '$nameincookie' AND passworddb = '$passincookie'";
+		$sql="SELECT *, (SELECT CASE WHEN g.winner = a.name THEN g.winner_elo ELSE g.loser_elo END as rating 
+                          FROM $gamestable g WHERE contested_by_loser = 0 AND withdrawn = 0 AND
+                               (a.name = g.winner OR a.name = g.loser) ORDER BY reported_on DESC LIMIT 1) as rating
+                FROM $playerstable a WHERE name = '".$_SESSION['username']."'";
+
 		$result=mysql_query($sql,$db);
 		$row = mysql_fetch_array($result);
 
 		// Get challenged info that was sent after pressing the button... [challenged2]
-		$sql2="SELECT * FROM $playerstable WHERE name = '$_GET[challenged2]'";
+		$sql2="SELECT *, (SELECT CASE WHEN g.winner = a.name THEN g.winner_elo ELSE g.loser_elo END as rating 
+                          FROM $gamestable g WHERE contested_by_loser = 0 AND withdrawn = 0 AND
+                               (a.name = g.winner OR a.name = g.loser) ORDER BY reported_on DESC LIMIT 1) as rating
+                 FROM $playerstable a WHERE name = '$_GET[challenged2]'";
 		$result2=mysql_query($sql2,$db);
 		$row2 = mysql_fetch_array($result2);
 
@@ -46,7 +40,7 @@ if ($_POST["sent"]) {
 		$mail = new PHPMailer();
 		$mail->IsSMTP(); // telling the class to use SMTP
 		//$mail->IsMail(); // telling the class to use SMTP
-		$mail->Host = "smtp1.b-one.net"; // SMTP server
+		$mail->Host = $mailhost; // SMTP server
 		$mail->From = "$row[mail]";
 		$mail->FromName = "$row[name]";
 		$mail->AddAddress("$row2[mail]");
@@ -84,7 +78,7 @@ if ($_POST["sent"]) {
 
 
 // Get challenger info
-$sql="SELECT * FROM $playerstable WHERE name = '$nameincookie' AND passworddb = '$passincookie'";
+$sql="SELECT * FROM $playerstable WHERE name = '".$_SESSION['username']."'";
 $result=mysql_query($sql,$db);
 $row = mysql_fetch_array($result);
 
@@ -97,7 +91,7 @@ $row2 = mysql_fetch_array($result2);
 <table>
 
 <tr>
-<td><h2 valign="bottom"><?echo "$nameincookie ($row[rating])";?>&nbsp;<img src='avatars/<?php echo "$row[Avatar].gif'";?>></h2></td>
+<td><h2 valign="bottom"><?echo $row['name']." (".$row['rating'].")";?>&nbsp;<img src='avatars/<?php echo "$row[Avatar].gif'";?>></h2></td>
 
 <td><h2 valign="bottom">&nbsp;&nbsp;&nbsp;  vs. &nbsp;&nbsp;&nbsp; </h2></td>
 
@@ -109,7 +103,7 @@ $row2 = mysql_fetch_array($result2);
 <p>Send well in advance. Type 2-3 suggestion of <i>times (GMT) </i> when you both can play. Everything else will be sent automatically.</p>
 <form action="challenge.php?challenged2=<?php echo $row2["name"];?>" method="post">
 
-<textarea maxlength="1000" cols="60" rows="6" name="sent"> </textarea>
+<textarea maxlength="1000" cols="60" rows="6" name="sent"></textarea>
 
 <br>
 <input value="Send mail" type="submit" />

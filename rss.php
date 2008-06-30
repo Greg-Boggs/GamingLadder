@@ -1,4 +1,7 @@
 <?php 
+session_start();
+require_once 'conf/variables.php';
+require 'autologin.inc.php';
 require "top.php";
 ?>
 <h2>RSS Feeds</h2>

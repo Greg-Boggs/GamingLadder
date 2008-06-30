@@ -10,13 +10,8 @@ require('../top.php');
 if (isset($_POST['rerank'])) {
     require_once '../include/elo.class.php';
 
-    // Reset the Ladder to empty
-    $sql = "UPDATE $playerstable SET wins = 0, losses = 0, games = 0, streakwins = 0, streaklosses = 0, LastGame = null, provisional = 1, ".
-           "rating = ". BASE_RATING;
-    $result = mysql_query($sql) or die("reset failed");
-
     echo "<h2>Rerank the Ladder</h2>";
-    $query = "SELECT winner, loser, date FROM $gamestable ORDER BY game_id";
+    $query = "SELECT winner, loser, CASE draw WHEN 0 THEN 'false' ELSE 'true' END as draw, reported_on FROM $gamestable ORDER BY reported_on";
     $result = mysql_query($query) or die ("query failed");
     $elo = new Elo($db);
 
@@ -24,8 +19,8 @@ if (isset($_POST['rerank'])) {
         $winner = $row['winner'];
         $loser = $row['loser'];
 
-        if (!$elo->ReportGame($winner, $loser, $row['date'])) {
-            echo "Error: could not report game between ".htmlentities($winner)." and ".htmlentities($loser)." on ".htmlentities($row['date'])."<br />";
+        if (!$elo->RankGame($winner, $loser, $row['reported_on'], $row['draw'])) {
+            echo "Error: could not report game between ".htmlentities($winner)." and ".htmlentities($loser)." on ".htmlentities($row['reported_on'])."<br />";
         }
     }
 

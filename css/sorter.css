@@ -51,11 +51,11 @@ table.tablesorter thead tr .header {
 	cursor: pointer;
 }
 table.tablesorter tbody td {
-	height: 44px;
+	/* height: 44px; */
 	color: #3D3D3D;
 	padding: 4px;
 	background-color: #e7d9be;
-	vertical-align: top;
+	vertical-align: middle;
 }
 table.tablesorter tbody tr.odd td {
 	background-color:#d9bc94;

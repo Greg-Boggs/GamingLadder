@@ -1,65 +1,54 @@
 <?php
 
-include ("logincheck.inc.php");
+require_once 'autologin.inc.php';
 
-$sql="set @num  = 0";
-$result=mysql_query($sql,$db) or die ("failed to set num");
+require 'top.php';
 
-$sql="select rank, Avatar, country, mail, aim, msn, Titles, Joined, name, wins, losses, games, rating, LastGame, MsgMe, CanPlay, Approved, active, streaklosses, streakwins, provisional from  (
-select
-   @num := @num + 1 as rank, Avatar, country, mail, aim, msn, Titles, Joined, name, wins, losses, games, rating, LastGame, MsgMe, CanPlay, Approved, active, streaklosses, streakwins, provisional
-from $playerstable
-where active = 1 and games >= $gamestorank
-order by rating desc ) as A where name='$_GET[name]'";
-//echo $sql;
-$result=mysql_query($sql,$db) or die ("Failed to  select current player information");
-$row = mysql_fetch_array($result);
-$rank = $row['rank'];
+// Get My Ladder Rank
+$sql = "select * from (select a.name, g.reported_on, 
+       CASE WHEN g.winner = a.name THEN g.winner_elo ELSE g.loser_elo END as rating,
+       CASE WHEN g.winner = a.name THEN g.winner_wins ELSE g.loser_wins END as wins,
+       CASE WHEN g.winner = a.name THEN g.winner_losses ELSE g.loser_losses END as losses,
+       CASE WHEN g.winner = a.name THEN g.winner_games ELSE g.loser_games END as games,
+       CASE WHEN g.winner = a.name THEN g.winner_streak ELSE g.loser_streak END as streak,
+       withdrawn, contested_by_loser
+       FROM (select name, max(reported_on) as latest_game FROM $playerstable JOIN $gamestable ON (name = winner OR name = loser)  WHERE contested_by_loser = 0 AND withdrawn = 0 GROUP BY 1) a JOIN $gamestable g ON (g.reported_on = a.latest_game)) standings join $playerstable USING (name) WHERE
+       reported_on > now() - interval $passivedays day AND rating >= $ladderminelo AND games >= $gamestorank ORDER BY 3 desc, 6 desc LIMIT $playersshown";
+$result=mysql_query($sql,$db);
 
-//if the player has no rank he is passive, so make a second query grabbing the passive players
+// Loop through and find me
+$cur = 1;
+$rank = "";
+while ($row = mysql_fetch_row($result)) {
+    if ($row['name'] == $_GET['name']) {
+        $rank = $cur;
+        break;
+    }
+    $cur++;
+}
+
+// If the player has no rank he is passive, so make a second query grabbing the passive players
 if ($rank == "") {
+    $sql = "select * from (select a.name, g.reported_on, 
+       CASE WHEN g.winner = a.name THEN g.winner_elo ELSE g.loser_elo END as rating,
+       CASE WHEN g.winner = a.name THEN g.winner_wins ELSE g.loser_wins END as wins,
+       CASE WHEN g.winner = a.name THEN g.winner_losses ELSE g.loser_losses END as losses,
+       CASE WHEN g.winner = a.name THEN g.winner_games ELSE g.loser_games END as games,
+       CASE WHEN g.winner = a.name THEN g.winner_streak ELSE g.loser_streak END as streak,
+       withdrawn, contested_by_loser
+       FROM (select name, max(reported_on) as latest_game FROM $playerstable JOIN $gamestable ON (name = winner OR name = loser) GROUP BY 1) a JOIN webl_games g ON (g.reported_on = a.latest_game)) standings right join $playerstable USING (name) WHERE name = '".$_GET['name']."'";
 
-	$sql="select Avatar, country, mail, aim, msn, Titles, Joined, name, wins, losses, games, rating, LastGame, MsgMe, CanPlay, Approved, active, streaklosses, streakwins, provisional
-	from $playerstable
-	where name='$_GET[name]'
-	order by rating desc";
-	//echo $sql;
 
 	$result=mysql_query($sql,$db) or die ("Failed to  select current player information");
 	$row = mysql_fetch_array($result);
+    $rank = "unranked";
 }
 
 // PASSIVE CHECK: Lets get to know how many days the player has left before hes put into passive mode -----------------
+$sql = "SELECT reported_on + '".$passivedays." days' < now() AS passive, ".$passivedays." - (to_days(now()) - to_days(reported_on)) as daysleft  from webl_games WHERE winner = '$_GET[name]' OR loser = '$_GET[name]' ORDER BY reported_on DESC LIMIT 1";
+$result = mysql_query($sql, $db);
+list($passive, $daysleft) = mysql_fetch_row($result);
 
-$rawdata = $row[LastGame];
-//DEB echo $rawdata ."<br>";
-
-// Since the format is always identical with the identical number of characters in the time/date string we can just as well use string positioning to rip out what we need. Dirty, but works.
-$hour = substr($rawdata, 0,2);
-$minute = substr($rawdata, 3,2);
-$day = substr($rawdata, 6,2);
-$month = substr($rawdata, 9,2);
-$year = substr($rawdata, 12,2);
-	
-// To get the number of days that has passed since the latest played game we first need to convert the latest-played-game-date into unix epoch seconds. That's easy since we already have all the numbers from the database tucked into nice $variables....
-$unixedlatest = mktime($hour, $minute, 1, $month, $day, $year);
-	//DEB  echo "<br>This is the extracted:  $hour:$minute $day/$month/$year";
-// Now, we take the date today (in seconds since 70) and subtract it with the date then. The result is the difference in seconds.
-$timedifference =  (date("U") - $unixedlatest);
-
-// Let's convert this into days since we played...
-$daysago = ceil(($timedifference / (24*60*60))); 
-// DEB echo $daysago;
-$daysleft = $passivedays - $daysago;
-
-// Show us the date when he enters passive mode...
-$passivedate = ($unixedlatest + ($passivedays*24*60*60));
-$passivedate = date("j M", $passivedate);
-
-// PASSIVE CHECK END
-
-
-if ($row != "") {
 if ($row["approved"] == "no") {
 $blocked = "(<font color='#FF0000'>blocked or not added yet</font>)";
 }else{
@@ -130,15 +119,6 @@ $totalpercentage = 0.000;
 }else {
 $totalpercentage = $row['wins'] / $row['games'];
 }
-if ($row[streakwins] >= 1) {
-$streak = "+$row[streakwins]";
-}
-else if ($row[streaklosses] >= 1) {
-$streak = "-$row[streaklosses]";
-}
-else {
-$streak = 0;
-}
 ?>
 <table width="100%" cellpadding="1px">
 <tr>
@@ -147,10 +127,10 @@ $streak = 0;
 <h1><?php
 
 
-if (($loggedin == 1) && ($nameincookie == $_GET[name])) {
-	echo "<a href='edit.php'>$row[name] $blocked</a>";
+if ($_SESSION['username'] == $_GET[name]) {
+	    echo "<a href='edit.php'>$row[name] $blocked</a>";
 	} else {
-	echo "$row[name] $blocked";
+	    echo "$row[name] $blocked";
 	}
 ?>
 </h1>
@@ -208,13 +188,13 @@ if ( $row["LastGame"]  != "" ) {
 
 // we need some info to get to know how many points the player wins in average WHEN he wins, and the same about when he loses...
 
-$sqlavpl="SELECT elo_change FROM $gamestable WHERE loser = '$_GET[name]'  ORDER BY game_id DESC";
+$sqlavpl="SELECT loser_points FROM $gamestable WHERE loser = '$_GET[name]' ORDER BY reported_on DESC";
 $resultavpl=mysql_query($sqlavpl,$db);
 
-while ($rowavpl = mysql_fetch_array($resultavpl)) {
+while ($rowavpl = mysql_fetch_row($resultavpl)) {
 
-	if ($rowavpl[elo_change] !="") {
-	$avpl = $avpl + $rowavpl[elo_change]; 
+	if ($rowavpl[0] !="") {
+	$avpl = $avpl + $rowavpl[0]; 
 	$numlosses++;
 
 	}
@@ -225,13 +205,13 @@ if ($numlosses != 0) {
 }
 
 
-$sqlavpw="SELECT elo_change FROM $gamestable WHERE winner = '$_GET[name]'  ORDER BY game_id DESC";
+$sqlavpw="SELECT winner_points FROM $gamestable WHERE winner = '$_GET[name]'  ORDER BY reported_on DESC";
 $resultavpw=mysql_query($sqlavpw,$db);
 
 
-while ($rowavpw = mysql_fetch_array($resultavpw)) {
-	if ($rowavpw[elo_change] !="") {
-	$avpw = $avpw + $rowavpw[elo_change]; 
+while ($rowavpw = mysql_fetch_row($resultavpw)) {
+	if ($rowavpw[0] !="") {
+	$avpw = $avpw + $rowavpw[0]; 
 	$numwins++;
 	}
 }
@@ -266,7 +246,7 @@ if (($row[games] >= $gamestorank) && ($daysleft >= 0)) { echo " ($classrating)";
 <td><?echo "$row[losses]" ?></td>
 <td><?echo "$row[games]" ?></td>
 <td><?echo "$avpw / $avpl / $avep" ?></td>
-<td><?echo "$streak" ?></td>
+<td><?echo "$row[streak]" ?></td>
 
 </tr>
 </table>
@@ -278,8 +258,8 @@ if (($row[games] >= $gamestorank) && ($daysleft >= 0)) { echo " ($classrating)";
 		else {echo "<font color=\"#9E005D\">Please don't message me asking for a game.</font>";}
 		
 		
-				if ($loggedin == 1 && $row[MsgMe] == "Yes"){
-			echo "  <a href=\"challenge.php?challenger=$nameincookie&challenged=$_GET[name]\">[Challenge]</a>";
+				if ($_SESSION['username'] && $row[MsgMe] == "Yes"){
+			echo "  <a href=\"challenge.php?challenger=".urlencode($_SESSION['username'])."&challenged=$_GET[name]\">[Challenge]</a>";
 						
 		}
 
@@ -517,58 +497,84 @@ if ($row[CanPlay] != "") { ?>
 if ($row[games] > 0) { ?>
 
 <h2>Recent Games</h2>
-<table width="100%" border="0" bgcolor="<?echo"$color5" ?>" bordercolor="<?echo"$color1" ?>" cellspacing="0" cellpadding="5">
 
+<script type="text/javascript">
+$(document).ready(function() 
+    { 
+        $("#games").tablesorter({sortList: [[0,0]], widgets: ['zebra'] }); 
+    } 
+); 
+</script>
+
+<table width="<?echo"$tablewidth" ?>" id="games" class="tablesorter">
+<thead>
 <tr>
-<td width="<?echo"$width" ?>" bordercolor="<?echo"$color7" ?>" nowrap><p class="text"><b>Winner</b></p></td>
-<td width="<?echo"$width" ?>" bordercolor="<?echo"$color7" ?>" nowrap><p class="text"><b>Loser</b></p></td>
-<td width="<?echo"$width" ?>" bordercolor="<?echo"$color7" ?>" nowrap><p class="text"><b>+/- Points</b></p></td>
-<td width="<?echo"$width" ?>" bordercolor="<?echo"$color7" ?>" nowrap><p class="text"><b>Date</b></p></td>
+<th>Reported Time</th>
+<th>Winner</th>
+<th>Loser</th>
+<th>Winner New Rating</th>
+<th>Loser New Rating</th>
+<th>Replay</th>
+<?
+if ($approvegames == "yes") {
+?>
+<th>Status</th>
+<?
+}
+?>
 </tr>
-<?php
+<?
+    $sql = "SELECT reported_on, winner, loser, winner_points, loser_points, winner_elo, loser_elo, length(replay) as is_replay, withdrawn, contested_by_loser FROM $gamestable WHERE winner = '$_GET[name]' OR loser = '$_GET[name]'  ORDER BY reported_on DESC LIMIT 20";
 
+$result = mysql_query($sql,$db);
+while ($row = mysql_fetch_array($result)) {
+    if ($row["recorded"] == "yes") {
+        $status = "recorded";
+    } else {
+        $status = "pending";
+    }
 
-// Show the players latest played games,...
-
-$sql="SELECT * FROM $gamestable WHERE winner = '$_GET[name]' OR loser = '$_GET[name]'  ORDER BY game_id DESC LIMIT 0, 20";
-$result=mysql_query($sql,$db);
-
-$odd = true;
-
-while ($row = mysql_fetch_array($result)) { ?>
-
-
+    // Strike through games that aren't counted
+    if ($row['withdrawn'] <> 0 || $row['contested_by_loser'] <> 0) {
+        $sdel = "<del>";
+        $edel = "</del>";
+    } else {
+        $sdel = "";
+        $edel = "";
+    }
+?>
+</thead>
+<tbody>
 <tr>
-<td bgcolor=<?php if ($odd == true) { echo "'#FFFBF0'"; } else { echo "'#E7D9C0'"; } ?> width="<?echo"$width" ?>" bordercolor="<?echo"$color7" ?>" nowrap><p class="text">
+<td><?echo $sdel.$row[reported_on].$edel ?></td>
+<td><?echo $sdel."<a href=\"profile.php?name=$row[winner]\">$row[winner]</a>".$edel ?></td>
+<td><?echo $sdel."<a href=\"profile.php?name=$row[loser]\">$row[loser]</a>".$ededl ?></td>
+<td><?echo $sdel.$row['winner_elo']." (".$row['winner_points'].")".$edel ?></td>
+<td><?echo $sdel.$row['loser_elo']." (".$row['loser_points'].")".$edel ?></td>
+<td>
 <?php
-
-// Only show a link to the profile if it's not the profiles owner...
-if ($row[winner] != $_GET[name]) {
-echo "<a href=\"profile.php?name=$row[winner]\">$row[winner]</a>"; 
-} else {
-	echo "$row[winner]"; 
-	}
-?></p></td>
-<td bgcolor=<?php if ($odd == true) { echo "'#FFFBF0'"; } else { echo "'#E7D9C0'"; } ?> width="<?echo"$width" ?>" bordercolor="<?echo"$color7" ?>" nowrap><p class="text"><?php
-// Only show a link to the profile if it's not the profiles owner...
-if ($row[loser] != $_GET[name]) {
-echo "<a href=\"profile.php?name=$row[loser]\">$row[loser]</a>"; 
-} else {
-	echo "$row[loser]"; 
-	}
-?></p></td>
-<td bgcolor=<?php if ($odd == true) { echo "'#FFFBF0'"; } else { echo "'#E7D9C0'"; } ?> width="<?echo"$width" ?>" bordercolor="<?echo"$color7" ?>" nowrap><p class="text"><? if ($_GET[name] == $row[winner]) { echo  "+ $row[elo_change]";} else { echo  "- $row[elo_change]";} ?></p></td>
-<td bgcolor=<?php if ($odd == true) { echo "'#FFFBF0'"; } else { echo "'#E7D9C0'"; } ?> width="<?echo"$width" ?>" bordercolor="<?echo"$color7" ?>" nowrap><p class="text"><?echo "$row[date]" ?></p></td>
+    if ($row['is_replay']  > 0) {
+       echo $sdel."<a href=\"download-replay.php?reported_on=".urlencode($row['reported_on'])."\">Download</a>.$edel";
+    } else {
+       echo $sdel."No".$edel;
+    }
+?>
+</td>
+<?php
+    if ($approvegames == "yes") {
+?>
+<td><?echo $sdel."$status".$edel ?></td>
+<?
+    }
+?>
 </tr>
-
+<?
+}
+?>
+</tbody>
+</table>
+<br>
 <?php
-
-if ($odd == true) { $odd = false; } else { $odd = true; }
 }
-}
-
-}
-
-echo "</table>";
 require('bottom.php');
 ?>

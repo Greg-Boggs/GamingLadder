@@ -1,5 +1,8 @@
 <?php
+session_start();
 require('conf/variables.php');
+require('autologin.inc.php');
+require('logincheck.inc.php');
 
 // We have ajax lower down on the page, we handle it here and then exit.
 // This keeps the ajax code with the page that is calling it.
@@ -17,21 +20,13 @@ if (isset($_GET['q'])) {
 
 // Lets check to see if there are Ladder cookies to see if the user is logged in. If so, we wont show the login box....
 // First we extract the info from the cookies... There are 2 of them, one containing username, other one the password.
-require('ladder_cookie.inc.php');
 require('top.php');
-
-if ($loggedin == 0) {
-    echo "<h1>Access denied.</h1><br><p>Please <a href=\"index.php\">log in</a> to report a game. " .
-    "Only members of the ladder can make reports. <a href=\"join.php\">Become one</a> and compete today!</p>";
-    require('bottom.php');
-    exit;
-}
 
 if (isset($_POST['report'])) {
 ?>
 <h3>Report Game Results</h3>
 <?php    
-    $current_player = $nameincookie;
+    $current_player = $_SESSION['username'];
     $sql = "SELECT * FROM $playerstable WHERE name = '$current_player'";
     $result = mysql_query($sql, $db);
     $row = mysql_fetch_array($result);
@@ -48,8 +43,25 @@ if (isset($_POST['report'])) {
 		echo "No playing against yourself! ";
 		echo '<a href="report.php">Go back.</a>';
 		require('bottom.php');	
+        exit;
 	}
-	require('calc_elo.inc.php');
+
+    $draw = false;
+    // Do all the replay stuff to create a replay in the database
+    if (($_FILES["uploadedfile"]["size"] < 200000) && ($_FILES["uploadedfile"]["type"] == "application/x-gzip")){
+		$replay = file_get_contents($_FILES['uploadedfile']['tmp_name']);
+    } else {
+        $replay = null;
+    }
+
+    require_once 'include/elo.class.php';
+    
+    $elo = new Elo($db);
+    $result = $elo->ReportNewGame($winner, $loser, $draw, $replay);
+    if (!$result) {
+        echo "<p>Error ranking the game, please try again.</p>";
+    } else {
+
 ?>
 <p>Congratulations <?php echo $current_player; ?> you have defeated <?php echo $loser; ?>!</p>
 
@@ -61,41 +73,39 @@ if (isset($_POST['report'])) {
 	</tr>
 	<tr>
         <td>Provisional Player</td>
-        <td><?php echo $winnerStats[1] ? "Yes" : "No"; ?></td>
-        <td><?php echo $loserStats[1] ? "Yes" : "No"; ?></td>
+        <td><?php echo $result['winnerProvisional'] ? "Yes" : "No"; ?></td>
+        <td><?php echo $result['loserProvisional'] ? "Yes" : "No"; ?></td>
     </tr>
     <tr>
         <td>Rating change</td>
-        <td><?php echo $winnerChange; ?></td>
-        <td><?php echo $loserChange; ?></td>
+        <td><?php echo $result['winnerChange']; ?></td>
+        <td><?php echo $result['loserChange']; ?></td>
     </tr>
     <tr>
         <td>Old Ratings</td>
-        <td><?php echo $winnerStats[0]; ?></td>
-        <td><?php echo $loserStats[0]; ?></td>
+        <td><?php echo $result['winnerRating']; ?></td>
+        <td><?php echo $result['loserRating']; ?></td>
     </tr>
     <tr>
         <td>New Ratings</td>
-        <td><?php echo $winnerRating; ?></td>
-        <td><?php echo $loserRating; ?></td>
+        <td><?php echo $result['winnerRating'] + $result['winnerChange']; ?></td>
+        <td><?php echo $result['loserRating'] + $result['loserChange']; ?></td>
     </tr>
     </table>
-
 <?php
-	require('update_player.inc.php');
-
-	$sql = "INSERT INTO $gamestable (winner, loser, date, elo_change) VALUES ('$winner', '$loser', '$date', '$winnerChange')";
-	//echo "game: $sql <br/>";
-	$result = mysql_query($sql) or die ("failed to insert game");
-
-	echo "<p>Thank you! Information entered. Check your <a href=\"playerdata.php\">current position.</a></p>";
+    }
+	echo "<p>Thank you! Information entered. Check your <a href=\"ladder.php?personalladder=".urlencode($_SESSION['username'])."\">current position.</a></p>";
 } else {
 ?>
-<form name="form1" method="post" action="report.php">
+<form name="form1" enctype="multipart/form-data" method="post" onsubmit="return confirm('Report win against ' + this.losername.value +'?')" action="report.php">
 <h3>Report Game</h3>
 <p>
-    <?php echo $nameincookie; ?> won over 
-    <input type="text" name="losername" id="CityAjax" value="" style="width: 200px;" />
+    <?php echo $_SESSION['username']; ?> won over 
+    <input type="text" name="losername" id="CityAjax" value="" style="width: 200px;" /><br />
+
+    <input type="hidden" name="MAX_FILE_SIZE" value="200000" />
+    Choose a .gz replay to upload: <input name="uploadedfile" type="file" /><br />
+
     <input type="submit" name="report" value="Report Game" onclick="lookupAjax();" style="background-color: <?echo"$color5" ?>; border: 1 solid <?echo"$color1" ?>"/>
 </p>
 <b>Warning: If you cheat you will be banned.</b><br />If <i>accidentally</i> reported a false result 

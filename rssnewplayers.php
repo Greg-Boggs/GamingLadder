@@ -12,7 +12,7 @@ require_once 'rss_generator.inc.php';
 
 //	if ($row[Confirmation] != "" AND $row[Confirmation] != "Ok")
 
-$sql="SELECT name, country, rating FROM $playerstable ORDER BY player_id DESC LIMIT 0,20";
+$sql="SELECT name, country, joined FROM $playerstable ORDER BY player_id DESC LIMIT 0,20";
 $result=mysql_query($sql,$db);
 
 
@@ -32,7 +32,7 @@ $result=mysql_query($sql,$db);
 while ($row = mysql_fetch_array($result)) {
   $item = new rssGenerator_item();
   $item->title = $row[name];
-  $describtiontxt =  $row[rating];
+  $describtiontxt =  "";
 	
 	// What, except for the name, will we show in the description?
 
@@ -44,7 +44,7 @@ while ($row = mysql_fetch_array($result)) {
   $item->link = 'http://ladder.subversiva.org/profile.php?name='. $row[name];
   $item->guid = 'http://ladder.subversiva.org/profile.php?name='. $row[name];
   //$item->pubDate = 'Tue, 07 Mar 2006 00:00:01 GMT';
-$item->pubDate = date("D, d M Y H:i:s") . " GMT";
+$item->pubDate = date("D, d M Y H:i:s", $row['joined']) . " GMT";
   $rss_channel->items[] = $item;
 }
 

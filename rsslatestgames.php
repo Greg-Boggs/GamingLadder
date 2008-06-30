@@ -12,7 +12,7 @@ require_once 'rss_generator.inc.php';
 
 //	if ($row[Confirmation] != "" AND $row[Confirmation] != "Ok")
 
-$sql="SELECT winner, loser, date, elo_change FROM $gamestable ORDER BY game_id DESC LIMIT 0,20";
+$sql="SELECT DATE_FORMAT(reported_on, '%a, %d %b %Y %H:%i:%s') as pubdate, winner, loser, winner_elo, loser_elo, reported_on, winner_points, loser_points FROM $gamestable ORDER BY reported_on DESC LIMIT 0,20";
 $result=mysql_query($sql,$db);
 
 
@@ -31,15 +31,17 @@ $result=mysql_query($sql,$db);
 
 while ($row = mysql_fetch_array($result)) {
   $item = new rssGenerator_item();
-  $item->title = $row[winner] ." beats ". $row[loser];
-  $describtiontxt =  $row[date] . " / " . $row[RankMove] . " p";
+  $item->title = $row['winner'] ." beats ". $row['loser'];
+  $describtiontxt =  $row['winner']." ".$row['winner_elo']." (".$row['winner_points']."), ";
+  $describtiontxt .=  $row['loser']." ".$row['loser_elo']." (".$row['loser_points'].") ";
+  $describtiontxt .= $row['pubdate']." GMT";
 	
 	
   $item->description = $describtiontxt;
   $item->link = 'http://ladder.subversiva.org/profile.php?name='. $row[winner];
   $item->guid = 'http://fake.com'. rand(1,9999);
   //$item->pubDate = 'Tue, 07 Mar 2006 00:00:01 GMT';
-$item->pubDate = date("D, d M Y H:i:s") . " GMT";
+  $item->pubDate = $row['pubdate']." GMT";
   $rss_channel->items[] = $item;
 }
 

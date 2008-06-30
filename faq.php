@@ -1,5 +1,5 @@
 <?
-$page = "faq";
+session_start();
 require('conf/variables.php');
 require('top.php');
 ?>

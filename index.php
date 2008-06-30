@@ -1,6 +1,6 @@
 <?
-$page = "index";
-$time=time();
+session_start();
+$time = time();
 require('conf/variables.php');
 require('include/smileys.inc.php');
 ?>
@@ -43,8 +43,10 @@ $passworddb = md5($passworddb);
 	 if ("$bajs[player_id]" > 0) {
 		
 		// Set cookies... 776000 sec = 3 months before they expire.
-		  setcookie ("LadderofWesnoth1", $bajs[name], $time+7776000); 
-		  setcookie ("LadderofWesnoth2", $bajs[passworddb], $time+7776000); 
+		setcookie ("LadderofWesnoth1", $bajs[name], $time+7776000); 
+		setcookie ("LadderofWesnoth2", $bajs[passworddb], $time+7776000); 
+        $_SESSION['username'] = $bajs['name'];
+        $_SESSION['real-username'] = $bajs['name'];
 		header("Location: index.php");
 		//echo $sql;
 		exit;
@@ -152,57 +154,9 @@ echo"<a href='index.php?readnews=$row[news_id]'><font color='$color1'>$row[date]
 
 // Lets check to see if there are Ladder cookies to see if the user is logged in. If so, we wont show the login box....
 
+require 'autologin.inc.php';
+include ('sidebar.php'); 
 
-// First we extract the info from the cookies... There are 2 of them, one containing username, other one the password.
-
-	if (isset($_COOKIE["LadderofWesnoth1"]) AND isset($_COOKIE["LadderofWesnoth2"])) {
-		//DEB echo "2 Cookies are set..."; 
-		
-			
-		$nameincookie = $_COOKIE["LadderofWesnoth1"];
-		$passincookie =  $_COOKIE["LadderofWesnoth2"];
-		
-		// We hash it again to avoid getting the password broken by Rainbow tables...
-		
-
-	
-		// Now lets compare the cookies with the database. If there is a playername and pass that corresponds, he's logged in...
-		$sql = "SELECT * FROM $playerstable WHERE name='$nameincookie' AND passworddb='$passincookie'";
-		$result = mysql_query($sql,$db);
-		$bajs = mysql_fetch_array($result); 
-		
-		//DEB echo "<div align='right'>Vnameincookie: $nameincookie</div>";
-		//DEB echo "bajsplayerid: $bajs[name] $bajs[player_id]";
-		
-			if ($bajs[player_id] > 0) { 
-				$loggedin = 1;
-			} else { $loggedin = 0; }
-		}
-
-?>
-
-<?php include ('sidebar.php'); ?>
-
-
-<?php
 echo"<br>";
 require('bottom.php');
-
-
-function TimeConvert($ToConvert) {
-global $beenconverted;
-
-$min = floor($ToConvert/60);
-$h = floor($min/60);
-$min2 = $min;
-
-if ($h >= 1) {$min2 = ($min - ($h * 60));}
-
-if ($h >= 1) {
-$beenconverted = $h."h ".$min2."min"; 
-} else {
-$beenconverted = $min2."min"; 
-}
-
-}
 ?>

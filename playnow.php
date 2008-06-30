@@ -1,21 +1,10 @@
 <?php
-
+session_start();
 // Playnow  v. 1.01
-
-$page = "playnow";
+require 'autologin.inc.php';
 require('logincheck.inc.php');
 
-if ($loggedin != 1) {
-	echo "Login to view this page...";
-	exit;
-	
-	}
-
-
-
-?>
-<?php
-
+require 'top.php';
 /* In the HTML we'll use a drop down with server options. They're based in the users settings;
    If he has only the developers version or only the stable version of the game, then they'll be the only
    ones to appear. If he has both versions, a drop down will appear with both. 
@@ -79,7 +68,7 @@ $lastactive = time();
 	
 // Check if visitor is already in the table
 // ("SELECT onlineid FROM online WHERE ipaddress = '$ipaddress'");
-$sql = "SELECT id FROM $waitingtable WHERE username = '$nameincookie'";
+$sql = "SELECT id FROM $waitingtable WHERE username = '".$_SESSION['username']."'";
 $intable = mysql_query($sql);
 
 // $intable = mysql_num_rows($sql);
@@ -91,7 +80,7 @@ $intable = mysql_query($sql);
 	
 					
 	// "INSERT INTO online (ipaddress, lastactive) VALUES ('$ipaddress', $lastactive)"
-		$sql = "INSERT INTO $waitingtable (username, time, entered, meetingplace, rating) VALUES ('$nameincookie', '$_POST[hours]', '$lastactive', '$MeetingPlace', '$Rating')";
+		$sql = "INSERT INTO $waitingtable (username, time, entered, meetingplace, rating) VALUES ('".$_SESSION['username']."', '$_POST[hours]', '$lastactive', '$MeetingPlace', '$Rating')";
 		$result = mysql_query($sql);
 
 			// if suceesfully inserted data into database....
@@ -110,7 +99,7 @@ $intable = mysql_query($sql);
 // DEB echo "starting to updated entry...<br>";
 		// "UPDATE online SET lastactive = $lastactive WHERE ipaddress = '$ipaddress'");
 
-	$sql = "UPDATE $waitingtable SET time =  '$_POST[hours]', entered = '$lastactive', meetingplace = '$MeetingPlace', rating = '$Rating' WHERE username = '$nameincookie'";
+	$sql = "UPDATE $waitingtable SET time =  '$_POST[hours]', entered = '$lastactive', meetingplace = '$MeetingPlace', rating = '$Rating' WHERE username = '".$_SESSION['username']."'";
 		$result = mysql_query($sql);
 			
 			if($result){
@@ -131,14 +120,14 @@ $intable = mysql_query($sql);
 
 // If the user is logged in and wants to delete himself from the list...
 
-if (($_GET['del'] == $nameincookie) && ($loggedin == 1)) {
+if ($_GET['del'] == $_SESSION['username']) {
 
-	$sql3="DELETE FROM $waitingtable WHERE username = '$nameincookie'";
+	$sql3="DELETE FROM $waitingtable WHERE username = '".$_SESSION['username']."'";
 	$result3=mysql_query($sql3,$db);
 
 	if ($result3) {
 
-		echo "<h1>Removed $nameincookie from list...</h1><br /><a href='$wesnothdir'>back to index >></a>";
+		echo "<h1>Removed ".$_SESSION['username']." from list...</h1><br /><a href='$wesnothdir'>back to index >></a>";
 			require('bottom.php');
 			exit;
 	}

@@ -4,7 +4,25 @@ require('top.php');
 ?>
 <h1>Site development &amp; Changes</h1>
 
-<h2>Version 0.3.0 (to be released)</h2>
+<h2>Version 0.4.0</h2>
+<ul>
+<li>Redesign database to store all the information against games and not players.</li>
+<li>Allow upload of and download of replays.</li>
+<li>Game reporting give you a better summary of the results when entered.</li>
+<li>Contested games are visible in the games history and struck out.</li>
+<li>Complete overhaul of administration interface to ensure all function operate.</li>
+<li>Update rss to record the correct posting time of a game or new player.</li>
+<li>Removed all unused files</li>
+<li>Move all ranking work into the elo.class.php</li>
+<li>The relevant part of the ladder is automatically reranked when a game is removed.</li>
+<li>Reworked the login functionality to use sessions.</li>
+<li>Administrators are now ladder members with an is_admin flag.</li>
+<li>JQuery tablesorter was applied to games and players pages.</li>
+<li>General GUI cleanup, it's not perfect, but it's better.</li>
+<li>Rolled a number of similiar functions into one place, eg Ladder and My Ladder</li>
+</ul>
+
+<h2>Version 0.3.0</h2>
 <ul>
 <li>Import code into SVN</li>
 <li>Update installation procedures to be part of the admin section of the application.</li>

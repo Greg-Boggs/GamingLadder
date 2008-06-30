@@ -1,60 +1,19 @@
 <?php
-
+session_start();
 // v. 1.07
 
 require('conf/variables.php');
+require_once 'autologin.inc.php';
+require_once 'logincheck.inc.php';
+
 require('top.php');
 include 'include/avatars.inc.php';
-?>
-
-<?php 
 
 // Lets check to see if there are Ladder cookies to see if the user is logged in. If so, we wont show the login box....
-
-
 // First we extract the info from the cookies... There are 2 of them, one containing username, other one the password.
-
-	if (isset($_COOKIE["LadderofWesnoth1"]) AND isset($_COOKIE["LadderofWesnoth2"])) {
-		//DEB echo "2 Cookies are set..."; 
-		
-			
-		$nameincookie = $_COOKIE["LadderofWesnoth1"];
-		$passincookie =  $_COOKIE["LadderofWesnoth2"];
-		
-
-	
-		// Now lets compare the cookies with the database. If there is a playername and pass that corresponds, he's logged in...
-		$sql = "SELECT * FROM $playerstable WHERE name='$nameincookie' AND passworddb='$passincookie'";
-		$result = mysql_query($sql,$db);
-		$bajs = mysql_fetch_array($result); 
-		
-		//DEB echo "<div align='right'>Vnameincookie: $nameincookie</div>";
-		//DEB echo "bajsplayerid: $bajs[name] $bajs[player_id]";
-		
-			if ($bajs[player_id] > 0) { 
-				$loggedin = 1;
-			} else { $loggedin = 0; }
-		}
-
-
-if ($loggedin == 0) {
-	
-	echo "<h1>Oops...</h1><br><p>You're trying to edit a profile, but for that to happen you must first be logged in, must you not?</p>";
-	require('bottom.php');
-	exit;
-}
-	
-
-?>
-
-<?php echo "<br><h2>$nameincookie</h2>"; ?>
-
-<?php
-
-
+echo "<br /><h2>".$_SESSION['username']."</h2>";
 	
 if ($_POST[submit]) {
-	
 	// Lets generate the encrypted pass, after all, its the one thats stored in the database... we do it by applying the salt and hashing it twice.
 // We need to take the users real pass, "encrypt" it the same way we did when he registered, and then compare the results.
 // $salt is read from config file
@@ -69,7 +28,7 @@ $passworddb2 = md5($passworddb2);
 	
 	
 	
-$sql="SELECT * FROM $playerstable WHERE name='$nameincookie' AND passworddb = '$passworddb2'";
+$sql="SELECT * FROM $playerstable WHERE name='".$_SESSION['username']."'";
 $result=mysql_query($sql,$db);
 $num = mysql_num_rows($result);
 if ($num > 0) {
@@ -125,49 +84,39 @@ $mail = trim(strip_tags($_POST[mail]));
 
 // check if the user wants a new password than the old. 
 
-if  ($_POST[newpassworddb] == $_POST[newpassworddb2]) {
-	// if the same new pass was entered twice he should get a new pass.... one will be generated now:
-	
-	
-	
-if ($_POST[newpassworddb] != "" && $_POST[newpassworddb2] != "") {
-		
-		
-		// Apparently he wants a new pass... let's compare the new pass verification:
-		
-		
-		$newpassworddb = $salt.$_POST[newpassworddb];
-		$newpassworddb = md5($newpassworddb); 
-		$newpassworddb = md5($newpassworddb); 
-		
+    if ($_POST[newpassworddb] == $_POST[newpassworddb2]) {
+        // if the same new pass was entered twice he should get a new pass.... one will be generated now:
+	    if ($_POST[newpassworddb] != "" && $_POST[newpassworddb2] != "") {
+		    // Apparently he wants a new pass... let's compare the new pass verification:
+		    $newpassworddb = $salt.$_POST[newpassworddb];
+            $newpassworddb = md5($newpassworddb); 
+            $newpassworddb = md5($newpassworddb); 
 		}
-	
-	
-	} else { echo "New password verification didn't match. Please re-type and verify the new password."; exit;}
+	} else {
+        echo "New password verification didn't match. Please re-type and verify the new password."; 
+        include 'bottom.php';
+        exit;
+    }
 
 
-
-// Depending on if he wants a new pass or wants to keep the old we need 2 different sql queries...
-
-if ($newpassworddb && $newpassworddb != "")  {
-
-$sql = "UPDATE $playerstable SET mail = '$mail', icq = '$icq', aim = '$aim', msn = '$msn', country = '$_POST[country]', Avatar = '$_POST[avatar]', MsgMe = '$_POST[msgme]', HaveVersion = '$_POST[version]', CanPlay = '$CanPlay', Jabber = '$_POST[jabber]', passworddb = '$newpassworddb' WHERE name='$nameincookie' AND passworddb = '$passworddb2'"; } else {
-
-$sql = "UPDATE $playerstable SET mail = '$mail', icq = '$icq', aim = '$aim', msn = '$msn', country = '$_POST[country]', Avatar = '$_POST[avatar]', MsgMe = '$_POST[msgme]', HaveVersion = '$_POST[version]', CanPlay = '$CanPlay', Jabber = '$_POST[jabber]' WHERE name='$nameincookie' AND passworddb = '$passworddb2'"; }
-
-
-$result = mysql_query($sql);
-echo "<p class='text'>Profile is now updated.</p>";
-if ($newpassworddb && $newpassworddb !="") { echo "<p class='text'><br>Since you changed password you have been loged out. Please login with your new password.</p>"; }
-
-}
-else {
-echo "<p class='text'>The password you entered is incorrect.<br><br><a href='edit.php'>Please try again.</a></p>";
-}
+    // Depending on if he wants a new pass or wants to keep the old we need 2 different sql queries...
+    // An administrator can impersonate a user and update information about them without entering the original password.
+    if ($newpassworddb && $newpassworddb != "")  {
+        $sql = "UPDATE $playerstable SET mail = '$mail', icq = '$icq', aim = '$aim', msn = '$msn', country = '$_POST[country]', Avatar = '$_POST[avatar]', MsgMe = '$_POST[msgme]', HaveVersion = '$_POST[version]', CanPlay = '$CanPlay', Jabber = '$_POST[jabber]', passworddb = '$newpassworddb' WHERE name='".$_SESSION['username']."' AND (passworddb = '$passworddb2' OR '".$_SESSION['real-username']."' <> '".$_SESSION['username']."')"; 
+    } else {
+        $sql = "UPDATE $playerstable SET mail = '$mail', icq = '$icq', aim = '$aim', msn = '$msn', country = '$_POST[country]', Avatar = '$_POST[avatar]', MsgMe = '$_POST[msgme]', HaveVersion = '$_POST[version]', CanPlay = '$CanPlay', Jabber = '$_POST[jabber]' WHERE name='".$_SESSION['username']."' AND (passworddb = '$passworddb2' OR '".$_SESSION['real-username']."' <> '".$_SESSION['username']."')"; 
+    }
+    $result = mysql_query($sql);
+    echo "<p class='text'>Profile is now updated.</p>";
+    if ($newpassworddb && $newpassworddb !="") {
+       echo "<p class='text'><br>Since you changed password you will need to login to the site again to use the automatic login feature.  Please login with your new password.</p>"; }
+    } else {
+        echo "<p class='text'>The password you entered is incorrect.<br><br><a href='edit.php'>Please try again.</a></p>";
+    }
 } else {
 ?>
 <?php
-$sql="SELECT * FROM $playerstable WHERE name = '$nameincookie' ORDER BY name ASC";
+$sql="SELECT * FROM $playerstable WHERE name = '".$_SESSION['username']."' ORDER BY name ASC";
 $result=mysql_query($sql,$db);
 $row = mysql_fetch_array($result);
 ?>
@@ -176,7 +125,7 @@ $row = mysql_fetch_array($result);
 
 <tr>
 <td>
-	<input type=hidden name="editname" value="<?echo $nameincookie?>">
+	<input type=hidden name="editname" value="<?echo $_SESSION['username'] ?>">
 </td>
 </tr>
 

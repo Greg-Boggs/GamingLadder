@@ -11,7 +11,7 @@ require('./../top.php');
 if ($_POST[submit]) {
     $sql = "UPDATE $playerstable SET approved = 'no' WHERE name='$_POST[name]'";
     $result = mysql_query($sql);
-    echo "<p class='text'>Thank you! Information entered.<br><br><a href='blockuser.php'><font color='$color1'>Block another user</font>.</a></p>";
+    echo "<p class='text'>Thank you! Information entered.<br><br><a href='user-block.php'>Complete more blocking operations</a>.</p>";
 } else {
     if (isset($_GET['unblock'])) {
         $sql = "UPDATE $playerstable SET approved = 'yes' WHERE name='$_GET[unblock]'";

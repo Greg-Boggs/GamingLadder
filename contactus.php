@@ -1,7 +1,6 @@
 <?php
 require('conf/variables.php');
 require('top.php');
-require('ladder_cookie.inc.php');
 
 $sent = $_GET['sent'];
 if ( $sent == "sent" ) {

@@ -1,22 +1,23 @@
 <?
-
-$page = "players";
+session_start();
 require('conf/variables.php');
+require_once 'autologin.inc.php';
 require('top.php');
 ?>
-<p class="header">Players.</p>
-
+<h2>Find Players</h2>
+<br />
 <!-- Form: Search By Name -->
 <form method="GET"> 
 	Search by Name: <input type="text" name="byname" />
 	<input type="submit" value="Submit" />
 </form>
-<a href="players.php?startplayers=0&finishplayers=30" >Show All</a>
+<a href="players.php?startplayers=0&finishplayers=100" >Show All</a>
 
 <?
-$sql="SELECT * FROM $playerstable ORDER BY name ASC";
+$sql="SELECT count(*) FROM $playerstable";
 $result=mysql_query($sql,$db);
-$yo = mysql_num_rows($result);
+$yo = mysql_fetch_row($result);
+$yo = $yo[0];
 $number = 0;
 $link = 1;
 $finishnumber = $numplayerspage;
@@ -32,68 +33,79 @@ $number = $number + $numgamespage;
 $link = $link + 1;
 }
 if ($startplayers < $yo - $numplayerspage) {
-echo "<a href='playersgames.php?startplayers=$startnext&finishplayers=$finishnumber'><font color='$color1'>></font></a>&nbsp;|";
+echo "<a href='playersgames.php?startplayers=$startnext&finishplayers=$finishnumber'><font color='$color1'></font></a>&nbsp;|";
 }
 ?>
-<br><br>
-<table width="80%" border="1" bgcolor="<?php echo"$color5" ?>" bordercolor="<?echo"$color1" ?>" cellspacing="0" cellpadding="2">
+<script type="text/javascript">
+$(document).ready(function() 
+    { 
+        $("#player").tablesorter({sortList: [[1,0]], widgets: ['zebra'] }); 
+    } 
+); 
+</script>
+<table id="player" class="tablesorter">
+<thead>
 <tr>
-<td width="20%" bordercolor="<?echo"$color7" ?>" nowrap><p class="text"><b>Player</b></p></td>
-<td width="20%" bordercolor="<?echo"$color7" ?>" nowrap><p class="text"><b>Games</b></p></td>
-<td width="20%" bordercolor="<?echo"$color7" ?>" nowrap><p class="text"><b>Wins</b></p></td>
-<td width="20%" bordercolor="<?echo"$color7" ?>" nowrap><p class="text"><b>Losses</b></p></td>
-<td width="20%" bordercolor="<?echo"$color7" ?>" nowrap><p class="text"><b>Rating</b></p></td>
+<th>&nbsp;</th>
+<th>Player</th>
+<th>Games</th>
+<th>Wins</th>
+<th>Losses</th>
+<th>Rating</th>
+<th>Streak</th>
 </tr>
-<tr>
-<td width="20%" bordercolor="<?echo"$color7" ?>" nowrap><p class="text">&nbsp;</p></td>
-<td width="20%" bordercolor="<?echo"$color7" ?>" nowrap><p class="text">&nbsp;</p></td>
-<td width="20%" bordercolor="<?echo"$color7" ?>" nowrap><p class="text">&nbsp;</p></td>
-<td width="20%" bordercolor="<?echo"$color7" ?>" nowrap><p class="text">&nbsp;</p></td>
-<td width="20%" bordercolor="<?echo"$color7" ?>" nowrap><p class="text">&nbsp;</p></td>
-</tr>
-<?
+</thead>
+<tbody>
+<?php
 
-// I have split the sql statement
-$sql="SELECT * FROM $playerstable ";
+$sql = "select * from (select a.name, g.reported_on, 
+       CASE WHEN g.winner = a.name THEN g.winner_elo ELSE g.loser_elo END as rating,
+       CASE WHEN g.winner = a.name THEN g.winner_wins ELSE g.loser_wins END as wins,
+       CASE WHEN g.winner = a.name THEN g.winner_losses ELSE g.loser_losses END as losses,
+       CASE WHEN g.winner = a.name THEN g.winner_games ELSE g.loser_games END as games,
+       CASE WHEN g.winner = a.name THEN g.winner_streak ELSE g.loser_streak END as streak
+       FROM (select name, max(reported_on) as latest_game FROM $playerstable JOIN $gamestable ON (name = winner OR name = loser) GROUP BY 1) a JOIN webl_games g ON (g.reported_on = a.latest_game)) standings right join $playerstable USING (name)";
 
 //if byname is set than, add the where clause
 if ( isset($_GET['byname']) ) {
 	$sql .= " WHERE name like '%".$_GET['byname']."%' ";
 }
-$sql .= "ORDER BY name ASC , games ASC ";
+$sql .= "GROUP BY name ORDER BY name ASC";
 
 //these two Variables had to be checked because if you search by players with the form, these two variables aren't set anymore
 if ( isset($_GET[startplayers]) && isset($_GET[finishplayers]) ) { 
 	$sql .= " LIMIT $_GET[startplayers], $_GET[finishplayers]";
 }
 
-
 $result=mysql_query($sql,$db);
 while ($row = mysql_fetch_array($result)) {
     if ($row["approved"] == "no") {
-	$namepage = "<font color='#FF0000'>$row[name]</font>";
+	$namepage = "<span style='color: #FF0000'>$row[name]</span>";
     } else {
-	$namepage = "<font color='$color1'>$row[name]</font>";
+	$namepage = $row[name];
     }
 
-    $games = $row['games'];
-    $wins = $row['wins'];
-    $losses = $row ['losses'];
-    $rating = $row['rating'];
+    $games = $row['games'] == "" ? 0 : $row['games'];
+    $wins = $row['wins'] == "" ? 0 : $row['wins'];
+    $losses = $row ['losses'] == "" ? 0 : $row['losses'];
+    $rating = $row['rating'] == "" ? BASE_RATING : $row['rating'];
+    $streak = $row['streak'] == "" ? 0 : $row['streak'];
 
 ?>
 <tr>
-<td width="20%" bordercolor="<?echo"$color7" ?>" align="left" nowrap><p class='text'><?echo "<img src='graphics/flags/$row[country].bmp' align='absmiddle' border='1'>&nbsp;<a href='profile.php?name=$row[name]'><font color='$color1'>$namepage</font></a>"?></p></td>
-<td width="20%" bordercolor="<?echo"$color7" ?>" nowrap><p class="text"><?echo "$games" ?></p></td>
-<td width="20%" bordercolor="<?echo"$color7" ?>" nowrap><p class="text"><?echo "$wins" ?></p></td>
-<td width="20%" bordercolor="<?echo"$color7" ?>" nowrap><p class="text"><?echo "$losses" ?></p></td>
-<td width="20%" bordercolor="<?echo"$color7" ?>" nowrap><p class="text"><?echo "$rating" ?></p></td>
+<td align="right"><?echo "<img src='graphics/flags/$row[country].bmp' align='absmiddle' border='1'>"?></td>
+<td><?php echo "<a href='profile.php?name=$row[name]'>$namepage</a>"?></td>
+<td><?echo "$games" ?></td>
+<td><?echo "$wins" ?></td>
+<td><?echo "$losses" ?></td>
+<td><?echo "$rating" ?></td>
+<td><?echo "$streak" ?></td>
 </tr>
 <?
 }
 ?>
+</tbody>
 </table>
-<br>
 <?
 require('bottom.php');
 ?>

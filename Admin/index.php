@@ -1,7 +1,7 @@
 <?
 session_start();
 if (isset($_GET['logout'])) {
-    $_SESSION = array();
+    unset($_SESSION['admin-login']);
 }
 $GLOBALS['prefix'] = "../";
 require('./../conf/variables.php');
@@ -18,11 +18,12 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
     $result = mysql_query($sql,$db);
     $number = mysql_num_rows($result);
     if ($number == 1) {
-        $_SESSION['username'] = $_POST['username'];
+        $_SESSION['real-username'] = $_POST['username'];
+		$_SESSION['admin-login'] = true;
     }
 }
 
-if(isset($_SESSION['username']) ) {
+if(isset($_SESSION['username']) && isset($_SESSION['admin-login'])) {
 ?>
 <p class='text'>You are logged in as <b><?php echo $_SESSION['username'] ?></b>.</p>
 <?php
