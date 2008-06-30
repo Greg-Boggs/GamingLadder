@@ -20,11 +20,11 @@ $laddermailsender = "test@dot.com"; // this will be the senders email when the l
  $admintable = "webl_admin"; //name of the table that stores the admin login information
  $pagestable = "webl_pages"; //name of the table that stores additional pages
  $waitingtable = "webl_waiting"; //name of the table that stores the players waiting for a game...
- //junk? $wesnothdir = "/foobardir"; //relative path to the site dir, with / at the start
- $mailhost = "my.smtp.server";
+  $mailhost = "my.smtp.server";
 
 //config security
-$salt = "yourinfo"; // Notice: If you have a running ladder with registered users DONT ever change the salt! Nobody will be able to login then, ever, if you lose the salt.
+// WARNING: If you have a running ladder with registered users DONT ever change the salt! Nobody will be able to login then, ever, if you lose the salt.
+$salt = "yourinfo"; 
 
 //config stuff that has to do with the registration process...
 define("REG_MIN_NICKLENGTH", 3); //Minimum number of characters allowed in a registrants nickname
@@ -41,6 +41,7 @@ $numindexnews = 10; // news items displayed at index bottom...
 $newsitems = 3; //news items to show full text of...this needs to be fixed - index shows 3 even if it says 5 in here.. lol
 $numindexdeled = 5; // how many deleted games are shown at index.
 define("COUNT_GAMES_OF_LATEST_DAYS", 1); // amount of days we're gonne count the most recent played games in to display in index sidebar
+define("MIN_COUNT_GAMES_OF_LATEST_DAYS", 1); // minimum amount of games that need to have been played within the x most recent days to show the amount of games the x most recent days
 
 // redundant... remove if all works as it should: $kvalue = 32; // Which is the K-value in the Elo formula?
 
