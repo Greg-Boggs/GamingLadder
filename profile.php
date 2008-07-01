@@ -36,7 +36,7 @@ if ($rank == "") {
        CASE WHEN g.winner = a.name THEN g.winner_games ELSE g.loser_games END as games,
        CASE WHEN g.winner = a.name THEN g.winner_streak ELSE g.loser_streak END as streak,
        withdrawn, contested_by_loser, latest_game
-       FROM (select name, max(reported_on) as latest_game FROM $playerstable JOIN $gamestable ON (name = winner OR name = loser) GROUP BY 1) a JOIN webl_games g ON (g.reported_on = a.latest_game)) standings right join $playerstable USING (name) WHERE name = '".$_GET['name']."'";
+       FROM (select name, max(reported_on) as latest_game FROM $playerstable JOIN $gamestable ON (name = winner OR name = loser) WHERE contested_by_loser = 0 AND withdrawn = 0 GROUP BY 1) a JOIN $gamestable g ON (g.reported_on = a.latest_game)) standings right join $playerstable USING (name) WHERE name = '".$_GET['name']."'";
 
 
 	$result=mysql_query($sql,$db) or die ("Failed to  select current player information");
@@ -45,7 +45,7 @@ if ($rank == "") {
 }
 
 // PASSIVE CHECK: Lets get to know how many days the player has left before hes put into passive mode -----------------
-$sql = "SELECT reported_on + '".$passivedays." days' < now() AS passive, ".$passivedays." - (to_days(now()) - to_days(reported_on)) as daysleft  from webl_games WHERE winner = '$_GET[name]' OR loser = '$_GET[name]' ORDER BY reported_on DESC LIMIT 1";
+$sql = "SELECT reported_on + '".$passivedays." days' < now() AS passive, ".$passivedays." - (to_days(now()) - to_days(reported_on)) as daysleft  from $gamestable WHERE (winner = '$_GET[name]' OR loser = '$_GET[name]') AND contested_by_loser = 0 AND withdrawn = 0 ORDER BY reported_on DESC LIMIT 1";
 $result = mysql_query($sql, $db);
 list($passive, $daysleft) = mysql_fetch_row($result);
 
@@ -537,17 +537,25 @@ while ($row = mysql_fetch_array($result)) {
         $status = "pending";
     }
 
+    $undoDeleteLink = "";
     // Strike through games that aren't counted
     if ($row['withdrawn'] <> 0 || $row['contested_by_loser'] <> 0) {
         $sdel = "<del>";
         $edel = "</del>";
+        // We use withdrawn and contested_by_loser to detect if the game should be allowed to restored.
+        // There is no limit on restoring games at this point in time. However only a certain number are displayed on this screen.
+        if ($row['withdrawn'] <> 0 && $row['winner'] == $_SESSION['username']) {
+            $undoDeleteLink = " <a href='restoregame.php?reported_on=".urlencode($row['reported_on'])."'>Restore</a>";
+        } else if ($row['contested_by_loser'] <> 0 && $row['loser'] == $_SESSION['username']) {
+            $undoDeleteLink = " <a href='restoregame.php?reported_on=".urlencode($row['reported_on'])."'>Restore</a>";
+        }
     } else {
         $sdel = "";
         $edel = "";
     }
 ?>
 <tr>
-<td><?echo $sdel.$row[reported_on].$edel ?></td>
+<td><?echo $sdel.$row[reported_on].$edel.$undoDeleteLink ?></td>
 <td><?echo $sdel."<a href=\"profile.php?name=$row[winner]\">$row[winner]</a>".$edel ?></td>
 <td><?echo $sdel."<a href=\"profile.php?name=$row[loser]\">$row[loser]</a>".$ededl ?></td>
 <td><?echo $sdel.$row['winner_elo']." (".$row['winner_points'].")".$edel ?></td>
