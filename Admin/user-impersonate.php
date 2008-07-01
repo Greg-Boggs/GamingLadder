@@ -29,7 +29,7 @@ while ($row = mysql_fetch_array($result)) {
 </select></td>
 </tr>
 </table>
-<p><input type="Submit" name="submit" value="Block." style="background-color: <?echo"$color5" ?>; border: 1 solid <?echo"$color1" ?>" class="text"><br>
+<p><input type="Submit" name="submit" value="Impersonate" style="background-color: <?echo"$color5" ?>; border: 1 solid <?echo"$color1" ?>" class="text"><br>
 </form>
 <hr />
 <?php

@@ -14,7 +14,7 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
     $passworddb = md5($passworddb);
     $passworddb = md5($passworddb);
 
-	$sql = "SELECT name FROM $playerstable WHERE name='$_POST[username]' AND passworddb='$passworddb' AND is_admin = true";
+	$sql = "SELECT name FROM $playerstable WHERE name='$_POST[username]' AND passworddb='$passworddb' AND is_admin = 1";
     $result = mysql_query($sql,$db);
     $number = mysql_num_rows($result);
     if ($number == 1) {

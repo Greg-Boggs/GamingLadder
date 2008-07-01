@@ -1,5 +1,6 @@
 <?php
-
+session_start();
+require 'conf/variables.php';
 require_once 'autologin.inc.php';
 
 require 'top.php';
