@@ -47,19 +47,33 @@ if (isset($_POST['report'])) {
 	}
 
     $draw = false;
+    $failure = false;
+    $error = "";
     // Do all the replay stuff to create a replay in the database
-    if (($_FILES["uploadedfile"]["size"] < 200000) && ($_FILES["uploadedfile"]["type"] == "application/x-gzip")){
-		$replay = file_get_contents($_FILES['uploadedfile']['tmp_name']);
+    // We use the tmp_name to detect if somebody actually filled in a file for upload.
+    if (isset($_FILES["uploadedfile"]["name"]) && $_FILES['uploadedfile']['name'] != "") {
+        if (($_FILES["uploadedfile"]["size"] < 200000) && ($_FILES["uploadedfile"]["type"] == "application/x-gzip")){
+	        $replay = file_get_contents($_FILES['uploadedfile']['tmp_name']);
+        } else {
+            $failure = true;
+            $error = "You attempted to upload a replay, it wasn't small enough (<200Kb) or it wasn't the correct type (*.gz)";
+        }
     } else {
         $replay = null;
     }
 
-    require_once 'include/elo.class.php';
+    if (!$failure) {
+        require_once 'include/elo.class.php';
     
-    $elo = new Elo($db);
-    $result = $elo->ReportNewGame($winner, $loser, $draw, $replay);
-    if (!$result) {
-        echo "<p>Error ranking the game, please try again.</p>";
+        $elo = new Elo($db);
+        $result = $elo->ReportNewGame($winner, $loser, $draw, $replay);
+        if ($result === false) {
+            $failure = true;
+            $error = "There was a failure in reporting your game, please try again.";
+        }
+    }
+    if ($failure) {
+        echo "<p>ERROR: ".$error."</p>";
     } else {
 
 ?>
@@ -93,8 +107,8 @@ if (isset($_POST['report'])) {
     </tr>
     </table>
 <?php
-    }
 	echo "<p>Thank you! Information entered. Check your <a href=\"ladder.php?personalladder=".urlencode($_SESSION['username'])."\">current position.</a></p>";
+    }
 } else {
 ?>
 <form name="form1" enctype="multipart/form-data" method="post" onsubmit="return confirm('Report win against ' + this.losername.value +'?')" action="report.php">
