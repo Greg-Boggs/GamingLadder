@@ -72,7 +72,7 @@ if ($approvegames == "yes") {
 <script type="text/javascript">
 $(document).ready(function() 
     { 
-        $("#games").tablesorter({sortList: [[0,0]], widgets: ['zebra'] }); 
+        $("#games").tablesorter({sortList: [[0,1]], widgets: ['zebra'] }); 
     } 
 ); 
 </script>
@@ -94,6 +94,8 @@ if ($approvegames == "yes") {
 }
 ?>
 </tr>
+</thead>
+<tbody>
 <?
 if ($_REQUEST[selectname]) {
     $sql = "SELECT withdrawn, contested_by_loser, reported_on, winner, loser, winner_points, loser_points, winner_elo, loser_elo, length(replay) as is_replay FROM $gamestable WHERE winner = '$_REQUEST[selectname]' OR loser = '$_REQUEST[selectname]'  ORDER BY reported_on DESC LIMIT $_GET[startplayed], $_GET[finishplayed]";
@@ -117,7 +119,6 @@ while ($row = mysql_fetch_array($result)) {
     }
 ?>
 
-<tbody>
 <tr>
 <td><?echo $sdel.$row['reported_on'].$edel ?></td>
 <td><?echo $sdel."<a href=\"profile.php?name=$row[winner]\">$row[winner]</a>".$edel ?></td>
