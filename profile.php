@@ -11,7 +11,7 @@ $sql = "select * from (select a.name, g.reported_on,
        CASE WHEN g.winner = a.name THEN g.winner_losses ELSE g.loser_losses END as losses,
        CASE WHEN g.winner = a.name THEN g.winner_games ELSE g.loser_games END as games,
        CASE WHEN g.winner = a.name THEN g.winner_streak ELSE g.loser_streak END as streak,
-       withdrawn, contested_by_loser
+       withdrawn, contested_by_loser, latest_game
        FROM (select name, max(reported_on) as latest_game FROM $playerstable JOIN $gamestable ON (name = winner OR name = loser)  WHERE contested_by_loser = 0 AND withdrawn = 0 GROUP BY 1) a JOIN $gamestable g ON (g.reported_on = a.latest_game)) standings join $playerstable USING (name) WHERE
        reported_on > now() - interval $passivedays day AND rating >= $ladderminelo AND games >= $gamestorank ORDER BY 3 desc, 6 desc LIMIT $playersshown";
 $result=mysql_query($sql,$db);
@@ -19,7 +19,7 @@ $result=mysql_query($sql,$db);
 // Loop through and find me
 $cur = 1;
 $rank = "";
-while ($row = mysql_fetch_row($result)) {
+while ($row = mysql_fetch_array($result)) {
     if ($row['name'] == $_GET['name']) {
         $rank = $cur;
         break;
@@ -35,7 +35,7 @@ if ($rank == "") {
        CASE WHEN g.winner = a.name THEN g.winner_losses ELSE g.loser_losses END as losses,
        CASE WHEN g.winner = a.name THEN g.winner_games ELSE g.loser_games END as games,
        CASE WHEN g.winner = a.name THEN g.winner_streak ELSE g.loser_streak END as streak,
-       withdrawn, contested_by_loser
+       withdrawn, contested_by_loser, latest_game
        FROM (select name, max(reported_on) as latest_game FROM $playerstable JOIN $gamestable ON (name = winner OR name = loser) GROUP BY 1) a JOIN webl_games g ON (g.reported_on = a.latest_game)) standings right join $playerstable USING (name) WHERE name = '".$_GET['name']."'";
 
 
@@ -148,8 +148,8 @@ if ( $row["provisional"]  == "1" ) {
 }
 
 
-if ( $row["LastGame"]  != "" ) { 
-    echo $row["LastGame"];
+if ( $row["latest_game"]  != "" ) { 
+    echo $row["latest_game"];
 
     if (($daysleft >= 0)) {
 	echo " ($daysleft days left)";
@@ -201,7 +201,7 @@ while ($rowavpl = mysql_fetch_row($resultavpl)) {
 }
 
 if ($numlosses != 0) {
-	$avpl = "-". round(($avpl / $numlosses),0);
+	$avpl = round(($avpl / $numlosses),0);
 }
 
 
@@ -239,7 +239,8 @@ else {
 if ($daysleft >= 0) {echo $rank;} else {echo "<a href=\"faq.php#passive\">(passive)</a>";}  }?></td>
 <td><?
 echo round($row[rating],0);
-if (($row[games] >= $gamestorank) && ($daysleft >= 0)) { echo " ($classrating)"; } ?></td>
+// classrating is not defined anywhere, until its use is known, it has been commented out
+//if (($row[games] >= $gamestorank) && ($daysleft >= 0)) { echo " ($classrating)"; } ?></td>
 
 <td><?echo round(($totalpercentage * 100),0); ?>%</td>
 <td><?echo "$row[wins]" ?></td>
