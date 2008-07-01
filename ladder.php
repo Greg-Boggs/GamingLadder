@@ -14,23 +14,6 @@ $(document).ready(function()
     } 
 ); 
 </script>
-<h2><?php echo $personalladder ?> Ladder Standings</h2>
-<table id="ladder" class="tablesorter" width="100%">
-<thead>
-<tr>
-<th align="left" width='10%'>No.</th>
-<th align="left">Avatar&nbsp; &nbsp;</th>
-<th align="left">Player&nbsp; &nbsp;</th>
-<th align="center">Wins&nbsp; &nbsp;</th>
-<th align="center">Losses&nbsp; &nbsp;</th>
-<th align="center">Total&nbsp; &nbsp;</th>
-<th align="center">Wins% &nbsp; &nbsp;</th>
-<th align="center">Rating&nbsp; &nbsp;</th>
-<th align="center">Streak&nbsp; &nbsp;</th>
-</tr>
-</thead>
-<tbody>
-
 <?php
 
 $sql = "select * from (select a.name, g.reported_on, 
@@ -55,9 +38,37 @@ while ($row = mysql_fetch_array($result)) {
     }
     $cur++;
 }
+
+// I'm not ranked, it's not really my section of the ladder at all.
+if (!isset($myrank)) {
+    $personalladder = "";
+}
+?>
+<h2><?php echo $personalladder ?> Ladder Standings</h2>
+<table id="ladder" class="tablesorter" width="100%">
+<thead>
+<tr>
+<th align="left" width='10%'>No.</th>
+<th align="left">Avatar&nbsp; &nbsp;</th>
+<th align="left">Player&nbsp; &nbsp;</th>
+<th align="center">Wins&nbsp; &nbsp;</th>
+<th align="center">Losses&nbsp; &nbsp;</th>
+<th align="center">Total&nbsp; &nbsp;</th>
+<th align="center">Wins% &nbsp; &nbsp;</th>
+<th align="center">Rating&nbsp; &nbsp;</th>
+<th align="center">Streak&nbsp; &nbsp;</th>
+</tr>
+</thead>
+<tbody>
+<?php
 // Reset the result set
 mysql_data_seek($result, 0);
 $cur = 1;
+
+// If I don't have a rank, and requesting a personal ladder, display a message to that effect.
+if (!isset($myrank) && isset($_GET['personalladder'])) {
+    echo "<p>You are not ranked, the default ladder will be shown</p>";
+}
 
 while ($row = mysql_fetch_array($result)) {
 	$namepage = "$row[name]";
