@@ -528,7 +528,7 @@ if ($approvegames == "yes") {
 </thead>
 <tbody>
 <?
-    $sql = "SELECT reported_on, DATE_FORMAT(reported_on, '".$GLOBALS['displayDateFormat']."') as report_time, winner, loser, winner_points, loser_points, winner_elo, loser_elo, length(replay) as is_replay, withdrawn, contested_by_loser FROM $gamestable WHERE winner = '$_GET[name]' OR loser = '$_GET[name]'  ORDER BY reported_on DESC LIMIT 20";
+    $sql = "SELECT reported_on, DATE_FORMAT(reported_on, '".$GLOBALS['displayDateFormat']."') as report_time, winner, loser, winner_points, loser_points, winner_elo, loser_elo, length(replay) as is_replay, replay_downloads, withdrawn, contested_by_loser FROM $gamestable WHERE winner = '$_GET[name]' OR loser = '$_GET[name]'  ORDER BY reported_on DESC LIMIT 20";
 
 $result = mysql_query($sql,$db);
 while ($row = mysql_fetch_array($result)) {
@@ -564,7 +564,7 @@ while ($row = mysql_fetch_array($result)) {
 <td>
 <?php
     if ($row['is_replay']  > 0) {
-       echo $sdel."<a href=\"download-replay.php?reported_on=".urlencode($row['reported_on'])."\">Download</a>.$edel";
+       echo $sdel."<a href=\"download-replay.php?reported_on=".urlencode($row['reported_on'])."\">Download</a> (".$row['replay_downloads'].")".$edel;
     } else {
        echo $sdel."No".$edel;
     }

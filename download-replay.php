@@ -7,6 +7,7 @@ $result = mysql_query($sql, $db);
 
 if (mysql_num_rows($result) == 1) {
     $row = mysql_fetch_array($result);
+    mysql_query("UPDATE $gamestable set replay_downloads = replay_downloads + 1 WHERE reported_on = '".$_GET['reported_on']."'", $db);
     header('Cache-control: public');
     header('Content-Type: application/x-gzip'); 
     header('Content-Length: '.strlen($row['replay']));

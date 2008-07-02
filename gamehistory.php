@@ -98,9 +98,9 @@ if ($approvegames == "yes") {
 <tbody>
 <?
 if ($_REQUEST[selectname]) {
-    $sql = "SELECT withdrawn, contested_by_loser, DATE_FORMAT(reported_on, '".$GLOBALS['displayDateFormat']."') as report_time, reported_on, winner, loser, winner_points, loser_points, winner_elo, loser_elo, length(replay) as is_replay FROM $gamestable WHERE winner = '$_REQUEST[selectname]' OR loser = '$_REQUEST[selectname]'  ORDER BY reported_on DESC LIMIT $_GET[startplayed], $_GET[finishplayed]";
+    $sql = "SELECT withdrawn, contested_by_loser, DATE_FORMAT(reported_on, '".$GLOBALS['displayDateFormat']."') as report_time, reported_on, winner, loser, winner_points, loser_points, winner_elo, loser_elo, length(replay) as is_replay, replay_downloads FROM $gamestable WHERE winner = '$_REQUEST[selectname]' OR loser = '$_REQUEST[selectname]'  ORDER BY reported_on DESC LIMIT $_GET[startplayed], $_GET[finishplayed]";
 } else {
-    $sql = "SELECT withdrawn, contested_by_loser, DATE_FORMAT(reported_on, '".$GLOBALS['displayDateFormat']."') as report_time, reported_on, winner, loser, winner_points, loser_points, winner_elo, loser_elo, length(replay) as is_replay FROM $gamestable ORDER BY reported_on DESC LIMIT $_GET[startplayed], $_GET[finishplayed]";
+    $sql = "SELECT withdrawn, contested_by_loser, DATE_FORMAT(reported_on, '".$GLOBALS['displayDateFormat']."') as report_time, reported_on, winner, loser, winner_points, loser_points, winner_elo, loser_elo, length(replay) as is_replay, replay_downloads FROM $gamestable ORDER BY reported_on DESC LIMIT $_GET[startplayed], $_GET[finishplayed]";
 }
 $result = mysql_query($sql,$db);
 while ($row = mysql_fetch_array($result)) {
@@ -128,7 +128,7 @@ while ($row = mysql_fetch_array($result)) {
 <td>
 <?php
     if ($row['is_replay']  > 0) {
-       echo $sdel."<a href=\"download-replay.php?reported_on=".urlencode($row['reported_on'])."\">Download</a>.$edel";
+       echo $sdel."<a href=\"download-replay.php?reported_on=".urlencode($row['reported_on'])."\">Download</a> (".$row['replay_downloads'].")".$edel;
     } else {
        echo $sdel."No".$edel;
     }
