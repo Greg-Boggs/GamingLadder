@@ -43,6 +43,10 @@ $numindexdeled = 5; // how many deleted games are shown at index.
 define("COUNT_GAMES_OF_LATEST_DAYS", 1); // amount of days we're gonne count the most recent played games in to display in index sidebar
 define("MIN_COUNT_GAMES_OF_LATEST_DAYS", 1); // minimum amount of games that need to have been played within the x most recent days to show the amount of games the x most recent days
 
+// The format style used here is the one from mysql DATE_FORMAT
+// http://dev.mysql.com/doc/refman/6.0/en/date-and-time-functions.html#function_date-format
+$displayDateFormat = '%Y-%m-%d %h:%i';
+
 // redundant... remove if all works as it should: $kvalue = 32; // Which is the K-value in the Elo formula?
 
 

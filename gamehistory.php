@@ -98,9 +98,9 @@ if ($approvegames == "yes") {
 <tbody>
 <?
 if ($_REQUEST[selectname]) {
-    $sql = "SELECT withdrawn, contested_by_loser, reported_on, winner, loser, winner_points, loser_points, winner_elo, loser_elo, length(replay) as is_replay FROM $gamestable WHERE winner = '$_REQUEST[selectname]' OR loser = '$_REQUEST[selectname]'  ORDER BY reported_on DESC LIMIT $_GET[startplayed], $_GET[finishplayed]";
+    $sql = "SELECT withdrawn, contested_by_loser, DATE_FORMAT(reported_on, '".$GLOBALS['displayDateFormat']."') as report_time, reported_on, winner, loser, winner_points, loser_points, winner_elo, loser_elo, length(replay) as is_replay FROM $gamestable WHERE winner = '$_REQUEST[selectname]' OR loser = '$_REQUEST[selectname]'  ORDER BY reported_on DESC LIMIT $_GET[startplayed], $_GET[finishplayed]";
 } else {
-    $sql = "SELECT withdrawn, contested_by_loser, reported_on, winner, loser, winner_points, loser_points, winner_elo, loser_elo, length(replay) as is_replay FROM $gamestable ORDER BY reported_on DESC LIMIT $_GET[startplayed], $_GET[finishplayed]";
+    $sql = "SELECT withdrawn, contested_by_loser, DATE_FORMAT(reported_on, '".$GLOBALS['displayDateFormat']."') as report_time, reported_on, winner, loser, winner_points, loser_points, winner_elo, loser_elo, length(replay) as is_replay FROM $gamestable ORDER BY reported_on DESC LIMIT $_GET[startplayed], $_GET[finishplayed]";
 }
 $result = mysql_query($sql,$db);
 while ($row = mysql_fetch_array($result)) {
@@ -120,7 +120,7 @@ while ($row = mysql_fetch_array($result)) {
 ?>
 
 <tr>
-<td><?echo $sdel.$row['reported_on'].$edel ?></td>
+<td><?echo $sdel.$row['report_time'].$edel ?></td>
 <td><?echo $sdel."<a href=\"profile.php?name=$row[winner]\">$row[winner]</a>".$edel ?></td>
 <td><?echo $sdel."<a href=\"profile.php?name=$row[loser]\">$row[loser]</a>".$ededl ?></td>
 <td><?echo $sdel.$row['winner_elo']." (".$row['winner_points'].")".$edel ?></td>

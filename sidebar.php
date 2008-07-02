@@ -195,7 +195,7 @@ if ($recentgames[0] >= 1) {
 	
 // Show x  deleted games...
 	
-	$sql ="SELECT winner, loser, reported_on FROM $gamestable WHERE contested_by_loser <> 0 OR withdrawn <> 0 ORDER BY reported_on DESC LIMIT $numindexresults";
+	$sql ="SELECT winner, loser, DATE_FORMAT(reported_on,'".$GLOBALS['displayDateFormat']."') FROM $gamestable WHERE contested_by_loser <> 0 OR withdrawn <> 0 ORDER BY reported_on DESC LIMIT $numindexresults";
 	$result = mysql_query($sql,$db);
 
 	echo "<br /><br><b>Deleted reports</b><br><ol>";

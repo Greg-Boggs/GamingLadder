@@ -528,7 +528,7 @@ if ($approvegames == "yes") {
 </thead>
 <tbody>
 <?
-    $sql = "SELECT reported_on, winner, loser, winner_points, loser_points, winner_elo, loser_elo, length(replay) as is_replay, withdrawn, contested_by_loser FROM $gamestable WHERE winner = '$_GET[name]' OR loser = '$_GET[name]'  ORDER BY reported_on DESC LIMIT 20";
+    $sql = "SELECT reported_on, DATE_FORMAT(reported_on, '".$GLOBALS['displayDateFormat']."') as report_time, winner, loser, winner_points, loser_points, winner_elo, loser_elo, length(replay) as is_replay, withdrawn, contested_by_loser FROM $gamestable WHERE winner = '$_GET[name]' OR loser = '$_GET[name]'  ORDER BY reported_on DESC LIMIT 20";
 
 $result = mysql_query($sql,$db);
 while ($row = mysql_fetch_array($result)) {
@@ -556,7 +556,7 @@ while ($row = mysql_fetch_array($result)) {
     }
 ?>
 <tr>
-<td><?echo $sdel.$row[reported_on].$edel.$undoDeleteLink ?></td>
+<td><?echo $sdel.$row['report_time'].$edel.$undoDeleteLink ?></td>
 <td><?echo $sdel."<a href=\"profile.php?name=$row[winner]\">$row[winner]</a>".$edel ?></td>
 <td><?echo $sdel."<a href=\"profile.php?name=$row[loser]\">$row[loser]</a>".$ededl ?></td>
 <td><?echo $sdel.$row['winner_elo']." (".$row['winner_points'].")".$edel ?></td>
