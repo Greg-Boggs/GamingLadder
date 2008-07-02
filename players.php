@@ -64,7 +64,7 @@ $sql = "select * from (select a.name, g.reported_on,
        CASE WHEN g.winner = a.name THEN g.winner_losses ELSE g.loser_losses END as losses,
        CASE WHEN g.winner = a.name THEN g.winner_games ELSE g.loser_games END as games,
        CASE WHEN g.winner = a.name THEN g.winner_streak ELSE g.loser_streak END as streak
-       FROM (select name, max(reported_on) as latest_game FROM $playerstable JOIN $gamestable ON (name = winner OR name = loser) GROUP BY 1) a JOIN $gamestable g ON (g.reported_on = a.latest_game)) standings right join $playerstable USING (name)";
+       FROM (select name, max(reported_on) as latest_game FROM $playerstable JOIN $gamestable ON (name = winner OR name = loser) WHERE withdrawn = 0 AND contested_by_loser = 0 GROUP BY 1) a JOIN $gamestable g ON (g.reported_on = a.latest_game)) standings right join $playerstable USING (name)";
 
 //if byname is set than, add the where clause
 if ( isset($_GET['byname']) ) {
@@ -95,11 +95,11 @@ while ($row = mysql_fetch_array($result)) {
 <tr>
 <td align="right"><?echo "<img src='graphics/flags/$row[country].bmp' align='absmiddle' border='1'>"?></td>
 <td><?php echo "<a href='profile.php?name=$row[name]'>$namepage</a>"?></td>
-<td><?echo "$games" ?></td>
-<td><?echo "$wins" ?></td>
-<td><?echo "$losses" ?></td>
-<td><?echo "$rating" ?></td>
-<td><?echo "$streak" ?></td>
+<td><?echo $games ?></td>
+<td><?echo $wins ?></td>
+<td><?echo $losses ?></td>
+<td><?echo $rating ?></td>
+<td><?echo $streak ?></td>
 </tr>
 <?
 }
