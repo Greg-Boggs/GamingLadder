@@ -4,6 +4,12 @@
         $GLOBALS['prefix'] = "";
     }
 
+    // We need to detect the filename as maintenance.php includes this file.
+    if ($maintenanceMode == true && basename($_SERVER['SCRIPT_FILENAME']) != 'maintenance.php') {
+        // If the site is down for maintenance, redirect to the maintenance page
+        header ("Location: maintenance.php");
+        exit;
+    }
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" dir="ltr">

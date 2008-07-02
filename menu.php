@@ -1,6 +1,7 @@
 <?php 
 // All pages that include the menu should have started the session is they want to use logged in information
 
+if ($maintenanceMode <> true) {
 ?>
 <div id="nav">
   <ul>
@@ -23,6 +24,10 @@
 	<li><a href="faq.php">FAQ</a></li>
 	</ul>
 </div>
-
-
-
+<?php
+ } else {
+?>
+<div id="nav"></div>
+<?php
+}
+?>
