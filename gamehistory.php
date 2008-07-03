@@ -136,9 +136,14 @@ while ($row = mysql_fetch_array($result)) {
 <td>
 <?php
     if ($row['is_replay']  > 0) {
-       echo $sdel."<a href=\"download-replay.php?reported_on=".urlencode($row['reported_on'])."\">Download</a> (".$row['replay_downloads'].")".$edel;
+        $downloadDisplay = "";
+		// Only show how many times a replay has been downloaded if it has been downloaded to begin with...
+		if ($row['replay_downloads'] > 0) {
+		    $downloadDisplay = " (".$row['replay_downloads'].")";
+		}
+		echo $sdel."<a href=\"download-replay.php?reported_on=".urlencode($row['reported_on'])."\">Download</a>".$downloadDisplay.$edel;
     } else {
-       echo $sdel."No".$edel;
+        echo $sdel."No".$edel;
     }
 ?>
 </td>
