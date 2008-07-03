@@ -2,8 +2,6 @@
 // We dont want to show the login form if we're logged in alread, so:
 if (!isset($_SESSION['username']))  {
 ?>
-
-
 	<form action=index.php method=post> 
 	<input type=text name=user size=15>
 	<input type=password name=pass size=15>
@@ -35,48 +33,32 @@ function TimeConvert($ToConvert)
 <div class="sidebar">
 <?php
 
-
 // Lets erase all waiting players who are no longer waiting...
-
-$sql="SELECT * FROM $waitingtable ORDER BY id DESC";
-$result=mysql_query($sql,$db);
+$sql = "SELECT * FROM $waitingtable ORDER BY id DESC";
+$result = mysql_query($sql, $db);
 
 while ($row = mysql_fetch_array($result)) {
+    // Set the time they wanted to search for a game...
+    $inactive = time()-(60*60*$row[time]);
 
-	// Set the time they wanted to search for a game...
-
-	$inactive = time()-(60*60*$row[time]);
-	// DEB echo "inactive: $inactive<br>";	
-
-	// Delete the entry if the time has passed...
-
-	if ($row[entered] < $inactive) {
-	
-		$sql3="DELETE FROM $waitingtable WHERE username = '$row[username]'";
-		$result3=mysql_query($sql3,$db);
+    // Delete the entry if the time has passed...
+    if ($row['entered'] < $inactive) {
+		$sql3 = "DELETE FROM $waitingtable WHERE username = '$row[username]'";
+		$result3 = mysql_query($sql3, $db);
 	}
-	
-
-
 }
 
-//$db->query ("DELETE FROM online WHERE lastactive < $inactive");
-
-
-
-$sql="SELECT * FROM $waitingtable ORDER BY id ASC";
-$result=mysql_query($sql,$db);
+$sql = "SELECT * FROM $waitingtable ORDER BY id ASC";
+$result = mysql_query($sql, $db);
 
 
 // If nobody at all is looking for a game at this moment we want a special teazer pic to show up...
-
 if ((mysql_num_rows($result)==0) && isset($_SESSION['username'])) {
+    echo "<div align='left'><a href='playnow.php'><img border='0' src='graphics/waiting.gif'></a></div><br />";
 
-echo "<div align='left'><a href='playnow.php'><img border='0' src='graphics/waiting.gif'></a></div><br />";
+    // If people were in the list we dont display the picture.. instead we show the names and causal links
 
-// If people were in the list we dont display the cock-teazing picture.. instead we show the names and causal links
-
-} elseif (mysql_num_rows($result)!=0) {
+} elseif (mysql_num_rows($result) != 0) {
 	echo "<b>Looking for a game</b><ol>";
 	
 	while ($row = mysql_fetch_array($result)) {
@@ -146,6 +128,8 @@ echo "<div align='left'><a href='playnow.php'><img border='0' src='graphics/wait
 	
 
 	// Only get the payers that show in the ladder.... its defined by the minimum amount of games they have to played and a minimal rating
+    // We don't apply the limit in SQL as we use the total number of rows as the number of ladder players, the since query with more data
+    // is faster than the same query twice.
 	
     $sql = "select * from (select a.name, g.reported_on, 
        CASE WHEN g.winner = a.name THEN g.winner_elo ELSE g.loser_elo END as rating,
@@ -154,12 +138,18 @@ echo "<div align='left'><a href='playnow.php'><img border='0' src='graphics/wait
        CASE WHEN g.winner = a.name THEN g.winner_games ELSE g.loser_games END as games,
        CASE WHEN g.winner = a.name THEN g.winner_streak ELSE g.loser_streak END as streak
        FROM (select name, max(reported_on) as latest_game FROM $playerstable JOIN $gamestable ON (name = winner OR name = loser) WHERE contested_by_loser = 0 AND withdrawn = 0 GROUP BY 1) a JOIN $gamestable g ON (g.reported_on = a.latest_game)) standings join $playerstable USING (name) WHERE
-       reported_on > now() - interval $passivedays day AND rating >= $ladderminelo AND games >= $gamestorank ORDER BY 3 desc, 6 desc LIMIT 10";
+       reported_on > now() - interval $passivedays day AND rating >= $ladderminelo AND games >= $gamestorank ORDER BY 3 desc, 6 desc";
 
 	$result = mysql_query($sql,$db);
-
+    $rankedPlayers = mysql_num_rows($result);
+    $count = 0;
 	while ($row = mysql_fetch_array($result)) {
 		echo "<li><a href=\"profile.php?name=$row[name]\">$row[name]</a> ($row[rating])</li>"; 
+        // If the count gets to the limit, break out and only display top 10
+        $count++;
+        if ($count >= 10) {
+            break;
+        }
 	}
 	echo "</ol>";
 	
@@ -185,45 +175,32 @@ echo "<br /><b>Games/Player: </b>". round($number2/$number,2);
 	
 	
 // Display number of games played within x amount of days...
-$sql="SELECT count(*) FROM $gamestable WHERE cast(reported_on as date) >= cast(now() as date) - ".COUNT_GAMES_OF_LATEST_DAYS." AND withdrawn = 0 AND contested_by_loser = 0";
+$sql="SELECT count(*) FROM $gamestable WHERE cast(reported_on as date) <> cast(now() as date) AND cast(reported_on as date) >= cast(now() as date) - ".COUNT_GAMES_OF_LATEST_DAYS." AND withdrawn = 0 AND contested_by_loser = 0";
 $result = mysql_query($sql,$db);
 $recentgames = mysql_fetch_row($result);
 
 if ($recentgames[0] >= 1) {
-    echo "<br><b>Games latest ". COUNT_GAMES_OF_LATEST_DAYS ." days: </b>". $recentgames[0]; 
+    echo "<br><b>Games last ". COUNT_GAMES_OF_LATEST_DAYS ." days: </b>". $recentgames[0]; 
+}
+
+// Games today
+$sql="SELECT count(*) FROM $gamestable WHERE cast(reported_on as date) = cast(now() as date) AND withdrawn = 0 AND contested_by_loser = 0";
+$result = mysql_query($sql,$db);
+$todaygames = mysql_fetch_row($result);
+echo "<br><b>Games today: </b>". $todaygames[0]; 
+
+// Ranked Players
+// Use ladder standings from above to general total.
+echo "<br /><b>Ranked Players: </b>".$rankedPlayers;
+
+
+
+if (isset($_SESSION['username']))  {
+    echo "<br /><br /><a href='logout.php'>Log out</a>";	
 }
 	
-// Show x  deleted games...
-	
-	$sql ="SELECT winner, loser, DATE_FORMAT(reported_on,'".$GLOBALS['displayDateFormat']."') FROM $gamestable WHERE contested_by_loser <> 0 OR withdrawn <> 0 ORDER BY reported_on DESC LIMIT $numindexresults";
-	$result = mysql_query($sql,$db);
-
-	echo "<br /><br><b>Deleted reports</b><br><ol>";
-	
-	while ($bajs = mysql_fetch_array($result)) { 
-	
-		echo "<li><a href=\"profile.php?name=$bajs[0]\">$bajs[0]</a> beats <a href=\"profile.php?name=$bajs[1]\">$bajs[1]</a><br>$bajs[2]</li>";
-	}
-	echo "</ol>";
-
-	
-	If (isset($_SESSION['username']))  {
-		echo "<br /><br /><a href='logout.php'>Log out</a>";	
-	}
-	
-	?>
-
-
+?>
 </td>	
-	
-	
-
-	
-	
-	
-	
-
-
 	</tr>
 </table>
 </div>
