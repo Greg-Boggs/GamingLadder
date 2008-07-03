@@ -253,6 +253,28 @@ echo round($row[rating],0);
 </tr>
 </table>
 </p>
+
+<?php
+$sql = "SELECT sum(withdrawn) from $gamestable WHERE winner = '".$_GET['name']."'";
+$result = mysql_query($sql, $db);
+list($withdrawn) = mysql_fetch_row($result);
+$sql = "SELECT sum(contested_by_loser) from $gamestable WHERE loser = '".$_GET['name']."'";
+$result = mysql_query($sql, $db);
+list($contested) = mysql_fetch_row($result);
+if ($contested != 0 || $withdrawn != 0) {
+?>
+<br />
+<table>
+<tr>
+<td>Games Withdrawn:</td>
+<td><?php echo $withdrawn ?></td>
+</tr>
+<tr>
+<td>Games Contested:</td>
+<td><?php echo $contested ?></td>
+</tr>
+</table>
+<?php } ?>
 <br><br>
 <table width="100%" bgcolor="#E7D9C0"><tr><td>
 		<?php 
