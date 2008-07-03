@@ -117,12 +117,20 @@ while ($row = mysql_fetch_array($result)) {
         $sdel = "";
         $edel = "";
     }
+
+    $winnerWithdrew = "";
+    $loserContested = "";
+    if ($row['withdrawn'] <> 0) {
+        $winnerWithdrew = "**";
+    } else if ($row['contested_by_loser'] <> 0) {
+        $loserContested = "**";
+    }
 ?>
 
 <tr>
 <td><?echo $sdel.$row['report_time'].$edel ?></td>
-<td><?echo $sdel."<a href=\"profile.php?name=$row[winner]\">$row[winner]</a>".$edel ?></td>
-<td><?echo $sdel."<a href=\"profile.php?name=$row[loser]\">$row[loser]</a>".$ededl ?></td>
+<td><?echo $sdel."<a href=\"profile.php?name=$row[winner]\">$row[winner]</a>".$winnerWithdrew.$edel ?></td>
+<td><?echo $sdel."<a href=\"profile.php?name=$row[loser]\">$row[loser]</a>".$loserContested.$edel ?></td>
 <td><?echo $sdel.$row['winner_elo']." (".$row['winner_points'].")".$edel ?></td>
 <td><?echo $sdel.$row['loser_elo']." (".$row['loser_points'].")".$edel ?></td>
 <td>
