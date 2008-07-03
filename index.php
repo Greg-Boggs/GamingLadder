@@ -68,6 +68,8 @@ $passworddb = md5($passworddb);
 				}
 }
 
+// You must have autologin before top.php
+require 'autologin.inc.php';
 require('top.php');
 
 ?> 
@@ -82,7 +84,6 @@ require('top.php');
 
 <?php
 
-require 'autologin.inc.php';
 if ($_GET[readnews]) {
 $sql="SELECT * FROM $newstable WHERE news_id = '$_GET[readnews]' ORDER BY news_id DESC LIMIT 0, $newsitems";
 $result=mysql_query($sql,$db);
@@ -153,9 +154,6 @@ echo"<a href='index.php?readnews=$row[news_id]'><font color='$color1'>$row[date]
 
 <?php 
 
-// Lets check to see if there are Ladder cookies to see if the user is logged in. If so, we wont show the login box....
-
-require 'autologin.inc.php';
 include ('sidebar.php'); 
 
 echo"<br>";
