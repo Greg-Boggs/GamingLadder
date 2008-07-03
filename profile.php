@@ -150,15 +150,20 @@ if ( $row["provisional"]  == "1" ) {
 
 
 if ( $row["latest_game"]  != "" ) { 
-    echo $row["latest_game"];
-
     if (($daysleft >= 0)) {
 	echo " ($daysleft days left)";
     }
 } 
 
-
-
+// If we are logged in and displaying somebody elses profile, tell us about my win/loss
+if (isset($_SESSION['username']) && $row['name'] != $_SESSION['username']) {
+    require_once 'include/elo.class.php';
+    $elo = new Elo($db);
+    $winresult = $elo->RankGame($_SESSION['username'],$row['name'], date("Ymd His"));
+    $lossresult = $elo->RankGame($row['name'],$_SESSION['username'], date("Ymd His"));
+    $drawresult = $elo->RankGame($row['name'],$_SESSION['username'], date("Ymd His"), true);
+    echo ", Points for (Win/Loss/Draw): ".$winresult['winnerChange']."/".$lossresult['loserChange']."/".$drawresult['loserChange'];
+}
 ?>
 </td>
 <td valign="top">

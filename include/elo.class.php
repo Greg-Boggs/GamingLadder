@@ -73,7 +73,7 @@ class Elo {
             return false;
         }
 
-        $result = $this->RankGame($winner, $loser, $reportTime, $draw);
+        $result = $this->RankGameInDB($winner, $loser, $reportTime, $draw);
 
         if (!$result) {
             $sql = "DELETE FROM $gamestable WHERE reported_on = '$reportTime'";
@@ -128,8 +128,6 @@ class Elo {
 
     function RankGame($winner, $loser, $reportedTime, $draw = false)
     {
-        global $playerstable, $gamestable;
-
         $result = array();
 
         $loserStats = $this->GetRating($reportedTime, $loser);
@@ -177,7 +175,14 @@ class Elo {
             $result['winnerGames'] = $winnerStats['games'];
             $result['loserGames'] = $loserStats['games'];
         }
+        return $result;
+    }
 
+    function RankGameInDB($winner, $loser, $reportedTime, $draw = false)
+    {
+        global $playerstable, $gamestable;
+
+        $result = $this->RankGame($winner, $loser, $reportedTime, $draw);
         // Add the ratings into the game information
         // We also use this opportunity to insert the initial rating if it doesn't exist.
         $sql = "UPDATE $gamestable SET winner_elo = ".$result['winnerRating']." + ".$result['winnerChange'].",

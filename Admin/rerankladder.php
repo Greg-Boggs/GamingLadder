@@ -19,7 +19,7 @@ if (isset($_POST['rerank'])) {
         $winner = $row['winner'];
         $loser = $row['loser'];
 
-        if (!$elo->RankGame($winner, $loser, $row['reported_on'], $row['draw'])) {
+        if (!$elo->RankGameInDB($winner, $loser, $row['reported_on'], $row['draw'])) {
             echo "Error: could not report game between ".htmlentities($winner)." and ".htmlentities($loser)." on ".htmlentities($row['reported_on'])."<br />";
         }
     }
