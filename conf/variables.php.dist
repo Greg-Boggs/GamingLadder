@@ -1,9 +1,5 @@
 <?
-//start
 
-// If you sent maintenance mode to true, the entire application will redirect to maintenance.php to allow you to do maintenance
-// on things like the database.  The maintenance page makes significant use of styles and included materials, when upgrading the
-// ladder application, you will still lose the website for a few moments when you update it.
 $maintenanceMode = false;
 
 //configure database info
@@ -17,14 +13,11 @@ $laddermailsender = "test@dot.com"; // this will be the senders email when the l
 
 
 //configure the tables in the database
- $deletedgames = "webl_deleted_games";
  $playerstable = "webl_players"; //the name of the table that contains information about the players
  $gamestable = "webl_games"; //the name of the table that stores the played games
  $newstable = "webl_news"; // the name of the table that stores the news
- $varstable = "webl_vars"; //the name of the table that stores various information
- $admintable = "webl_admin"; //name of the table that stores the admin login information
- $pagestable = "webl_pages"; //name of the table that stores additional pages
- $waitingtable = "webl_waiting"; //name of the table that stores the players waiting for a game...
+  $admintable = "webl_admin"; //name of the table that stores the admin login information
+  $waitingtable = "webl_waiting"; //name of the table that stores the players waiting for a game...
   $mailhost = "my.smtp.server";
 
 //config security

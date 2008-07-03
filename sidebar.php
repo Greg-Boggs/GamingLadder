@@ -90,16 +90,21 @@ if ((mysql_num_rows($result)==0) && isset($_SESSION['username'])) {
 	
 // Show latest played games:	
 	
-	$sql ="SELECT winner, loser FROM $gamestable WHERE withdrawn = 0 and contested_by_loser = 0 ORDER BY reported_on DESC LIMIT $numindexresults";
+	$sql ="SELECT winner, loser, replay, reported_on FROM $gamestable WHERE withdrawn = 0 and contested_by_loser = 0 ORDER BY reported_on DESC LIMIT $numindexresults";
 	$result = mysql_query($sql,$db);
 	//$bajs = mysql_fetch_array($result); 
 	
 
-	echo "<b>Latest results</b><br><ol>";
+	echo "<b>Latest results (w/l)</b><br><ol>";
 	
 	while ($bajs = mysql_fetch_array($result)) { 
 	
-		echo "<li><a href=\"profile.php?name=$bajs[0]\">$bajs[0]</a> beats <a href=\"profile.php?name=$bajs[1]\">$bajs[1]</a></li>";
+	// show replay link or not?
+	if ($bajs[replay] == NULL) {
+			echo "<li><a href=\"profile.php?name=$bajs[0]\">$bajs[0]</a> / <a href=\"profile.php?name=$bajs[1]\">$bajs[1]</a></li>";
+		} else { 
+			echo "<li><a href=\"profile.php?name=$bajs[0]\">$bajs[0]</a> / <a href=\"profile.php?name=$bajs[1]\">$bajs[1]</a><a href=\"download-replay.php?reported_on=$bajs[reported_on]\"> ®</a></li>";
+		}
 	}
 	echo "</ol>";
 	
@@ -179,9 +184,9 @@ $sql="SELECT count(*) FROM $gamestable WHERE cast(reported_on as date) <> cast(n
 $result = mysql_query($sql,$db);
 $recentgames = mysql_fetch_row($result);
 
-if ($recentgames[0] >= 1) {
+//if ($recentgames[0] >= 1) {
     echo "<br><b>Games last ". COUNT_GAMES_OF_LATEST_DAYS ." days: </b>". $recentgames[0]; 
-}
+//}
 
 // Games today
 $sql="SELECT count(*) FROM $gamestable WHERE cast(reported_on as date) = cast(now() as date) AND withdrawn = 0 AND contested_by_loser = 0";
