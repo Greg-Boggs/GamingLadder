@@ -27,16 +27,22 @@ if (isset($_POST['report'])) {
 <h3>Report Game Results</h3>
 <?php    
     $current_player = $_SESSION['username'];
-    $sql = "SELECT * FROM $playerstable WHERE name = '$current_player'";
+    $sql = "SELECT name FROM $playerstable WHERE name = '".$_POST['losername']."' and Confirmation = 'Ok'";
     $result = mysql_query($sql, $db);
-    $row = mysql_fetch_array($result);
 
 	// Make sure the user selected a loser, this should be done in javascript.
-	if ($_POST[losername] == "") {
+	if ($_POST['losername'] == "") {
 		echo "<p><b>You must select the name of the loser!</b></p><p>Please return the the <a href='report.php'>report</a> page and select a name.</p>";
 		require('bottom.php');
 		exit;
 	}
+    // Make sure the selected user is actually a ladder member
+    if (mysql_num_rows($result) == 0) {
+        echo "<p><b>You must select a valid and confirmed ladder player!</b></p><p>Please return the the <a href='report.php'>report</a> page and select a valid opponent.</p>";
+        require 'bottom.php';
+        exit;
+    }
+
 	$winner = $current_player;
 	$loser = $_POST['losername'];
 	if ($winner == $loser) { 
