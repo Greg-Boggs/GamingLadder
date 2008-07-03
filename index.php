@@ -82,6 +82,7 @@ require('top.php');
 
 <?php
 
+require 'autologin.inc.php';
 if ($_GET[readnews]) {
 $sql="SELECT * FROM $newstable WHERE news_id = '$_GET[readnews]' ORDER BY news_id DESC LIMIT 0, $newsitems";
 $result=mysql_query($sql,$db);
