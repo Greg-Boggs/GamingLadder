@@ -81,6 +81,19 @@ if (isset($_POST['report'])) {
     if ($failure) {
         echo "<p>ERROR: ".$error."</p>";
     } else {
+		
+	// Now that the Elo has been added into the games table, let's update the entry so that it also includes the comment & sportsmanship rating
+		
+	
+	$sportsmanship = $_POST['sportsmanship'];
+	$username = $_SESSION['username'];
+	$comment = $_POST['comment'];
+	$query2 = "UPDATE $gamestable SET winner_comment = '$comment', loser_stars = '$sportsmanship' WHERE  winner = '$username' AND reported_on = '$reportTime' ORDER BY reported_on DESC";
+    $result2 = mysql_query($query2) or die("fail");
+    
+	
+	
+		
 
 ?>
 <p>Congratulations <?php echo $current_player; ?> you have defeated <?php echo $loser; ?>!</p>
@@ -88,32 +101,45 @@ if (isset($_POST['report'])) {
 <table border="1" cellpadding="5" cellspacing="0">
 	<tr>
         <th></th>
-        <th><?php echo $current_player; ?></th>
-        <th><?php echo $loser; ?></th>
+
+		 <th>Provisional Player</th>
+		<th>Rating Change</th>   
+		<th>Old Ratings</th>   
+		<th>New Ratings</th> 
+		<th>Sportsmanship</th>   
 	</tr>
+	
+	
 	<tr>
-        <td>Provisional Player</td>
+  
+		<th><?php echo $current_player; ?></th>
         <td><?php echo $result['winnerProvisional'] ? "Yes" : "No"; ?></td>
-        <td><?php echo $result['loserProvisional'] ? "Yes" : "No"; ?></td>
+         <td><?php echo $result['winnerChange']; ?></td>
+		        <td><?php echo $result['winnerRating']; ?></td> 
+				        <td><?php echo $result['winnerRating'] + $result['winnerChange']; ?></td>
+							<td>?</td>
     </tr>
-    <tr>
-        <td>Rating change</td>
-        <td><?php echo $result['winnerChange']; ?></td>
-        <td><?php echo $result['loserChange']; ?></td>
-    </tr>
-    <tr>
-        <td>Old Ratings</td>
-        <td><?php echo $result['winnerRating']; ?></td>
+	
+	
+	
+	<tr>
+			<th><?php echo $loser; ?></th>
+			<td><?php echo $result['loserProvisional'] ? "Yes" : "No"; ?></td>
+			        <td><?php echo $result['loserChange']; ?></td>
+		
         <td><?php echo $result['loserRating']; ?></td>
-    </tr>
-    <tr>
-        <td>New Ratings</td>
-        <td><?php echo $result['winnerRating'] + $result['winnerChange']; ?></td>
+		
         <td><?php echo $result['loserRating'] + $result['loserChange']; ?></td>
-    </tr>
+		
+	<td><?php echo $sportsmanship;?></td>
+	<tr>
+	
+
+
+	
     </table>
 <?php
-	echo "<p>Thank you! Information entered. Check your <a href=\"ladder.php?personalladder=".urlencode($_SESSION['username'])."\">current position.</a></p>";
+	echo "<p>Thank you! Information entered. Check your <a href=\"ladder.php?personalladder=".urlencode($_SESSION['username'])."\">current position.</a><br />Report Id: $reportTime</p>";
     }
 } else {
 ?><table>
@@ -152,7 +178,7 @@ if (isset($_POST['report'])) {
 
 <tr><td valign="top">
 <p valign="top">game comment</p></td>
-<td valign="top"><textarea rows="5" cols="60"> </textarea> </td>
+<td valign="top"><textarea name="comment" rows="5" cols="60"> </textarea> </td>
 </tr>
 <tr><td>
 	<input type="submit" name="report" value="Report Game" onclick="lookupAjax();" style="background-color: <?echo"$color5" ?>; border: 1 solid <?echo"$color1" ?>"/>

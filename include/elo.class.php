@@ -48,7 +48,7 @@ class Elo {
 
     function ReportNewGame($winner, $loser, $draw = false, $replay = NULL)
     {
-        global $gamestable;
+        global $gamestable, $reportTime;
 
         $reportTime = date('Y-m-d h:i:s'); 
 
