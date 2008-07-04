@@ -19,6 +19,7 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
     $number = mysql_num_rows($result);
     if ($number == 1) {
         $_SESSION['real-username'] = $_POST['username'];
+        $_SESSION['username'] = $_POST['username'];
 		$_SESSION['admin-login'] = true;
     }
 }

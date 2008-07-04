@@ -1,6 +1,9 @@
 <?
 
+// Is the site under maintenance, if so set this to true and all pages will show a maintenance screen
 $maintenanceMode = false;
+// You can backup the database without logging in if you have access to the key below.  Change it to a secure string
+$backupKey = "A long password w!tH $ymb0ls is G00d";
 
 //configure database info
  $adminemail = "spam@THIS.com";
