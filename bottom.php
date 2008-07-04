@@ -18,5 +18,6 @@ $totaltime = round($totaltime, 5);
 echo "<p align=\"center\" class=\"copyleft\">$totaltime sec.</p>";
 ?>
 </div>
+<br /><br />
 </body>
 </html>

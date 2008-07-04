@@ -18,6 +18,7 @@ $laddermailsender = "test@dot.com"; // this will be the senders email when the l
  $newstable = "webl_news"; // the name of the table that stores the news
   $admintable = "webl_admin"; //name of the table that stores the admin login information
   $waitingtable = "webl_waiting"; //name of the table that stores the players waiting for a game...
+$logtable ="webl_log";//name of tabel that has some log info  
   $mailhost = "my.smtp.server";
 
 //config security

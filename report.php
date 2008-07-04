@@ -116,22 +116,56 @@ if (isset($_POST['report'])) {
 	echo "<p>Thank you! Information entered. Check your <a href=\"ladder.php?personalladder=".urlencode($_SESSION['username'])."\">current position.</a></p>";
     }
 } else {
-?>
+?><table>
 <form name="form1" enctype="multipart/form-data" method="post" onsubmit="return confirm('Report win against ' + this.losername.value +'?')" action="report.php">
 <h3>Report Game</h3>
+
+
 <p>
-    <?php echo $_SESSION['username']; ?> won over 
-    <input type="text" name="losername" id="CityAjax" value="" style="width: 200px;" /><br />
+
+<table>
+
+<tr>
+<td><?php echo $_SESSION['username']; ?> won over</td>
+    
+	<td><input type="text" name="losername" id="CityAjax" value="" style="width: 200px;" /></td><br />
+</tr>
 
     <input type="hidden" name="MAX_FILE_SIZE" value="200000" />
-    Choose a .gz replay to upload: <input name="uploadedfile" type="file" /><br />
-
-    <input type="submit" name="report" value="Report Game" onclick="lookupAjax();" style="background-color: <?echo"$color5" ?>; border: 1 solid <?echo"$color1" ?>"/>
+    
+	<tr><td>.gz replay to upload</td><td><input name="uploadedfile" type="file" /></td></tr><br />
+	
+	<tr><td>sportsmanship</td><td><select size="1" name="sportsmanship">
+		<option selected>3</option>
+		<option>1</option>
+		<option>2</option>
+		<option>3</option>
+		<option>4</option>
+		<option>5</option>
+	</select>
+	</td>
+		
+	<br/>
+	
+	
 </p>
-<b>Warning: If you cheat you will be banned.</b><br />If <i>accidentally</i> reported a false result 
+
+<tr><td valign="top">
+<p valign="top">game comment</p></td>
+<td valign="top"><textarea rows="5" cols="60"> </textarea> </td>
+</tr>
+<tr><td>
+	<input type="submit" name="report" value="Report Game" onclick="lookupAjax();" style="background-color: <?echo"$color5" ?>; border: 1 solid <?echo"$color1" ?>"/>
+	</td></tr>
+</table>
+
+</form>
+
+<br /><br /><b>Warning: If you cheat you will be banned.</b><br />If <i>accidentally</i> reported a false result 
 
 <a href="undogame.php" onclick="return confirm('Delete your last win?');"> undo it!</a> 
-</form>
+
+
 <?
 }
 ?>
@@ -196,5 +230,6 @@ $(document).ready(function() {
 });
 </script>
 <?
+echo "<br /><br />";
 require('bottom.php');
 ?>
