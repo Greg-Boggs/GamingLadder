@@ -62,7 +62,7 @@ if (isset($_POST['report'])) {
 	        $replay = file_get_contents($_FILES['uploadedfile']['tmp_name']);
         } else {
             $failure = true;
-            $error = "You attempted to upload a replay, it wasn't small enough (<200Kb) or it wasn't the correct type (*.gz)";
+            $error = "You attempted to upload a replay, either it wasn't small enough (<200Kb) or it wasn't the correct type (*.gz)";
         }
     } else {
         $replay = null;

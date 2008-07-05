@@ -225,11 +225,11 @@ if ($numwins != 0)
 	$avpw = round(($avpw / $numwins),0);
 else
 	$avpw = 0;
-//while ($row = mysql_fetch_array($result)) 
+
 
 // get the players averahe points / game...
 if ($row[games] > 0)
-	$avep = round((($row[rating] - 1500)/$row[games]),2);
+	$avep = round((($row[rating] - BASE_RATING)/$row[games]),2);
 else
 $avep = 0;
 
@@ -263,27 +263,37 @@ echo round($row[rating],0);
 $sql = "SELECT sum(withdrawn), sum(contested_by_loser) from $gamestable WHERE winner = '".$_GET['name']."'";
 $result = mysql_query($sql, $db);
 list($withdrawn, $contestedByOthers) = mysql_fetch_row($result);
-$sql = "SELECT sum(contested_by_loser) from $gamestable WHERE loser = '".$_GET['name']."'";
+$sql = "SELECT sum(contested_by_loser) from $gamestable WHERE loser = ' ".$_GET['name']."'";
 $result = mysql_query($sql, $db);
 list($contested) = mysql_fetch_row($result);
-if ($contested != 0 || $withdrawn != 0 || $contestedByOthers != 0) {
+
+
+// Get average sportsmanship. This will get the points one has gotten from others while one is the loser of the game.
+
+
+$sql33 = "SELECT AVG(loser_stars) as total_stars FROM $gamestable WHERE loser = '".$_GET['name']."'  AND loser_stars IS NOT NULL";
+$result33 = mysql_query($sql33, $db);
+$row33 = mysql_fetch_array($result33);
+$SportsmanshipAsWinner = $row33[total_stars];
+
+// This will get the points one has gotten from others while one is the winner of the game.
+$sql33 = "SELECT AVG(winner_stars) as total_stars FROM $gamestable WHERE winner = '".$_GET['name']."'  AND winner_stars IS NOT NULL";
+$result33 = mysql_query($sql33, $db);
+$row33 = mysql_fetch_array($result33);
+$SportsmanshipAsLoser= $row33[total_stars];
+
+
+// Add the two averages together and then create a new average, also limit it to 2 decimals since there's no use of more in the profile.
+$sportsmanship = round((($SportsmanshipAsWinner+$SportsmanshipAsLoser)/2),2);
+
+echo "<br /><b>Sportsmanship:</b> $sportsmanship   &nbsp; &nbsp; <b>Games U/Cbo/C:</b> $withdrawn / $contestedByOthers / $contested";
+
 ?>
-<br />
-<table>
-<tr>
-<td>Games Withdrawn:</td>
-<td><?php echo $withdrawn ?></td>
-</tr>
-<tr>
-<td>Wins Contested by Others:</td>
-<td><?php echo $contestedByOthers ?></td>
-</tr>
-<tr>
-<td>Games Contested:</td>
-<td><?php echo $contested ?></td>
-</tr>
-</table>
-<?php } ?>
+
+
+
+
+
 <br><br>
 <table width="100%" bgcolor="#E7D9C0"><tr><td>
 		<?php 
@@ -365,21 +375,6 @@ if ($row[MsgMe] == "Yes") {
 	
 				
 </table>
-
-
-
-<?php  
-/*
-$pos1 = strpos("$row[CanPlay]", "MonA");
-if ($pos1 != FALSE) {echo "<br>Can play Monday Afternoon...";}
-
-$pos1 = strpos("$row[CanPlay]", "MonE");
-if ($pos1 != FALSE) {echo "<br>Can play Monday Evening...";}
-
-$pos1 = strpos("$row[CanPlay]", "MonNi");
-if ($pos1 != FALSE) {echo "<br>Can play Monday Night...";}
-*/
-?>
 
 
 
@@ -542,12 +537,14 @@ $(document).ready(function()
 <table width="<?echo"$tablewidth" ?>" id="games" class="tablesorter">
 <thead>
 <tr>
-<th>Reported Time</th>
+<th>Reported</th>
 <th>Winner</th>
 <th>Loser</th>
-<th>Winner New Rating</th>
-<th>Loser New Rating</th>
+<th>Winner  Rating</th>
+<th>Loser Rating</th>
+<th>Feedback</th>
 <th>Replay</th>
+
 <?
 if ($approvegames == "yes") {
 ?>
@@ -559,7 +556,7 @@ if ($approvegames == "yes") {
 </thead>
 <tbody>
 <?
-    $sql = "SELECT reported_on, DATE_FORMAT(reported_on, '".$GLOBALS['displayDateFormat']."') as report_time, winner, loser, winner_points, loser_points, winner_elo, loser_elo, length(replay) as is_replay, replay_downloads, withdrawn, contested_by_loser FROM $gamestable WHERE winner = '$_GET[name]' OR loser = '$_GET[name]'  ORDER BY reported_on DESC LIMIT 20";
+    $sql = "SELECT reported_on, DATE_FORMAT(reported_on, '".$GLOBALS['displayDateFormat']."') as report_time, winner, loser, winner_points, loser_points, winner_elo, loser_elo, length(replay) as is_replay, replay_downloads, withdrawn, contested_by_loser, winner_comment, loser_comment, winner_stars, loser_stars FROM $gamestable WHERE winner = '$_GET[name]' OR loser = '$_GET[name]'  ORDER BY reported_on DESC LIMIT 20";
 
 $result = mysql_query($sql,$db);
 while ($row = mysql_fetch_array($result)) {
@@ -596,10 +593,42 @@ while ($row = mysql_fetch_array($result)) {
 ?>
 <tr>
 <td><?echo $sdel.$row['report_time'].$edel.$undoDeleteLink ?></td>
-<td><?echo $sdel."<a href=\"profile.php?name=$row[winner]\">$row[winner]</a>".$winnerWithdrew.$edel ?></td>
-<td><?echo $sdel."<a href=\"profile.php?name=$row[loser]\">$row[loser]</a>".$loserContested.$edel ?></td>
+<td><?
+if ($row[winner] == $_GET[name]) { echo $sdel."$row[winner]".$winnerWithdrew.$edel ; } else { echo $sdel."<a href=\"profile.php?name=$row[winner]\">$row[winner]</a>".$winnerWithdrew.$edel; }
+?></td>
+
+<td><?
+
+if ($row[loser] == $_GET[name]) { echo $sdel."$row[loser]".$loserContested.$edel; } else {echo $sdel."<a href=\"profile.php?name=$row[loser]\">$row[loser]</a>".$loserContested.$edel;  } ?></td>
 <td><?echo $sdel.$row['winner_elo']." (".$row['winner_points'].")".$edel ?></td>
 <td><?echo $sdel.$row['loser_elo']." (".$row['loser_points'].")".$edel ?></td>
+<td><?php 
+
+// We only want to show stuff if there is something..else we'll show a - 
+
+if ($row['winner_stars'] == NULL ){ $winnerstars = "-";} else { $winnerstars = $row['winner_stars']; }
+if ($row['loser_stars'] == NULL ){ $loserstars = "-";} else { $loserstars = $row['loser_stars']; }
+
+
+echo $sdel.$winnerstars." / ". $loserstars. " &nbsp;".$edel; 
+if ( $row['winner_comment']  != NULL ) { $commentedby = "W";}
+if ( $row['loser_comment']  != NULL ) { $commentedby = $commentedby." / L";}
+
+// we also want to let the profile owner give a comment & sportsmanship rating if
+// he's viewing his own profile and he hasn't already given the comment/sportsmanship rating. 
+// It only happens when he's the loser since the winner is expected to comment & grade immediatley when reporting. (Let's keep it like that - encourages more comments / sportsm. ratings) 
+
+if (($row['loser_stars'] == NULL || $row['loser_comment'] == NULL) && ($row['loser'] ==  $_GET[name]) && ($_SESSION['username'] == $_GET[name]) ) {
+		echo " &nbsp; <a href='edit_feedback.php'>&nbsp; $commentedby</a>";
+	} else {
+		 echo " &nbsp; &nbsp; $commentedby";
+	}
+
+
+
+
+?></td>
+
 <td>
 <?php
     if ($row['is_replay']  > 0) {

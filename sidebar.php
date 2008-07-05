@@ -195,6 +195,13 @@ echo "<br><b>Games today: </b>". $todaygames[0];
 // Use ladder standings from above to general total.
 echo "<br /><b>Ranked Players: </b>".$rankedPlayers;
 
+// Show number of replay downloads:
+
+// SELECT SUM(replay_downloads) FROM $gamestable
+$sql="SELECT SUM(replay_downloads) FROM $gamestable";
+$result = mysql_query($sql,$db);
+$replaydownloads= mysql_fetch_row($result);
+echo "<br><b>Replay downloads: </b>". $replaydownloads[0]; 
 
 
 if (isset($_SESSION['username']))  {
