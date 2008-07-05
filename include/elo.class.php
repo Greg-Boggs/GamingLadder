@@ -85,45 +85,28 @@ class Elo {
 
     function ChooseKVal($rating) 
     {
-        if ($rating < BOTTOM_RATING) {
-            return BOTTOM_K_VAL;
-        } else if($rating < MIDDLE_RATING) {
-            return MIDDLE_K_VAL;
-        } else {
-            return TOP_K_VAL;
+        foreach ($GLOBALS['kArray'] as $kRating => $kValue) {
+            if ($rating >= $kRating) {
+                return $kValue;
+            }
         }
     }
 
-    function CalcElo($loserRating, $winnerRating, $k, $forLoser, $provisional) 
+    function CalcElo($playerRating, $opponentRating, $winState, $k, $protection) 
     {
-        if($winnerRating < $loserRating) {
-            $rw1 = $winnerRating - $loserRating;
-            $rw2 = -$rw1/400;
+        // Calculate the win expectancy of the player.
+        $winExpectancy = 1/(1 + pow(10,($opponentRating - $playerRating)/400));
+
+        if ($protection == true) {
+            $protection = PROVISIONAL_PROTECTION;
         } else {
-            $rw1 = $loserRating - $winnerRating;
-            $rw2 = $rw1/400;
+            $protection = 1;
         }
 
-        if ($rw1 > MAX_DIFFERENCE || $rw1 < -MAX_DIFFERENCE) {    
-            return null;
-        }
+        // Calculate the new rating
+        $ratingChange = ($k * ($winState - $winExpectancy)) / $protection;
 
-        $rw3 = pow(10, $rw2);
-        $rw4 = $rw3 + 1;
-        $rw5 = 1/$rw4;
-        $rw6 = 1 - $rw5;
-        $rw7 = $k * $rw6;
-
-        if (PROVISIONAL_PROTECTION != 0) {
-            if ($provisional == true) {
-                $rw7 = $rw7/PROVISIONAL_PROTECTION;
-            }
-        }
-        if ($forLoser == true) {
-            return -round($rw7);
-        } else {
-            return round($rw7);
-        }
+        return round($ratingChange);
     }
 
     function RankGame($winner, $loser, $reportedTime, $draw = false)
@@ -133,6 +116,15 @@ class Elo {
         $loserStats = $this->GetRating($reportedTime, $loser);
         $winnerStats = $this->GetRating($reportedTime, $winner);
 
+        // Set the scores for the players vs their expected results for this game.
+        if ($draw === true) {
+            $winnerState = 0.5;
+            $loserState = 0.5;
+        } else {
+            $winnerState = 1;
+            $loserState = 0;
+        }
+
         if ($winnerStats['provisional'] || $loserStats['provisional']) {
             $provisional = true;
         } else {
@@ -140,30 +132,20 @@ class Elo {
         }
 
         $kValWinner = $this->ChooseKVal($winnerStats['rating']);
-        $result['winnerChange'] = $this->CalcElo($loserStats['rating'], $winnerStats['rating'], $kValWinner, false, $provisional);
+        $result['winnerChange'] = $this->CalcElo($winnerStats['rating'], $loserStats['rating'], $winnerState, $kValWinner, $provisional);
         $result['winnerRating'] = $winnerStats['rating'];
 
         $kValLoser = $this->ChooseKVal($loserStats['rating']);
-        $result['loserChange'] = $this->CalcElo($loserStats['rating'], $winnerStats['rating'], $kValLoser, true, $provisional);
+        $result['loserChange'] = $this->CalcElo($loserStats['rating'], $winnerStats['rating'], $loserState, $kValLoser, $provisional);
         $result['loserRating'] = $loserStats['rating'];
 
-        // At the moment, we count a draw as a half win, half loss.
-        // Here we adjust our Change by if the result was the other way around.
-        // $drawnGame allows us to only add to wins or losses when the game is not drawn
         if ($draw === true) {
-            $result['winnerChange'] += $this->CalcElo($winnerStats['rating'], $loserStats['rating'], $kValWinner, true, $provisional);
-            $result['winnerChange'] = intval($result['winnerChange']/2);
-            $result['loserChange'] += $this->CalcElo($winnerStats['rating'], $loserStats['rating'], $kValLoser, false, $provisional);
-            $result['loserChange'] = intval($result['loserChange']/2);
-            $drawnGame = 0;
             $result['winnerStreak'] = 0;
             $result['loserStreak'] = 0;
             $result['winnerWins'] = $winnerStats['wins'];
             $result['winnerLosses'] = $winnerStats['losses'];
             $result['loserWins'] = $loserStats['wins'];
             $result['loserLosses'] = $loserStats['losses'];
-            $result['winnerGames'] = $winnerStats['games'];
-            $result['loserGames'] = $loserStats['games'];
         } else {
             $drawnGame = 1;
             $result['winnerStreak'] = $winnerStats['streak'] < 0 ? 1 : $winnerStats['streak'] + 1;
@@ -172,9 +154,10 @@ class Elo {
             $result['winnerLosses'] = $winnerStats['losses'];
             $result['loserWins'] = $loserStats['wins'];
             $result['loserLosses'] = $loserStats['losses'] + 1;
-            $result['winnerGames'] = $winnerStats['games'];
-            $result['loserGames'] = $loserStats['games'];
         }
+        $result['winnerGames'] = $winnerStats['games'] + 1;
+        $result['loserGames'] = $loserStats['games'] + 1;
+
         return $result;
     }
 
@@ -187,13 +170,13 @@ class Elo {
         // We also use this opportunity to insert the initial rating if it doesn't exist.
         $sql = "UPDATE $gamestable SET winner_elo = ".$result['winnerRating']." + ".$result['winnerChange'].",
                                        winner_points = ".$result['winnerChange'].",
-                                       winner_games = ".$result['winnerGames']." + 1,
+                                       winner_games = ".$result['winnerGames'].",
                                        winner_wins = ".$result['winnerWins'].",
                                        winner_losses = ".$result['winnerLosses'].",
                                        winner_streak = ".$result['winnerStreak'].",
                                        loser_elo = ".$result['loserRating']." + ".$result['loserChange'].",
                                        loser_points = ".$result['loserChange'].",
-                                       loser_games = ".$result['loserGames']." + 1,
+                                       loser_games = ".$result['loserGames'].",
                                        loser_wins = ".$result['loserWins'].",
                                        loser_losses = ".$result['loserLosses'].",
                                        loser_streak = ".$result['loserStreak']."

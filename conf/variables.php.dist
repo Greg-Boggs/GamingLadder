@@ -60,12 +60,8 @@ $ladderminelo = 1300; // all players that have this or higher elo rating will be
 $gamestorank = 10; // number of games a player must have played in order to get a ranking (not the same as getting an elo rating!)
 $playersshown = 200; //Number of players to show per php query on stats
 
-define("BOTTOM_K_VAL", 32); //Max rating per game for players < 1800
-define("MIDDLE_K_VAL", 24); //Max rating per game for players < 2100
-define("TOP_K_VAL", 16); // Max rating per game for top players.
-
-define("MIDDLE_RATING", 2100); //this is the highest rating you can have before becoming a top player
-define("BOTTOM_RATING", 1800); //this is the highest rating you can have before becoming a middle player
+// Define a Kvalue array, must be in descending points order.  rating => kvalue
+$kArray = array(2100 => 16, 1800 => 24, 0 => 32);
 
 define("BASE_RATING", 1500);    // this is what a new player gets
 define("MAX_DIFFERENCE", 1000); //1200 is so high this never gets used
