@@ -89,7 +89,7 @@ if (isset($_POST['report'])) {
 	$username = $_SESSION['username'];
 	$comment = $_POST['comment'];
 	$query2 = "UPDATE $gamestable SET winner_comment = '$comment', loser_stars = '$sportsmanship' WHERE  winner = '$username' AND reported_on = '".$result['reportedTime']."'";
-echo $sql;
+
     $result2 = mysql_query($query2) or die("fail");
     
 	

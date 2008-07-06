@@ -127,6 +127,12 @@ if ((mysql_num_rows($result)==0) && isset($_SESSION['username'])) {
 	
 	
 // Show the top x players
+$endtime = microtime();
+$endarray = explode(" ", $endtime);
+$endtime = $endarray[1] + $endarray[0];
+$totaltime = $endtime - $starttime;
+$totaltime = round($totaltime, 5);
+echo $totaltime;
 	
 	echo "<br /><br /><b>Top $numindexhiscore players</b><ol>";
 	
@@ -143,7 +149,6 @@ if ((mysql_num_rows($result)==0) && isset($_SESSION['username'])) {
        CASE WHEN g.winner = a.name THEN g.winner_streak ELSE g.loser_streak END as streak
        FROM (select name, max(reported_on) as latest_game FROM $playerstable JOIN $gamestable ON (name = winner OR name = loser) WHERE contested_by_loser = 0 AND withdrawn = 0 GROUP BY 1) a JOIN $gamestable g ON (g.reported_on = a.latest_game)) standings join $playerstable USING (name) WHERE
        reported_on > now() - interval $passivedays day AND rating >= $ladderminelo AND games >= $gamestorank ORDER BY 3 desc, 6 desc";
-
 	$result = mysql_query($sql,$db);
     $rankedPlayers = mysql_num_rows($result);
     $count = 0;
