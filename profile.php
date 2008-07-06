@@ -159,9 +159,10 @@ if ( $row["latest_game"]  != "" ) {
 if (isset($_SESSION['username']) && $row['name'] != $_SESSION['username']) {
     require_once 'include/elo.class.php';
     $elo = new Elo($db);
-    $winresult = $elo->RankGame($_SESSION['username'],$row['name'], date("Ymd His"));
-    $lossresult = $elo->RankGame($row['name'],$_SESSION['username'], date("Ymd His"));
-    $drawresult = $elo->RankGame($row['name'],$_SESSION['username'], date("Ymd His"), true);
+    $winresult = $elo->RankGame($_SESSION['username'],$row['name'], date("Y-m-d H:i:s"));
+    $lossresult = $elo->RankGame($row['name'],$_SESSION['username'], date("Y-m-d H:i:s"));
+    $drawresult = $elo->RankGame($row['name'],$_SESSION['username'], date("Y-m-d H:i:s"), true);
+
     echo ", Points for (Win/Loss/Draw): ".$winresult['winnerChange']."/".$lossresult['loserChange']."/".$drawresult['loserChange'];
 }
 ?>
