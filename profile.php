@@ -271,20 +271,23 @@ list($contested) = mysql_fetch_row($result);
 // Get average sportsmanship. This will get the points one has gotten from others while one is the loser of the game.
 
 
-$sql33 = "SELECT AVG(loser_stars) as total_stars FROM $gamestable WHERE loser = '".$_GET['name']."'  AND loser_stars IS NOT NULL";
+$sql33 = "SELECT sum(loser_stars) as total_stars, count(loser_stars) as count FROM $gamestable WHERE loser = '".$_GET['name']."'  AND loser_stars IS NOT NULL";
 $result33 = mysql_query($sql33, $db);
 $row33 = mysql_fetch_array($result33);
-$SportsmanshipAsWinner = $row33[total_stars];
+$SportsmanshipAsWinner = $row33['total_stars'];
+$SportsmanshipRatedAsWinner = $row33['count'];
 
 // This will get the points one has gotten from others while one is the winner of the game.
-$sql33 = "SELECT AVG(winner_stars) as total_stars FROM $gamestable WHERE winner = '".$_GET['name']."'  AND winner_stars IS NOT NULL";
+$sql33 = "SELECT sum(winner_stars) as total_stars, count(winner_stars) as count FROM $gamestable WHERE winner = '".$_GET['name']."'  AND winner_stars IS NOT NULL";
 $result33 = mysql_query($sql33, $db);
 $row33 = mysql_fetch_array($result33);
 $SportsmanshipAsLoser= $row33[total_stars];
+$SportsmanshipRatedAsLoser = $row33['count'];
 
-
-// Add the two averages together and then create a new average, also limit it to 2 decimals since there's no use of more in the profile.
-$sportsmanship = round((($SportsmanshipAsWinner+$SportsmanshipAsLoser)/2),2);
+// We must to account of the fact that a user may only have a sportsmanship rating as either a winner or a loser.
+// You must average at the last possible moment, so we can't create a total sportsmanship average in the SQL.
+// Instead we do that here.
+$sportsmanship = round((($SportsmanshipAsWinner+$SportsmanshipAsLoser)/($SportsmanshipRatedAsLoser+$SportsmanshipRatedAsWinner)),2);
 
 echo "<br /><b>Sportsmanship:</b> $sportsmanship   &nbsp; &nbsp; <b>Games U/Cbo/C:</b> $withdrawn / $contestedByOthers / $contested";
 
