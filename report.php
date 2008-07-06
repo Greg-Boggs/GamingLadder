@@ -88,7 +88,8 @@ if (isset($_POST['report'])) {
 	$sportsmanship = $_POST['sportsmanship'];
 	$username = $_SESSION['username'];
 	$comment = $_POST['comment'];
-	$query2 = "UPDATE $gamestable SET winner_comment = '$comment', loser_stars = '$sportsmanship' WHERE  winner = '$username' AND reported_on = '".$result['reportTime']."' ORDER BY reported_on DESC";
+	$query2 = "UPDATE $gamestable SET winner_comment = '$comment', loser_stars = '$sportsmanship' WHERE  winner = '$username' AND reported_on = '".$result['reportedTime']."'";
+echo $sql;
     $result2 = mysql_query($query2) or die("fail");
     
 	
@@ -139,7 +140,7 @@ if (isset($_POST['report'])) {
 	
     </table>
 <?php
-	echo "<p>Thank you! Information entered. Check your <a href=\"ladder.php?personalladder=".urlencode($_SESSION['username'])."\">current position.</a><br />Report Id: $reportTime</p>";
+	echo "<p>Thank you! Information entered. Check your <a href=\"ladder.php?personalladder=".urlencode($_SESSION['username'])."\">current position.</a><br />Report Id: ".$result['reportedTime']."</p>";
     }
 } else {
 ?><table>
@@ -178,7 +179,7 @@ if (isset($_POST['report'])) {
 
 <tr><td valign="top">
 <p valign="top">game comment</p></td>
-<td valign="top"><textarea name="comment" rows="5" cols="60"> </textarea> </td>
+<td valign="top"><textarea name="comment" rows="5" cols="60"></textarea> </td>
 </tr>
 <tr><td>
 	<input type="submit" name="report" value="Report Game" onclick="lookupAjax();" style="background-color: <?echo"$color5" ?>; border: 1 solid <?echo"$color1" ?>"/>

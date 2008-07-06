@@ -157,7 +157,7 @@ class Elo {
         }
         $result['winnerGames'] = $winnerStats['games'] + 1;
         $result['loserGames'] = $loserStats['games'] + 1;
-        $result['reportTime'] = $reportTime;
+        $result['reportedTime'] = $reportedTime;
 
         return $result;
     }
