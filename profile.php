@@ -288,7 +288,11 @@ $SportsmanshipRatedAsLoser = $row33['count'];
 // We must to account of the fact that a user may only have a sportsmanship rating as either a winner or a loser.
 // You must average at the last possible moment, so we can't create a total sportsmanship average in the SQL.
 // Instead we do that here.
-$sportsmanship = round((($SportsmanshipAsWinner+$SportsmanshipAsLoser)/($SportsmanshipRatedAsLoser+$SportsmanshipRatedAsWinner)),2);
+if (($SportsmanshipRatedAsLoser+$SportsmanshipRatedAsWinner) > 0) {
+    $sportsmanship = round((($SportsmanshipAsWinner+$SportsmanshipAsLoser)/($SportsmanshipRatedAsLoser+$SportsmanshipRatedAsWinner)),2);
+} else {
+    $sportsmanship = "-";
+}
 
 echo "<br /><b>Sportsmanship:</b> $sportsmanship   &nbsp; &nbsp; <b>Games U/Cbo/C:</b> $withdrawn / $contestedByOthers / $contested";
 
@@ -560,7 +564,7 @@ if ($approvegames == "yes") {
 </thead>
 <tbody>
 <?
-    $sql = "SELECT reported_on, DATE_FORMAT(reported_on, '".$GLOBALS['displayDateFormat']."') as report_time, winner, loser, winner_points, loser_points, winner_elo, loser_elo, length(replay) as is_replay, replay_downloads, withdrawn, contested_by_loser, winner_comment, loser_comment, winner_stars, loser_stars FROM $gamestable WHERE winner = '$_GET[name]' OR loser = '$_GET[name]'  ORDER BY reported_on DESC LIMIT 20";
+    $sql = "SELECT reported_on, DATE_FORMAT(reported_on, '".$GLOBALS['displayDateFormat']."') as report_time, winner, loser, winner_points, loser_points, winner_elo, loser_elo, length(replay) as is_replay, replay_downloads, withdrawn, contested_by_loser, winner_comment, loser_comment, winner_stars, loser_stars, winner_games, loser_games FROM $gamestable WHERE winner = '$_GET[name]' OR loser = '$_GET[name]'  ORDER BY reported_on DESC LIMIT 30";
 
 $result = mysql_query($sql,$db);
 while ($row = mysql_fetch_array($result)) {
@@ -594,6 +598,8 @@ while ($row = mysql_fetch_array($result)) {
     } else if ($row['contested_by_loser'] <> 0) {
         $loserContested = "**";
     }
+    $winnerProvisional = $row['winner_games'] < PROVISIONAL ? "p" : "";
+    $loserProvisional = $row['loser_games'] < PROVISIONAL ? "p" : "";
 ?>
 <tr>
 <td><?echo $sdel.$row['report_time'].$edel.$undoDeleteLink ?></td>
@@ -604,8 +610,8 @@ if ($row[winner] == $_GET[name]) { echo $sdel."$row[winner]".$winnerWithdrew.$ed
 <td><?
 
 if ($row[loser] == $_GET[name]) { echo $sdel."$row[loser]".$loserContested.$edel; } else {echo $sdel."<a href=\"profile.php?name=$row[loser]\">$row[loser]</a>".$loserContested.$edel;  } ?></td>
-<td><?echo $sdel.$row['winner_elo']." (".$row['winner_points'].")".$edel ?></td>
-<td><?echo $sdel.$row['loser_elo']." (".$row['loser_points'].")".$edel ?></td>
+<td><?echo $sdel.$row['winner_elo'].$winnerProvisional." (".$row['winner_points'].")".$edel ?></td>
+<td><?echo $sdel.$row['loser_elo'].$loserProvisional." (".$row['loser_points'].")".$edel ?></td>
 <td><?php 
 
 // We only want to show stuff if there is something..else we'll show a - 
