@@ -615,12 +615,14 @@ if ($row[loser] == $_GET[name]) { echo $sdel."$row[loser]".$loserContested.$edel
 
 // We only want to show stuff if there is something..else we'll show a - 
 
-if ($row['winner_stars'] == NULL ){ $winnerstars = "-";} else { $winnerstars = $row['winner_stars']; }
-if ($row['loser_stars'] == NULL ){ $loserstars = "-";} else { $loserstars = $row['loser_stars']; }
+if ($row['winner_stars'] == NULL || $row['winner_stars'] == "" ){ $winnerstars = "-";} else { $winnerstars = $row['winner_stars']; }
+if ($row['loser_stars'] == NULL || $row['loser_stars'] == ""){ $loserstars = "-";} else { $loserstars = $row['loser_stars']; }
 
 
-echo $sdel.$winnerstars." / ". $loserstars. " &nbsp;".$edel; 
+echo $sdel.$winnerstars." / ". $loserstars.$edel; 
 $commentedby = "";
+if (($row['loser']  == $_SESSION['username']) && ($_GET['name'] == $_SESSION['username'])) {$commentedby = "Edit";}
+
 if ( $row['winner_comment']  != "" ) { $commentedby = "W";}
 if ( $row['loser_comment']  != "" ) { $commentedby = "L";}
 if ( ($row['loser_comment']  != "") && ($row['winner_comment']  != "") ) { $commentedby =  "W/L";}

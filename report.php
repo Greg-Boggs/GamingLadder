@@ -58,12 +58,24 @@ if (isset($_POST['report'])) {
     // Do all the replay stuff to create a replay in the database
     // We use the tmp_name to detect if somebody actually filled in a file for upload.
     if (isset($_FILES["uploadedfile"]["name"]) && $_FILES['uploadedfile']['name'] != "") {
-        if (($_FILES["uploadedfile"]["size"] < 200000) && ($_FILES["uploadedfile"]["type"] == "application/x-gzip")){
+        if (($_FILES["uploadedfile"]["size"] <= MAX_REPLAYSIZE) && ($_FILES["uploadedfile"]["type"] == REPLAY_MIME_TYPE)){
 	        $replay = file_get_contents($_FILES['uploadedfile']['tmp_name']);
         } else {
             $failure = true;
-            $error = "You attempted to upload a replay, either it wasn't small enough (<200Kb) or it wasn't the correct type (*.gz)";
-        }
+			$maxfilesizekb = (MAX_REPLAYSIZE / 1000);
+				
+				if ($_FILES["uploadedfile"]["type"] != REPLAY_MIME_TYPE) { 
+				if ($_FILES["uploadedfile"]["type"] == "") { $uploadedfilesmime = "an unknown";} else {
+				$uploadedfilesmime =  "a ".$_FILES["uploadedfile"]["type"]; }
+				
+				 $error = "You attempted to upload a replay but failed. The file you uploaded wasn't of the correct type. Instead of a *.". $replayfileextension ." file you uploaded $uploadedfilesmime file"; 
+				 }	else {			
+				$uploadefilesizekb= ($_FILES["uploadedfile"]["size"]/1000);
+				$uploadefileoversizedkb = $uploadedfileziekb - $maxfilesizekb;
+				$error = "You attempted to upload a replay but failed. It wasn't small enough. We only allow replays that are <= $maxfilesizekb Kb. Yours was $uploadefilesizekb Kb, which is $uploadefileoversizedkb Kb too large.";
+				}
+			}
+
     } else {
         $replay = null;
     }
@@ -85,14 +97,32 @@ if (isset($_POST['report'])) {
 	// Now that the Elo has been added into the games table, let's update the entry so that it also includes the comment & sportsmanship rating
 		
 	
-	$sportsmanship = $_POST['sportsmanship'];
-	$username = $_SESSION['username'];
-	$comment = $_POST['comment'];
-	$query2 = "UPDATE $gamestable SET winner_comment = '$comment', loser_stars = '$sportsmanship' WHERE  winner = '$username' AND reported_on = '".$result['reportedTime']."'";
-
-    $result2 = mysql_query($query2) or die("fail");
-    
 	
+	
+	// If the winner left a comment or a sportsmanship rating we now want to update the tables, that already have the game result in them,. to include it/them. Lets choose a sql statement...
+	
+	$username =  $_SESSION['username'];
+	$sportsmanship = trim($_POST['sportsmanship']); 
+	$comment = trim($_POST['comment']);
+	
+	
+	if ($sportsmanship != "") { 
+			$query2 = "UPDATE $gamestable SET loser_stars = '$sportsmanship' WHERE  winner = '$username' AND reported_on = '".$result['reportedTime']."'";	
+	}
+	if ($comment != "") { 
+			$query2 = "UPDATE $gamestable SET winner_comment = '$comment' WHERE  winner = '$username' AND reported_on = '".$result['reportedTime']."'";	
+	}
+	
+	if ($sportsmanship != "" && $comment != "") { 
+			$query2 = "UPDATE $gamestable SET winner_comment = '$comment', loser_stars = '$sportsmanship' WHERE  winner = '$username' AND reported_on = '".$result['reportedTime']."'";	
+	}
+	
+	// Now lets apply it if there was a comment or sportsmanship point given.
+		
+	if ($sportsmanship != "" || $comment != "") { 
+		$result2 = mysql_query($query2) or die("fail");
+    }
+
 	
 		
 
@@ -163,7 +193,7 @@ if (isset($_POST['report'])) {
 	<tr><td>.gz replay to upload</td><td><input name="uploadedfile" type="file" /></td></tr><br />
 	
 	<tr><td>sportsmanship</td><td><select size="1" name="sportsmanship">
-		<option selected>3</option>
+		<option selected></option>
 		<option>1</option>
 		<option>2</option>
 		<option>3</option>

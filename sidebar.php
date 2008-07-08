@@ -132,7 +132,7 @@ $endarray = explode(" ", $endtime);
 $endtime = $endarray[1] + $endarray[0];
 $totaltime = $endtime - $starttime;
 $totaltime = round($totaltime, 5);
-echo $totaltime;
+
 	
 	echo "<br /><br /><b>Top $numindexhiscore players</b><ol>";
 	
