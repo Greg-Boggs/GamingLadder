@@ -44,6 +44,7 @@ $newsitems = 3; //news items to show full text of...this needs to be fixed - ind
 $numindexdeled = 5; // how many deleted games are shown at index.
 define("COUNT_GAMES_OF_LATEST_DAYS", 1); // amount of days we're gonne count the most recent played games in to display in index sidebar
 define("MIN_COUNT_GAMES_OF_LATEST_DAYS", 1); // minimum amount of games that need to have been played within the x most recent days to show the amount of games the x most recent days
+define("AVERAGE_GAME_LENGTH", 40); // amount of minutes the average game is expected to last. This is used for calcuating work-hours spent on gaming in the sidebar.
 
 // The format style used here is the one from mysql DATE_FORMAT
 // http://dev.mysql.com/doc/refman/6.0/en/date-and-time-functions.html#function_date-format

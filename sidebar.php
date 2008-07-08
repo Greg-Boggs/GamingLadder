@@ -179,6 +179,10 @@ $sql=mysql_query("SELECT * FROM $gamestable WHERE withdrawn = 0 AND contested_by
 $number2=mysql_num_rows($sql);
 echo "<br /><b>Played Games:</b> $number2";
 
+// Work hours = the total time by all players spent spent on playin. Work days = the same turned into days. We multiply the number by 2 since a game i splayed by 2 people. Hence, if a game takes 1h to play, 2 work hours has been spent on it. (maybe called "Man hours").
+$workingdays = round(((($number2 * AVERAGE_GAME_LENGTH)/1440)*2),0);
+echo "<br /><b>Work days played:</b> $workingdays";
+
 // Display average number of games per user...
 echo "<br /><b>Games/Player: </b>". round($number2/$number,2);
 	
@@ -195,6 +199,8 @@ $sql="SELECT count(*) FROM $gamestable WHERE cast(reported_on as date) = cast(no
 $result = mysql_query($sql,$db);
 $todaygames = mysql_fetch_row($result);
 echo "<br><b>Games today: </b>". $todaygames[0]; 
+
+
 
 // Ranked Players
 // Use ladder standings from above to general total.
