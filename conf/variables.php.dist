@@ -49,8 +49,6 @@ define("MIN_COUNT_GAMES_OF_LATEST_DAYS", 1); // minimum amount of games that nee
 // http://dev.mysql.com/doc/refman/6.0/en/date-and-time-functions.html#function_date-format
 $displayDateFormat = '%Y-%m-%d %h:%i';
 
-// redundant... remove if all works as it should: $kvalue = 32; // Which is the K-value in the Elo formula?
-
 
 // Don't change the values below unless you have some basic understanding of how Elo works, the settings that are there already are okey for most people.  
 // WARNING: If you have played games and you change any of the below values, you MUST rerank the entire ladder.  As the values below will change the rankings of players.
@@ -67,10 +65,6 @@ define("BASE_RATING", 1500);    // this is what a new player gets
 define("MAX_DIFFERENCE", 1000); //1200 is so high this never gets used
 define("PROVISIONAL", 10); //The number of games it takes to not be provisional anymore 
 define("PROVISIONAL_PROTECTION", 2); //The amount provisional rating is divided by.
-
-$passivedaysd2 = 60;
-$ladderminelod2 = 1499;
-$gamestorankd2 = 2;
 
 
 // Variableis that used to be stored in the database.  They have been unified in this one configuration file.

@@ -246,8 +246,7 @@ else {
 if ($daysleft >= 0) {echo $rank;} else {echo "<a href=\"faq.php#passive\">(passive)</a>";}  }?></td>
 <td><?
 echo round($row[rating],0);
-// classrating is not defined anywhere, until its use is known, it has been commented out
-//if (($row[games] >= $gamestorank) && ($daysleft >= 0)) { echo " ($classrating)"; } ?></td>
+ ?></td>
 
 <td><?echo round(($totalpercentage * 100),0); ?>%</td>
 <td><?echo "$row[wins]" ?></td>
@@ -621,18 +620,17 @@ if ($row['loser_stars'] == NULL ){ $loserstars = "-";} else { $loserstars = $row
 
 
 echo $sdel.$winnerstars." / ". $loserstars. " &nbsp;".$edel; 
-if ( $row['winner_comment']  != NULL ) { $commentedby = "W";}
-if ( $row['loser_comment']  != NULL ) { $commentedby = $commentedby." / L";}
+$commentedby = "";
+if ( $row['winner_comment']  != "" ) { $commentedby = "W";}
+if ( $row['loser_comment']  != "" ) { $commentedby = "L";}
+if ( ($row['loser_comment']  != "") && ($row['winner_comment']  != "") ) { $commentedby =  "W/L";}
 
 // we also want to let the profile owner give a comment & sportsmanship rating if
 // he's viewing his own profile and he hasn't already given the comment/sportsmanship rating. 
 // It only happens when he's the loser since the winner is expected to comment & grade immediatley when reporting. (Let's keep it like that - encourages more comments / sportsm. ratings) 
 
-if (($row['loser_stars'] == NULL || $row['loser_comment'] == NULL) && ($row['loser'] ==  $_GET[name]) && ($_SESSION['username'] == $_GET[name]) ) {
-		echo " &nbsp; <a href='edit_feedback.php'>&nbsp; $commentedby</a>";
-	} else {
-		 echo " &nbsp; &nbsp; $commentedby";
-	}
+		echo " &nbsp; <a href='feedback.php'>&nbsp; $commentedby</a>";
+		
 
 
 
