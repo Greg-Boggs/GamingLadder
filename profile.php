@@ -621,7 +621,7 @@ if ($row['loser_stars'] == NULL || $row['loser_stars'] == ""){ $loserstars = "-"
 
 echo $sdel.$winnerstars." / ". $loserstars.$edel; 
 $commentedby = "";
-if (($row['loser']  == $_SESSION['username']) && ($_GET['name'] == $_SESSION['username'])) {$commentedby = "Edit";}
+if (($row['loser']  == $_SESSION['username']) && ($_GET['name'] == $_SESSION['username'])) {$commentedby = "Add";}
 
 if ( $row['winner_comment']  != "" ) { $commentedby = "W";}
 if ( $row['loser_comment']  != "" ) { $commentedby = "L";}
@@ -631,9 +631,9 @@ if ( ($row['loser_comment']  != "") && ($row['winner_comment']  != "") ) { $comm
 // he's viewing his own profile and he hasn't already given the comment/sportsmanship rating. 
 // It only happens when he's the loser since the winner is expected to comment & grade immediatley when reporting. (Let's keep it like that - encourages more comments / sportsm. ratings) 
 
-		echo " &nbsp; <a href='feedback.php'>&nbsp; $commentedby</a>";
+	//	echo "<a href='feedback.php?time=". $row['reported_on'] ."?winner=". $row['winner'] ."> $commentedby</a>";
 		
-
+echo $sdel."<a href=\"feedback.php?reported_on=". urlencode($row['reported_on'])."&winner=".urlencode($row['winner'])."\"> &nbsp; $commentedby</a>".$edel;
 
 
 
