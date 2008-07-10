@@ -65,6 +65,7 @@ $playersshown = 200; //Number of players to show per php query on stats
 
 // Define a Kvalue array, must be in descending points order.  rating => kvalue
 $kArray = array(2100 => 16, 1800 => 24, 0 => 32);
+$kArrayProvisional = array(2100 => 16, 1800 => 24, 0 => 32);
 
 define("BASE_RATING", 1500);    // this is what a new player gets
 define("MAX_DIFFERENCE", 1000); //1200 is so high this never gets used

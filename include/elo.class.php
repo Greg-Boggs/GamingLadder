@@ -83,9 +83,15 @@ class Elo {
         return $result;
     }
 
-    function ChooseKVal($rating) 
+    function ChooseKVal($rating, $provisional) 
     {
-        foreach ($GLOBALS['kArray'] as $kRating => $kValue) {
+        if (!$provisional) {
+           $k = $GLOBALS['kArray'];
+        } else {
+           $k = $GLOBALS['kArrayProvisional'];
+        }
+
+        foreach ($k as $kRating => $kValue) {
             if ($rating >= $kRating) {
                 return $kValue;
             }
@@ -125,18 +131,33 @@ class Elo {
             $loserState = 0;
         }
 
-        if ($winnerStats['provisional'] || $loserStats['provisional']) {
-            $provisional = true;
+        // Only protect non-provisional players to help new players find their rank faster
+        if ($winnerStats['provisional'] && $loserStats['provisional']) {
+            $loserProtection = false;
+            $winnerProtection = false;
+        } else if ($winnerStats['provisional']) {
+            $winnerProtection = false;
+            $loserProtection = true;
+/*
+  // At this time, if the non-provisional player wins, they get the normal points.
+  // If you are too far away from a provisional player, you won't get many points anyway. If you
+  // are close, you will push the provisional player away a long way.  So you don't want to play
+  // them too many times.
+        } else if ($loserStats['provisional']) {
+            $winnerProtection = true;
+            $loserProtection = false;
+*/
         } else {
-            $provisional = false;
+            $winnerProtection = false;
+            $loserProtection = false;
         }
 
-        $kValWinner = $this->ChooseKVal($winnerStats['rating']);
-        $result['winnerChange'] = $this->CalcElo($winnerStats['rating'], $loserStats['rating'], $winnerState, $kValWinner, $provisional);
+        $kValWinner = $this->ChooseKVal($winnerStats['rating'], $winnerStats['provisional']);
+        $result['winnerChange'] = $this->CalcElo($winnerStats['rating'], $loserStats['rating'], $winnerState, $kValWinner, $winnerProtection);
         $result['winnerRating'] = $winnerStats['rating'];
 
-        $kValLoser = $this->ChooseKVal($loserStats['rating']);
-        $result['loserChange'] = $this->CalcElo($loserStats['rating'], $winnerStats['rating'], $loserState, $kValLoser, $provisional);
+        $kValLoser = $this->ChooseKVal($loserStats['rating'], $loserStats['provisional']);
+        $result['loserChange'] = $this->CalcElo($loserStats['rating'], $winnerStats['rating'], $loserState, $kValLoser, $loserProtection);
         $result['loserRating'] = $loserStats['rating'];
 
         if ($draw === true) {
