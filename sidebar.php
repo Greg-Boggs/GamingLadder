@@ -173,7 +173,7 @@ echo "<br /><b>Games/Player: </b>". round($number2[0]/$number[0],2);
 	
 	
 // Display number of games played within x amount of days...
-$sql="SELECT count(*) FROM $gamestable WHERE cast(reported_on as date) <> cast(now() as date) AND cast(reported_on as date) >= cast(now() as date) - ".COUNT_GAMES_OF_LATEST_DAYS." AND withdrawn = 0 AND contested_by_loser = 0";
+$sql="SELECT count(*) FROM $gamestable WHERE cast(reported_on as date) <> cast(now() as date) AND cast(reported_on as date) >= cast(now() as date) - interval ".COUNT_GAMES_OF_LATEST_DAYS." day AND withdrawn = 0 AND contested_by_loser = 0";
 $result = mysql_query($sql,$db);
 $recentgames = mysql_fetch_row($result);
 
