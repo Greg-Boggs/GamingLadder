@@ -24,6 +24,7 @@ if (isset($_GET['download'])) {
     echo "friends=\"$names\"";
     exit;
 }
+session_start();
 require('top.php');
 ?>
 <h1>Friends List</h1>
