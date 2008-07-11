@@ -21,7 +21,7 @@ while ($row = mysql_fetch_array($result)) {
 
 // If the player has no rank he is passive, so make a second query grabbing the passive players
 if ($rank == "") {
-    $result = mysql_query($standingsSql." WHERE name = '".$_GET['name']."'", $db);
+    $result = mysql_query("select * from $standingscachetable right join $playerstable USING (name) WHERE name = '".$_GET['name']."'", $db);
 	$row = mysql_fetch_array($result);
     $rank = "unranked";
 }
@@ -134,17 +134,22 @@ if ( $rank != "unranked" ) {
     if (($daysleft >= 0)) {
 	echo " ($daysleft days left)";
     }
+    
 } 
 
 // If we are logged in and displaying somebody elses profile, tell us about my win/loss
 if (isset($_SESSION['username']) && $row['name'] != $_SESSION['username']) {
+    // Print the comma separator only if the player is active and we are logged in.
+    if (($daysleft >= 0)) {
+        echo ", ";
+    }
     require_once 'include/elo.class.php';
     $elo = new Elo($db);
     $winresult = $elo->RankGame($_SESSION['username'],$row['name'], date("Y-m-d H:i:s"));
     $lossresult = $elo->RankGame($row['name'],$_SESSION['username'], date("Y-m-d H:i:s"));
     $drawresult = $elo->RankGame($row['name'],$_SESSION['username'], date("Y-m-d H:i:s"), true);
 
-    echo ", Points for (Win/Loss/Draw): ".$winresult['winnerChange']."/".$lossresult['loserChange']."/".$drawresult['loserChange'];
+    echo "Points for (Win/Loss/Draw): ".$winresult['winnerChange']."/".$lossresult['loserChange']."/".$drawresult['loserChange'];
 }
 ?>
 </td>
