@@ -58,13 +58,7 @@ $(document).ready(function()
 <tbody>
 <?php
 
-$sql = "select * from (select a.name, g.reported_on, 
-       CASE WHEN g.winner = a.name THEN g.winner_elo ELSE g.loser_elo END as rating,
-       CASE WHEN g.winner = a.name THEN g.winner_wins ELSE g.loser_wins END as wins,
-       CASE WHEN g.winner = a.name THEN g.winner_losses ELSE g.loser_losses END as losses,
-       CASE WHEN g.winner = a.name THEN g.winner_games ELSE g.loser_games END as games,
-       CASE WHEN g.winner = a.name THEN g.winner_streak ELSE g.loser_streak END as streak
-       FROM (select name, max(reported_on) as latest_game FROM $playerstable JOIN $gamestable ON (name = winner OR name = loser) WHERE withdrawn = 0 AND contested_by_loser = 0 GROUP BY 1) a JOIN $gamestable g ON (g.reported_on = a.latest_game)) standings right join $playerstable USING (name)";
+$sql = "select * from $standingscachetable right join $playerstable USING (name)";
 
 //if byname is set than, add the where clause
 if ( isset($_GET['byname']) ) {

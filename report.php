@@ -93,6 +93,9 @@ if (isset($_POST['report'])) {
     if ($failure) {
         echo "<p>ERROR: ".$error."</p>";
     } else {
+        // Finally we recache the ladder, it takes about 1-2 seconds with 25000 games
+        mysql_query("TRUNCATE TABLE $standingscachetable", $db);	
+        mysql_query("INSERT INTO $standingscachetable ".$cacheSql, $db);	
 		
 	// Now that the Elo has been added into the games table, let's update the entry so that it also includes the comment & sportsmanship rating
 		
@@ -123,8 +126,6 @@ if (isset($_POST['report'])) {
 		$result2 = mysql_query($query2) or die("fail");
     }
 
-	
-		
 
 ?>
 <p>Congratulations <?php echo $current_player; ?> you have defeated <?php echo $loser; ?>!</p>
@@ -172,6 +173,7 @@ if (isset($_POST['report'])) {
 <?php
 	echo "<p>Thank you! Information entered. Check your <a href=\"ladder.php?personalladder=".urlencode($_SESSION['username'])."\">current position.</a><br />Report Id: ".$result['reportedTime']."</p>";
     }
+		
 } else {
 ?><table>
 <form name="form1" enctype="multipart/form-data" method="post" onsubmit="return confirm('Report win against ' + this.losername.value +'?')" action="report.php">

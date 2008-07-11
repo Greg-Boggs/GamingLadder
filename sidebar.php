@@ -141,24 +141,9 @@ $totaltime = round($totaltime, 5);
     // We don't apply the limit in SQL as we use the total number of rows as the number of ladder players, the since query with more data
     // is faster than the same query twice.
 	
-    $sql = "select * from (select a.name, g.reported_on, 
-       CASE WHEN g.winner = a.name THEN g.winner_elo ELSE g.loser_elo END as rating,
-       CASE WHEN g.winner = a.name THEN g.winner_wins ELSE g.loser_wins END as wins,
-       CASE WHEN g.winner = a.name THEN g.winner_losses ELSE g.loser_losses END as losses,
-       CASE WHEN g.winner = a.name THEN g.winner_games ELSE g.loser_games END as games,
-       CASE WHEN g.winner = a.name THEN g.winner_streak ELSE g.loser_streak END as streak
-       FROM (select name, max(reported_on) as latest_game FROM $playerstable JOIN $gamestable ON (name = winner OR name = loser) WHERE contested_by_loser = 0 AND withdrawn = 0 GROUP BY 1) a JOIN $gamestable g ON (g.reported_on = a.latest_game)) standings join $playerstable USING (name) WHERE
-       reported_on > now() - interval $passivedays day AND rating >= $ladderminelo AND games >= $gamestorank ORDER BY 3 desc, 6 desc";
-	$result = mysql_query($sql,$db);
-    $rankedPlayers = mysql_num_rows($result);
-    $count = 0;
+	$result = mysql_query($standingsSqlWithRestrictions." LIMIT 10",$db);
 	while ($row = mysql_fetch_array($result)) {
 		echo "<li><a href=\"profile.php?name=$row[name]\">$row[name]</a> ($row[rating])</li>"; 
-        // If the count gets to the limit, break out and only display top 10
-        $count++;
-        if ($count >= 10) {
-            break;
-        }
 	}
 	echo "</ol>";
 	
@@ -171,20 +156,20 @@ echo "</ol><br><div align='left'><a href='friends.php'><img border='0' src='grap
 echo "</ol><br><div align='left'><a href='http://chaosrealm.net/wesnoth/index.php?readnews=-1'><img border='0' src='graphics/mod.jpg'></a></div><br />";
 	
 // Show  number of registered CONFIRMED users
-$sql=mysql_query("SELECT * FROM $playerstable WHERE Confirmation = \"Ok\" OR Confirmation = ''");
-$number=mysql_num_rows($sql);
-echo "<br /><br /><b>Confirmed Players:</b> $number";
+$sql=mysql_query("SELECT count(*) FROM $playerstable WHERE Confirmation = \"Ok\" OR Confirmation = ''");
+$number=mysql_fetch_row($sql);
+echo "<br /><br /><b>Confirmed Players:</b> ".$number[0];
 
-$sql=mysql_query("SELECT * FROM $gamestable WHERE withdrawn = 0 AND contested_by_loser = 0");
-$number2=mysql_num_rows($sql);
-echo "<br /><b>Played Games:</b> $number2";
+$sql=mysql_query("SELECT count(*) FROM $gamestable WHERE withdrawn = 0 AND contested_by_loser = 0");
+$number2=mysql_fetch_row($sql);
+echo "<br /><b>Played Games:</b>".$number2[0];
 
 // Work hours = the total time by all players spent spent on playin. Work days = the same turned into days. We multiply the number by 2 since a game i splayed by 2 people. Hence, if a game takes 1h to play, 2 work hours has been spent on it. (maybe called "Man hours").
-$workingdays = round(((($number2 * AVERAGE_GAME_LENGTH)/1440)*2),0);
+$workingdays = round(((($number2[0] * AVERAGE_GAME_LENGTH)/1440)*2),0);
 echo "<br /><b>Work days played:</b> $workingdays";
 
 // Display average number of games per user...
-echo "<br /><b>Games/Player: </b>". round($number2/$number,2);
+echo "<br /><b>Games/Player: </b>". round($number2[0]/$number[0],2);
 	
 	
 // Display number of games played within x amount of days...
@@ -204,7 +189,10 @@ echo "<br><b>Games today: </b>". $todaygames[0];
 
 // Ranked Players
 // Use ladder standings from above to general total.
-echo "<br /><b>Ranked Players: </b>".$rankedPlayers;
+$sql = "SELECT count(*) FROM $standingscachetable";
+$result = mysql_query($sql,$db);
+$rankedPlayers = mysql_fetch_row($result);
+echo "<br /><b>Ranked Players: </b>".$rankedPlayers[0];
 
 // Show number of replay downloads:
 
