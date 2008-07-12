@@ -109,13 +109,18 @@ $(document).ready(function()
 $where = "(winner like '%".$searchArray['winner']."%' ".$searchArray['playerand']." loser like '%".$searchArray['loser']."%') ";
 
 // Setup ratings in query
-if ($searchArray['winnerratingdirection'] != "") {
+if ($searchArray['winnerratingdirection'] != "" && $searchArray['winnerrating'] != "") {
     $where .= " AND (winner_elo ".$searchArray['winnerratingdirection']." '".$searchArray['winnerrating']."' ".$searchArray['ratingand']." ";
-    if ($searchArray['loserratingdirection'] != "") {
+    if ($searchArray['loserratingdirection'] != "" && $searchArray['loserrating'] != "") {
         $where .= " loser_elo ".$searchArray['loserratingdirection']." '".$searchArray['loserrating']."') ";
     } else {
         $where .= " 1=1)";
     }
+} else {
+   // Still do the loser rating stuff
+   if ($searchArray['loserratingdirection'] != "" && $searchArray['loserrating'] != "") {
+        $where .= " AND loser_elo ".$searchArray['loserratingdirection']." '".$searchArray['loserrating']."' ";
+   }
 }
 
 // Add replay restrictions
@@ -126,7 +131,7 @@ if ($searchArray['replay'] == "no") {
 }
 
 // Add reported_on restrictions
-if ($searchArray['reporteddirection'] != "") {
+if ($searchArray['reporteddirection'] != "" && $searchArray['reportdate'] != "") {
     $where .= " AND reported_on ".$searchArray['reporteddirection']." '".$searchArray['reportdate']."' ";
 }
 
