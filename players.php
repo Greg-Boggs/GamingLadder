@@ -1,41 +1,35 @@
 <?
 session_start();
 require('conf/variables.php');
+
+// Handle cookies setting before any display is made
+$searchArray = unserialize($_COOKIE['playeroptions']);
+if (isset($_GET['player'])) $searchArray['player'] = $_GET['player'];
+if (isset($_GET['gamesdirection'])) $searchArray['gamesdirection'] = $_GET['gamesdirection'];
+if (isset($_GET['winsdirection'])) $searchArray['winsdirection'] = $_GET['winsdirection'];
+if (isset($_GET['lossesdirection'])) $searchArray['lossesdirection'] = $_GET['lossesdirection'];
+if (isset($_GET['ratingdirection'])) $searchArray['ratingdirection'] = $_GET['ratingdirection'];
+if (isset($_GET['streakdirection'])) $searchArray['streakdirection'] = $_GET['streakdirection'];
+if (isset($_GET['games'])) $searchArray['games'] = $_GET['games'];
+if (isset($_GET['wins'])) $searchArray['wins'] = $_GET['wins'];
+if (isset($_GET['losses'])) $searchArray['losses'] = $_GET['losses'];
+if (isset($_GET['rating'])) $searchArray['rating'] = $_GET['rating'];
+if (isset($_GET['streak'])) $searchArray['streak'] = $_GET['streak'];
+
+if ($searchArray['gamesdirection'] <> "<=" && $searchArray['gamesdirection'] <> ">=" && $searchArray['gamesdirection'] <> "=") $searchArray['gamesdirection'] = "";
+if ($searchArray['winsdirection'] <> "<=" && $searchArray['winsdirection'] <> ">=" && $searchArray['winsdirection'] <> "=") $searchArray['winsdirection'] = "";
+if ($searchArray['lossesdirection'] <> "<=" && $searchArray['lossesdirection'] <> ">=" && $searchArray['lossesdirection'] <> "=") $searchArray['lossesdirection'] = "";
+if ($searchArray['ratingdirection'] <> "<=" && $searchArray['ratingdirection'] <> ">=" && $searchArray['ratingdirection'] <> "=") $searchArray['ratingdirection'] = "";
+if ($searchArray['streakdirection'] <> "<=" && $searchArray['streakdirection'] <> ">=" && $searchArray['streakdirection'] <> "=") $searchArray['streakdirection'] = "";
+
+setcookie ("playeroptions", serialize($searchArray), time()+7776000); 
+
 require_once 'autologin.inc.php';
 require('top.php');
 ?>
-<h2>Find Players</h2>
-<br />
-<!-- Form: Search By Name -->
-<form method="GET"> 
-	Search by Name: <input type="text" name="byname" />
-	<input type="submit" value="Submit" />
-</form>
-<a href="players.php?startplayers=0&finishplayers=100" >Show All</a>
-
-<?
-$sql="SELECT count(*) FROM $playerstable";
-$result=mysql_query($sql,$db);
-$yo = mysql_fetch_row($result);
-$yo = $yo[0];
-$number = 0;
-$link = 1;
-$finishnumber = $numplayerspage;
-$startnext = $_GET[startplayers] + $numplayerspage;
-$startprevious = $_GET[startplayers] - $numplayerspage;
-echo "<p class='text'>Go to page:";
-if ($startprevious >= 0) {
-echo "&nbsp;|&nbsp;<a href='players.php?startplayers=$startprevious&finishplayers=$finishnumber'><font color='$color1'><</font></a>&nbsp;|";
-}
-while ($number < $yo) {
-echo "&nbsp;<a href='players.php?startplayers=$number&finishplayers=$finishnumber'><font color='$color1'>$link</font></a>&nbsp;|&nbsp;";
-$number = $number + $numgamespage;
-$link = $link + 1;
-}
-if ($startplayers < $yo - $numplayerspage) {
-echo "<a href='playersgames.php?startplayers=$startnext&finishplayers=$finishnumber'><font color='$color1'></font></a>&nbsp;|";
-}
-?>
+<h2>Player Search</h2>
+<p>You can search for players below.  You may use the options in the header to search for specific criteria.  A maximum of 250 players will be displayed for any search.</p>
+<form method="get" action="players.php"> 
 <script type="text/javascript">
 $(document).ready(function() 
     { 
@@ -54,22 +48,76 @@ $(document).ready(function()
 <th>Rating</th>
 <th>Streak</th>
 </tr>
+<tr>
+<td><input type="submit" value="Update" /></td>
+<td><input name="player" type="text" value="<? echo $searchArray['player'] ?>" size="10" /></td>
+<td><select name="gamesdirection">
+    <option <?php if ($searchArray['gamesdirection'] == "") echo "selected='selected'"; ?> value="">--</option>
+    <option <?php if ($searchArray['gamesdirection'] == "<=") echo "selected='selected'"; ?> value="&lt;=">&lt;=</option>
+    <option <?php if ($searchArray['gamesdirection'] == ">=") echo "selected='selected'"; ?> value="&gt;=">&gt;=</option>
+    <option <?php if ($searchArray['gamesdirection'] == "=") echo "selected='selected'"; ?> value="=">=</option>
+    </select>
+    <input type="text" value="<?php echo $searchArray['games']; ?>" name="games" size="4" />
+</td>
+<td><select name="winsdirection">
+    <option <?php if ($searchArray['winsdirection'] == "") echo "selected='selected'"; ?> value="">--</option>
+    <option <?php if ($searchArray['winsdirection'] == "<=") echo "selected='selected'"; ?> value="&lt;=">&lt;=</option>
+    <option <?php if ($searchArray['winsdirection'] == ">=") echo "selected='selected'"; ?> value="&gt;=">&gt;=</option>
+    <option <?php if ($searchArray['winsdirection'] == "=") echo "selected='selected'"; ?> value="=">=</option>
+    </select>
+    <input type="text" value="<?php echo $searchArray['wins']; ?>" name="wins" size="4" />
+</td>
+<td><select name="lossesdirection">
+    <option <?php if ($searchArray['lossesdirection'] == "") echo "selected='selected'"; ?> value="">--</option>
+    <option <?php if ($searchArray['lossesdirection'] == "<=") echo "selected='selected'"; ?> value="&lt;=">&lt;=</option>
+    <option <?php if ($searchArray['lossesdirection'] == ">=") echo "selected='selected'"; ?> value="&gt;=">&gt;=</option>
+    <option <?php if ($searchArray['lossesdirection'] == "=") echo "selected='selected'"; ?> value="=">=</option>
+    </select>
+    <input type="text" value="<?php echo $searchArray['losses']; ?>" name="losses" size="4" />
+</td>
+<td><select name="ratingdirection">
+    <option <?php if ($searchArray['ratingdirection'] == "") echo "selected='selected'"; ?> value="">--</option>
+    <option <?php if ($searchArray['ratingdirection'] == "<=") echo "selected='selected'"; ?> value="&lt;=">&lt;=</option>
+    <option <?php if ($searchArray['ratingdirection'] == ">=") echo "selected='selected'"; ?> value="&gt;=">&gt;=</option>
+    <option <?php if ($searchArray['ratingdirection'] == "=") echo "selected='selected'"; ?> value="=">=</option>
+    </select>
+    <input type="text" value="<?php echo $searchArray['rating']; ?>" name="rating" size="4" />
+</td>
+<td><select name="streakdirection">
+    <option <?php if ($searchArray['streakdirection'] == "") echo "selected='selected'"; ?> value="">--</option>
+    <option <?php if ($searchArray['streakdirection'] == "<=") echo "selected='selected'"; ?> value="&lt;=">&lt;=</option>
+    <option <?php if ($searchArray['streakdirection'] == ">=") echo "selected='selected'"; ?> value="&gt;=">&gt;=</option>
+    <option <?php if ($searchArray['streakdirection'] == "=") echo "selected='selected'"; ?> value="=">=</option>
+    </select>
+    <input type="text" value="<?php echo $searchArray['streak']; ?>" name="streak" size="4" />
+</td>
+</tr>
 </thead>
 <tbody>
 <?php
 
-$sql = "select * from $standingscachetable right join $playerstable USING (name)";
+// Construct the where clause
+$where = "name like '%".$searchArray['player']."%' ";
 
-//if byname is set than, add the where clause
-if ( isset($_GET['byname']) ) {
-	$sql .= " WHERE name like '%".$_GET['byname']."%' ";
+// Setup ratings in query
+if ($searchArray['gamesdirection'] != "" && $searchArray['games'] != "") {
+    $where .= " AND games ".$searchArray['gamesdirection']." '".$searchArray['games']."' ";
 }
-$sql .= "GROUP BY name ORDER BY name ASC";
+if ($searchArray['winsdirection'] != "" && $searchArray['wins'] != "") {
+    $where .= " AND wins ".$searchArray['winsdirection']." '".$searchArray['wins']."' ";
+}
+if ($searchArray['lossesdirection'] != "" && $searchArray['losses'] != "") {
+    $where .= " AND losses ".$searchArray['lossesdirection']." '".$searchArray['losses']."' ";
+}
+if ($searchArray['ratingdirection'] != "" && $searchArray['rating'] != "") {
+    $where .= " AND rating ".$searchArray['ratingdirection']." '".$searchArray['rating']."' ";
+}
+if ($searchArray['streakdirection'] != "" && $searchArray['streak'] != "") {
+    $where .= " AND streak ".$searchArray['streakdirection']." '".$searchArray['streak']."' ";
+}
 
-//these two Variables had to be checked because if you search by players with the form, these two variables aren't set anymore
-if ( isset($_GET[startplayers]) && isset($_GET[finishplayers]) ) { 
-	$sql .= " LIMIT $_GET[startplayers], $_GET[finishplayers]";
-}
+$sql = "select * from $standingscachetable right join $playerstable USING (name) WHERE ".$where;
+$sql .= " ORDER BY name ASC LIMIT 250";
 
 $result=mysql_query($sql,$db);
 while ($row = mysql_fetch_array($result)) {
@@ -100,6 +148,7 @@ while ($row = mysql_fetch_array($result)) {
 ?>
 </tbody>
 </table>
+</form>
 <?
 require('bottom.php');
 ?>
