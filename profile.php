@@ -21,7 +21,7 @@ while ($row = mysql_fetch_array($result)) {
 
 // If the player has no rank he is passive, so make a second query grabbing the passive players
 if ($rank == "") {
-    $result = mysql_query("select * from $standingscachetable right join $playerstable USING (name) WHERE name = '".$_GET['name']."'", $db);
+    $result = mysql_query("select * from $standingscachetable right join $playerstable USING (name) WHERE confirmation <> 'Deleted' AND name = '".$_GET['name']."'", $db);
 	$row = mysql_fetch_array($result);
     $rank = "unranked";
 }

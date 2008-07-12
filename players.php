@@ -116,7 +116,7 @@ if ($searchArray['streakdirection'] != "" && $searchArray['streak'] != "") {
     $where .= " AND streak ".$searchArray['streakdirection']." '".$searchArray['streak']."' ";
 }
 
-$sql = "select * from $standingscachetable right join $playerstable USING (name) WHERE ".$where;
+$sql = "select * from $standingscachetable right join $playerstable USING (name) WHERE confirmation <> 'Deleted' AND ".$where;
 $sql .= " ORDER BY name ASC LIMIT 250";
 
 $result=mysql_query($sql,$db);

@@ -7,7 +7,7 @@
 require('conf/variables.php');
 
 // Get a list of all the player names
-$sql = "SELECT name FROM $playerstable ORDER BY player_id ASC";
+$sql = "SELECT name FROM $playerstable WHERE confirmation <> 'Deleted' ORDER BY player_id ASC";
 $result = mysql_query($sql, $db);
 
 $friends = array();
