@@ -50,7 +50,7 @@ class Elo {
     {
         global $gamestable;
 
-        $reportTime = date('Y-m-d h:i:s'); 
+        $reportTime = date('Y-m-d H:i:s'); 
 
         if ($draw === true) {
             $insertDraw = 'true';
