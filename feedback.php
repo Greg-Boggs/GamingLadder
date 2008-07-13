@@ -153,12 +153,12 @@ if (($row['loser']  == $_SESSION['username']) && ($row['loser_comment'] == "" ||
 if (trim($row['winner_stars']) == "") { ?>
 
 	<tr><td>sportsmanship</td><td><select size="1" name="sportsmanship">
-		<option selected></option>
-		<option>1</option>
-		<option>2</option>
-		<option>3</option>
-		<option>4</option>
-		<option>5</option>
+		<option selected="selected" value="">-- No sportmanship rating --</option>
+		<option value="1">1 - Not very likely to play with this person again.</option>
+		<option value="2">2 - Not the best experience, but I'd consider playing against this player again.</option>
+		<option value="3">3 - A pleasant opponent.</option>
+		<option value="4">4 - A more than pleasant player with good chat.</option>
+		<option value="5">5 - I made a new friend.</option>
 	</select>
 	</td>
 	</tr>
