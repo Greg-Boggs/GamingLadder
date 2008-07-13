@@ -4,7 +4,7 @@ session_start();
 require('conf/variables.php');
 
 // Handle all of the cookie management before we attempt to do anything else
-$searchArray = unserialize($_COOKIE['gamehistoryoptions']);
+$searchArray = unserialize(base64_decode($_COOKIE['gamehistoryoptions']));
 if (isset($_GET['reporteddirection'])) $searchArray['reporteddirection'] = $_GET['reporteddirection'];
 if (isset($_GET['reportdate'])) $searchArray['reportdate'] = $_GET['reportdate'];
 if (isset($_GET['reportdate'])) $searchArray['reportdate'] = $_GET['reportdate'];
@@ -24,7 +24,7 @@ if ($searchArray['loserratingdirection'] <> "<=" && $searchArray['loserratingdir
 if ($searchArray['playerand'] <> "AND" && $searchArray['playerand'] <> "OR") $searchArray['playerand'] = "AND";
 if ($searchArray['ratingand'] <> "AND" && $searchArray['ratingand'] <> "OR") $searchArray['ratingand'] = "AND";
 
-setcookie ("gamehistoryoptions", serialize($searchArray), time()+7776000); 
+setcookie ("gamehistoryoptions", base64_encode(serialize($searchArray)), time()+7776000); 
 
 require_once 'autologin.inc.php';
 require('top.php');

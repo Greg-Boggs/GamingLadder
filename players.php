@@ -3,7 +3,7 @@ session_start();
 require('conf/variables.php');
 
 // Handle cookies setting before any display is made
-$searchArray = unserialize($_COOKIE['playeroptions']);
+$searchArray = unserialize(base64_decode($_COOKIE['playeroptions']));
 if (isset($_GET['player'])) $searchArray['player'] = $_GET['player'];
 if (isset($_GET['gamesdirection'])) $searchArray['gamesdirection'] = $_GET['gamesdirection'];
 if (isset($_GET['winsdirection'])) $searchArray['winsdirection'] = $_GET['winsdirection'];
@@ -22,7 +22,7 @@ if ($searchArray['lossesdirection'] <> "<=" && $searchArray['lossesdirection'] <
 if ($searchArray['ratingdirection'] <> "<=" && $searchArray['ratingdirection'] <> ">=" && $searchArray['ratingdirection'] <> "=") $searchArray['ratingdirection'] = "";
 if ($searchArray['streakdirection'] <> "<=" && $searchArray['streakdirection'] <> ">=" && $searchArray['streakdirection'] <> "=") $searchArray['streakdirection'] = "";
 
-setcookie ("playeroptions", serialize($searchArray), time()+7776000); 
+setcookie ("playeroptions", base64_encode(serialize($searchArray)), time()+7776000); 
 
 require_once 'autologin.inc.php';
 require('top.php');
