@@ -162,7 +162,7 @@ echo "<br /><br /><b>Confirmed Players:</b> ".$number[0];
 
 $sql=mysql_query("SELECT count(*) FROM $gamestable WHERE withdrawn = 0 AND contested_by_loser = 0");
 $number2=mysql_fetch_row($sql);
-echo "<br /><b>Played Games:</b>".$number2[0];
+echo "<br /><b>Played Games:</b> ".$number2[0];
 
 // Work hours = the total time by all players spent spent on playin. Work days = the same turned into days. We multiply the number by 2 since a game i splayed by 2 people. Hence, if a game takes 1h to play, 2 work hours has been spent on it. (maybe called "Man hours").
 $workingdays = round(((($number2[0] * AVERAGE_GAME_LENGTH)/1440)*2),0);

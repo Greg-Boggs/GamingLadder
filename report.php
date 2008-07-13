@@ -58,21 +58,32 @@ if (isset($_POST['report'])) {
     // Do all the replay stuff to create a replay in the database
     // We use the tmp_name to detect if somebody actually filled in a file for upload.
     if (isset($_FILES["uploadedfile"]["name"]) && $_FILES['uploadedfile']['name'] != "") {
-        if (($_FILES["uploadedfile"]["size"] <= MAX_REPLAYSIZE) && ($_FILES["uploadedfile"]["type"] == REPLAY_MIME_TYPE)){
-	        $replay = file_get_contents($_FILES['uploadedfile']['tmp_name']);
+        
+		
+			// To the the file extension of the file we use the handy pathinfo php function/array. 
+			$file_info = pathinfo($_FILES["uploadedfile"]["name"]);
+							
+		
+		// Only sabe the file if it's right size and right extension:
+		if (($_FILES["uploadedfile"]["size"] <= MAX_REPLAYSIZE) && ($file_info['extension'] == $replayfileextension)){
+			$replay = file_get_contents($_FILES['uploadedfile']['tmp_name']);
+			
+		
+			
         } else {
+			
             $failure = true;
 			$maxfilesizekb = (MAX_REPLAYSIZE / 1000);
 				
-				if ($_FILES["uploadedfile"]["type"] != REPLAY_MIME_TYPE) { 
-				if ($_FILES["uploadedfile"]["type"] == "") { $uploadedfilesmime = "an unknown";} else {
-				$uploadedfilesmime =  "a ".$_FILES["uploadedfile"]["type"]; }
 				
-				 $error = "You attempted to upload a replay but failed. The file you uploaded wasn't of the correct type. Instead of a *.". $replayfileextension ." file you uploaded $uploadedfilesmime file"; 
+				if ($file_info['extension'] != $replayfileextension) { 
+				
+				 $error = "You attempted to upload a replay but failed. The file you uploaded wasn't of the correct type. Instead of a *.". $replayfileextension ." file you uploaded a ". $file_info['extension'].  "-file. Please only upload valid replays.<br /><br /><b>Notice:</b> The game has <i>not</i> been reported. Try again."; 
 				 }	else {			
 				$uploadefilesizekb= ($_FILES["uploadedfile"]["size"]/1000);
-				$uploadefileoversizedkb = $uploadedfileziekb - $maxfilesizekb;
-				$error = "You attempted to upload a replay but failed. It wasn't small enough. We only allow replays that are <= $maxfilesizekb Kb. Yours was $uploadefilesizekb Kb, which is $uploadefileoversizedkb Kb too large.";
+							
+				$uploadefileoversizedkb = ($uploadefilesizekb - $maxfilesizekb);
+				$error = "You attempted to upload a replay but failed since it wasn't small enough. We only allow replays that are <= $maxfilesizekb Kb. Yours was $uploadefilesizekb Kb, which is $uploadefileoversizedkb Kb too large. Better luck with next replay....<br /><br /><b>Notice:</b> The game has <i>not</i> been reported. Try again.";
 				}
 			}
 

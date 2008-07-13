@@ -48,7 +48,6 @@ define("COUNT_GAMES_OF_LATEST_DAYS", 1); // amount of days we're gonne count the
 define("MIN_COUNT_GAMES_OF_LATEST_DAYS", 1); // minimum amount of games that need to have been played within the x most recent days to show the amount of games the x most recent days
 define("AVERAGE_GAME_LENGTH", 40); // amount of minutes the average game is expected to last. This is used for calcuating work-hours spent on gaming in the sidebar.
 define("MAX_REPLAYSIZE", 200000); // max fileseize of replay file user can upload, set in bytes. 200000 = 200 kb. This will have to be adjusted to fit different games and maybe according to you hosting limits. 
-define("REPLAY_MIME_TYPE", "application/x-gzip"); // Mime-type the uploaded replay must have to be saved/valid. Only files that has this mime-type will be allowed. Official mimetypes can be seen in http://www.iana.org/assignments/media-types/  ..inofficial have the letter x- infront of them. If you want to know the mime type for a specific game then just upload one of it's replay and check it out in the error message it will give you. Set this to "" (nothing, not even a space) if php cant detect the mimetype, then it should probably allow all files it cant detect.
 $replayfileextension = "gz"; //file extension of the replay files.
 
 // The format style used here is the one from mysql DATE_FORMAT
