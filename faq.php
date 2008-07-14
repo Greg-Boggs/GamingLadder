@@ -5,14 +5,15 @@ require('top.php');
 ?>
 <b>Table of Content</b>
 <ol>
-    <li><a href="faq.php#mrules">Rules</a> - v0.14 (18 April 2008)</li>
+  
+    <li><a href="faq.php#mrules">Rules</a> - v0.15 (14 July 2008)</li>
     <li><a href="faq.php#magreement">Agreement</a></li>
-    <li><a href="faq.php#mfaq">Faq</a> - v0.2 (5 June 2008)</li>
+    <li><a href="faq.php#mfaq">Faq</a> - v0.3 (14 July 2008)</li>
 </ol>
 
-<p>
-<b>Notice:</b> The ladder is <i>not</i> in any way associated with the official Wesnoth forum, it's moderators and/or the developers of Wesnoth. Please don't use the forum to start new ladder threads and don't contact the Wesnoth staff about ladder related issues.
-</p>
+<pre><b>Notice:</b> The ladder is <i>not</i> in any way associated with the official Wesnoth forum, it's moderators and/or<br /> the developers of Wesnoth. Please don't use the forum to start new ladder threads and don't ever contact <br /> the Wesnoth staff or server admins about ladder related issues - they won't & can't help you.</pre>
+
+
 
 <a name="mrules"></a><h2>Rules</h2>
 <h3>Ladder Rating & Ranking</h3>
@@ -35,7 +36,7 @@ require('top.php');
 <ol>
 <li>All games are 1 vs 1. You're allowed to play however many games you want, with whoever that is participating in the ladder and that wants to compete with you. To find an opponent for a ladder game you'd have to contact people in the ladder and/or create (ladder) games on the offical server. You can find players by using the ladder <a href="friends.php">in-game friends list</a>, contacting them via some kind of <a href="http://www.pidgin.im">instant messenger</a> and also email challange them via their profile.</li>
 <li>Game must be played on one of the <i>Official Servers</i> using the original unmodified software.</li>
-<li>The name of the game must start with the prefix <i>(L)</i> or <i>(Ladder)</i>. It's recomended but not mandatory to let it be followed by <i>ladder.subversiva.org</i> and don't forget your <i>ladder nick & your Elo rating</i> in paranthesis. The ranking <i>may</i> be rounded to nearest hundredth (1545 becomes 1500). An example of a ladder game name according to the above would be: <i>(L) ladder.subversiva.org (eyerouge 1600)</i></li> 
+<li>The name of the game <i>must start</i> with the prefix <i>(L)</i> or <i>(Ladder)</i>. It's recomended but not mandatory to let it be followed by <i>ladder.subversiva.org</i> and don't forget your <i>ladder nick & your Elo rating</i>. The ranking <i>may</i> be rounded to nearest hundredth (1545 becomes 1500). An example of a ladder game name according to the above would be: <i>(L) ladder.subversiva.org (eyerouge 1600)</i> Another example is: <i>(L) doodle 1545 vs Rick 1800</i> </li> 
 <li>Only the current stable <i>and</i> development versions of Battle for Wesnoth for <i>your plattform</i> are legal for you. Only exceptions to this are if those versions don't perform well on your system, in which case you're allowed to use one older subversion. Always make sure both you and your opponent use the same version before the game begins to avoid all kinds of trouble.</li>
 <li>You must have downloaded your copy of Wesnoth from a site that the  wesnoth.org download section links to.</li>
 <li>The loading of Saved Games isn't allowed unless you both explicitly agree that it is or the rules suggest it.</li>
@@ -49,13 +50,14 @@ require('top.php');
         <li>Turn Bonus: 200</li>
         <li>Action Bonus: 20</li>
     </ul>These are the lowest values allowed unless you <i>agree</i> on another higher or lower setting with your opponent <i>before</i> the game starts. (If you're an apprentice be warned: <i>For many total newcomers to the world of Wesnoth the recomended time setting can be harsh.</i> You have to eat many Wose roots before you can play the game skillfully under the perils of time. Try to agree on more time before starting the game if you're worried about this.)</li> 
-<li>Settings within the game lobby: Use your <i>exact ladder</i> name. Be in different teams, have the map default amount of gold and default income.</li>
-<li>Observers: It's encouraged that you allow observers, but you have the right to play ladder games with observers turned off. If at least one player requests that observers are turned off then observers must be turned off. A player who enters a game with observers on <em>automatically agrees</em> on allowing observers. Notice: If you allow observers your opponent or his friends can observe your moves with another instance of Wesnoth. In general people don't cheat.</li>
+<li>Settings within the game lobby: Be in different teams, have the map default amount of gold and default income.</li>
+<li>Observers: It's strongly encouraged that you allow observers, but you have the right to play ladder games with observers turned off. If at least one player requests that observers are turned off then observers must be turned off. A player who enters a game with observers on <em>automatically agrees</em> on allowing observers. Notice: If you allow observers your opponent or his friends can observe your moves with another instance of Wesnoth. In general people don't cheat, and it's considered to be more more polite and friendly to allow observers.</li>
 
 </ol>
 
 <h3>Players</h3>
 <ol>
+<li>When playing a ladder game you <i>must</i> a) use the exact and same nick in the game as you use on the ladder and b) also <i>make sure</i> that the opponent also has his original ladder name when playing a ladder game with you. If you fail you may get your game result deleted by admin without any warning. It doesn't matter which one of you isn't using his/her real ladder nickname - as long as one isn't doing it the game result is void, and you're not even entitled to report the game in the first place. In cases where you disconnect and can't get your real nickname back on a reconnect then you should still use your exact real ladder nickname followed by an extenstion marking that it's a temporary solution. Example: nickname_2 or nickname_tmp. If using an extension make sure it's crystal clear you're doing so, especially if you have hard to understand nickname. If somebody has hi-jacked your nickname then don't play until you have resolved the situation.</li>
 <li>If two players communicate the language used should be English <i>unless</i> they both agree to use another language. If an observer speaks openly in a game, so that the players can see the text, she/he is only allowed to do so in the very same language the players use. Private chat <i>between</i> the observers may occur in any language.</li>
 <li>The <i>winner</i> of the game is allowed to report the result to the ladder after each finished game. The loser isn't.</li>
 <li>Except for the cases below the winner/loser is declared by Wesnoth.</li>
@@ -64,7 +66,6 @@ require('top.php');
 <li>If all parties at any time agree that they began playing the game using the wrong settings they're allowed to disconnect and start a new game instead. The correct settings are defined in this document.</li>
 <li>Always save a replay of your game - it might be of value in the future and will also prevent the most common cheaters.</li>
 <li>If you manage to make a false report by misstake please send us a mail and we'll correct it.</li>
-<li>Only use your exact ladder nick and try to have a unique one. If you, against all reason and recomendation, don't use the same nick ingame as in the ladder, you must be prepared to verify that you are who you say you if a player requests it. Verification is done via the IM that you have specified in your profile here in the ladder.</li>
 <li>As soon as an out of sync (OOS) message is shown to a player that player must report it to the other. The game must then be loaded from <i>the most recent saved turn before</i> the first OOS-message. OOS errors mean that the game sends different types of info to the players, which in the end will result you seeing all kinds of things that haven't isn't seen by your opponent and vice versa. In essence you'll be playing two separate games against nobody, which doesn't make any sense. If you ignore the OOS-error messages and keep on playing the game is declared unvalid unless it's re-loaded according to the above.</li>
 <li>In cases where the OOS problem arise, the player requsiting a re-load due to the OSS error must be able to validate the error with a screenshot and a save file <i>if</i> the opponent doesn't get the same error message <i>and</i> the opponent actually demands the validation.</li>
 
@@ -79,7 +80,7 @@ require('top.php');
 <li>You are only allowed to have one account. If you want to create a new account and delete your old please contact us and be ready to give eyerouge your password in order for us to verify that you're the real owner of the account that's about to be deleted.</li>
 <li>If you suspect a player breaks the agreement you must contact us. Don't fear - we treat all correspondence with discretion. Whatever you do, <em>don't </em>start rumours or accusations in the open as it never leads to anything productive.</li>
 <li>Using this ladder and our services isn't a right - it's a privilege that we  choose to give to you as long as we want and as long as it's possible.</li>
-<li>If there are breaches in the agreement and/or other apparent reasons to do so the site administration has the right to ban users and/or delete/modify results, together with any other necessary measures that a situation might require for us to secure the ladders integrity and the intended functions of it.</li>
+<li>If there are breaches in the agreement and/or other for us apparent reasons to do so the site administration has the right to ban users and/or delete/modify results and other info, together with any other necessary measures that a situation might require for us to secure the ladders integrity and the intended functions of it as the admin envisions them.</li>
 <li>The rules are always a subject for change. If many players require a modification, addition or deletion or if the admin sees fit the rules will be revised. Revisions are marked with a version number and they're announced in the news section as well as in here.</li>
 </ol>
 
@@ -96,7 +97,10 @@ require('top.php');
     <li><a href="faq.php#passive">What does passive rank mode mean?</a></li>
     <li><a href="faq.php#elochange">Help! My Elo points changed for no reason!</a></li>
     <li><a href="faq.php#countdown">What is the countdown in days for in my profile?</a></li>
-    <li><a href="faq.php#avgp">Wtf is Average P W/L/T in the profile?</a></li>
+	<li><a href="faq.php#replay">How can I upload a replay?</a></li>	
+	<li><a href="faq.php#sportsmanship">What is sportsmanship?</a></li>
+	<li><a href="faq.php#comments">How do I write a game comment?</a></li>
+	<li><a href="faq.php#avgp">What is Average P W/L/T in the profile?</a></li>
     <li><a href="faq.php#rulings">Where do I get a ruling?</a></li>
     <li><a href="faq.php#rulessuck">The rules suck.</a></li>
     <li><a href="faq.php#playnowlist">What is the stuff next to the players nick in the waiting for game list?</a></li>
@@ -187,6 +191,30 @@ Nothing ever happens without reason, and if it does then the ladder needs some f
 It shows you how many days you have left until you're put in passive rank mode. You can only see this if you're logged in and view your own profile.
 </p>
 
+<a name="replay"></a><h4>How can I upload a replay?</h4>
+<p>When reporting a game you can choose to upload a replay if you want to. It must be smaller than <?php echo MAX_REPLAYSIZE / 1000; ?> kB and a <?php echo "$replayfileextension";  ?>-file. All replays you upload can be downloaded and watched by others. 
+</p>
+
+<a name="sportsmanship"></a><h4>What is sportsmanship?</h4>
+<p>
+Sportsmanship is a type of karma-system we offer our players. It's a way to rate the conduct of your opponents by giving them a numerical value from 1 (lowest, worst) to 5 (highest, best). The winner can rate the loser when he/she reports the win. The loser can rate the winner via the profile -> game history. Once given a rating can't be changed.<br /><br />
+
+Every player has a sportsmanship average in his/her profile. It's the sum of all his averages divided by the number of ratings. We strongly encourage you to rate your opponents as it will make it easier to spot people that behave badly or in any other way not wished by the general wesnoth or ladder community.<br /><br />
+
+Also keep in mind that however you rate people, it is always official. Be prepared to stand up for your opinions and be open with them, or keep them to yourself and don't use the rating at all.<br /><br />
+
+<b>How to rate</b><br />
+If you've played a casual, normal game where nothing popped up then that equals a 3. It means that the opponent followed the general multiplayers conduct and also abided under all the ladder rules. Please keep in mind a 3 is not a bad rating. It's actually what's expected in most games as it signifies "normality".<br /><br />If you happen to play against somebody that's friendly or helps you out, enchants your game play session or does something which makes him/her stand out as a nice person measured by general multiplayer standards or the ladder rules, then he/she should get a 4 or 5. Reward nice people.<br /><br /> Likewise, when the contrary is true, a person should get a 1 or 2. Examples for when it would occur are: Player is spamming, not responding several turns or reporting AFK, disconnecting without notice and without coming back or messaging, acting like 7-year old from hell, etc etc. In essence, anything that normal sportsmanship would deem as bad and which is unwanted according the ladder rules and/or the general Wesnoth multiplayer community should guarantee a rating of 1 or 2. Punish the wicked.
+<br /><br />Notice: Sportsmanship has <i>nothing</i> with player skills to do or how good or bad a player is at the game itself! It's a rating of <I>the social aspect</i> of gaming and a measure of the attitude of people.
+</p>
+
+<a name="comments"></a><h4>How do I write a game comment?</h4>
+<p>
+The participants of a game can comment it if they choose to do so. The winner inputs his/her comment when reporting the game. The loser can add a comment by pressing L/W/WL/Add in his profile's recent game history. Please keep in mind that comments are always official. Use the English language and make sure the public can understand what you write. Don't be offensive or an idiot in some other wat, or admin will delete your comment(s) and/or your account without a warning. Once posted you can't change the comment (yes, this is a feature and not us beeing lazy coders), so please read it through before you post it as nobody will change it or correct it for you later on.
+</p>
+
+
+
 <a name="avgp"></a><h4>Wtf is Average P W/L/T in the profile?</h4>
 <p>
 The Average P WLT shows x / y / z, which translates to the average points the player wins when she wins, the average points the player loses when she loses, and also the average points the player gets/loses per game in total. I hope you all see the potential already, as this great info actually tells you what kind of a player you/the others are:
@@ -245,7 +273,7 @@ If you are logged in and view another players profile you'll see something that 
 
 <a name="provisional"></a><h4>What is a provisional player?</h4>
 <p>
-In a players profile you can sometimes see the title <i>provisional</i>. In an effort to encourage competitive play, all new players to the ladder will be given <?php echo PROVISIONAL;?> games of new player protection: Their rank will be simply "provisional". Playing a game against a provisional player is worth the normal amount of points you would get divided by <?php echo PROVISIONAL_PROTECTION;?>, and the points you would lose to one is also divided by <?php echo PROVISIONAL_PROTECTION;?>. We use the provisonal mode to both encourage competitive players and to protect new players, to give them a chance to try out opposition on the ladder and get a feel for it. It also makes it less risky for highly rated players to play with newcomers which still haven't got their true rating in their profile due to the lack of games.
+In a players profile you can sometimes see the title <i>provisional</i>. In an effort to encourage competitive play, all new players to the ladder will be given <?php echo PROVISIONAL;?> games of new player protection: Their rank will be simply "provisional". Playing a game against a provisional player is worth the normal amount of points you would get if you win. If you lose against a provisonal player then you are protected, and you would only lose whatever you would lose in a normal game, but divided with <?php echo PROVISIONAL_PROTECTION;?>. We use the provisonal mode to encourage competitive players and to make new players get an accurate rating faster by giving them a much higher K while they are provisional.
 </p>
 
 <a name="protection"></a><h4>Won't players just play against weaker players or stop playing to maintain their high rating?</h4>
