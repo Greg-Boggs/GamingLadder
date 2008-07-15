@@ -49,6 +49,7 @@ define("MIN_COUNT_GAMES_OF_LATEST_DAYS", 1); // minimum amount of games that nee
 define("AVERAGE_GAME_LENGTH", 40); // amount of minutes the average game is expected to last. This is used for calcuating work-hours spent on gaming in the sidebar.
 define("MAX_REPLAYSIZE", 200000); // max fileseize of replay file user can upload, set in bytes. 200000 = 200 kb. This will have to be adjusted to fit different games and maybe according to you hosting limits. 
 $replayfileextension = "gz"; //file extension of the replay files.
+define("INDEX_COMMENT_HILITE", 1); // 0 or 1. If enabled (1) then the latest game with a comment & replay will be displayed before the news posts.
 
 // The format style used here is the one from mysql DATE_FORMAT
 // http://dev.mysql.com/doc/refman/6.0/en/date-and-time-functions.html#function_date-format

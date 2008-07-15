@@ -80,10 +80,42 @@ require('top.php');
 	<tr>
 	
 	
-	<td width="70%" valign="top" padding-right="15px">
+	<td width="50%" valign="top" padding-right="20px">
 
 <?php
 
+If (INDEX_COMMENT_HILITE == 1) {
+
+
+
+	$sql ="SELECT winner, loser, length(replay) as replay, reported_on, winner_comment, loser_comment, winner_elo, loser_elo FROM $gamestable WHERE withdrawn = 0 AND contested_by_loser = 0 AND replay != '' AND (winner_comment != '' || loser_comment != '') ORDER BY reported_on DESC LIMIT 0,1";
+	
+	$result = mysql_query($sql,$db);
+	$row = mysql_fetch_array($result);
+	
+	
+
+echo "<h1>Spotlight</h1><br /> <b>".$row['winner']." (".$row['winner_elo'].") / ".$row['loser']." (".$row['loser_elo'].")</b>";
+
+ if ($row[replay] != 0) {
+		    echo " <a href=\"download-replay.php?reported_on=$row[reported_on]\">®</a><br /><br />";
+		}
+
+if (trim($row['winner_comment']) != "") {
+	echo "<i>\"".$row['winner_comment'] ."\"  </i>~".$row['winner']."<br /><br />";
+	}
+
+
+if (trim($row['loser_comment']) != "") {
+	echo "<i>\"".$row['loser_comment'] ."\"  </i>~".$row['loser'];
+	}
+
+
+echo "<br /><br />";
+
+
+}
+echo "<h1>News</h1>";
 if ($_GET[readnews]) {
 $sql="SELECT * FROM $newstable WHERE news_id = '$_GET[readnews]' ORDER BY news_id DESC LIMIT 0, $newsitems";
 $result=mysql_query($sql,$db);
@@ -146,10 +178,7 @@ echo"<a href='index.php?readnews=$row[news_id]'><font color='$color1'>$row[date]
 	
 	</td>
 	
-	<td>&nbsp;&nbsp;&nbsp;</td>
 	
-			<td width="30%" valign="top" class="smallinfo">	
-
 
 
 <?php 

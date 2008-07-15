@@ -1,3 +1,6 @@
+
+<td width="25%" valign="top" class="smallinfo">	
+
 <?php
 // We dont want to show the login form if we're logged in alread, so:
 if (!isset($_SESSION['username']))  {
@@ -107,7 +110,7 @@ if ((mysql_num_rows($result)==0) && isset($_SESSION['username'])) {
 	}
 	echo "</ol>";
 	
-	
+
 	
 // Show latest joined and verified players...
 
@@ -211,6 +214,7 @@ if (isset($_SESSION['username']))  {
 </td>	
 	</tr>
 </table>
+
 </div>
  </div></div></div></div></div></div></div></div>
 <hr>

@@ -16,7 +16,7 @@
 
 <head>
 <title><?php echo $titlebar; ?></title>
-<meta name="keywords" content="wesnoth, league, ladder, elo, open source" />
+<meta name="keywords" content="wesnoth, league, ladder, elo, open source, gaming" />
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <script type="text/javascript" src="<?php echo $GLOBALS['prefix'] ?>jquery/jquery-1.2.6.pack.js"></script>
 <script type='text/javascript' src='<?php echo $GLOBALS['prefix'] ?>jquery/jquery.autocomplete.js'></script>
@@ -70,4 +70,4 @@ font-size: 12 px;
 ?>
 </div>
 
-<div style="background-color: <?php echo"$color7" ?>; width: 800px; margin-left: auto; margin-right: auto">
+<div style="background-color: <?php echo"$color7" ?>; width: 900px; margin-left: auto; margin-right: auto">

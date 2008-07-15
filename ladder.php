@@ -37,17 +37,18 @@ if (!isset($myrank)) {
 }
 ?>
 <h2><?php echo $personalladder ?> Ladder Standings</h2>
-<table id="ladder" class="tablesorter" width="100%">
+
+<table id="ladder" class="tablesorter">
 <thead>
 <tr>
 <th align="left" width='10%'>No.</th>
 <th align="left">Avatar&nbsp; &nbsp;</th>
 <th align="left">Player&nbsp; &nbsp;</th>
+<th align="center">Rating&nbsp; &nbsp;</th>
+<th align="center">Wins% &nbsp; &nbsp;</th>
 <th align="center">Wins&nbsp; &nbsp;</th>
 <th align="center">Losses&nbsp; &nbsp;</th>
 <th align="center">Total&nbsp; &nbsp;</th>
-<th align="center">Wins% &nbsp; &nbsp;</th>
-<th align="center">Rating&nbsp; &nbsp;</th>
 <th align="center">Streak&nbsp; &nbsp;</th>
 </tr>
 </thead>
@@ -59,7 +60,7 @@ $cur = 1;
 
 // If I don't have a rank, and requesting a personal ladder, display a message to that effect.
 if (!isset($myrank) && isset($_GET['personalladder'])) {
-    echo "<p>You are not ranked, the default ladder will be shown</p>";
+    echo "<p>You are not ranked, the default ladder will be shown instead of the personal.</p>";
 }
 
 while ($row = mysql_fetch_array($result)) {
@@ -82,7 +83,7 @@ if ($row[streak] >= $hotcoldnum) {
 } else {
     $picture = 'images/streaknull.gif';
 }
-if ($personalladder == $namepage) {
+if (($personalladder == $namepage) || ($_SESSION['username'] == $namepage)) {
 echo '<tr class="myrow">';
 } else {
 ?>
@@ -93,11 +94,11 @@ echo '<tr class="myrow">';
 <td><?php echo "$cur"?></td>	
 <td><?php echo "<img border='0' height='20px' src='avatars/$row[Avatar].gif' alt='avatar' />"?><a name="<?php echo $namepage ?>"></a></td>
 <td><a href='profile.php?name=<?php echo "$namepage '> $namepage"; ?></a> </td>
+<td><?php echo "$row[rating]"; ?></td>
+<td><?php printf("%.0f", $row['wins']/$row['games']*100); ?></td>
 <td><?php echo "$row[wins]" ?> </td>
 <td><?php echo "$row[losses]" ?></td>
 <td><?php echo ($row[games]); ?></td>
-<td><?php printf("%.0f", $row['wins']/$row['games']*100); ?></td>
-<td><?php echo "$row[rating]"; ?></td>
 <td><?php echo "$row[streak]"?></td>
 </tr>
 <?php 
