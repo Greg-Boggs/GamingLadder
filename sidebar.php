@@ -189,7 +189,7 @@ echo "<br><b>Games today: </b>". $todaygames[0];
 
 // Ranked Players
 // Use ladder standings from above to general total.
-$sql = "SELECT count(*) FROM $standingscachetable";
+$sql = "SELECT count(*) FROM ($standingsSqlWithRestrictions) a";
 $result = mysql_query($sql,$db);
 $rankedPlayers = mysql_fetch_row($result);
 echo "<br /><b>Ranked Players: </b>".$rankedPlayers[0];
