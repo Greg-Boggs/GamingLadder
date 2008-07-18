@@ -44,6 +44,45 @@
  *                  */
 
 
+
+/* Begin Images */
+p img {
+	padding: 0;
+	max-width: 100%;
+	}
+	
+img.centered {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	}
+	
+img.alignright {
+	margin: 0 0 2px 7px;
+	display: inline;
+	}
+
+img.alignleft {
+	margin: 0 7px 2px 0;
+	display: inline;
+	}
+
+.alignright {
+	float: right;
+	}
+	
+.alignleft {
+	float: left;
+	}
+/* End Images */
+
+
+
+
+
+
+
+
 /*
  *  * 1. General styles
  *   */
