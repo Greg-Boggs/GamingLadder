@@ -203,7 +203,7 @@ if (isset($_POST['report'])) {
 
     <input type="hidden" name="MAX_FILE_SIZE" value="200000" />
     
-	<tr><td>.gz replay to upload</td><td><input name="uploadedfile" type="file" /></td></tr><br />
+	<tr><td>.<?php echo $replayfileextension." ";?> replay to upload</td><td><input name="uploadedfile" type="file" /></td></tr><br />
 	
 	<tr><td>sportsmanship</td><td><select size="1" name="sportsmanship">
 		<option selected="selected" value="">-- No sportmanship rating --</option>

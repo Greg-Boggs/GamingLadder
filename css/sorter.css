@@ -1,5 +1,11 @@
 /* Menu */
 
+.spotlight {
+padding: 5px;	
+//background-color: #ece8dd;
+	
+	}
+
 .menu ul {
 	margin: 0;
 	list-style: none;

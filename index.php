@@ -95,7 +95,7 @@ If (INDEX_COMMENT_HILITE == 1) {
 	
 	
 
-echo "<h1>Spotlight</h1><br /> <b>".$row['winner']." (".$row['winner_elo'].") / ".$row['loser']." (".$row['loser_elo'].")</b>";
+echo "<div class=\"spotlight\"><h1 class=\"spotlight\">Spotlight</h1><br /> <b>".$row['winner']." (".$row['winner_elo'].") / ".$row['loser']." (".$row['loser_elo'].")</b>";
 
  if ($row[replay] != 0) {
 		    echo " <a href=\"download-replay.php?reported_on=$row[reported_on]\">®</a><br /><br />";
@@ -111,7 +111,7 @@ if (trim($row['loser_comment']) != "") {
 	}
 
 
-echo "<br /><br />";
+echo "<br /></div><br />";
 
 
 }

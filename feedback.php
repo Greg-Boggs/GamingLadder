@@ -20,8 +20,48 @@ $comment = trim($_POST['comment']);
 $winner = $_GET['winner'];
 $reported_on = $_GET['reported_on'];
 	
+	 // Do all the replay stuff to create a replay in the database
+    // We use the tmp_name to detect if somebody actually filled in a file for upload.
+    if (isset($_FILES["uploadedfile"]["name"]) && $_FILES['uploadedfile']['name'] != "") {
+        
+		
+			// To the the file extension of the file we use the handy pathinfo php function/array. 
+			$file_info = pathinfo($_FILES["uploadedfile"]["name"]);
+							
+		
+		// Only sabe the file if it's right size and right extension:
+		if (($_FILES["uploadedfile"]["size"] <= MAX_REPLAYSIZE) && ($file_info['extension'] == $replayfileextension)){
+			$replay = file_get_contents($_FILES['uploadedfile']['tmp_name']);
+			
+		
+			
+        } else {
+			
+            $failure = true;
+			$maxfilesizekb = (MAX_REPLAYSIZE / 1000);
+				
+				
+				if ($file_info['extension'] != $replayfileextension) { 
+				
+				 $error = "You attempted to upload a replay but failed. The file you uploaded wasn't of the correct type. Instead of a *.". $replayfileextension ." file you uploaded a ". $file_info['extension'].  "-file. Please only upload valid replays.<br /><br />"; 
+				 }	else {			
+				$uploadefilesizekb= ($_FILES["uploadedfile"]["size"]/1000);
+							
+				$uploadefileoversizedkb = ($uploadefilesizekb - $maxfilesizekb);
+				$error = "You attempted to upload a replay but failed since it wasn't small enough. We only allow replays that are <= $maxfilesizekb Kb. Yours was $uploadefilesizekb Kb, which is $uploadefileoversizedkb Kb too large. Better luck with next replay....<br /><br />";
+				}
+			}
+
+    } else {
+        $replay = null;
+    }
 
 	
+ if ($replay != null) {
+	
+		
+	}
+
 	if ($sportsmanship != "") { 
 			$query2 = "UPDATE $gamestable SET winner_stars = '$sportsmanship' WHERE  winner = '$winner' AND reported_on = '$reported_on'";	
 	}
@@ -36,28 +76,20 @@ $reported_on = $_GET['reported_on'];
 	
 	// Now lets apply it if there was a comment or sportsmanship point given.
 		
-	if ($sportsmanship != "" || $comment != "") { 
+	if ($sportsmanship != "" || $comment != "" || $replay != "") { 
 		$result2 = mysql_query($query2) or die("fail");
     
-	echo "<br>Yarr. Your feedback was added.";
+	echo "<br>Yarr. Your feedback was added.<br />";
 	
 	}
-
-
-
-
-
-
-
+	
+	if ($failure) {
+        echo "<p>ERROR: ".$error."</p>";
+    }
 
 require('bottom.php');
 exit;
 }
-
-
-
-
-
 
 ?>
 
@@ -150,6 +182,15 @@ if (($row['loser']  == $_SESSION['username']) && ($row['loser_comment'] == "" ||
 <table>
 
 <?php 
+
+if ($row[replay] == 0)  { ?>
+    <input type="hidden" name="MAX_FILE_SIZE" value="<?php echo MAX_REPLAYSIZE;?>" />
+    
+	<tr><td>.<?php echo $replayfileextension." ";?> replay to upload</td><td><input name="uploadedfile" type="file" /></td></tr><br />
+
+<?php } 
+
+
 if (trim($row['winner_stars']) == "") { ?>
 
 	<tr><td>sportsmanship</td><td><select size="1" name="sportsmanship">
