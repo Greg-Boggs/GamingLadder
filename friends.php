@@ -25,6 +25,7 @@ if (isset($_GET['download'])) {
     exit;
 }
 session_start();
+require 'autologin.inc.php';
 require('top.php');
 ?>
 <h1>Friends List</h1>
