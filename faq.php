@@ -205,7 +205,7 @@ Also keep in mind that however you rate people, it is always official. Be prepar
 
 <b>How to rate</b><br />
 If you've played a casual, normal game where nothing popped up then that equals a 3. It means that the opponent followed the general multiplayers conduct and also abided under all the ladder rules. Please keep in mind a 3 is not a bad rating. It's actually what's expected in most games as it signifies "normality".<br /><br />If you happen to play against somebody that's friendly or helps you out, enchants your game play session or does something which makes him/her stand out as a nice person measured by general multiplayer standards or the ladder rules, then he/she should get a 4 or 5. Reward nice people.<br /><br /> Likewise, when the contrary is true, a person should get a 1 or 2. Examples for when it would occur are: Player is spamming, not responding several turns or reporting AFK, disconnecting without notice and without coming back or messaging, acting like 7-year old from hell, etc etc. In essence, anything that normal sportsmanship would deem as bad and which is unwanted according the ladder rules and/or the general Wesnoth multiplayer community should guarantee a rating of 1 or 2. Punish the wicked.
-<br /><br />Notice: Sportsmanship has <i>nothing</i> with player skills to do or how good or bad a player is at the game itself! It's a rating of <I>the social aspect</i> of gaming and a measure of the attitude of people.
+<br /><br />Notice: Sportsmanship has <i>nothing</i> with player skills to do or how good or bad a player is at the game itself! It's a rating of <i>the social aspect</i> of gaming and a measure of the attitude of people.
 </p>
 
 <a name="comments"></a><h4>How do I write a game comment?</h4>

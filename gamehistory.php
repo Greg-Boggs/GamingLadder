@@ -2,6 +2,7 @@
 session_start();
 // v 1.01
 require('conf/variables.php');
+require_once 'include/gametable.inc.php';
 
 // Handle all of the cookie management before we attempt to do anything else
 $searchArray = unserialize(base64_decode($_COOKIE['gamehistoryoptions']));
@@ -47,7 +48,7 @@ $(document).ready(function()
 ); 
 </script>
 
-<table width="60%" id="games" class="tablesorter">
+<table id="games" class="tablesorter">
 <thead>
 <tr>
 <th>Reported Time</th>
@@ -55,7 +56,9 @@ $(document).ready(function()
 <th>Loser</th>
 <th>Winner New Rating</th>
 <th>Loser New Rating</th>
+<th>Feedback</th>
 <th>Replay</th>
+<th>Game Details</th>
 </tr>
 <tr>
 <td><select name="reporteddirection">
@@ -71,21 +74,23 @@ $(document).ready(function()
     <option <?php if ($searchArray['winnerratingdirection'] == "<=") echo "selected='selected'"; ?> value="&lt;=">&lt;=</option>
     <option <?php if ($searchArray['winnerratingdirection'] == ">=") echo "selected='selected'"; ?> value="&gt;=">&gt;=</option>
     </select>
-    <input type="text" value="<?php echo $searchArray['winnerrating']; ?>" name="winnerrating" size="4" />
+    <input type="text" value="<?php echo $searchArray['winnerrating']; ?>" name="winnerrating" size="3" />
 </td>
 <td><select name="loserratingdirection">
     <option <?php if ($searchArray['loserratingdirection'] == "") echo "selected='selected'"; ?> value="">--</option>
     <option <?php if ($searchArray['loserratingdirection'] == "<=") echo "selected='selected'"; ?> value="&lt;=">&lt;=</option>
     <option <?php if ($searchArray['loserratingdirection'] == ">=") echo "selected='selected'"; ?> value="&gt;=">&gt;=</option>
     </select>
-    <input type="text" value="<?php echo $searchArray['loserrating']; ?>" name="loserrating" size="4" />
+    <input type="text" value="<?php echo $searchArray['loserrating']; ?>" name="loserrating" size="3" />
 </td>
+<td>&nbsp;</td>
 <td><select name="replay">
     <option <?php if ($searchArray['replay'] == "") echo "selected='selected'"; ?> value="">All</option>
     <option <?php if ($searchArray['replay'] == "yes") echo "selected='selected'"; ?> value="yes">Yes</option>
     <option <?php if ($searchArray['replay'] == "no") echo "selected='selected'"; ?> value="no">No</option>
     </select>
 </td>
+<td>&nbsp;</td>
 </tr>
 <tr>
 <td style="vertical-align: middle; text-align: center"><input type="submit" name="submit" value="Update Search" /></td>
@@ -98,9 +103,9 @@ $(document).ready(function()
    <option <?php if ($searchArray['ratingand'] == "OR") echo "selected='selected'"; ?> value="OR">or</option>
    </select> above options together.</td>
 <td>&nbsp;</td>
+<td>&nbsp;</td>
 </tr>
 </thead>
-<tbody>
 <?php
 // Select the games we are interested in
 
@@ -139,58 +144,10 @@ if ($searchArray['reporteddirection'] != "" && $searchArray['reportdate'] != "")
 $sql = "SELECT withdrawn, contested_by_loser, DATE_FORMAT(reported_on, '".$GLOBALS['displayDateFormat']."') as report_time, reported_on, winner, loser, winner_points, loser_points, winner_elo, loser_elo, length(replay) as is_replay, replay_downloads FROM $gamestable WHERE $where ORDER BY reported_on DESC LIMIT 250";
 
 $result = mysql_query($sql, $db);
-while ($row = mysql_fetch_array($result)) {
-    if ($row["recorded"] == "yes") {
-        $status = "recorded";
-    } else {
-        $status = "pending";
-    }
-    // Strike through games that aren't counted
-    if ($row['withdrawn'] <> 0 || $row['contested_by_loser'] <> 0) {
-        $sdel = "<del>";
-        $edel = "</del>";
-    } else {
-        $sdel = "";
-        $edel = "";
-    }
-
-    $winnerWithdrew = "";
-    $loserContested = "";
-    if ($row['withdrawn'] <> 0) {
-        $winnerWithdrew = "**";
-    } else if ($row['contested_by_loser'] <> 0) {
-        $loserContested = "**";
-    }
+echo gameTableTBody($result);
 ?>
-
-<tr>
-<td><?echo $sdel.$row['report_time'].$edel ?></td>
-<td><?echo $sdel."<a href=\"profile.php?name=$row[winner]\">$row[winner]</a>".$winnerWithdrew.$edel ?></td>
-<td><?echo $sdel."<a href=\"profile.php?name=$row[loser]\">$row[loser]</a>".$loserContested.$edel ?></td>
-<td><?echo $sdel.$row['winner_elo']." (".$row['winner_points'].")".$edel ?></td>
-<td><?echo $sdel.$row['loser_elo']." (".$row['loser_points'].")".$edel ?></td>
-<td>
-<?php
-    if ($row['is_replay']  > 0) {
-        $downloadDisplay = "";
-		// Only show how many times a replay has been downloaded if it has been downloaded to begin with...
-		if ($row['replay_downloads'] > 0) {
-		    $downloadDisplay = " (".$row['replay_downloads'].")";
-		}
-		echo $sdel."<a href=\"download-replay.php?reported_on=".urlencode($row['reported_on'])."\">Download</a>".$downloadDisplay.$edel;
-    } else {
-        echo $sdel."No".$edel;
-    }
-?>
-</td>
-</tr>
-<?
-}
-?>
-</tbody>
 </table>
 </form>
-
 <br />
 <?
 require('bottom.php');
