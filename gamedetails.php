@@ -117,7 +117,7 @@ if (!isset($_GET['reported_on'])) {
 	$_GET['reported_on'] = $reportedOn;
 }
 
-$sql = "SELECT unix_timestamp(reported_on) as unixtime, reported_on, winner, loser, winner_points, loser_points, winner_elo, loser_elo, length(replay) as replay, replay_downloads, winner_comment, loser_comment, winner_stars, loser_stars, withdrawn, contested_by_loser FROM $gamestable WHERE reported_on = '$_GET[reported_on]' ORDER BY reported_on";
+$sql = "SELECT length(replay) as is_replay, unix_timestamp(reported_on) as unixtime, reported_on, winner, loser, winner_points, loser_points, winner_elo, loser_elo, length(replay) as replay, replay_downloads, winner_comment, loser_comment, winner_stars, loser_stars, withdrawn, contested_by_loser FROM $gamestable WHERE reported_on = '$_GET[reported_on]' ORDER BY reported_on";
 $result = mysql_query($sql, $db);
 $game = mysql_fetch_array($result); 
 // Reset the result for use by the game table display function
