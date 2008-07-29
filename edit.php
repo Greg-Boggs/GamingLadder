@@ -131,52 +131,52 @@ $row = mysql_fetch_array($result);
 
 <tr>
 <td><p class="text"><b>Password:</b></p></td>
-<td><input type="password" size="15" name="passworddb" style="background-color: <?echo"$color5" ?>; border: 1 solid <?echo"$color1" ?>" class="text"> You <i>must</i> enter this to save settings.</td>
+<td><input type="password" size="15" name="passworddb" class="text"> You <i>must</i> enter this to save settings.</td>
 </tr>
 
 <tr>
 <td><p class="text">New Password:</p></td>
-<td><input type="password" size="15" name="newpassworddb" style="background-color: <?echo"$color5" ?>; border: 1 solid <?echo"$color1" ?>" class="text"> Leave empty unless changing password.</td>
+<td><input type="password" size="15" name="newpassworddb" class="text"> Leave empty unless changing password.</td>
 </tr>
 
 
 <tr>
 <td><p class="text">Verify New Password:</p></td>
-<td><input type="password" size="15" name="newpassworddb2" style="background-color: <?echo"$color5" ?>; border: 1 solid <?echo"$color1" ?>" class="text"></td>
+<td><input type="password" size="15" name="newpassworddb2" class="text"></td>
 </tr>
 
 
 
 <tr>
 <td><p class="text"><b>Mail:</b></p></td>
-<td><input type="Text" name="mail" value="<?echo "$row[mail]" ?>" style="background-color: <?echo"$color5" ?>; border: 1 solid <?echo"$color1" ?>" class="text"></td>
+<td><input type="Text" name="mail" value="<?echo "$row[mail]" ?>" class="text"></td>
 </tr>
 
 <tr>
 <td><p class="text">Jabber:</p></td>
-<td><input type="Text" name="jabber" value="<?echo "$row[Jabber]" ?>" style="background-color: <?echo"$color5" ?>; border: 1 solid <?echo"$color1" ?>" class="text"> Open source, Same as g-mail chat.</td>
+<td><input type="Text" name="jabber" value="<?echo "$row[Jabber]" ?>" class="text"> Open source, Same as g-mail chat.</td>
 </tr>
 
 <tr>
 <td><p class="text">Icq:</p></td>
-<td><input type="Text" name="icq" value="<?echo "$row[icq]" ?>" style="background-color: <?echo"$color5" ?>; border: 1 solid <?echo"$color1" ?>" class="text"></td>
+<td><input type="Text" name="icq" value="<?echo "$row[icq]" ?>" class="text"></td>
 </tr>
 <tr>
 <td><p class="text">Aim:</p></td>
-<td><input type="Text" name="aim" value="<?echo "$row[aim]" ?>" style="background-color: <?echo"$color5" ?>; border: 1 solid <?echo"$color1" ?>" class="text"></td>
+<td><input type="Text" name="aim" value="<?echo "$row[aim]" ?>" class="text"></td>
 </tr>
 <tr>
 <td><p class="text">Msn:</p></td>
-<td><input type="Text" name="msn" value="<?php echo "$row[msn]" ?>" style="background-color: <?echo"$color5" ?>; border: 1 solid <?echo"$color1" ?>" class="text"></td>
+<td><input type="Text" name="msn" value="<?php echo "$row[msn]" ?>" class="text"></td>
 </tr>
 <tr>
 <td><p class="text">Country:</p></td>
-<td><select size="1" name="country" style="background-color: <?echo"$color5" ?>; border: 1 solid <?echo"$color1" ?>" class="text">
+<td><select size="1" name="country" class="text">
 <option selected><?php echo "$row[country]" ?></option>
 <?php include ("include/countries.inc.php"); ?>
 </select></td>
 </tr><tr><td><p class="text">Avatar:</p></td>
-<td>&nbsp;<select size="1" name="avatar" style="background-color: <?php echo"$color5" ?>; border: 1 solid <?php echo"$color1" ?>" class="text"><option selected><?php echo "$row[Avatar]" ?></option>
+<td>&nbsp;<select size="1" name="avatar" class="text"><option selected><?php echo "$row[Avatar]" ?></option>
 <?php
 // Force No avatar to the top
 echo "<option>No avatar</option>";
@@ -194,7 +194,7 @@ foreach ($avatars as $key => $data) {
 
 <tr><td><p class="text"><b>My version of Wesnoth:</b></p></td>
 
-<td>&nbsp;<select size="1" name="version" style="background-color: <?php echo"$color5" ?>; border: 1 solid <?php echo"$color1" ?>" class="text">
+<td>&nbsp;<select size="1" name="version" class="text">
 <?php echo "<option>$row[HaveVersion]</option>"; ?>
 <option>Stable</option>
 <option>Development</option>
@@ -202,7 +202,7 @@ foreach ($avatars as $key => $data) {
 </select></td></tr>
 
 <tr><td><p class="text">Msg me to play:</p></td>
-<td>&nbsp;<select size="1" name="msgme" style="background-color: <?php echo"$color5" ?>; border: 1 solid <?php echo"$color1" ?>" class="text">
+<td>&nbsp;<select size="1" name="msgme" class="text">
 <?php echo "<option>$row[MsgMe]</option>"; ?>
 <option>Yes</option>
 <option>No</option>
@@ -298,7 +298,7 @@ foreach ($avatars as $key => $data) {
 
 </table>
 
-<p><input type="Submit" name="submit" value="Submit." style="background-color: <?echo"$color5" ?>; border: 1 solid <?echo"$color1" ?>" class="text"><br>
+<p><input type="Submit" name="submit" value="Submit." class="text"><br>
 
 </form>
 <?php

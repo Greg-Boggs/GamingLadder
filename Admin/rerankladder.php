@@ -44,8 +44,8 @@ if (isset($_POST['rerank'])) {
 <p>
 This should be used if there has been a corruption of elo or win/loss/streak information.
 </p>
-<input type="submit" name="rerank" value="Rerank Ladder" style="background-color: <?echo"$color5" ?>; border: 1 solid <?echo"$color1" ?>" class="text" onclick="return confirm('Are you sure you want to rerank the ladder?');">
-<input type="submit" name="recache" value="Update corrupted cache" style="background-color: <?echo"$color5" ?>; border: 1 solid <?echo"$color1" ?>" class="text" onclick="return confirm('Are you sure you want to redo the cache?');">
+<input type="submit" name="rerank" value="Rerank Ladder" class="text" onclick="return confirm('Are you sure you want to rerank the ladder?');">
+<input type="submit" name="recache" value="Update corrupted cache" class="text" onclick="return confirm('Are you sure you want to redo the cache?');">
 </form>
 <?php
 }

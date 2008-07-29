@@ -149,16 +149,16 @@ if ($_GET['del'] == $_SESSION['username']) {
 
 If you are looking for a <i>ladder game</i> you can find opponents by e-mail challenging them via their profile, their instant messanger, using our <a href="http://chaosrealm.net/wesnoth/friends.php">friends list</a> and checking out the online lobby or by putting yourself on the "I want to play now"-list below.<br /><br />Please estimate for how many hours you'll be looking for a game. Also tell us if you are already waiting on a server with the same nickname or if you want to be contacted via instant messanger. Once your set time runs out you'll be auto-removed from the list. Don't forget to remove yourself if something else shows up. Abuse of this function will get you a ban.<br /><br />
 <form method="post">
-<select size="1" name="hours" style="background-color: <?php echo"$color5" ?>; border: 1 solid <?php echo"$color1" ?>" class="text"><option selected>2</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option>
+<select size="1" name="hours" class="text"><option selected>2</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option>
 </select>h is how long I'll be available for a game.
 <br /><br />
 
-<select size="1" name="server" style="background-color: <?php echo"$color5" ?>; border: 1 solid <?php echo"$color1" ?>" class="text">
+<select size="1" name="server" class="text">
 <?php //lets display the proper dropdown menu..
 echo "$dropdown"; ?>
 
 </select> is where you'll find and contact me.<br><br>
 
-<input type="Submit" name="wait" value="add me to the list" style="background-color: <?echo"$color5" ?>; border: 1 solid <?echo"$color1" ?>" class="text"><br>
+<input type="Submit" name="wait" value="add me to the list" class="text"><br>
 </form>
 <?php require('bottom.php'); ?>

@@ -126,7 +126,7 @@ $news = addSmileys($news);
 print("
 <p class=header>$row[title]</p>
 <p class=text>$news</p>
-<hr size=1 color=$color1><br>
+<hr size=1><br>
 ");
 
 }else{
@@ -141,7 +141,7 @@ print("
 <p class=header>$row[title]</p>
 <p class=text>$news</p>
 <br>
-<hr size=1 color=$color1><br>
+<hr size=1<br />
 ");
 }
 
@@ -172,7 +172,7 @@ $sql="SELECT * FROM $newstable ORDER BY news_id DESC LIMIT $numindexnews2, $numi
 
 	$result=mysql_query($sql,$db);
 while ($row = mysql_fetch_array($result)) {
-echo"<a href='index.php?readnews=$row[news_id]'><font color='$color1'>$row[date] - $row[title]</font></a><br>";
+echo"<a href='index.php?readnews=$row[news_id]'>$row[date] - $row[title]</a><br>";
 }
 ?>
 	

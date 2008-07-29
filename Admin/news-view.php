@@ -21,7 +21,7 @@ if ($_GET['read']) {
 }
 ?>
 <p><a href="news-post.php">Post News</a></p>
-<table border="1" cellspacing="1" cellpadding="2" bgcolor="<?echo"$color5" ?>" bordercolor="<?echo"$color1" ?>">
+<table border="1" cellspacing="1" cellpadding="2">
 <tr>
 <td align='center'>View</td>
 <td align='center'>Edit</td>
@@ -33,10 +33,10 @@ $result = mysql_query($sql,$db);
 while ($row = mysql_fetch_array($result)) {
 ?>
 <tr>
-<td align='center' bordercolor='$color7'><a href='news-view.php?read=<?php echo $row[news_id] ?>'><img border='1' src='../images/view.gif' width='18' height='18' align='middle' alt="View" /></a></td>
-<td align='center' bordercolor='$color7'><a href='news-edit.php?edit=<?php echo $row[news_id] ?>'><img border='1' src='../images/edit.gif' width='18' height='18' align='middle' alt="Edit" /></a></td>
-<td align='center' bordercolor='$color7'><a href='news-delete.php?edit=<?php echo $row[news_id] ?>'><img border='1' src='../images/delete.gif' width='18' height='18' align='middle' alt="Delete" /></a></td>
-<td align='left' bordercolor='$color7'><p class='text'><?php echo $row[date]." - ".$row['title'] ?></p></td></tr>
+<td align='center'><a href='news-view.php?read=<?php echo $row[news_id] ?>'><img border='1' src='../images/view.gif' width='18' height='18' align='middle' alt="View" /></a></td>
+<td align='center'><a href='news-edit.php?edit=<?php echo $row[news_id] ?>'><img border='1' src='../images/edit.gif' width='18' height='18' align='middle' alt="Edit" /></a></td>
+<td align='center'><a href='news-delete.php?edit=<?php echo $row[news_id] ?>'><img border='1' src='../images/delete.gif' width='18' height='18' align='middle' alt="Delete" /></a></td>
+<td align='left'><p class='text'><?php echo $row[date]." - ".$row['title'] ?></p></td></tr>
 <?php
 }
 ?>

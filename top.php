@@ -30,13 +30,6 @@
 
 <style type='text/css'>
 <!--
-a 	     { color: #7B0045; font-family: <?php echo"$font" ?>; font-size: 12 px; font-weight: <?php echo"$fontweight" ?>; text-decoration: none}
-a:link       { color: #7B0045; font-family: <?php echo"$font" ?>; font-size: 12 px; font-weight: <?php echo"$fontweight" ?>; text-decoration: none}
-a:visited    { color: #7B0045; font-family: <?php echo"$font" ?>; font-size: 12 px; font-weight: <?php echo"$fontweight" ?>; text-decoration: none}
-a:hover      { color: <?php echo"$color3" ?>; font-family: <?php echo"$font" ?>; font-size: 12 px; text-decoration: none; font-weight: <?php echo"$fontweight" ?>}
-.text        { color: <?php echo"$color1" ?>; font-family: <?php echo"$font" ?>; font-size: 12 px; font-weight: <?php echo"$fontweight" ?>; text-decoration: none}
-.textalt     { color: <?php echo"$color2" ?>; font-family: <?php echo"$font" ?>; font-size: 12 px; font-weight: <?php echo"$fontweight" ?>; text-decoration: none}
-.header     { color: <?php echo"$color1" ?>; font-family: <?php echo"$font" ?>; font-size: 12 px; font-weight: bold; text-decoration: none}
 
 .copyleft {
 color: #000000;
@@ -71,4 +64,4 @@ font-size: 12 px;
 ?>
 </div>
 
-<div style="background-color: <?php echo"$color7" ?>; width: 900px; margin-left: auto; margin-right: auto">
+<div style="width: 900px; margin-left: auto; margin-right: auto">

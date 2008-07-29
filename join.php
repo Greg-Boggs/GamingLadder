@@ -181,48 +181,48 @@ else{
 <table border="0" cellpadding="0">
 <tr>
 <td><p class="text"><b>Nickname:</b></p></td>
-<td>&nbsp;<input type="Text" name="name" style="background-color: <?php echo"$color5" ?>; border: 1 solid <?php echo"$color1" ?>" class="text"> (<?php echo REG_MIN_NICKLENGTH . " - " . REG_MAX_NICKLENGTH . " ";?> char, <i>must</i> be same as in the game)</td>
+<td>&nbsp;<input type="Text" name="name" class="text"> (<?php echo REG_MIN_NICKLENGTH . " - " . REG_MAX_NICKLENGTH . " ";?> char, <i>must</i> be same as in the game)</td>
 </tr>
 <tr>
 <td><p class="text"><b>Password:</b></p></td>
-<td>&nbsp;<input type="password" name="passworddb" style="background-color: <?php echo"$color5" ?>; border: 1 solid <?php echo"$color1" ?>" class="text"></td>
+<td>&nbsp;<input type="password" name="passworddb" class="text"></td>
 </tr>
 
 <tr>
 <td><p class="text"><b>Re-type Password:</b></p></td>
-<td>&nbsp;<input type="password" name="passworddb2" style="background-color: <?php echo"$color5" ?>; border: 1 solid <?php echo"$color1" ?>" class="text"></td>
+<td>&nbsp;<input type="password" name="passworddb2" class="text"></td>
 
 </tr>
 
 
 <tr>
 <td><p class="text"><b>Mail:</b></p></td>
-<td>&nbsp;<input type="Text" name="mail" value="" style="background-color: <?php echo"$color5" ?>; border: 1 solid <?php echo"$color1" ?>" class="text"> <?php if (REG_MAILVERIFICATION == 1) {	echo "Please enter a valid email. An activation link will be sent to it.<br>"; } else {
+<td>&nbsp;<input type="Text" name="mail" value="" class="text"> <?php if (REG_MAILVERIFICATION == 1) {	echo "Please enter a valid email. An activation link will be sent to it.<br>"; } else {
 				echo "Please enter a valid email. No spam will be sent.<br>"; } ?></td>
 </tr>
 <tr>
 <td>
 <p class="text">ICQ:</p></td>
-<td>&nbsp;<input type="Text" name="icq" value="n/a" style="background-color: <?php echo"$color5" ?>; border: 1 solid <?php echo"$color1" ?>" class="text"></td>
+<td>&nbsp;<input type="Text" name="icq" value="n/a" class="text"></td>
 </tr>
 <tr>
 <td>
 <p class="text">Aim:</p></td>
-<td>&nbsp;<input type="Text" name="aim" value="n/a" style="background-color: <?php echo"$color5" ?>; border: 1 solid <?php echo"$color1" ?>" class="text"></td>
+<td>&nbsp;<input type="Text" name="aim" value="n/a" class="text"></td>
 </tr>
 <tr>
 <td><p class="text">Msn:</p></td>
-<td>&nbsp;<input type="Text" name="msn" value="n/a" style="background-color: <?php echo"$color5" ?>; border: 1 solid <?php echo"$color1" ?>" class="text"></td>
+<td>&nbsp;<input type="Text" name="msn" value="n/a" class="text"></td>
 </tr>
 <tr>
 <td><p class="text">Country:</p></td>
-<td>&nbsp;<select size="1" name="country" style="background-color: <?php echo"$color5" ?>; border: 1 solid <?php echo"$color1" ?>" class="text">
+<td>&nbsp;<select size="1" name="country" class="text">
 <?php include ("include/countries.inc.php"); ?>
 </select></td>
 </tr>
 
 <tr><td><p class="text">Avatar:</p></td>
-<td>&nbsp;<select size="1" name="avatar" style="background-color: <?php echo"$color5" ?>; border: 1 solid <?php echo"$color1" ?>" class="text">
+<td>&nbsp;<select size="1" name="avatar" class="text">
 <?php
 // Force No avatar to the top
 echo "<option>No avatar</option>";
@@ -237,7 +237,7 @@ foreach ($avatars as $key => $data) {
 </select></td>
 
 <tr><td><p class="text"><b>My version of Wesnoth:</b></p></td>
-<td>&nbsp;<select size="1" name="version" style="background-color: <?php echo"$color5" ?>; border: 1 solid <?php echo"$color1" ?>" class="text">
+<td>&nbsp;<select size="1" name="version" class="text">
 <option></option>
 <option>Stable</option>
 <option>Development</option>
@@ -245,7 +245,7 @@ foreach ($avatars as $key => $data) {
 </select></td>
 
 <tr><td><p class="text">Msg me to play:</p></td>
-<td>&nbsp;<select size="1" name="msgme" style="background-color: <?php echo"$color5" ?>; border: 1 solid <?php echo"$color1" ?>" class="text">
+<td>&nbsp;<select size="1" name="msgme" class="text">
 <option>Yes</option>
 <option>No</option>
 </select></td>
@@ -336,7 +336,7 @@ foreach ($avatars as $key => $data) {
 
 </table>
 
-<p class="text"><input type="Submit" name="submit" value="Join." style="background-color: <?php echo"$color5" ?>; border: 1 solid <?php echo"$color1" ?>" class="text"><br><br>
+<p class="text"><input type="Submit" name="submit" value="Join." class="text"><br><br>
 </form>
 </p>
 <?

@@ -10,9 +10,9 @@ if ($maintenanceMode <> true) {
 	<?php } ?>
 	<li><a href="report.php">Report</a></li>
 	<li><a href="ladder.php">Ladder</a></li>
-	<li><a href="players.php?startplayers=0&amp;finishplayers=<?php echo $numplayerspage; ?>">Players</a></li>
+	<li><a href="players.php">Players</a></li>
 
-	<li><a href="gamehistory.php?startplayed=0&amp;finishplayed=<?php echo $numgamespage; ?>">Game History</a></li>
+	<li><a href="gamehistory.php">Game History</a></li>
 	<?php if (isset($_SESSION['username'])) { ?>
 	<li><a href="ladder.php?personalladder=<?php echo urlencode($_SESSION['username']) ?>">My Ladder</a></li>
 	<?php } ?>

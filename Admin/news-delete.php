@@ -20,7 +20,7 @@ if ($_POST[submit]) {
 </table>
 <p class="text">
 <input type='hidden' name='edit' value="<?echo "$_GET[edit]" ?>">
-<input type="Submit" name="submit" value="Delete." style="background-color: <?echo"$color5" ?>; border: 1 solid <?echo"$color1" ?>" class="text"><br>
+<input type="Submit" name="submit" value="Delete." class="text"><br>
 </form>
 <?php
 }

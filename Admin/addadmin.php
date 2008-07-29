@@ -23,11 +23,11 @@ if (isset($_POST['submit']) && $_POST['submit'] == "Add Admin") {
 <table border="0" cellpadding="0">
 <tr>
 <td><p class="text">Name:</p></td>
-<td><input type="Text" name="name" style="background-color: <?echo"$color5" ?>; border: 1 solid <?echo"$color1" ?>" class="text"></td>
+<td><input type="Text" name="name" class="text"></td>
 </tr>
 </table>
 <p align="left">
-<input type="Submit" name="submit" value="Add Admin" style="background-color: <?echo"$color5" ?>; border: 1 solid <?echo"$color1" ?>" class="text"><br><br>
+<input type="Submit" name="submit" value="Add Admin" class="text"><br><br>
 </form>
 </p>
 <p>This these are the current ladder administrators</p>

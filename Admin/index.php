@@ -39,14 +39,14 @@ if(isset($_SESSION['username']) && isset($_SESSION['admin-login'])) {
 <table border="0" cellpadding="0">
 <tr>
 <td><p class='text'>Name:</p></td>
-<td><input type="text" name="username" size="20" style="background-color: <?echo"$color5" ?>; border: 1 solid <?echo"$color1" ?>" class="text"></td>
+<td><input type="text" name="username" size="20" class="text"></td>
 </tr>
 <tr>
 <td><p class='text'>Password:</p></td>
-<td><input type="password" name="password" size="20" style="background-color: <?echo"$color5" ?>; border: 1 solid <?echo"$color1" ?>" class="text"></td>
+<td><input type="password" name="password" size="20" class="text"></td>
 </tr>
 <tr>
-<td><input type="submit" value="Log in." name="submit" style="background-color: <?echo"$color5" ?>; border: 1 solid <?echo"$color1" ?>" class="text"></td>
+<td><input type="submit" value="Log in." name="submit" class="text"></td>
 </tr>
 </table>
 </form>

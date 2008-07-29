@@ -25,7 +25,7 @@ if ($_POST[submit]) {
 <table border="0" cellpadding="0">
 <tr>
 <td><p class="text">Name:</p></td>
-<td><select size="1" name="name" style="background-color: <?echo"$color5" ?>; border: 1 solid <?echo"$color1" ?>" class="text">
+<td><select size="1" name="name" class="text">
 <?php
 $sql = "SELECT * FROM $playerstable WHERE approved='yes' ORDER BY name ASC";
 $result = mysql_query($sql,$db);
@@ -36,7 +36,7 @@ while ($row = mysql_fetch_array($result)) {
 </select></td>
 </tr>
 </table>
-<p><input type="Submit" name="submit" value="Block." style="background-color: <?echo"$color5" ?>; border: 1 solid <?echo"$color1" ?>" class="text"><br>
+<p><input type="Submit" name="submit" value="Block." class="text"><br>
 </form>
 <hr />
 <?php

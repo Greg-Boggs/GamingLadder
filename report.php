@@ -225,7 +225,7 @@ if (isset($_POST['report'])) {
 <td valign="top"><textarea name="comment" rows="5" cols="60"></textarea> </td>
 </tr>
 <tr><td>
-	<input type="submit" name="report" value="Report Game" onclick="lookupAjax();" style="background-color: <?echo"$color5" ?>; border: 1 solid <?echo"$color1" ?>"/>
+	<input type="submit" name="report" value="Report Game" onclick="lookupAjax();" />
 	</td></tr>
 </table>
 

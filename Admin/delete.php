@@ -26,13 +26,13 @@ else {
 </table>
 <p class="text">
 <input type='hidden' name='edit' value="<?echo "$_GET[edit]" ?>">
-<input type="Submit" name="submit" value="Delete." style="background-color: <?echo"$color5" ?>; border: 1 solid <?echo"$color1" ?>" class="text"><br>
+<input type="Submit" name="submit" value="Delete." class="text"><br>
 </form>
 <?php
 }
 }else{
 echo "<p class='header'>You are not allowed to view this part of the site.<br><br>
-<p class='text'><a href='index.php'><font color='$color1'>Login.</font></a></p>";
+<p class='text'><a href='index.php'>Login.</a></p>";
 }
 require('./../bottom.php');
 ?>
