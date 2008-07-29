@@ -107,7 +107,10 @@ function gameTableTBody($result, $playerName = null)
 		$text .= "</td>";
 
 		$canProvideFeedback = "";
-		if ($row['loser'] == $_SESSION['username'] && $_GET['name'] == $_SESSION['username']) {
+	
+		// If the user hasn't given some kind of feedback and not enough time has passed since the game was played we should show him/her the Feedback-text, indicating he can give some feeback by pressing it.
+		if ($row['loser'] == $_SESSION['username'] && $_GET['name'] == $_SESSION['username'] && ($row['is_replay'] <= 0 || $row['loser_comment']  == "" || $row['winner_stars'] == NULL) && (time() < $row['unixtime']+60*60*24*CHANGE_REPORT_DAYS) && $row['contested_by_loser'] == 0 && $row['withdrawn'] == 0 ) {
+			
 		    $canProvideFeedback = "/Feedback";
 		}
 		$text .= "<td>".$sdel."<a href=\"gamedetails.php?reported_on=".urlencode($row['reported_on'])."\">Details".$canProvideFeedback."</a>".$edel."</td>";

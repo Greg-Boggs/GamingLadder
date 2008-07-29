@@ -141,7 +141,7 @@ if ($searchArray['reporteddirection'] != "" && $searchArray['reportdate'] != "")
 }
 
 // Build the select
-$sql = "SELECT withdrawn, contested_by_loser, DATE_FORMAT(reported_on, '".$GLOBALS['displayDateFormat']."') as report_time, reported_on, winner, loser, winner_points, loser_points, winner_elo, loser_elo, length(replay) as is_replay, replay_downloads FROM $gamestable WHERE $where ORDER BY reported_on DESC LIMIT 250";
+$sql = "SELECT withdrawn, contested_by_loser, DATE_FORMAT(reported_on, '".$GLOBALS['displayDateFormat']."') as report_time, reported_on, winner, loser, winner_points, loser_points, winner_elo, loser_elo, length(replay) as is_replay, replay_downloads, winner_stars, loser_stars FROM $gamestable WHERE $where ORDER BY reported_on DESC LIMIT 250";
 
 $result = mysql_query($sql, $db);
 echo gameTableTBody($result);

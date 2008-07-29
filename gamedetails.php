@@ -34,6 +34,12 @@ if (isset($_POST['SendFeedback'])) {
     } else {
         $replay = null;
     }
+	
+	// Let's escape the replay to not get problems with magic quotes...
+	
+	$replay = mysql_real_escape_string($replay);
+	
+	// Now we'll decide how the sql query should look like. We only want to update whatever the user changed:
 
 	if ($sportsmanship != "") { 
 		$query2 = "UPDATE $gamestable SET winner_stars = '$sportsmanship' WHERE reported_on = '$reported_on' AND loser = '".mysql_escape_string($_SESSION['username'])."'";
@@ -47,15 +53,34 @@ if (isset($_POST['SendFeedback'])) {
 		$query2 = "UPDATE $gamestable SET loser_comment = '$comment', winner_stars = '$sportsmanship' WHERE reported_on = '$reported_on' AND loser = '".mysql_escape_string($_SESSION['username'])."'";
 	}
 	
-	// Now lets apply it if there was a comment or sportsmanship point given.
-	if ($sportsmanship != "" || $comment != "" || $replay != "") { 
-		$result2 = mysql_query($query2) or die("fail");
+	
+	if (($replay != NULL ) && ($sportsmanship == "") && ($comment == "")) { 
+		$query2 = "UPDATE $gamestable SET replay = '$replay' WHERE reported_on = '$reported_on' AND loser = '".mysql_escape_string($_SESSION['username'])."'";
+	}
+
+	if (($replay != NULL ) && ($sportsmanship != "") && ($comment == "")) { 
+		$replay = mysql_real_escape_string($replay);
+		$query2 = "UPDATE $gamestable SET winner_stars = '$sportsmanship', replay = '$replay' WHERE reported_on = '$reported_on' AND loser = '".mysql_escape_string($_SESSION['username'])."'";
 	}
 	
-	if ($failure) {
-        echo "<p>ERROR: ".$error."</p>";
-    }
-
+		if (($replay != NULL ) && ($sportsmanship == "") && ($comment != "")) { 
+		$replay = mysql_real_escape_string($replay);
+		$query2 = "UPDATE $gamestable SET loser_comment = '$comment', replay = '$replay' WHERE reported_on = '$reported_on' AND loser = '".mysql_escape_string($_SESSION['username'])."'";
+	}
+	
+			if (($replay != NULL ) && ($sportsmanship != "") && ($comment != "")) { 
+		$replay = mysql_real_escape_string($replay);
+		$query2 = "UPDATE $gamestable SET  winner_stars = '$sportsmanship', loser_comment = '$comment', replay = '$replay' WHERE reported_on = '$reported_on' AND loser = '".mysql_escape_string($_SESSION['username'])."'";
+	}
+	
+	// Now lets apply it if and only if there was a comment /sportsmanship point/replay given.
+	
+	if ($sportsmanship != "" || $comment != "" || $replay != NULL) { 
+		
+		$result2 = mysql_query($query2) or die("mysql failed somehow");
+		
+	}
+		
 	// We continue out of this loop the display the default page after we have completed the updates to the database.
 }
 
@@ -111,6 +136,10 @@ if ($reRankLadder !== false) {
 }
 
 require('top.php');
+
+if ($failure) {
+        echo "<br /><p><b>ERROR:</b> ".$error."</p>";
+    }
 
 // If we have posted this form, the value for GET needs to be set here from the values posted.
 if (!isset($_GET['reported_on'])) {
@@ -174,16 +203,24 @@ if (trim($game['loser_comment']) != "") {
 	echo nl2br(htmlentities($game['loser_comment']));
 }
 
-if ($game['loser'] == $_SESSION['username'] && ($game['loser_comment'] == "" || $game['winner_stars'] == "")) {
+
+// Only display the feedback forms if a) a certain feedback hasn't been given by the loser and b) he tries to give the feedback within x days from the time the game was reported and c) the game isnt withdrawn or contested
+
+if ($game['loser'] == $_SESSION['username'] && ($game['loser_comment'] == "" || $game['winner_stars'] == "" || $game['replay'] == NULL) && (time() < $game['unixtime']+60*60*24*CHANGE_REPORT_DAYS) && $game['contested_by_loser'] == 0 && $game['withdrawn'] == 0) {
+
 ?>
 <br /><br />
 	<form name="form1" enctype="multipart/form-data" method="post" action="<?php echo "gamedetails.php?reported_on=".urlencode($game['reported_on']) ?>">
 	<h2>Feedback</h2>
-	<table>
+
+
+
+<table>
 
 <?php 
+// Only allow loser to upload replay if the winner hasn't already done so and there is one.
 
-if ($game['replay'] == 0)  { ?>
+if (($game['replay'] == 0)  && (time() < $game['unixtime']+60*60*24*CHANGE_REPORT_DAYS)) { ?>
     <input type="hidden" name="MAX_FILE_SIZE" value="<?php echo MAX_REPLAYSIZE;?>" />
     
 	<tr><td>.<?php echo $replayfileextension ?> replay to upload</td>
@@ -191,21 +228,21 @@ if ($game['replay'] == 0)  { ?>
 
 <?php } 
 
-if (trim($game['winner_stars']) == "") { ?>
+if ((trim($game['winner_stars']) == "") && (time() < $game['unixtime']+60*60*24*CHANGE_REPORT_DAYS)) { ?>
 	<tr><td>sportsmanship</td><td><select size="1" name="sportsmanship">
 		<option selected="selected" value="">-- No sportmanship rating --</option>
-		<option value="1">1 - Not very likely to play with this person again.</option>
-		<option value="2">2 - Not the best experience, but I'd consider playing against this player again.</option>
-		<option value="3">3 - A pleasant opponent.</option>
-		<option value="4">4 - A more than pleasant player with good chat.</option>
-		<option value="5">5 - I made a new friend.</option>
+		<option value="1">1 - Lousy conduct, the player behaved unacceptable.</option>
+		<option value="2">2 - Not the best conduct, but the player was tolerable.</option>
+		<option value="3">3 - Average conduct, nothing more and nothing less.</option>
+		<option value="4">4 - Good conduct, the player is nice and easy to deal with.</option>
+		<option value="5">5 - Superb conduct, the player is very friendly and co-operative.</option>
 	</select>
 	</td>
 	</tr>
 <?php 
 }
 
-if ($game['loser_comment'] == "") {
+if (($game['loser_comment'] == "") && (time() < $game['unixtime']+60*60*24*CHANGE_REPORT_DAYS)) {
 ?>
 <tr><td valign="top">
 <p valign="top">Game comment</p></td>

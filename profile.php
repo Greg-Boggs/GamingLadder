@@ -286,7 +286,7 @@ if (($SportsmanshipRatedAsLoser+$SportsmanshipRatedAsWinner) > 0) {
 <td><?echo "$player[games]" ?></td>
 <td><?echo "$avgPointsOnWin / $avgPointsOnLoss / $avgPointsPerGame" ?></td>
 <td><?echo "$player[streak]" ?></td>
-<td><?echo $sportsmanship ?></td>
+<td><?echo round($sportsmanship,0); ?></td>
 <td><?php echo sprintf("%0.2f",($withdrawn+$contestedByOthers+$contested)/$player['games']*100)."% ($withdrawn / $contestedByOthers / $contested) "; ?></td>
 </tr>
 </tbody>
@@ -386,7 +386,9 @@ foreach($days as $name => $abbrev) {
 // Only show game history if there are any played games...
 
 if ($player[games] > 0) { 
-    $sql = "SELECT reported_on, DATE_FORMAT(reported_on, '".$GLOBALS['displayDateFormat']."') as report_time, winner, loser, winner_points, loser_points, winner_elo, loser_elo, length(replay) as is_replay, replay_downloads, withdrawn, contested_by_loser, winner_comment, loser_comment, winner_stars, loser_stars, winner_games, loser_games FROM $gamestable WHERE winner = '$_GET[name]' OR loser = '$_GET[name]'  ORDER BY reported_on DESC LIMIT 30";
+
+
+    $sql = "SELECT reported_on, DATE_FORMAT(reported_on, '".$GLOBALS['displayDateFormat']."') as report_time, unix_timestamp(reported_on) as unixtime, winner, loser, winner_points, loser_points, winner_elo, loser_elo, length(replay) as is_replay, replay_downloads, withdrawn, contested_by_loser, winner_comment, loser_comment, winner_stars, loser_stars, winner_games, loser_games FROM $gamestable WHERE winner = '$_GET[name]' OR loser = '$_GET[name]'  ORDER BY reported_on DESC LIMIT 30";
 
 $result = mysql_query($sql,$db);
 ?>
