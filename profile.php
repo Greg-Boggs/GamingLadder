@@ -184,7 +184,7 @@ if (isset($_SESSION['username']) && $player['name'] != $_SESSION['username']) {
     $lossresult = $elo->RankGame($player['name'],$_SESSION['username'], date("Y-m-d H:i:s"));
     $drawresult = $elo->RankGame($player['name'],$_SESSION['username'], date("Y-m-d H:i:s"), true);
 
-    echo "Points for (Win/Loss/Draw): ".$winresult['winnerChange']."/".$lossresult['loserChange']."/".$drawresult['loserChange'];
+    echo "Points for Win/Loss/Draw: ".$winresult['winnerChange']."/".$lossresult['loserChange']."/".$drawresult['loserChange'];
 }
 ?>
 </td>
@@ -279,16 +279,26 @@ if (($SportsmanshipRatedAsLoser+$SportsmanshipRatedAsWinner) > 0) {
 }
 ?>
 </td>
-<td><?echo round($player[rating],0) ?></td>
+<td><? if ($player['games'] <= 0) { echo BASE_RATING ;} else { echo round($player[rating],0); } ?></td>
 <td><?echo $totalpercentage ?>%</td>
 <td><?echo "$player[wins]" ?></td>
 <td><?echo "$player[losses]" ?></td>
 <td><?echo "$player[games]" ?></td>
-<td><?echo "$avgPointsOnWin / $avgPointsOnLoss / $avgPointsPerGame" ?></td>
-<td><?echo "$player[streak]" ?></td>
+<td><? if ($player['games'] > 0) { echo "$avgPointsOnWin / $avgPointsOnLoss / $avgPointsPerGame"; } else { echo "-"; } ?></td>
+
+<td><? if ($player['games'] > 0) { echo "$player[streak]"; } else { echo "-"; }  ?></td>
 <td><?echo $sportsmanship; ?></td>
-<td><?php echo sprintf("%0.0f%% (%d / %d / %d)",($withdrawn+$contestedByOthers+$contested)/($player['games']+$withdrawn+$contestedByOthers+$contested)*100,
-               $withdrawn, $contestedByOthers, $contested); ?></td>
+<td><?php 
+
+// Avoid division by zero problems...
+
+if ($player['games'] > 0) {
+echo sprintf("%0.0f%% (%d / %d / %d)",($withdrawn+$contestedByOthers+$contested)/($player['games']+$withdrawn+$contestedByOthers+$contested)*100, $withdrawn, $contestedByOthers, $contested);
+} else {
+echo "-";
+}
+
+?></td>
 </tr>
 </tbody>
 </table>
