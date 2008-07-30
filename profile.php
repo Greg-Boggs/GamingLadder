@@ -287,7 +287,7 @@ if (($SportsmanshipRatedAsLoser+$SportsmanshipRatedAsWinner) > 0) {
 <td><?echo "$avgPointsOnWin / $avgPointsOnLoss / $avgPointsPerGame" ?></td>
 <td><?echo "$player[streak]" ?></td>
 <td><?echo $sportsmanship; ?></td>
-<td><?php echo sprintf("%0.2f%% (%d / %d / %d)",($withdrawn+$contestedByOthers+$contested)/($player['games']+$withdrawn+$contestedByOthers+$contested)*100,
+<td><?php echo sprintf("%0.0f%% (%d / %d / %d)",($withdrawn+$contestedByOthers+$contested)/($player['games']+$withdrawn+$contestedByOthers+$contested)*100,
                $withdrawn, $contestedByOthers, $contested); ?></td>
 </tr>
 </tbody>
