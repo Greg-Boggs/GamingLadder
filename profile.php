@@ -234,7 +234,7 @@ $avgPointsOnWin = $row[0];
 $sql = "SELECT coalesce(sum(withdrawn),0), coalesce(sum(contested_by_loser),0) from $gamestable WHERE winner = '".$_GET['name']."'";
 $result = mysql_query($sql, $db);
 list($withdrawn, $contestedByOthers) = mysql_fetch_row($result);
-$sql = "SELECT coalesce(sum(contested_by_loser),0) from $gamestable WHERE loser = ' ".$_GET['name']."'";
+$sql = "SELECT coalesce(sum(contested_by_loser),0) from $gamestable WHERE loser = '".$_GET['name']."'";
 $result = mysql_query($sql, $db);
 list($contested) = mysql_fetch_row($result);
 
@@ -273,7 +273,7 @@ $SportsmanshipRatedAsWinner = $row['count'];
 // You must average at the last possible moment, so we can't create a total sportsmanship average in the SQL.
 // Instead we do that here.
 if (($SportsmanshipRatedAsLoser+$SportsmanshipRatedAsWinner) > 0) {
-    $sportsmanship = round((($SportsmanshipAsWinner+$SportsmanshipAsLoser)/($SportsmanshipRatedAsLoser+$SportsmanshipRatedAsWinner)),2);
+    $sportsmanship = round((($SportsmanshipAsWinner+$SportsmanshipAsLoser)/($SportsmanshipRatedAsLoser+$SportsmanshipRatedAsWinner)),0);
 } else {
     $sportsmanship = "-";
 }
@@ -286,8 +286,9 @@ if (($SportsmanshipRatedAsLoser+$SportsmanshipRatedAsWinner) > 0) {
 <td><?echo "$player[games]" ?></td>
 <td><?echo "$avgPointsOnWin / $avgPointsOnLoss / $avgPointsPerGame" ?></td>
 <td><?echo "$player[streak]" ?></td>
-<td><?echo round($sportsmanship,0); ?></td>
-<td><?php echo sprintf("%0.2f",($withdrawn+$contestedByOthers+$contested)/$player['games']*100)."% ($withdrawn / $contestedByOthers / $contested) "; ?></td>
+<td><?echo $sportsmanship; ?></td>
+<td><?php echo sprintf("%0.2f%% (%d / %d / %d)",($withdrawn+$contestedByOthers+$contested)/($player['games']+$withdrawn+$contestedByOthers+$contested)*100,
+               $withdrawn, $contestedByOthers, $contested); ?></td>
 </tr>
 </tbody>
 </table>
