@@ -89,7 +89,7 @@ $reRankLadder = false;
 if ($_POST['submit'] == "Withdraw Game") {
 	$reportedOn = $_POST['reported_on'];
 	$reRankLadder = $reportedOn;
-	$sql = "UPDATE $gamestable SET withdrawn = 0 WHERE reported_on = '".mysql_escape_string($reportedOn)."' AND UNIX_TIMESTAMP(reported_on) > ".(time()-60*60*24*CHANGE_REPORT_DAYS)." AND winner = '".mysql_escape_string($_SESSION['username'])."'";
+	$sql = "UPDATE $gamestable SET withdrawn = 1 WHERE reported_on = '".mysql_escape_string($reportedOn)."' AND UNIX_TIMESTAMP(reported_on) > ".(time()-60*60*24*CHANGE_REPORT_DAYS)." AND winner = '".mysql_escape_string($_SESSION['username'])."'";
 	$result = mysql_query($sql) or die("failed to remove the last game");
 }
 // If we are restoring a withdrawn game
