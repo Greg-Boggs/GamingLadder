@@ -1,12 +1,11 @@
 <?
 
-// Is the site under maintenance, if so set this to true and all pages will show a maintenance screen
-$maintenanceMode = false;
-// You can backup the database without logging in if you have access to the key below.  Change it to a secure string
-$backupKey = "A long password w!tH $ymb0ls is G00d";
+$maintenanceMode = false; // Is the site under maintenance, if so set this to true and all pages will show a maintenance screen
+$backupKey = "A long password w!tH $ymb0ls is G00d"; // You can backup the database without logging in if you have access to the key below.  Change it to a secure string
 
 //configure database info
- $adminemail = "spam@THIS.com";
+
+$adminemail = "spam@THIS.com";
 $laddermailsender = "test@dot.com"; // this will be the senders email when the ladder sends a mail to someone... 
  $databaseserver = "localhost"; //usually localhost
  $databasename = "yourinfo"; //the name of your database
@@ -16,7 +15,8 @@ $laddermailsender = "test@dot.com"; // this will be the senders email when the l
 
 
 //configure the tables in the database
- $playerstable = "webl_players"; //the name of the table that contains information about the players
+
+$playerstable = "webl_players"; //the name of the table that contains information about the players
  $gamestable = "webl_games"; //the name of the table that stores the played games
  $newstable = "webl_news"; // the name of the table that stores the news
   $admintable = "webl_admin"; //name of the table that stores the admin login information
@@ -26,8 +26,7 @@ $logtable ="webl_log";//name of tabel that has some log info
   $mailhost = "my.smtp.server";
 
 //config security
-// WARNING: If you have a running ladder with registered users DONT ever change the salt! Nobody will be able to login then, ever, if you lose the salt.
-$salt = "yourinfo"; 
+$salt = "yourinfo"; // WARNING: If you have a running ladder with registered users DONT ever change the salt! Nobody will be able to login then, ever, if you lose the salt.
 
 //config stuff that has to do with the registration process...
 define("REG_MIN_NICKLENGTH", 3); //Minimum number of characters allowed in a registrants nickname
@@ -51,10 +50,7 @@ define("AVERAGE_GAME_LENGTH", 40); // amount of minutes the average game is expe
 define("MAX_REPLAYSIZE", 200000); // max fileseize of replay file user can upload, set in bytes. 200000 = 200 kb. This will have to be adjusted to fit different games and maybe according to you hosting limits. 
 $replayfileextension = "gz"; //file extension of the replay files.
 define("INDEX_COMMENT_HILITE", 1); // 0 or 1. If enabled (1) then the latest game with a comment & replay will be displayed before the news posts.
-
-// The format style used here is the one from mysql DATE_FORMAT
-// http://dev.mysql.com/doc/refman/6.0/en/date-and-time-functions.html#function_date-format
-$displayDateFormat = '%Y-%m-%d %h:%i';
+$displayDateFormat = '%Y-%m-%d %h:%i'; // The format style used here is the one from mysql DATE_FORMAT - http://dev.mysql.com/doc/refman/6.0/en/date-and-time-functions.html#function_date-format
 
 
 // Don't change the values below unless you have some basic understanding of how Elo works, the settings that are there already are okey for most people.  
@@ -90,7 +86,7 @@ $report = 'winner';
 $leaguename = 'Ladder of Wesnoth';
 $copyright = 'powered by: <a href=\"http://www.worms-league.com/WebLeague\">WebLeague</a>';
 
-//finish
+// Config ends here! Don't edit anything beyond this line unless you know what your doing.
 
 $latestGameSql = "select name, max(latest_game) as latest_game from (
 select name, max(reported_on) as latest_game FROM $playerstable JOIN $gamestable ON (name = winner) WHERE contested_by_loser = 0 AND withdrawn = 0 GROUP BY 1
@@ -113,12 +109,6 @@ $standingsSql = "select * from $standingscachetable join $playerstable USING (na
 // Apply the restrictions to standings
 $standingsSqlWithRestrictions = $standingsSql." WHERE reported_on > now() - interval $passivedays day AND rating >= $ladderminelo AND games >= $gamestorank ORDER BY 3 desc, 6 desc";
 
-
-// variabledb.php used to connect to the database, I've added a temporary hack here to do that in the config file, it should be
-// moved somewhere more appropriate
-$db = mysql_connect($databaseserver, $databaseuser, $databasepass);
-mysql_select_db($databasename,$db);
-?>
 
 // variabledb.php used to connect to the database, I've added a temporary hack here to do that in the config file, it should be
 // moved somewhere more appropriate
