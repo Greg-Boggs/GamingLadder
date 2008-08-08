@@ -172,7 +172,7 @@ $workingdays = round(((($number2[0] * AVERAGE_GAME_LENGTH)/1440)*2),0);
 echo "<br /><b>Work days played:</b> $workingdays";
 
 // Display average number of games per user...
-echo "<br /><b>Games/Player: </b>". round($number2[0]/$number[0],2);
+echo "<br /><b>Games/Player: </b>". @round($number2[0]/$number[0],2);
 	
 	
 // Display number of games played within x amount of days...

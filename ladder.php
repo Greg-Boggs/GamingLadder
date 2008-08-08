@@ -55,7 +55,7 @@ if (!isset($myrank)) {
 <tbody>
 <?php
 // Reset the result set
-mysql_data_seek($result, 0);
+@mysql_data_seek($result, 0);
 $cur = 1;
 
 // If I don't have a rank, and requesting a personal ladder, display a message to that effect.

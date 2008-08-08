@@ -82,7 +82,63 @@ table.tablesorter tbody tr.myrow td {
 	background-color: #a1bd85;
 }
 
+
+table.tablesortergadder {
+	
+	font-family:sans-serif, verdana, arial;
+	background-color: #CDCDCD;
+	margin:10px 0pt 15px;
+	font-size: 10pt;
+	width: 100%;
+	text-align: left;
+}
+
+
+table.tablesortergadder thead tr th, table.tablesortergadder tfoot tr th {
+	background-color: #e7d9be;
+	border: 1px solid #FFF;
+	font-size: 8pt;
+	padding: 4px;
+}
+table.tablesortergadder thead tr .header {
+	background-image: url(bg.gif);
+	background-repeat: no-repeat;
+	background-position: center right;
+	cursor: pointer;
+}
+table.tablesortergadder tbody td {
+	/* height: 44px; */
+	color: #3D3D3D;
+	padding: 4px;
+	background-color: #e7d9be;
+	vertical-align: middle;
+}
+table.tablesortergadder tbody tr.odd td {
+	background-color:#d9bc94;
+}
+table.tablesortergadder thead tr .headerSortUp {
+	background-image: url(asc.gif);
+}
+table.tablesortergadder thead tr .headerSortDown {
+	background-image: url(desc.gif);
+}
+table.tablesortergadder thead tr .headerSortDown, table.tablesortergadder thead tr .headerSortUp {
+background-color: #8dbdd8;
+}
+table.tablesortergadder tbody tr.myrow td {
+	background-color: #a1bd85;
+}
+
+.gadderrank {
+font-size: 18pt;
+font-family: serif, "times new roman", "new roman", helvetica;
+text-align: left;
+
+
+	}
+
 .myrow td {
 	background-color: #a1bd85c;
+	
 }
 

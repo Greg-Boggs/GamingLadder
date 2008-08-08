@@ -10,6 +10,7 @@ if ($maintenanceMode <> true) {
 	<?php } ?>
 	<li><a href="report.php">Report</a></li>
 	<li><a href="ladder.php">Ladder</a></li>
+	<li><a href="gadder.php">Classes</a></li>
 	<li><a href="players.php">Players</a></li>
 
 	<li><a href="gamehistory.php">Game History</a></li>
