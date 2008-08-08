@@ -1,4 +1,5 @@
 <?
+define("TRIBAL_VERSION", "0.6.1"); // version number shown in footer. Please change when you upgrade. Also add "Rev" in front of it if you customize the ladder code somehow.
 
 $maintenanceMode = false; // Is the site under maintenance, if so set this to true and all pages will show a maintenance screen
 $backupKey = "A long password w!tH $ymb0ls is G00d"; // You can backup the database without logging in if you have access to the key below.  Change it to a secure string
@@ -57,7 +58,7 @@ define("MAX_REPLAYSIZE", 200000); // max fileseize of replay file user can uploa
 $replayfileextension = "gz"; //file extension of the replay files.
 define("INDEX_COMMENT_HILITE", 1); // 0 or 1. If enabled (1) then the latest game with a comment & replay will be displayed before the news posts.
 $displayDateFormat = '%Y-%m-%d %h:%i'; // The format style used here is the one from mysql DATE_FORMAT - http://dev.mysql.com/doc/refman/6.0/en/date-and-time-functions.html#function_date-format
-
+define("FOOTER_MAIL", "your info at here dot whatever"); //email adr shown in footer
 
 // Don't change the values below unless you have some basic understanding of how Elo works, the settings that are there already are okey for most people.  
 // WARNING: If you have played games and you change any of the below values, you MUST rerank the entire ladder.  As the values below will change the rankings of players.
