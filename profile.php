@@ -360,9 +360,9 @@ $SportsmanshipRatedAsWinner = $row['count'];
 // You must average at the last possible moment, so we can't create a total sportsmanship average in the SQL.
 // Instead we do that here.
 if (($SportsmanshipRatedAsLoser+$SportsmanshipRatedAsWinner) > 0) {
-    $sportsmanship = round((($SportsmanshipAsWinner+$SportsmanshipAsLoser)/($SportsmanshipRatedAsLoser+$SportsmanshipRatedAsWinner)),0). " &nbsp;($userhasrated / $userwasrated / $averagegivenaswinner / $averagegivenasloser / $averagegiven)";
+    $sportsmanship = round((($SportsmanshipAsWinner+$SportsmanshipAsLoser)/($SportsmanshipRatedAsLoser+$SportsmanshipRatedAsWinner)),0). " &nbsp;($userwasrated / $userhasrated: $averagegivenaswinner / $averagegivenasloser / $averagegiven)";
 } else {
-    $sportsmanship = "- &nbsp;($userhasrated / $userwasrated / $averagegivenaswinner / $averagegivenasloser / $averagegiven)";
+    $sportsmanship = "- &nbsp;($userwasrated / $userhasrated:  $averagegivenaswinner / $averagegivenasloser / $averagegiven)";
 }
 ?>
 </td>
