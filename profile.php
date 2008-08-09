@@ -117,7 +117,7 @@ $sql=mysql_query("SELECT count(*) FROM $gamestable WHERE  winner = '$_GET[name]'
 $number=mysql_fetch_row($sql);
 $userhasrated = $userhasrated + $number[0];
 // Let's turn them into a percentage of the users total amount of played games:
-$userhasrated = round((($userhasrated/$player[games])*100),0)."%";
+@$userhasrated = round((($userhasrated/$player[games])*100),0)."%";
 
 // Let's see how many times others have rated the user....
 $sql=mysql_query("SELECT count(*) FROM $gamestable WHERE  loser = '$_GET[name]' AND loser_stars > '0' AND contested_by_loser = '0' AND withdrawn = '0'");
@@ -128,7 +128,7 @@ $sql=mysql_query("SELECT count(*) FROM $gamestable WHERE  winner = '$_GET[name]'
 $number=mysql_fetch_row($sql);
 $userwasrated = $userwasrated + $number[0];
 // Let's turn them into a percentage of the users total amount of played games:
-$userwasrated = round((($userwasrated/$player[games])*100),0)."%";
+@$userwasrated = round((($userwasrated/$player[games])*100),0)."%";
 
 
 
