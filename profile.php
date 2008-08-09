@@ -75,6 +75,89 @@ if ($rank == "") {
     $rank = "unranked";
 }
 
+
+
+// Get the players elo hiscore 
+
+$sql = "SELECT winner, winner_elo FROM $gamestable WHERE winner = '$_GET[name]' AND contested_by_loser = '0' AND withdrawn ='0' ORDER BY winner_elo DESC LIMIT 0,1";
+$result = mysql_query($sql, $db);
+$row = mysql_fetch_array($result);
+
+$hiscore_elo = $row['winner_elo'];
+
+// Get the players elo loscore 
+
+$sql = "SELECT loser, loser_elo FROM $gamestable WHERE loser = '$_GET[name]' AND contested_by_loser = '0' AND withdrawn ='0' ORDER BY loser_elo ASC LIMIT 0,1";
+$result = mysql_query($sql, $db);
+$row = mysql_fetch_array($result);
+
+$loscore_elo = $row['loser_elo'];
+
+
+
+
+// Get the players best streak
+$sql = "SELECT winner, winner_streak FROM $gamestable WHERE winner = '$_GET[name]' AND contested_by_loser = '0' AND withdrawn ='0' ORDER BY winner_streak DESC LIMIT 0,1";
+$result = mysql_query($sql, $db);
+$row = mysql_fetch_array($result);
+$hiscore_streak = $row['winner_streak'];
+
+// Get the players worst streak
+$sql = "SELECT loser, loser_streak FROM $gamestable WHERE loser = '$_GET[name]' AND contested_by_loser = '0' AND withdrawn ='0' ORDER BY loser_streak ASC LIMIT 0,1";
+$result = mysql_query($sql, $db);
+$row = mysql_fetch_array($result);
+$loscore_streak = $row['loser_streak'];
+
+// Now we want to know how many games the user has given a sportsmanship rating in. Sportsmanship rating can be given as loser or winner, so we need to add them together to get the correct count.
+$sql=mysql_query("SELECT count(*) FROM $gamestable WHERE  loser = '$_GET[name]' AND winner_stars > '0' AND contested_by_loser = '0' AND withdrawn = '0'");
+$number=mysql_fetch_row($sql);
+$userhasrated = $number[0];
+
+$sql=mysql_query("SELECT count(*) FROM $gamestable WHERE  winner = '$_GET[name]' AND loser_stars > '0' AND contested_by_loser = '0' AND withdrawn = '0'");
+$number=mysql_fetch_row($sql);
+$userhasrated = $userhasrated + $number[0];
+// Let's turn them into a percentage of the users total amount of played games:
+$userhasrated = round((($userhasrated/$player[games])*100),0)."%";
+
+// Let's see how many times others have rated the user....
+$sql=mysql_query("SELECT count(*) FROM $gamestable WHERE  loser = '$_GET[name]' AND loser_stars > '0' AND contested_by_loser = '0' AND withdrawn = '0'");
+$number=mysql_fetch_row($sql);
+$userwasrated = $number[0];
+
+$sql=mysql_query("SELECT count(*) FROM $gamestable WHERE  winner = '$_GET[name]' AND winner_stars > '0' AND contested_by_loser = '0' AND withdrawn = '0'");
+$number=mysql_fetch_row($sql);
+$userwasrated = $userwasrated + $number[0];
+// Let's turn them into a percentage of the users total amount of played games:
+$userwasrated = round((($userwasrated/$player[games])*100),0)."%";
+
+
+
+
+
+
+
+// Now let's see what the user has given other users as a sportsmanship rating, in average:
+
+$sql = "SELECT sum(winner_stars) as total_stars, count(winner_stars) as count FROM $gamestable WHERE loser = '".$_GET['name']."'  AND winner_stars IS NOT NULL AND contested_by_loser = '0' AND withdrawn = '0'";
+$result = mysql_query($sql, $db);
+$row = mysql_fetch_array($result);
+$gaveothersasloser= $row[total_stars];
+$gaveasloserthismanytimes = $row['count'];
+@$averagegivenasloser = round(($gaveothersasloser/$gaveasloserthismanytimes),0);
+
+// What the user has given other users as a sportsmanship rating, in average, when he has been the winner:
+$sql = "SELECT sum(loser_stars) as total_stars, count(loser_stars) as count FROM $gamestable WHERE winner = '".$_GET['name']."'  AND loser_stars IS NOT NULL AND contested_by_loser = '0' AND withdrawn = '0'";
+$result = mysql_query($sql, $db);
+$row = mysql_fetch_array($result);
+$gaveothersaswinner= $row[total_stars];
+$gaveaswinnerthismanytimes = $row['count'];
+@$averagegivenaswinner= round(($gaveothersaswinner/$gaveaswinnerthismanytimes),0);
+
+// And lastly we need an average of whenever he gives a sportsmanship rating
+@$averagegiven = round(($gaveothersasloser+$gaveothersaswinner)/($gaveasloserthismanytimes+$gaveaswinnerthismanytimes),0);
+
+
+
 // PASSIVE CHECK: Lets get to know how many days the player has left before hes put into passive mode -----------------
 $sql = "SELECT reported_on + '".$passivedays." days' < now() AS passive, ".$passivedays." - (to_days(now()) - to_days(reported_on)) as daysleft  from $gamestable WHERE (winner = '$_GET[name]' OR loser = '$_GET[name]') AND contested_by_loser = 0 AND withdrawn = 0 ORDER BY reported_on DESC LIMIT 1";
 $result = mysql_query($sql, $db);
@@ -208,7 +291,7 @@ if (isset($_SESSION['username']) && $player['name'] != $_SESSION['username']) {
 <th>Wins</th>
 <th>Losses</th>
 <th>Played</th>
-<th>Average P WLT</th>
+<th>Aver.P W/L/T</th>
 <th>Streak</th>
 <th>Sportsmanship</th>
 <th>Revoked Games</th>
@@ -255,6 +338,10 @@ if ($player[games] < $gamestorank) {
         echo "<a href=\"faq.php#passive\">(passive)</a>";
     }  
 }
+
+
+
+
 // Get average sportsmanship. This will get the points one has gotten from others while one is the loser of the game.
 $sql = "SELECT sum(loser_stars) as total_stars, count(loser_stars) as count FROM $gamestable WHERE loser = '".$_GET['name']."'  AND loser_stars IS NOT NULL";
 $result = mysql_query($sql, $db);
@@ -273,20 +360,20 @@ $SportsmanshipRatedAsWinner = $row['count'];
 // You must average at the last possible moment, so we can't create a total sportsmanship average in the SQL.
 // Instead we do that here.
 if (($SportsmanshipRatedAsLoser+$SportsmanshipRatedAsWinner) > 0) {
-    $sportsmanship = round((($SportsmanshipAsWinner+$SportsmanshipAsLoser)/($SportsmanshipRatedAsLoser+$SportsmanshipRatedAsWinner)),0);
+    $sportsmanship = round((($SportsmanshipAsWinner+$SportsmanshipAsLoser)/($SportsmanshipRatedAsLoser+$SportsmanshipRatedAsWinner)),0). " &nbsp;($userhasrated / $userwasrated / $averagegivenaswinner / $averagegivenasloser / $averagegiven)";
 } else {
-    $sportsmanship = "-";
+    $sportsmanship = "- &nbsp;($userhasrated / $userwasrated / $averagegivenaswinner / $averagegivenasloser / $averagegiven)";
 }
 ?>
 </td>
-<td><? if ($player['games'] <= 0) { echo BASE_RATING ;} else { echo round($player[rating],0); } ?></td>
+<td><? if ($player['games'] <= 0) { echo BASE_RATING ;} else { echo round($player[rating],0) ." &nbsp; (". round($hiscore_elo,0) ." / ". round($loscore_elo,0) .")"; } ?></td>
 <td><?echo $totalpercentage ?>%</td>
 <td><?echo "$player[wins]" ?></td>
 <td><?echo "$player[losses]" ?></td>
 <td><?echo "$player[games]" ?></td>
 <td><? if ($player['games'] > 0) { echo "$avgPointsOnWin / $avgPointsOnLoss / $avgPointsPerGame"; } else { echo "-"; } ?></td>
 
-<td><? if ($player['games'] > 0) { echo "$player[streak]"; } else { echo "-"; }  ?></td>
+<td><? if ($player['games'] > 0) { echo "$player[streak]  &nbsp;($hiscore_streak / $loscore_streak)"; } else { echo "-"; }  ?></td>
 <td><?echo $sportsmanship; ?></td>
 <td><?php 
 
@@ -302,6 +389,8 @@ echo "-";
 </tr>
 </tbody>
 </table>
+
+
 
 <table class="tablesorter"><tbody><tr><td>
 <?php 
