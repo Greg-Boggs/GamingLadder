@@ -43,7 +43,9 @@ in reported on order descending, so any missing games will be the oldest games f
 <script type="text/javascript">
 $(document).ready(function() 
     { 
-        $("#games").tablesorter({sortList: [[0,1]], widgets: ['zebra'] }); 
+        $("#games").tablesorter({sortList: [[0,1]], widgets: ['zebra'], 
+                                 headers: { 5: { sorter: false},
+                                            7: { sorter: false}} }); 
     } 
 ); 
 </script>

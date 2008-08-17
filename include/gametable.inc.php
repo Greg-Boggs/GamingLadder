@@ -94,15 +94,16 @@ function gameTableTBody($result, $playerName = null)
 
 		$text .= "<td>";
 
+		// We insert the span here to allow the table sorter to automatically sort the number of replay downloads
 	    if ($row['is_replay']  > 0) {
     	    $downloadDisplay = "";
 			// Only show how many times a replay has been downloaded if it has been downloaded to begin with...
 			if ($row['replay_downloads'] > 0) {
 			    $downloadDisplay = " (".$row['replay_downloads'].")";
 			}
-			$text .= $sdel."<a href=\"download-replay.php?reported_on=".urlencode($row['reported_on'])."\">Download</a>".$downloadDisplay.$edel;
+			$text .= $sdel."<span style='display: none'>".$row['replay_downloads']."</span><a href=\"download-replay.php?reported_on=".urlencode($row['reported_on'])."\">Download</a>".$downloadDisplay.$edel;
 	    } else {
-	        $text .= $sdel."No".$edel;
+	        $text .= $sdel."<span style='display: none'>-1</span>No".$edel;
 	    }
 		$text .= "</td>";
 
