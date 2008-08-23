@@ -22,7 +22,38 @@ if (isset($_GET['q'])) {
 // First we extract the info from the cookies... There are 2 of them, one containing username, other one the password.
 require('top.php');
 
+	// We'll fetch the time of the latest report the user made:
+	$sql = "SELECT winner, reported_on, winner_wins FROM $gamestable WHERE winner = '".$_SESSION['username']."'  ORDER BY reported_on DESC LIMIT 0,1";
+	$result87 = mysql_query($sql,$db);
+	$row87 = mysql_fetch_array($result87);
+	
+
 if (isset($_POST['report'])) {
+	
+	// Before we allow the player to do anything at all, let's check if he isn't a "spammer" - we'll only allow players to report a game every x minute. 
+	// In strategy 4x games a value of 20 - 30 minutes would probably be okey. In a FPS where the games can be quite fast 5 or 10 minutes would be better.
+	
+
+	
+		
+	// Get the current time as unix epoch
+	$currenttime = date(U);
+
+	// The format of the date in the mysql is 2008-08-23 03:12:14
+
+	// = date ("Y-m-d H:i:s");
+
+	$dateoflastgame = strtotime($row87['reported_on']);
+
+	if (((($currenttime - $dateoflastgame )/60) < SPAM_REPORT_TIME_PROTECTION) && ($row87['winner_wins'] < SPAM_REPORT_TIME_PROTECTION_UNLOCKED)) {
+
+		echo "<h1>poopage in the pants...<br></h1><b><br>Please notice that the game was unreported!</b><br> Your last report was made ". $row87['reported_on'] . ". You have to wait at least ". SPAM_REPORT_TIME_PROTECTION ." minutes between new reports. <br>However, currently only ". floor(($currenttime - $dateoflastgame )/60) . " minutes have passed. Pleased wait " .(SPAM_REPORT_TIME_PROTECTION -  floor(($currenttime - $dateoflastgame )/60) ) ." more minutes before trying to report again.";
+				
+		echo "<br /><br />";
+		require('bottom.php');
+		exit;
+	} 
+	
 ?>
 <h3>Report Game Results</h3>
 <?php    
@@ -187,7 +218,8 @@ if (isset($_POST['report'])) {
 		
 } else {
 ?><table>
-<form name="form1" enctype="multipart/form-data" method="post" onsubmit="return confirm('Report win against ' + this.losername.value +'?')" action="report.php">
+<form name="form1" enctype="multipart/form-data" method="post" 
+<?php if ($row87['winner_wins'] < MIN_GAMES_REPORT_POPUP) { ?> onsubmit="return confirm('Report win against ' + this.losername.value +'?')" <?php } ?> action="report.php">
 <h3>Report Game</h3>
 
 

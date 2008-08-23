@@ -50,7 +50,7 @@ $numindexhiscore = 10; //number of people listed in the hiscore in the index sid
 $numindexnews = 10; // news items displayed at index bottom...
 $newsitems = 3; //news items to show full text of...this needs to be fixed - index shows 3 even if it says 5 in here.. lol
 $numindexdeled = 5; // how many deleted games are shown at index.
-define("MIN_GAMES_REPORT_POPUP", 10); // Players who have reported (won) less than this many games will get to see a pop up asking them if they are sure they want to report.
+define("MIN_GAMES_REPORT_POPUP", 30); // Players who have reported (won) less than this many games will get to see a pop up asking them if they are sure they want to report.
 define("COUNT_GAMES_OF_LATEST_DAYS", 1); // amount of days we're gonne count the most recent played games in to display in index sidebar
 define("MIN_COUNT_GAMES_OF_LATEST_DAYS", 1); // minimum amount of games that need to have been played within the x most recent days to show the amount of games the x most recent days
 define("AVERAGE_GAME_LENGTH", 40); // amount of minutes the average game is expected to last. This is used for calcuating work-hours spent on gaming in the sidebar.
@@ -59,6 +59,9 @@ $replayfileextension = "gz"; //file extension of the replay files.
 define("INDEX_COMMENT_HILITE", 1); // 0 or 1. If enabled (1) then the latest game with a comment & replay will be displayed before the news posts.
 $displayDateFormat = '%Y-%m-%d %h:%i'; // The format style used here is the one from mysql DATE_FORMAT - http://dev.mysql.com/doc/refman/6.0/en/date-and-time-functions.html#function_date-format
 define("FOOTER_MAIL", "your info at here dot whatever"); //email adr shown in footer
+define("SPAM_REPORT_TIME_PROTECTION", 1); // Number of minutes a user has to wait inbetween reporting a victory. 
+define("SPAM_REPORT_TIME_PROTECTION_UNLOCKED", 9999); // When a user has _reported_ at least these many games he won't adhere under the spam report protection rule. Instead he'll be able to report results within any time intervall. Set this number very high to shut off this feature. Set it to 50 or 100 or so to give the veterans the freedom.
+
 
 // Don't change the values below unless you have some basic understanding of how Elo works, the settings that are there already are okey for most people.  
 // WARNING: If you have played games and you change any of the below values, you MUST rerank the entire ladder.  As the values below will change the rankings of players.
