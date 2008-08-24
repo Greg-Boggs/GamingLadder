@@ -30,10 +30,10 @@ $(document).ready(function()
             $("#availabletoplaydiv").slideToggle(600);
             if ($("#availabletoplayexpand").html() == "[-]") {
                $("#availabletoplayexpand").html("[+]");
-               $.cookie('profileplay', "+");
+               $.cookie('profileplay', "+", { expires: 7});
             } else {
                $("#availabletoplayexpand").html("[-]");
-               $.cookie('profileplay', "-");
+               $.cookie('profileplay', "-", {expires: 7});
             }
         });
  
@@ -43,10 +43,10 @@ $(document).ready(function()
             $("#gamesdiv").slideToggle(600);
             if ($("#gamesexpand").html() == "[-]") {
                $("#gamesexpand").html("[+]");
-               $.cookie('profilegames', '+');
+               $.cookie('profilegames', '+', { expires: 7});
             } else {
                $("#gamesexpand").html("[-]");
-               $.cookie('profilegames', '-');
+               $.cookie('profilegames', '-', { expires: 7});
             }
         });
     } 
