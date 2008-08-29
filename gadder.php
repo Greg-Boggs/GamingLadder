@@ -90,8 +90,9 @@ $classbaseelo = $row['rating'];
 while ($row = mysql_fetch_array($result)) {
 
 
-	if  ($row['rating'] < ($classbaseelo - GADDER_ELO_RANGE) || ($row['rating'] >= ($classbaseelo)) ) {
-								
+	if  (($row['rating'] < ($classbaseelo - GADDER_ELO_RANGE)) || (($row['rating'] >= $classbaseelo) && ($previousrating != $classbaseelo))) {
+
+
 			$rank++;
 		}
 

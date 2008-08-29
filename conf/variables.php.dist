@@ -61,7 +61,7 @@ $displayDateFormat = '%Y-%m-%d %h:%i'; // The format style used here is the one 
 define("FOOTER_MAIL", "your info at here dot whatever"); //email adr shown in footer
 define("SPAM_REPORT_TIME_PROTECTION", 1); // Number of minutes a user has to wait inbetween reporting a victory. 
 define("SPAM_REPORT_TIME_PROTECTION_UNLOCKED", 9999); // When a user has _reported_ at least these many games he won't adhere under the spam report protection rule. Instead he'll be able to report results within any time intervall. Set this number very high to shut off this feature. Set it to 50 or 100 or so to give the veterans the freedom.
-
+define("ALLOW_REPLAY_UPLOAD", 0); // 1 for enabled, 0 for disabled. 
 
 // Don't change the values below unless you have some basic understanding of how Elo works, the settings that are there already are okey for most people.  
 // WARNING: If you have played games and you change any of the below values, you MUST rerank the entire ladder.  As the values below will change the rankings of players.

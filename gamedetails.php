@@ -18,7 +18,7 @@ if (isset($_POST['SendFeedback'])) {
 		// To the the file extension of the file we use the handy pathinfo php function/array. 
 		$file_info = pathinfo($_FILES["uploadedfile"]["name"]);
 		// Only sabe the file if it's right size and right extension:
-		if (($_FILES["uploadedfile"]["size"] <= MAX_REPLAYSIZE) && ($file_info['extension'] == $replayfileextension)){
+		if (($_FILES["uploadedfile"]["size"] <= MAX_REPLAYSIZE) && ($file_info['extension'] == $replayfileextension) && (ALLOW_REPLAY_UPLOAD == 1)){
 			$replay = file_get_contents($_FILES['uploadedfile']['tmp_name']);
         } else {
             $failure = true;
@@ -75,7 +75,7 @@ if (isset($_POST['SendFeedback'])) {
 	
 	// Now lets apply it if and only if there was a comment /sportsmanship point/replay given.
 	
-	if ($sportsmanship != "" || $comment != "" || $replay != NULL) { 
+	if ($sportsmanship != "" || $comment != "" || (($replay != NULL) && (ALLOW_REPLAY_UPLOAD == 1))) { 
 		
 		$result2 = mysql_query($query2) or die("mysql failed somehow");
 		
@@ -206,7 +206,7 @@ if (trim($game['loser_comment']) != "") {
 
 // Only display the feedback forms if a) a certain feedback hasn't been given by the loser and b) he tries to give the feedback within x days from the time the game was reported and c) the game isnt withdrawn or contested
 
-if ($game['loser'] == $_SESSION['username'] && ($game['loser_comment'] == "" || $game['winner_stars'] == "" || $game['replay'] == NULL) && (time() < $game['unixtime']+60*60*24*CHANGE_REPORT_DAYS) && $game['contested_by_loser'] == 0 && $game['withdrawn'] == 0) {
+if ($game['loser'] == $_SESSION['username'] && ($game['loser_comment'] == "" || $game['winner_stars'] == "" || $game['replay'] == NULL) && (ALLOW_REPLAY_UPLOAD == 1) && (time() < $game['unixtime']+60*60*24*CHANGE_REPORT_DAYS) && $game['contested_by_loser'] == 0 && $game['withdrawn'] == 0) {
 
 ?>
 <br /><br />
@@ -220,8 +220,8 @@ if ($game['loser'] == $_SESSION['username'] && ($game['loser_comment'] == "" || 
 <?php 
 // Only allow loser to upload replay if the winner hasn't already done so and there is one.
 
-if (($game['replay'] == 0)  && (time() < $game['unixtime']+60*60*24*CHANGE_REPORT_DAYS)) { ?>
-    <input type="hidden" name="MAX_FILE_SIZE" value="<?php echo MAX_REPLAYSIZE;?>" />
+if (($game['replay'] == 0)  && (time() < $game['unixtime']+60*60*24*CHANGE_REPORT_DAYS) && (ALLOW_REPLAY_UPLOAD == 1)) { ?>
+    <input type="hidden" name="MAX_REPLAYSIZE" value="<?php echo (MAX_REPLAYSIZE * 10);?>" />
     
 	<tr><td>.<?php echo $replayfileextension ?> replay to upload</td>
 		<td><input name="uploadedfile" type="file" /></td></tr>
