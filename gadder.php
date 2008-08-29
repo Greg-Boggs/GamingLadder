@@ -89,13 +89,13 @@ $classbaseelo = $row['rating'];
 
 while ($row = mysql_fetch_array($result)) {
 
-// Set row colouring...
+
 	if  ($row['rating'] < ($classbaseelo - GADDER_ELO_RANGE) || ($row['rating'] >= ($classbaseelo)) ) {
 								
 			$rank++;
 		}
 
-	if ($rank == $mygroup) { // Im to lazy to find out why the -1 is needed but I think it has to with the order of the code...
+	if ($rank == $mygroup) { // Set row colouring
 		$trclass = "<tr class='myrow'>";
 		$myclassrank++;
 		} else {
@@ -117,7 +117,7 @@ if (GADDER_FLAGS == 1){
 	
 	// Finally time to display it all..
 	
-	if  (($row['rating'] < ($classbaseelo - GADDER_ELO_RANGE)) || ($row['rating'] >= $classbaseelo)) {
+	if  (($row['rating'] < ($classbaseelo - GADDER_ELO_RANGE)) || (($row['rating'] >= $classbaseelo) && ($previousrating != $classbaseelo))) {
 
 			
 			echo "</td></tr>$trclass<td class=\"gadderrank\">$rank</td><td><img src='avatars/".$row['Avatar'].".gif'></td><td>$flagprefix ";?>
@@ -142,6 +142,8 @@ if (GADDER_FLAGS == 1){
 			
 		}
 	
+
+$previousrating = $row['rating'];
 }
 echo "</table>";
 
