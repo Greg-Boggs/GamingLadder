@@ -7,9 +7,10 @@ require('logincheck.inc.php');
 // We have ajax lower down on the page, we handle it here and then exit.
 // This keeps the ajax code with the page that is calling it.
 // Unfortunately we are stuck with 'q' as the query variable as it's hardcoded into the jquery autocomplete module.
+// We also only show valid players on the list, meaning players that have their Confirmation set to 'Ok'.
 if (isset($_GET['q'])) {
     $q = strtolower($_GET["q"]);
-    $query = "SELECT player_id, name from $playerstable WHERE name like '$q%' ORDER BY name";
+    $query = "SELECT player_id, name from $playerstable WHERE name like '$q%' AND Confirmation = 'Ok' ORDER BY name";
     $result = mysql_query($query) or die("fail");
     while ($row = mysql_fetch_array($result)) {
 	    echo $row['name'] . "|" . $row ['player_id'] . "\n";
@@ -41,8 +42,6 @@ if (isset($_POST['report'])) {
 
 	// The format of the date in the mysql is 2008-08-23 03:12:14
 
-	// = date ("Y-m-d H:i:s");
-
 	$dateoflastgame = strtotime($row87['reported_on']);
 
 	if (((($currenttime - $dateoflastgame )/60) < SPAM_REPORT_TIME_PROTECTION) && ($row87['winner_wins'] < SPAM_REPORT_TIME_PROTECTION_UNLOCKED)) {
@@ -58,7 +57,7 @@ if (isset($_POST['report'])) {
 <h3>Report Game Results</h3>
 <?php    
     $current_player = $_SESSION['username'];
-    $sql = "SELECT name FROM $playerstable WHERE name = '".$_POST['losername']."' and Confirmation = 'Ok'";
+    $sql = "SELECT name FROM $playerstable WHERE name = '".$_POST['losername']."' and Confirmation = 'Ok' ";
     $result = mysql_query($sql, $db);
 
 	// Make sure the user selected a loser, this should be done in javascript.
@@ -75,7 +74,10 @@ if (isset($_POST['report'])) {
     }
 
 	$winner = $current_player;
-	$loser = $_POST['losername'];
+	$rowLoser = mysql_fetch_array($result);
+	// OLD $loser = $_POST['losername'];
+	$loser = $rowLoser['name'];
+	
 	if ($winner == $loser) { 
 		echo "No playing with yourself! ";
 		echo '<a href="report.php">Go back.</a>';

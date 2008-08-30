@@ -17,6 +17,16 @@ if ($_POST[user] AND $_POST[pass]) {
 $sql="SELECT * FROM $playerstable WHERE name = '$fname'";
 	$result=mysql_query($sql,$db);
 	$row = mysql_fetch_array($result);
+	
+		
+	if ($row[Confirmation] != "" AND $row[Confirmation] == "Deleted") {
+		require('top.php');
+		echo "<b>You cant login because your account was deleted either on your request or by admin.</b><br><br>Feel free to contact us if you want to re-enable your account: All the data associated with it has been saved and can easily be restored by admin.";
+		require('bottom.php');
+		exit;		
+		}
+	
+	
 	if ($row[Confirmation] != "" AND $row[Confirmation] != "Ok") {
 		require('top.php');
 		echo "<b>You cant login because you have not activated your account.</b><br /><br />When you registered a mail was sent to you containing a unique <i>activation link</i>. Please find that mail and click the activation link. Dont forget to check your spam box, as some services wrongly flag our activation mail as spam. <br><br>Feel free to contact us if you are sure that you have missplaced your activation email.";

@@ -67,10 +67,10 @@ while ($player = mysql_fetch_array($result)) {
     }
     $cur++;
 }
-
+ 
 // If the player has no rank he is passive, so make a second query grabbing the passive players
 if ($rank == "") {
-    $result = mysql_query("select * from $standingscachetable right join $playerstable USING (name) WHERE confirmation <> 'Deleted' AND name = '".$_GET['name']."'", $db);
+    $result = mysql_query("select * from $standingscachetable right join $playerstable USING (name) WHERE name = '".$_GET['name']."'", $db);
 	$player = mysql_fetch_array($result);
     $rank = "unranked";
 }
@@ -228,6 +228,13 @@ if ($player['games'] <= 0) {
 
 <h1><?php
 
+if ($player['Confirmation'] == "Deleted") {
+	echo "<h2>The  account  of ". $player['name'] ." is deleted...</h2>For some reason the user or admin has deleted the account you are looking for. It's statistics and other info is preserved and the account can be re-activated by it's owner. We have however decided not to share the info of deleted accounts. Please contact the admin if you wish to undelete your deleted account. <br><br>";
+	
+	require('bottom.php');
+	exit;
+	}
+	
 
 if ($_SESSION['username'] == $_GET[name]) {
 	    echo "<a href='edit.php'>$player[name] $blocked</a>";
