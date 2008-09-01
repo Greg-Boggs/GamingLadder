@@ -113,9 +113,7 @@ if ((mysql_num_rows($result)==0) && isset($_SESSION['username'])) {
 
 	
 // Show latest joined and verified players...
-
 	
-	// $sql ="SELECT name FROM $playerstable ORDER BY player_id DESC";
 	$sql ="SELECT name FROM $playerstable WHERE Confirmation = 'Ok' ORDER BY player_id DESC LIMIT $numindexnewbs";
 	$result = mysql_query($sql,$db);
 
@@ -151,24 +149,20 @@ $totaltime = round($totaltime, 5);
 	echo "</ol>";
 	
 
-
-
-
+// Link to friendslist: This is probably only usable by Battle for Wesnoth latters - all others would like to comment out/delete the line below:
 echo "</ol><br><div align='left'><a href='friends.php'><img border='0' src='graphics/friendslist.jpg'></a></div><br />";
 
-echo "</ol><br><div align='left'><a href='http://chaosrealm.net/wesnoth/index.php?readnews=-1'><img border='0' src='graphics/mod.jpg'></a></div><br />";
-	
 // Show  number of registered CONFIRMED users
 $sql=mysql_query("SELECT count(*) FROM $playerstable WHERE Confirmation = \"Ok\" OR Confirmation = ''");
 $number=mysql_fetch_row($sql);
 echo "<br /><br /><b>Confirmed Players:</b> ".$number[0];
 
 $sql=mysql_query("SELECT count(*) FROM $gamestable WHERE withdrawn = 0 AND contested_by_loser = 0");
-$number2=mysql_fetch_row($sql);
-echo "<br /><b>Played Games:</b> ".$number2[0];
+$playedgames2=mysql_fetch_row($sql);
+echo "<br /><b>Played Games:</b> ".$playedgames2[0];
 
-// Work hours = the total time by all players spent spent on playin. Work days = the same turned into days. We multiply the number by 2 since a game i splayed by 2 people. Hence, if a game takes 1h to play, 2 work hours has been spent on it. (maybe called "Man hours").
-$workingdays = round(((($number2[0] * AVERAGE_GAME_LENGTH)/1440)*2),0);
+// Work hours = the total time by all players spent spent on playing. Work days = the same turned into days. We multiply the number by 2 since a game is played by 2 people. Hence, if a game takes 1h to play, 2 work hours has been spent on it. (maybe called "Man hours").
+$workingdays = round(((($playedgames2[0] * AVERAGE_GAME_LENGTH)/1440)*2),0);
 echo "<br /><b>Work days played:</b> $workingdays";
 
 // Display average number of games per user...
@@ -199,11 +193,59 @@ echo "<br /><b>Ranked Players: </b>".$rankedPlayers[0];
 
 // Show number of replay downloads:
 
-// SELECT SUM(replay_downloads) FROM $gamestable
 $sql="SELECT SUM(replay_downloads) FROM $gamestable";
 $result = mysql_query($sql,$db);
 $replaydownloads= mysql_fetch_row($result);
 echo "<br><b>Replay downloads: </b>". $replaydownloads[0]; 
+
+
+// Display average sportsmanship given
+
+// First we figure out the sum of all winners rating
+$sql="SELECT SUM(winner_stars) FROM $gamestable";
+$result = mysql_query($sql,$db);
+$winnersrating= mysql_fetch_row($result);
+
+// Then the same of the losers...
+$sql="SELECT SUM(loser_stars) FROM $gamestable";
+$result = mysql_query($sql,$db);
+$losersrating= mysql_fetch_row($result);
+
+// Now let's add them together and divide with the number of games where somebody was rated, in order to get the average
+
+$totalsportsmanship = $losersrating[0]+$winnersrating[0];
+
+$sql=mysql_query("SELECT count(*) FROM $gamestable WHERE withdrawn = 0 AND contested_by_loser = 0 AND loser_stars != 'NULL' OR winner_stars != 'NULL'");
+$gamesrated=mysql_fetch_row($sql);
+
+echo "<br><b >Games w. sprtm. rating:</b> ". round((($gamesrated[0]/$playedgames2[0])*100),0) ."%";
+echo "<br><b >Avg. sprtm. rating:</b> ". round(($totalsportsmanship/$gamesrated[0]),1);
+
+// Now we'll show how many % of all games are contested:
+
+$sql=mysql_query("SELECT count(*) FROM $gamestable WHERE contested_by_loser = 1");
+$contested=mysql_fetch_row($sql);
+echo "<br><b>Contested:</b> ". round((($contested[0]/$playedgames2[0])*100),0) . "% (". $contested[0] .")";
+
+
+$sql=mysql_query("SELECT count(*) FROM $gamestable WHERE withdrawn = 1");
+$withdrawn=mysql_fetch_row($sql);
+echo "<br><b>Withdrawn:</b> ". round((($withdrawn[0]/$playedgames2[0])*100),0) ."% (". $withdrawn[0] .")";
+
+echo "<br><b>Revoked:</b> ". round(((($withdrawn[0]+$contested[0])/$playedgames2[0])*100),0) ."% (". ($withdrawn[0]+$contested[0]) .")";
+
+
+$sql=mysql_query("SELECT count(*) FROM $gamestable WHERE winner_comment != '' OR loser_comment != ''");
+$commented=mysql_fetch_row($sql);
+echo "<br><b>Commented:</b> ". round((($commented[0]/$playedgames2[0])*100),0) ."% (". $commented[0] .")";
+
+
+
+
+
+
+
+
 
 
 if (isset($_SESSION['username']))  {

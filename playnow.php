@@ -16,9 +16,14 @@ if ($bajs[HaveVersion] == "Development") {$dropdown = "<option selected>Instant 
 
 if ($bajs[HaveVersion] == "Stable") {$dropdown = "<option selected>Instant Message</option><option>Stable Server</option>";}
 
+
+
 // get the rating of the player...
-$Rating = $bajs[rating];
-// DEB echo "<h1>$Rating</h1>";
+$sql = "SELECT name, rating FROM $standingscachetable WHERE name = '".$_SESSION['username']."'";
+$resultrating= mysql_query($sql, $db);
+$rowrating = mysql_fetch_array($resultrating);
+
+$Rating = $rowrating['rating'];
 
 
 // See if the player uses any Instant Messangers...
@@ -67,25 +72,21 @@ $lastactive = time();
 	
 	
 // Check if visitor is already in the table
-// ("SELECT onlineid FROM online WHERE ipaddress = '$ipaddress'");
+
 $sql = "SELECT id FROM $waitingtable WHERE username = '".$_SESSION['username']."'";
 $intable = mysql_query($sql);
-
-// $intable = mysql_num_rows($sql);
 
 
 // if in table the update the user... else add him...
 
 	if (mysql_num_rows($intable)==0) {
 	
-					
-	// "INSERT INTO online (ipaddress, lastactive) VALUES ('$ipaddress', $lastactive)"
-		$sql = "INSERT INTO $waitingtable (username, time, entered, meetingplace, rating) VALUES ('".$_SESSION['username']."', '$_POST[hours]', '$lastactive', '$MeetingPlace', '$Rating')";
+			$sql = "INSERT INTO $waitingtable (username, time, entered, meetingplace, rating) VALUES ('".$_SESSION['username']."', '$_POST[hours]', '$lastactive', '$MeetingPlace', '$Rating')";
 		$result = mysql_query($sql);
 
 			// if suceesfully inserted data into database....
 			if($result){
-			echo "<h1>added new entry</h1><br /><a href='$wesnothdir'>back to index >></a>";
+			echo "<h1>added new entry</h1><br /><a href='$directory'>back to index >></a>";
 			require('bottom.php');
 			exit;
 
@@ -103,7 +104,7 @@ $intable = mysql_query($sql);
 		$result = mysql_query($sql);
 			
 			if($result){
-			echo "<h1>Updated entry</h1><br><a href='$wesnothdir'>back to index >></a>";
+			echo "<h1>Updated entry</h1><br><a href='$directory'>back to index >></a>";
 			require('bottom.php');
 			exit;
 
@@ -127,7 +128,7 @@ if ($_GET['del'] == $_SESSION['username']) {
 
 	if ($result3) {
 
-		echo "<h1>Removed ".$_SESSION['username']." from list...</h1><br /><a href='$wesnothdir'>back to index >></a>";
+		echo "<h1>Removed ".$_SESSION['username']." from list...</h1><br /><a href='$directory'>back to index >></a>";
 			require('bottom.php');
 			exit;
 	}
