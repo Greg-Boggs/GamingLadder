@@ -23,6 +23,7 @@
 <script type='text/javascript' src='<?php echo $GLOBALS['prefix'] ?>jquery/jquery.cookie.js'></script>
 <script type="text/javascript" src="<?php echo $GLOBALS['prefix'] ?>jquery/tablesorter/jquery.tablesorter.js"></script>
 <script type="text/javascript" src="<?php echo $GLOBALS['prefix'] ?>jquery/tablesorter/jquery.tablesorter.pager.js"></script>
+<script type="text/javascript" src="<?php echo $GLOBALS['prefix'] ?>jquery/tooltip.js"></script>
 <link rel="stylesheet" type="text/css" href="<?php echo $GLOBALS['prefix'] ?>css/wesnoth-main.css" />
 <link rel="stylesheet" type="text/css" href="<?php echo $GLOBALS['prefix'] ?>css/sorter.css" />
 <link rel="stylesheet" type="text/css" href="<?php echo $GLOBALS['prefix'] ?>css/jquery.autocomplete.css" />
@@ -50,6 +51,8 @@ font-size: 12 px;
 </head>
 
 <body>
+<div id="toolTip"> </div>
+
 <?php 
     $starttime = microtime();
     $startarray = explode(" ", $starttime);

@@ -292,16 +292,16 @@ if (isset($_SESSION['username']) && $player['name'] != $_SESSION['username']) {
 <table width="100%" class="tablesorter">
 <thead>
 <tr>
-<th>Rank</th>
-<th>Rating</th>
-<th>Percent</th>
-<th>Wins</th>
-<th>Losses</th>
-<th>Played</th>
-<th>Aver.P W/L/T</th>
-<th>Streak</th>
-<th>Sportsmanship</th>
-<th>Revoked Games</th>
+<th><span onmouseover="showToolTip('Player Rank','The position the player currently holds in the ladder.',event);" onmouseout="hideToolTip();">Rank</span></th>
+<th onmouseover="showToolTip('Elo Rating','Current rating (Highest rating / Lowest rating) .',event);" onmouseout="hideToolTip();">Rating</th>
+<th onmouseover="showToolTip('Win Percentage','Has won this many % of the total amount of played games.',event);" onmouseout="hideToolTip();">Percent</th>
+<th onmouseover="showToolTip('Player Victories','Amount of games won, in total.',event);" onmouseout="hideToolTip();">Wins</th>
+<th onmouseover="showToolTip('Player Losses','Amount of games lost, in total.',event);" onmouseout="hideToolTip();">Losses</th>
+<th onmouseover="showToolTip('Played Games','Amount of played games, in total.',event);" onmouseout="hideToolTip();">Played</th>
+<th onmouseover="showToolTip('Average Points','Average elo points the player gets when (s)he Wins/Loses/In total.',event);" onmouseout="hideToolTip();">Aver.P W/L/T</th>
+<th onmouseover="showToolTip('Streaks','Games currently won/lost in a row (Highest win streak / Highest Loss streak)',event);" onmouseout="hideToolTip();">Streak</th>
+<th onmouseover="showToolTip('Sportsmanship / Karma','Current rating / % that rated the player (% that the player rated / average rating given by player when player is the winner / avg. r. given by player when (s)he is the loser / avg. rating given by the player).',event);" onmouseout="hideToolTip();">Sportsmanship</th>
+<th onmouseover="showToolTip('False Reports','Involved in this many % of games where the result is false. (Withdrawn victories by player / Player victories contested by others / Player contested losses).',event);" onmouseout="hideToolTip();">Revoked Games</th>
 </tr>
 </thead>
 <tbody>
