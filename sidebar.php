@@ -166,7 +166,7 @@ $workingdays = round(((($playedgames2[0] * AVERAGE_GAME_LENGTH)/1440)*2),0);
 echo "<br /><b>Work days played:</b> $workingdays";
 
 // Display average number of games per user...
-echo "<br /><b>Games/Player: </b>". @round($number2[0]/$number[0],2);
+echo "<br /><b>Games/Player: </b>". @round($playedgames2[0]/$number[0],2);
 	
 	
 // Display number of games played within x amount of days...
@@ -199,27 +199,38 @@ $replaydownloads= mysql_fetch_row($result);
 echo "<br><b>Replay downloads: </b>". $replaydownloads[0]; 
 
 
-// Display average sportsmanship given
+// Do some calcs to get the average sportsmanship rating. Games that have a raing of both the winner and loser will get them added and then divided by 2. Then all game ratings will be summed up and divided with number of games that had a rating.
 
-// First we figure out the sum of all winners rating
-$sql="SELECT SUM(winner_stars) FROM $gamestable";
-$result = mysql_query($sql,$db);
-$winnersrating= mysql_fetch_row($result);
+// Number of winner ratings given....
+$sql=mysql_query("SELECT count(*) FROM $gamestable WHERE withdrawn = 0 AND contested_by_loser = 0 AND winner_stars != 'NULL'");
+$numberwinnerratings=mysql_fetch_row($sql);
 
-// Then the same of the losers...
-$sql="SELECT SUM(loser_stars) FROM $gamestable";
-$result = mysql_query($sql,$db);
-$losersrating= mysql_fetch_row($result);
 
-// Now let's add them together and divide with the number of games where somebody was rated, in order to get the average
+// Number of loser ratings given....
+$sql=mysql_query("SELECT count(*) FROM $gamestable WHERE withdrawn = 0 AND contested_by_loser = 0 AND loser_stars != 'NULL'");
+$numberloserratings=mysql_fetch_row($sql);
 
-$totalsportsmanship = $losersrating[0]+$winnersrating[0];
+//Number games with at least one rating 
 
-$sql=mysql_query("SELECT count(*) FROM $gamestable WHERE withdrawn = 0 AND contested_by_loser = 0 AND loser_stars != 'NULL' OR winner_stars != 'NULL'");
+$sql=mysql_query("SELECT count(*) FROM $gamestable WHERE withdrawn = 0 AND contested_by_loser = 0 AND winner_stars != 'NULL' OR loser_stars != 'NULL'");
 $gamesrated=mysql_fetch_row($sql);
 
-echo "<br><b >Games w. sprtm. rating:</b> ". round((($gamesrated[0]/$playedgames2[0])*100),0) ."%";
-echo "<br><b >Avg. sprtm. rating:</b> ". round(($totalsportsmanship/$gamesrated[0]),1);
+// Totalsum winner ratings...
+$sql="SELECT SUM(winner_stars) FROM $gamestable";
+$result = mysql_query($sql,$db);
+$sumwinnerratings= mysql_fetch_row($result);
+
+// Totalsum loser ratings...
+$sql="SELECT SUM(loser_stars) FROM $gamestable";
+$result = mysql_query($sql,$db);
+$sumloserratings= mysql_fetch_row($result);
+
+// Here's the average:
+$avgsportsmanship = ($sumwinnerratings[0] + $sumloserratings[0]) / ( $numberloserratings[0] + $numberwinnerratings[0]);
+
+
+echo "<br><b >Games w. sprtm. rating:</b> ". round((($gamesrated[0]/$playedgames2[0])*100),0) ."% (". $gamesrated[0] . ")";
+echo "<br><b >Avg. sprtm. rating:</b> ". round($avgsportsmanship,2);
 
 // Now we'll show how many % of all games are contested:
 
@@ -238,13 +249,6 @@ echo "<br><b>Revoked:</b> ". round(((($withdrawn[0]+$contested[0])/$playedgames2
 $sql=mysql_query("SELECT count(*) FROM $gamestable WHERE winner_comment != '' OR loser_comment != ''");
 $commented=mysql_fetch_row($sql);
 echo "<br><b>Commented:</b> ". round((($commented[0]/$playedgames2[0])*100),0) ."% (". $commented[0] .")";
-
-
-
-
-
-
-
 
 
 
