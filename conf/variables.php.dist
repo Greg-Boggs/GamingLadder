@@ -74,7 +74,7 @@ $playersshown = 200; //Number of players to show per php query on stats
 // Define a Kvalue array, must be in descending points order.  rating => kvalue
 $kArray = array(2100 => 16, 1800 => 24, 0 => 32);
 $kArrayProvisional = array(2100 => 16, 1800 => 24, 0 => 32);
-
+define("ELO_DIVIDE_FACTOR",400); // This number regulates the win expectancy and is a part of the Elo formula. Leave it on 400 in full information games with 0 randomness like chess. Make it 800 or so in games with some more randomness in them. The more randomness, the higher the number should be, but, the higher the number and the more randomness, the more useless the Elo system gets.
 define("BASE_RATING", 1500);    // this is what a new player gets
 define("MAX_DIFFERENCE", 1000); //1200 is so high this never gets used
 define("PROVISIONAL", 10); //The number of games it takes to not be provisional anymore 

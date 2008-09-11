@@ -101,7 +101,7 @@ class Elo {
     function CalcElo($playerRating, $opponentRating, $winState, $k, $protection) 
     {
         // Calculate the win expectancy of the player.
-        $winExpectancy = 1/(1 + pow(10,($opponentRating - $playerRating)/400));
+        $winExpectancy = 1/(1 + pow(10,($opponentRating - $playerRating)/ELO_DIVIDE_FACTOR));
 
         if ($protection == true) {
             $protection = PROVISIONAL_PROTECTION;
