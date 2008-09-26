@@ -1,11 +1,24 @@
+****************************************************************************************
+	WARNING!
+
+	If you are going to use this Ladder system then please only use the latest code
+	that can be found in the /trunk of the SVN on sourceforge. The regular download section 
+	is not up to date or maintained. The /trunk in the SVN always is. Also, please contact us
+	if you are uncertain or have any questions regarding the ladder.
+****************************************************************************************
+
+
 -------------------------------------------------------
 // tribal bliss
-   the elo webladder system for competetive gaming
+   the open source elo web ladder system for competetive gaming
 
-   v.0.1.2 of this document
+   v.0.1.3 of this document
 
 
-	php written by: chains, eyerouge, hendrixes, mr-russ and whoever more.
+	php written by: mr-russ, chains, eyerouge, hendrixes and whoever more.
+	
+	please let us know if you submitted code into the svn and want your name
+	here.
 
 	This project is a derivation of Peter Hendrix & Danny Hendrix webladder 
 	projected called "WebLeague". We've converted it into GPL v3 with written
@@ -41,9 +54,43 @@ maintained anymore. Our goal is to offer a complete webladder system.
 
 The sourceforge project can be found at https://sourceforge.net/projects/gamingladder/
 and we need every PHP coder we can get our hands on, so please contact us and help
-out. 
+out. Else the project will die as all others.
 
 Contact: spam at eyerouge dot com
+
+
+
+// Installation and setup of Tribal Bliss
+-------------------------------------------------------
+
+1. SQL Code: CREATE DATABASE `subversiva_org` ;
+
+2. Load/import the file called __EmptyDB_revxxx__.sql.zip. It's the empty structure and it's probably the latest one. Structure seldom/never change unless big code changes are made, and they're not planned unless you code them ; ) 
+
+3. Now, see to it that you get the latest code from the sourceforge SVN. Don't use anything else then the latest SVN, ever.
+
+4. Put the code on your webserver, and see to it that the server runs php5 and mysql.
+
+5. In /conf you can find the setup file you must alter before the site will work. It's called variables.php.dist. After editing it to your liking, rename it to variables.php
+
+6. Visit your newly setup ladder site. Register the first user. Let's call him AdminJohn for the sake of the example in here.
+
+7. After the first user is setup, edit the database using phpmyadmin or whatever tools you like. In the players table you can find AdminJohn. Edit his "is_admin tinyint(1)" flag so it says "1" without the "-marks. That will make him into an admin.
+
+8. Now visit the site again, but this time add /Admin to the url and login.
+
+9. If you see anything that looks strange, like division by zero errors and what not it will probably go away once you have some reported games.
+
+-------------------------------------------------------
+
+
+
+
+
+
+
+
+
 
 
 The original WebLeague readme text is included below. It was writte by the Webleague 
