@@ -226,29 +226,29 @@ $result = mysql_query($sql,$db);
 $sumloserratings= mysql_fetch_row($result);
 
 // Here's the average:
-$avgsportsmanship = ($sumwinnerratings[0] + $sumloserratings[0]) / ( $numberloserratings[0] + $numberwinnerratings[0]);
+@$avgsportsmanship = ($sumwinnerratings[0] + $sumloserratings[0]) / ( $numberloserratings[0] + $numberwinnerratings[0]);
 
 
-echo "<br><b >Games w. sprtm. rating:</b> ". round((($gamesrated[0]/$playedgames2[0])*100),0) ."% (". $gamesrated[0] . ")";
+echo "<br><b >Games w. sprtm. rating:</b> ". @round((($gamesrated[0]/$playedgames2[0])*100),0) ."% (". $gamesrated[0] . ")";
 echo "<br><b >Avg. sprtm. rating:</b> ". round($avgsportsmanship,2);
 
 // Now we'll show how many % of all games are contested:
 
 $sql=mysql_query("SELECT count(*) FROM $gamestable WHERE contested_by_loser = 1");
 $contested=mysql_fetch_row($sql);
-echo "<br><b>Contested:</b> ". round((($contested[0]/$playedgames2[0])*100),0) . "% (". $contested[0] .")";
+echo "<br><b>Contested:</b> ". @round((($contested[0]/$playedgames2[0])*100),0) . "% (". $contested[0] .")";
 
 
 $sql=mysql_query("SELECT count(*) FROM $gamestable WHERE withdrawn = 1");
 $withdrawn=mysql_fetch_row($sql);
-echo "<br><b>Withdrawn:</b> ". round((($withdrawn[0]/$playedgames2[0])*100),0) ."% (". $withdrawn[0] .")";
+echo "<br><b>Withdrawn:</b> ". @round((($withdrawn[0]/$playedgames2[0])*100),0) ."% (". $withdrawn[0] .")";
 
-echo "<br><b>Revoked:</b> ". round(((($withdrawn[0]+$contested[0])/$playedgames2[0])*100),0) ."% (". ($withdrawn[0]+$contested[0]) .")";
+echo "<br><b>Revoked:</b> ". @round(((($withdrawn[0]+$contested[0])/$playedgames2[0])*100),0) ."% (". ($withdrawn[0]+$contested[0]) .")";
 
 
 $sql=mysql_query("SELECT count(*) FROM $gamestable WHERE winner_comment != '' OR loser_comment != ''");
 $commented=mysql_fetch_row($sql);
-echo "<br><b>Commented:</b> ". round((($commented[0]/$playedgames2[0])*100),0) ."% (". $commented[0] .")";
+echo "<br><b>Commented:</b> ". @round((($commented[0]/$playedgames2[0])*100),0) ."% (". $commented[0] .")";
 
 
 
