@@ -23,6 +23,32 @@ if (isset($_GET['q'])) {
 // First we extract the info from the cookies... There are 2 of them, one containing username, other one the password.
 require('top.php');
 
+
+
+// Now let's check if the player is allowed to report a victory at all. Players are only allowed to report x amount of games within y amount of days.
+// Example: 3 reports per 1 day, or 5 reports within a 2 day period. Any numbers go, they can be set in the configfile.
+
+
+$sql = "select count(winner) from $gamestable WHERE reported_on > now() - interval ". PLAYER_MAX_GAMES_PERIOD_DAYS." day AND (winner = '". $_SESSION['username']."' OR loser = '".$_SESSION['username'] ."') AND withdrawn= 0 AND contested_by_loser = 0";
+$result = mysql_query($sql) or die("fail");
+$row = mysql_fetch_row($result);
+
+
+if ($row[0] < PLAYER_MAX_GAMES_PER_DAY) {
+echo "<h3>Report Game</h3><br>You have played ". $row[0]  ." of ". PLAYER_MAX_GAMES_PER_DAY ." allowed games within the recent ". PLAYER_MAX_GAMES_PERIOD_DAYS ." days."; }
+
+if ($row[0] >= PLAYER_MAX_GAMES_PER_DAY) {
+
+echo "<h1>No more games for today...</h1><br>Sorry ".$_SESSION['username'].", but you have played ". $row[0]  ." of ". PLAYER_MAX_GAMES_PER_DAY ." games within the recent ". PLAYER_MAX_GAMES_PERIOD_DAYS ." days. This means that you are not allowed to play any more ladder games <i>today</i>. Please try again tomorrow!<br><br>Notice that current server date & time is ". date('d/m H:m')."<br><br>"; 
+
+include("bottom.php");
+
+
+exit;
+
+}
+
+
 	// We'll fetch the time of the latest report the user made:
 	$sql = "SELECT winner, reported_on, winner_wins FROM $gamestable WHERE winner = '".$_SESSION['username']."'  ORDER BY reported_on DESC LIMIT 0,1";
 	$result87 = mysql_query($sql,$db);
@@ -227,7 +253,7 @@ if (isset($_POST['report'])) {
 ?><table>
 <form name="form1" enctype="multipart/form-data" method="post" 
 <?php if ($row87['winner_wins'] < MIN_GAMES_REPORT_POPUP) { ?> onsubmit="return confirm('Report win against ' + this.losername.value +'?')" <?php } ?> action="report.php">
-<h3>Report Game</h3>
+
 
 
 <p>
