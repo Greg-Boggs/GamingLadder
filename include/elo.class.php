@@ -91,11 +91,11 @@ class Elo {
            $k = $GLOBALS['kArrayProvisional'];
         }
 
-        foreach ($k as $kRating => $kValue) {
-            if ($rating >= $kRating) {
-                return $kValue;
-            }
-        }
+	foreach ($k as $kRating => $kValue) {
+		if ($rating >= $kRating) {
+			return $kValue;
+		}
+	}
     }
 
     function CalcElo($playerRating, $opponentRating, $winState, $k, $protection) 
@@ -113,6 +113,27 @@ class Elo {
         $ratingChange = ($k * ($winState - $winExpectancy)) / $protection;
 
         return round($ratingChange);
+    }
+
+    function ApplyAntiMatchspam ($k)
+    {
+	// Apply the anti-matchspam penalty to the (winner's) k value and return it
+	if ($GLOBALS['recentgames'] < ANTI_MATCHSPAM_NUMGAMES) return $k;
+		
+	switch (ANTI_MATCHSPAM_METHOD) {
+	
+	case 0: // Don't punish match spam
+	case 1: // Games cap; implemented in report.php
+	default: // No config?
+		return $k;
+
+	case 2: // If played more games than cap, reduce k * fixed value
+		return $k * ANTI_MATCHSPAM_FACTOR;
+	
+	case 3: // reduce k by dynamic value
+		$excess = $GLOBALS['recentgames'] - ANTI_MATCHSPAM_NUMGAMES;
+		return $k * pow (2, - $excess / (ANTI_MATCHSPAM_FACTOR * 10));
+	}
     }
 
     function RankGame($winner, $loser, $reportedTime, $draw = false)
@@ -152,14 +173,14 @@ class Elo {
             $loserProtection = false;
         }
 
-        $kValWinner = $this->ChooseKVal($winnerStats['rating'], $winnerStats['provisional']);
+	$kValWinner = $this->ApplyAntiMatchspam ($this->ChooseKVal($winnerStats['rating'], $winnerStats['provisional']));
         $result['winnerChange'] = $this->CalcElo($winnerStats['rating'], $loserStats['rating'], $winnerState, $kValWinner, $winnerProtection);
         $result['winnerRating'] = $winnerStats['rating'];
 
         $kValLoser = $this->ChooseKVal($loserStats['rating'], $loserStats['provisional']);
         $result['loserChange'] = $this->CalcElo($loserStats['rating'], $winnerStats['rating'], $loserState, $kValLoser, $loserProtection);
         $result['loserRating'] = $loserStats['rating'];
-
+	
         if ($draw === true) {
             $result['winnerStreak'] = 0;
             $result['loserStreak'] = 0;
