@@ -34,7 +34,7 @@ define("REG_MIN_NICKLENGTH", 3); //Minimum number of characters allowed in a reg
 define("REG_MAX_NICKLENGTH", 20); //Maximum number of characters allowed in a registrants nickname
 define("REG_MAILVERIFICATION", 0); //Set to 0 or 1, where 0 is off and 1 on. If enabled (1) the player will get a e-mail when registering, with a link he must click in order to activate his account. Unverified accounts can't report games or logg in at all. If set to 0 no mail will be sent and the player can start using his acocunt directly since he will be "auto-verified" instead. Currently, and maybe depending on your host and who you send to, 10 - 30% of the mails sent are killed by the spam-filters, so it might be an idea to have this disabled if many complain, else they won't be able to use their accoutn unless you manually activate them through fiddling with their Confirmation-entry in the the players database.
 define("NONPUBLIC_REPLAY_COMMENTS", 0); //set to 1 to enable, 0 to disable. If enabled only logged in members can view other members game comment
-define("CHANGE_REPORT_DAYS", 7); // The number of days after a report that you can contest/withdraw the game
+$reportdays = 7; // The number of days after a report that you can contest/withdraw the game
 
 // Measures against match spam (players gaining advantage by merely being more active than others)
 define("ANTI_MATCHSPAM_METHOD", 1); // 0 for none [default], 1 for cap on X matches / Y days, 2 for fixed k penalty factor after cap, 3 for dynamic factor
