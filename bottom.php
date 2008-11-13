@@ -3,14 +3,6 @@
 <?php echo "<br />contact: ". FOOTER_MAIL ?>
 
 <?php
-// Admins can impersonate other users on the ladder, it's important to display the fact they are behaving like another user at
-// the time.
-if (isset($_SESSION['real-username'])) {
-    if ($_SESSION['real-username'] != $_SESSION['username']) {
-        echo "<p align='center'>Administrator <b>".$_SESSION['real-username']."</b> is impersonating <b>".$_SESSION['username']."</b></p>";
-    }
-}
-
 $endtime = microtime();
 $endarray = explode(" ", $endtime);
 $endtime = $endarray[1] + $endarray[0];

@@ -64,7 +64,17 @@ font-size: 12 px;
   </div>
 <?php
     require('menu.php');
+	
 ?>
 </div>
 
 <div style="width: 900px; margin-left: auto; margin-right: auto">
+<?php
+// If it's an admin that's impersonating a player we need to always display the warning message
+if (isset($_SESSION['real-username'])) {
+    if ($_SESSION['real-username'] != $_SESSION['username']) {
+        
+		echo "<table width='100%' align='center'><tr bgcolor='#a1bc85'><td><p align='center'>Admin. <b>".$_SESSION['real-username']."</b> is impersonating <b>".$_SESSION['username']."</b></p></td></tr></table>";
+    }
+}
+?>

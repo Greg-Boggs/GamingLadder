@@ -3,6 +3,14 @@ session_start();
 require('conf/variables.php');
 require('autologin.inc.php');
 
+// If it's an admin that's impersonating a player we need to always display the revokebuttons, thus we make sure they wont "time out" for admins :
+if (isset($_SESSION['real-username'])) {
+    if ($_SESSION['real-username'] != $_SESSION['username']) {
+		$reportdays = 999999999999;
+    }
+}
+
+
 if (NONPUBLIC_REPLAY_COMMENTS == 1) {
 	require('logincheck.inc.php');
 }
@@ -89,28 +97,28 @@ $reRankLadder = false;
 if ($_POST['submit'] == "Withdraw Game") {
 	$reportedOn = $_POST['reported_on'];
 	$reRankLadder = $reportedOn;
-	$sql = "UPDATE $gamestable SET withdrawn = 1 WHERE reported_on = '".mysql_escape_string($reportedOn)."' AND UNIX_TIMESTAMP(reported_on) > ".(time()-60*60*24*CHANGE_REPORT_DAYS)." AND winner = '".mysql_escape_string($_SESSION['username'])."'";
+	$sql = "UPDATE $gamestable SET withdrawn = 1 WHERE reported_on = '".mysql_escape_string($reportedOn)."' AND UNIX_TIMESTAMP(reported_on) > ".(time()-60*60*24*$reportdays)." AND winner = '".mysql_escape_string($_SESSION['username'])."'";
 	$result = mysql_query($sql) or die("failed to remove the last game");
 }
 // If we are restoring a withdrawn game
 if ($_POST['submit'] == "Restore Game") {
 	$reportedOn = $_POST['reported_on'];
 	$reRankLadder = $reportedOn;
-	$sql = "UPDATE $gamestable SET withdrawn = 0 WHERE reported_on = '".mysql_escape_string($reportedOn)."' AND UNIX_TIMESTAMP(reported_on) > ".(time()-60*60*24*CHANGE_REPORT_DAYS)." AND winner = '".mysql_escape_string($_SESSION['username'])."'";
+	$sql = "UPDATE $gamestable SET withdrawn = 0 WHERE reported_on = '".mysql_escape_string($reportedOn)."' AND UNIX_TIMESTAMP(reported_on) > ".(time()-60*60*24*$reportdays)." AND winner = '".mysql_escape_string($_SESSION['username'])."'";
 	$result = mysql_query($sql);
 }
 // If we are contesting a game
 if ($_POST['submit'] == "Contest Game") {
 	$reportedOn = $_POST['reported_on'];
 	$reRankLadder = $reportedOn;
-	$sql = "UPDATE $gamestable SET contested_by_loser = 1 WHERE reported_on = '".mysql_escape_string($reportedOn)."' AND UNIX_TIMESTAMP(reported_on) > ".(time()-60*60*24*CHANGE_REPORT_DAYS)." AND loser = '".mysql_escape_string($_SESSION['username'])."'";
+	$sql = "UPDATE $gamestable SET contested_by_loser = 1 WHERE reported_on = '".mysql_escape_string($reportedOn)."' AND UNIX_TIMESTAMP(reported_on) > ".(time()-60*60*24*$reportdays)." AND loser = '".mysql_escape_string($_SESSION['username'])."'";
 	$result = mysql_query($sql);
 }
 // If we are contesting a game
 if ($_POST['submit'] == "Remove Contest") {
 	$reportedOn = $_POST['reported_on'];
 	$reRankLadder = $reportedOn;
-	$sql = "UPDATE $gamestable SET contested_by_loser = 0 WHERE reported_on = '".mysql_escape_string($reportedOn)."' AND UNIX_TIMESTAMP(reported_on) > ".(time()-60*60*24*CHANGE_REPORT_DAYS)." AND loser = '".mysql_escape_string($_SESSION['username'])."'";
+	$sql = "UPDATE $gamestable SET contested_by_loser = 0 WHERE reported_on = '".mysql_escape_string($reportedOn)."' AND UNIX_TIMESTAMP(reported_on) > ".(time()-60*60*24*$reportdays)." AND loser = '".mysql_escape_string($_SESSION['username'])."'";
 	$result = mysql_query($sql);
 }
 
@@ -164,13 +172,16 @@ echo gameTableTBody($result);
 </table>
 
 <?php
+
+
 if ($game['winner'] == $_SESSION['username']) {
-	if ($game['withdrawn'] == 1 && time() < $game['unixtime']+60*60*24*CHANGE_REPORT_DAYS) {
+	
+	if ($game['withdrawn'] == 1 && time() < $game['unixtime']+60*60*24*$reportdays) {
 		echo "<form method='post' action='gamedetails.php'>";
 		echo "<input type='hidden' name='reported_on' value='".$game['reported_on']."' />";
 		echo "<input type='submit' name='submit' value='Restore Game' />";
 		echo "</form>";
-	} else if ($game['withdrawn'] == 0 &&  time() < $game['unixtime']+60*60*24*CHANGE_REPORT_DAYS) {
+	} else if ($game['withdrawn'] == 0 &&  time() < $game['unixtime']+60*60*24*$reportdays) {
 		echo "<form method='post' action='gamedetails.php'>";
 		echo "<input type='hidden' name='reported_on' value='".$game['reported_on']."' />";
 		echo "<input type='submit' name='submit' value='Withdraw Game' />";
@@ -178,18 +189,20 @@ if ($game['winner'] == $_SESSION['username']) {
 	}	
 }
 if ($game['loser'] == $_SESSION['username']) {
-	if ($game['contested_by_loser'] == 1 && time() < $game['unixtime']+60*60*24*CHANGE_REPORT_DAYS) {
+	if ($game['contested_by_loser'] == 1 && time() < $game['unixtime']+60*60*24*$reportdays) {
 		echo "<form method='post' action='gamedetails.php'>";
 		echo "<input type='hidden' name='reported_on' value='".$game['reported_on']."' />";
 		echo "<input type='submit' name='submit' value='Remove Contest' />";
 		echo "</form>";
-	} else if ($game['contested_by_loser'] == 0 &&  time() < $game['unixtime']+60*60*24*CHANGE_REPORT_DAYS) {
+	} else if ($game['contested_by_loser'] == 0 &&  time() < $game['unixtime']+60*60*24*$reportdays) {
 		echo "<form method='post' action='gamedetails.php'>";
 		echo "<input type='hidden' name='reported_on' value='".$game['reported_on']."' />";
 		echo "<input type='submit' name='submit' value='Contest Game' />";
 		echo "</form>";
 	}	
 }
+
+
 ?>
 <?php
 // Display the player comments
@@ -206,7 +219,7 @@ if (trim($game['loser_comment']) != "") {
 
 // Only display the feedback forms if a) a certain feedback hasn't been given by the loser and b) he tries to give the feedback within x days from the time the game was reported and c) the game isnt withdrawn or contested
 
-if ($game['loser'] == $_SESSION['username'] && ($game['loser_comment'] == "" || $game['winner_stars'] == "" || $game['replay'] == NULL) && (ALLOW_REPLAY_UPLOAD == 1) && (time() < $game['unixtime']+60*60*24*CHANGE_REPORT_DAYS) && $game['contested_by_loser'] == 0 && $game['withdrawn'] == 0) {
+if ($game['loser'] == $_SESSION['username'] && ($game['loser_comment'] == "" || $game['winner_stars'] == "" || $game['replay'] == NULL) && (ALLOW_REPLAY_UPLOAD == 1) && (time() < $game['unixtime']+60*60*24*$reportdays) && $game['contested_by_loser'] == 0 && $game['withdrawn'] == 0) {
 
 ?>
 <br /><br />
@@ -220,7 +233,7 @@ if ($game['loser'] == $_SESSION['username'] && ($game['loser_comment'] == "" || 
 <?php 
 // Only allow loser to upload replay if the winner hasn't already done so and there is one.
 
-if (($game['replay'] == 0)  && (time() < $game['unixtime']+60*60*24*CHANGE_REPORT_DAYS) && (ALLOW_REPLAY_UPLOAD == 1)) { ?>
+if (($game['replay'] == 0)  && (time() < $game['unixtime']+60*60*24*$reportdays) && (ALLOW_REPLAY_UPLOAD == 1)) { ?>
     <input type="hidden" name="MAX_REPLAYSIZE" value="<?php echo (MAX_REPLAYSIZE * 10);?>" />
     
 	<tr><td>.<?php echo $replayfileextension ?> replay to upload</td>
@@ -228,7 +241,7 @@ if (($game['replay'] == 0)  && (time() < $game['unixtime']+60*60*24*CHANGE_REPOR
 
 <?php } 
 
-if ((trim($game['winner_stars']) == "") && (time() < $game['unixtime']+60*60*24*CHANGE_REPORT_DAYS)) { ?>
+if ((trim($game['winner_stars']) == "") && (time() < $game['unixtime']+60*60*24*$reportdays)) { ?>
 	<tr><td>sportsmanship</td><td><select size="1" name="sportsmanship">
 		<option selected="selected" value="">-- No sportmanship rating --</option>
 		<option value="1">1 - Lousy conduct, the player behaved unacceptable.</option>
@@ -242,7 +255,7 @@ if ((trim($game['winner_stars']) == "") && (time() < $game['unixtime']+60*60*24*
 <?php 
 }
 
-if (($game['loser_comment'] == "") && (time() < $game['unixtime']+60*60*24*CHANGE_REPORT_DAYS)) {
+if (($game['loser_comment'] == "") && (time() < $game['unixtime']+60*60*24*$reportdays)) {
 ?>
 <tr><td valign="top">
 <p valign="top">Game comment</p></td>

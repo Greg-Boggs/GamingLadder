@@ -1,5 +1,5 @@
 <?
-define("TRIBAL_VERSION", "0.6.1"); // version number shown in footer. Please change when you upgrade. Also add "Rev" in front of it if you customize the ladder code somehow.
+define("TRIBAL_VERSION", "0.6.5"); // version number shown in footer. Please change when you upgrade. Also add "Rev" in front of it if you customize the ladder code somehow.
 
 $maintenanceMode = false; // Is the site under maintenance, if so set this to true and all pages will show a maintenance screen
 $backupKey = "A long password w!tH $ymb0ls is G00d"; // You can backup the database without logging in if you have access to the key below.  Change it to a secure string
