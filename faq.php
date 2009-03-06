@@ -6,7 +6,7 @@ require('top.php');
 <b>Table of Content</b>
 <ol>
   
-    <li><a href="faq.php#mrules">Rules</a> - v0.15 (14 July 2008)</li>
+    <li><a href="faq.php#mrules">Rules</a> - v0.16 (4 November 2008)</li>
     <li><a href="faq.php#magreement">Agreement</a></li>
     <li><a href="faq.php#mfaq">Faq</a> - v0.3 (14 July 2008)</li>
 </ol>
@@ -37,11 +37,11 @@ require('top.php');
 <li>All games are 1 vs 1. You're allowed to play however many games you want, with whoever that is participating in the ladder and that wants to compete with you. To find an opponent for a ladder game you'd have to contact people in the ladder and/or create (ladder) games on the offical server. You can find players by using the ladder <a href="friends.php">in-game friends list</a>, contacting them via some kind of <a href="http://www.pidgin.im">instant messenger</a> and also email challange them via their profile.</li>
 <li>Game must be played on one of the <i>Official Servers</i> using the original unmodified software.</li>
 <li>The name of the game <i>must start</i> with the prefix <i>(L)</i> or <i>(Ladder)</i>. It's recomended but not mandatory to let it be followed by <i>ladder.subversiva.org</i> and don't forget your <i>ladder nick & your Elo rating</i>. The ranking <i>may</i> be rounded to nearest hundredth (1545 becomes 1500). An example of a ladder game name according to the above would be: <i>(L) ladder.subversiva.org (eyerouge 1600)</i> Another example is: <i>(L) doodle 1545 vs Rick 1800</i> </li> 
-<li>Only the current stable <i>and</i> development versions of Battle for Wesnoth for <i>your plattform</i> are legal for you. Only exceptions to this are if those versions don't perform well on your system, in which case you're allowed to use one older subversion. Always make sure both you and your opponent use the same version before the game begins to avoid all kinds of trouble.</li>
+<li>Only the current stable and development versions of Battle for Wesnoth for your plattform are legal for you. Always make sure both you and your opponent use the same version before the game begins to avoid all kinds of trouble.</li>
 <li>You must have downloaded your copy of Wesnoth from a site that the  wesnoth.org download section links to.</li>
 <li>The loading of Saved Games isn't allowed unless you both explicitly agree that it is or the rules suggest it.</li>
 <li>The only legit era is the <i>Default</i> one. No other eras are accepted.</li>
-<li>All official 2 player maps associated with the specific game version and that come with the game are allowed if they're made for a 1vs1 common game duel. Notice that survival maps are not allowed. Neither are the following maps: Wesbowl.</li> 
+<li>a) In the case where the development version is used all official 2-player maps associated with the specific game version and that come with the game are allowed if they're made for a 1vs1 common game duel. This means that survival maps are not allowed and neither are the following maps: Wesbowl. b) If you however use the stable version of the game then you have to use the update version of the official maps. You can do this very easily by just visiting the add-on server from within the game. When doing so you'll see an amazing list with extra content created by the great Wesnoth community. Among this content you'll find and entry called Map Updates by Doc Paterson. That's the one you'd want to install. Once done you're all set for new challenging ladder games.</li> 
 <li>Use map settings: On</li>
 <li>Time limits <em>must be activated</em> and set according to the following.
     <ul>
@@ -318,7 +318,7 @@ We don't have a php coder yet and need a guy (or girl) before we can start devel
 
 <a name="contact"></a><h4>How do I contact you?</h4>
 <p>
-Easiest way is to write me a mail &gt;&gt; eyerouge (thething) eyerouge (theotherone) com and to write it in english.
+Easiest way is to write me a mail &gt;&gt; themasterofbattle (at) gmail (dot) com and to write it in english.
 </p>
 
 <a name="graphics"></a><h4>Where's the graphics from?</h4>

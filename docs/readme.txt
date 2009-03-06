@@ -12,12 +12,13 @@
 // tribal bliss
    the open source elo web ladder system for competetive gaming
 
-   v.0.1.3 of this document
+   v.0.1.4 of this document
 
 
-	php written by: mr-russ, chains, eyerouge, hendrixes and whoever more.
+	Php written by: mr-russ, chains, eyerouge, hendrixes, admiral-n,  
+	Luigit and whoever more we failed to include. 
 	
-	please let us know if you submitted code into the svn and want your name
+	Please let us know if you submitted code into the svn and want your name
 	here.
 
 	This project is a derivation of Peter Hendrix & Danny Hendrix webladder 
@@ -77,7 +78,7 @@ Contact: spam at eyerouge dot com
 
 7. After the first user is setup, edit the database using phpmyadmin or whatever tools you like. In the players table you can find AdminJohn. Edit his "is_admin tinyint(1)" flag so it says "1" without the "-marks. That will make him into an admin.
 
-8. Now visit the site again, but this time add /Admin to the url and login.
+8. Now visit the site again, but this time add /Admin to the url and login. Notice: You must accept the cookies from the site ot be able to login properly.
 
 9. If you see anything that looks strange, like division by zero errors and what not it will probably go away once you have some reported games.
 

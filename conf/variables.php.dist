@@ -1,5 +1,5 @@
 <?
-define("TRIBAL_VERSION", "0.6.5"); // version number shown in footer. Please change when you upgrade. Also add "Rev" in front of it if you customize the ladder code somehow.
+define("TRIBAL_VERSION", "152"); // version number shown in footer. This = the revision number in SVN /trunk  Please change when you upgrade. Also add "Rev" in front of it if you customize the ladder code somehow and if you are not a part of the development team of tribal bliss. (we do however invite you to become so : ) 
 
 $maintenanceMode = false; // Is the site under maintenance, if so set this to true and all pages will show a maintenance screen
 $backupKey = "A long password w!tH $ymb0ls is G00d"; // You can backup the database without logging in if you have access to the key below.  Change it to a secure string
@@ -13,7 +13,7 @@ $laddermailsender = "test@dot.com"; // this will be the senders email when the l
  $databaseuser = "yourinfo"; //the name of the database-user
  $databasepass = "yourinfo"; // the password to your database
  $directory ="http://yourinfo.com" ; //the location of your ladder directory (no trailing slash)
- $path_file_replay = "replay/";	// directory where put replay file of game
+ $path_file_replay = "replay/";	// directory where the replay files are uploaded on the server. Notice that there should be a trailing slash at the end.
 
 //configure the tables in the database
 
