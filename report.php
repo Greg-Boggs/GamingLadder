@@ -112,50 +112,12 @@ if (isset($_POST['report'])) {
     $draw = false;
     $failure = false;
     $error = "";
-    // Do all the replay stuff to create a replay in the database
-    // We use the tmp_name to detect if somebody actually filled in a file for upload.
-    if ((isset($_FILES["uploadedfile"]["name"]) && $_FILES['uploadedfile']['name'] != "") && (ALLOW_REPLAY_UPLOAD == 1)) {
-        
-	
-		
-			// To the the file extension of the file we use the handy pathinfo php function/array. 
-			$file_info = pathinfo($_FILES["uploadedfile"]["name"]);
-							
-			
-		// Only save the file if it's right size and right extension and the replay upload feature is ENABLED:
-		if (($_FILES["uploadedfile"]["size"] <= MAX_REPLAYSIZE) && ($file_info['extension'] == $replayfileextension) && (ALLOW_REPLAY_UPLOAD == 1) ){
-
-		$replay = file_get_contents($_FILES['uploadedfile']['tmp_name']);
-		
-					
-			
-			
-        } else {
-			
-            $failure = true;
-			$maxfilesizekb = (MAX_REPLAYSIZE / 1000);
-				
-				if ($file_info['extension'] != $replayfileextension) { 
-					 $error = "You attempted to upload a replay but failed. The file you uploaded wasn't of the correct type. Instead of a *.". $replayfileextension ." file you uploaded a ". $file_info['extension'].  "-file. Please only upload valid replays.<br /><br /><b>Notice:</b> The game has <i>not</i> been reported. Try again."; 
-				 }	
-				
-				if ($_FILES["uploadedfile"]["size"] > MAX_REPLAYSIZE) {			
-					$uploadefilesizekb = ($_FILES["uploadedfile"]["size"]/1000);
-					$uploadefileoversizedkb = ($uploadefilesizekb - $maxfilesizekb);
-					$error = "You attempted to upload a replay but failed since it wasn't small enough. We only allow replays that are <= $maxfilesizekb Kb. Yours was $uploadefilesizekb Kb, which is $uploadefileoversizedkb Kb too large. Better luck with next replay....<br /><br /><b>Notice:</b> The game has <i>not</i> been reported. Try again.";
-				
-				}
-			}
-
-    } else {
-        $replay = null;
-    }
 
     if (!$failure) {
         require_once 'include/elo.class.php';
     
         $elo = new Elo($db);
-        $result = $elo->ReportNewGame($winner, $loser, $draw, $replay);
+        $result = $elo->ReportNewGame($winner, $loser, $draw);
         if ($result === false) {
             $failure = true;
             $error = "There was a failure in reporting your game, please try again.";
@@ -170,10 +132,36 @@ if (isset($_POST['report'])) {
         mysql_query("TRUNCATE TABLE $standingscachetable", $db);	
         mysql_query("INSERT INTO $standingscachetable ".$cacheSql, $db);	
 		
-	// Now that the Elo has been added into the games table, let's update the entry so that it also includes the comment & sportsmanship rating
 		
+			// Save replay into system and name into db
+			// We use the tmp_name to detect if somebody actually filled in a file for upload.
+			if ((isset($_FILES["uploadedfile"]["name"]) && $_FILES['uploadedfile']['name'] != "") && (ALLOW_REPLAY_UPLOAD == 1)) {
+				// To the the file extension of the file we use the handy pathinfo php function/array. 
+				$file_info = pathinfo($_FILES["uploadedfile"]["name"]);
+				// Only save the file if it's right size and right extension and the replay upload feature is ENABLED:
+				if (($_FILES["uploadedfile"]["size"] <= MAX_REPLAYSIZE) && ($file_info['extension'] == $replayfileextension) && (ALLOW_REPLAY_UPLOAD == 1) ){
+					$filename = preg_replace ( "(\:|\s|\-)", "", $result['reportedTime'] , -1).'.'.$replayfileextension;
+					if (move_uploaded_file($_FILES['uploadedfile']['tmp_name'], $path_file_replay.$filename)) {
+						$query2 = "UPDATE $gamestable SET replay_filename = '".$filename."' WHERE reported_on = '".$result['reportedTime']."'";	
+						$result2 = mysql_query($query2) or die("fail");
+					}
+				} 
+				else {
+					$failure = true;
+					$maxfilesizekb = (MAX_REPLAYSIZE / 1000);
+					if ($file_info['extension'] != $replayfileextension) { 
+						 $error = "You attempted to upload a replay but failed. The file you uploaded wasn't of the correct type. Instead of a *.". $replayfileextension ." file you uploaded a ". $file_info['extension'].  "-file. Please only upload valid replays.<br /><br /><b>Notice:</b> The game has <i>not</i> been reported. Try again."; 
+					}	
+					if ($_FILES["uploadedfile"]["size"] > MAX_REPLAYSIZE) {			
+						$uploadefilesizekb = ($_FILES["uploadedfile"]["size"]/1000);
+						$uploadefileoversizedkb = ($uploadefilesizekb - $maxfilesizekb);
+						$error = "You attempted to upload a replay but failed since it wasn't small enough. We only allow replays that are <= $maxfilesizekb Kb. Yours was $uploadefilesizekb Kb, which is $uploadefileoversizedkb Kb too large. Better luck with next replay....<br /><br /><b>Notice:</b> The game has <i>not</i> been reported. Try again.";
+					
+					}
+				}	
+			}
 	
-	
+	// Now that the Elo has been added into the games table, let's update the entry so that it also includes the comment & sportsmanship rating
 	
 	// If the winner left a comment or a sportsmanship rating we now want to update the tables, that already have the game result in them,. to include it/them. Lets choose a sql statement...
 	

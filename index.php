@@ -98,7 +98,7 @@ If (INDEX_COMMENT_HILITE == 1) {
 
 
 
-	$sql ="SELECT winner, loser, length(replay) as replay, reported_on, winner_comment, loser_comment, winner_elo, loser_elo FROM $gamestable WHERE withdrawn = 0 AND contested_by_loser = 0 AND replay != '' AND (winner_comment != '' || loser_comment != '') ORDER BY reported_on DESC LIMIT 0,1";
+	$sql ="SELECT winner, loser, replay_filename is not null as is_replay, reported_on, winner_comment, loser_comment, winner_elo, loser_elo FROM $gamestable WHERE withdrawn = 0 AND contested_by_loser = 0 AND replay_filename != '' AND (winner_comment != '' || loser_comment != '') ORDER BY reported_on DESC LIMIT 0,1";
 	
 	$result = mysql_query($sql,$db);
 	$row = mysql_fetch_array($result);
@@ -107,7 +107,7 @@ If (INDEX_COMMENT_HILITE == 1) {
 
 echo "<div class=\"spotlight\"><h1 class=\"spotlight\">Spotlight</h1><br /> <b>".$row['winner']." (".$row['winner_elo'].") / ".$row['loser']." (".$row['loser_elo'].")</b>";
 
- if ($row[replay] != 0) {
+ if ($row[is_replay] != 0) {
 		    echo " <a href=\"download-replay.php?reported_on=$row[reported_on]\">®</a><br /><br />";
 		}
 

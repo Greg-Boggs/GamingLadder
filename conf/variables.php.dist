@@ -13,7 +13,7 @@ $laddermailsender = "test@dot.com"; // this will be the senders email when the l
  $databaseuser = "yourinfo"; //the name of the database-user
  $databasepass = "yourinfo"; // the password to your database
  $directory ="http://yourinfo.com" ; //the location of your ladder directory (no trailing slash)
-
+ $path_file_replay = "replay/";	// directory where put replay file of game
 
 //configure the tables in the database
 

@@ -132,9 +132,9 @@ if ($searchArray['winnerratingdirection'] != "" && $searchArray['winnerrating'] 
 
 // Add replay restrictions
 if ($searchArray['replay'] == "no") {
-    $where .= " AND length(replay) IS NULL ";
+    $where .= " AND replay_filename IS NULL ";
 } else if ($searchArray['replay'] == "yes") {
-    $where .= " AND length(replay) > 0 ";
+    $where .= " AND lreplay_filename IS NOT NULL ";
 }
 
 // Add reported_on restrictions
@@ -143,7 +143,7 @@ if ($searchArray['reporteddirection'] != "" && $searchArray['reportdate'] != "")
 }
 
 // Build the select
-$sql = "SELECT withdrawn, contested_by_loser, DATE_FORMAT(reported_on, '".$GLOBALS['displayDateFormat']."') as report_time, reported_on, winner, loser, winner_points, loser_points, winner_elo, loser_elo, length(replay) as is_replay, replay_downloads, winner_stars, loser_stars FROM $gamestable WHERE $where ORDER BY reported_on DESC LIMIT 250";
+$sql = "SELECT withdrawn, contested_by_loser, DATE_FORMAT(reported_on, '".$GLOBALS['displayDateFormat']."') as report_time, reported_on, winner, loser, winner_points, loser_points, winner_elo, loser_elo, replay_filename as is_replay, replay_downloads, winner_stars, loser_stars FROM $gamestable WHERE $where ORDER BY reported_on DESC LIMIT 250";
 
 $result = mysql_query($sql, $db);
 echo gameTableTBody($result);

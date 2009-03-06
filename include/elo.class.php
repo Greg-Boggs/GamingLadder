@@ -46,7 +46,7 @@ class Elo {
         return $row;
     }
 
-    function ReportNewGame($winner, $loser, $draw = false, $replay = NULL)
+    function ReportNewGame($winner, $loser, $draw = false)
     {
         global $gamestable;
 
@@ -57,15 +57,9 @@ class Elo {
         } else {
             $insertDraw = 'false';
         }
-        // We add a new game with all the details we know up to the point of this game being reported.
-        if ($replay == null) {
-            $replay = "NULL";
-        } else {
-            $replay = "'".mysql_real_escape_string($replay, $this->dbConn)."'";
-        }
 
-        $sql = "INSERT INTO $gamestable (winner, loser, reported_on, contested_by_loser, draw, withdrawn, replay)
-                VALUES ('$winner', '$loser', '$reportTime', 0, ".$insertDraw.", 0,".$replay.")";
+        $sql = "INSERT INTO $gamestable (winner, loser, reported_on, contested_by_loser, draw, withdrawn)
+                VALUES ('$winner', '$loser', '$reportTime', 0, ".$insertDraw.", 0)";
 
         $result = mysql_query($sql, $this->dbConn);
 

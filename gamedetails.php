@@ -20,33 +20,6 @@ if (isset($_POST['SendFeedback'])) {
 	$comment = trim($_POST['comment']);
 	$reported_on = $_GET['reported_on'];
 
-	// Do all the replay stuff to create a replay in the database
-    // We use the tmp_name to detect if somebody actually filled in a file for upload.
-    if (isset($_FILES["uploadedfile"]["name"]) && $_FILES['uploadedfile']['name'] != "") {    
-		// To the the file extension of the file we use the handy pathinfo php function/array. 
-		$file_info = pathinfo($_FILES["uploadedfile"]["name"]);
-		// Only sabe the file if it's right size and right extension:
-		if (($_FILES["uploadedfile"]["size"] <= MAX_REPLAYSIZE) && ($file_info['extension'] == $replayfileextension) && (ALLOW_REPLAY_UPLOAD == 1)){
-			$replay = file_get_contents($_FILES['uploadedfile']['tmp_name']);
-        } else {
-            $failure = true;
-			$maxfilesizekb = (MAX_REPLAYSIZE / 1000);
-			if ($file_info['extension'] != $replayfileextension) {
-				$error = "You attempted to upload a replay but failed. The file you uploaded wasn't of the correct type. Instead of a *.". $replayfileextension ." file you uploaded a ". $file_info['extension'].  "-file. Please only upload valid replays.<br /><br />"; 
-			} else {			
-				$uploadefilesizekb= ($_FILES["uploadedfile"]["size"]/1000);
-				$uploadefileoversizedkb = ($uploadefilesizekb - $maxfilesizekb);
-				$error = "You attempted to upload a replay but failed since it wasn't small enough. We only allow replays that are <= $maxfilesizekb Kb. Yours was $uploadefilesizekb Kb, which is $uploadefileoversizedkb Kb too large. Better luck with next replay....<br /><br />";
-			}
-		}
-    } else {
-        $replay = null;
-    }
-	
-	// Let's escape the replay to not get problems with magic quotes...
-	
-	$replay = mysql_real_escape_string($replay);
-	
 	// Now we'll decide how the sql query should look like. We only want to update whatever the user changed:
 
 	if ($sportsmanship != "") { 
@@ -62,32 +35,39 @@ if (isset($_POST['SendFeedback'])) {
 	}
 	
 	
-	if (($replay != NULL ) && ($sportsmanship == "") && ($comment == "")) { 
-		$query2 = "UPDATE $gamestable SET replay = '$replay' WHERE reported_on = '$reported_on' AND loser = '".mysql_escape_string($_SESSION['username'])."'";
-	}
-
-	if (($replay != NULL ) && ($sportsmanship != "") && ($comment == "")) { 
-		$replay = mysql_real_escape_string($replay);
-		$query2 = "UPDATE $gamestable SET winner_stars = '$sportsmanship', replay = '$replay' WHERE reported_on = '$reported_on' AND loser = '".mysql_escape_string($_SESSION['username'])."'";
-	}
-	
-		if (($replay != NULL ) && ($sportsmanship == "") && ($comment != "")) { 
-		$replay = mysql_real_escape_string($replay);
-		$query2 = "UPDATE $gamestable SET loser_comment = '$comment', replay = '$replay' WHERE reported_on = '$reported_on' AND loser = '".mysql_escape_string($_SESSION['username'])."'";
-	}
-	
-			if (($replay != NULL ) && ($sportsmanship != "") && ($comment != "")) { 
-		$replay = mysql_real_escape_string($replay);
-		$query2 = "UPDATE $gamestable SET  winner_stars = '$sportsmanship', loser_comment = '$comment', replay = '$replay' WHERE reported_on = '$reported_on' AND loser = '".mysql_escape_string($_SESSION['username'])."'";
-	}
-	
 	// Now lets apply it if and only if there was a comment /sportsmanship point/replay given.
 	
-	if ($sportsmanship != "" || $comment != "" || (($replay != NULL) && (ALLOW_REPLAY_UPLOAD == 1))) { 
-		
+	if ($sportsmanship != "" || $comment != "") 
 		$result2 = mysql_query($query2) or die("mysql failed somehow");
-		
+
+	// Save replay into system and name into db
+	// We use the tmp_name to detect if somebody actually filled in a file for upload.
+	if ((isset($_FILES["uploadedfile"]["name"]) && $_FILES['uploadedfile']['name'] != "") && (ALLOW_REPLAY_UPLOAD == 1)) {
+	// To the the file extension of the file we use the handy pathinfo php function/array. 
+		$file_info = pathinfo($_FILES["uploadedfile"]["name"]);
+		// Only save the file if it's right size and right extension and the replay upload feature is ENABLED:
+		if (($_FILES["uploadedfile"]["size"] <= MAX_REPLAYSIZE) && ($file_info['extension'] == $replayfileextension) && (ALLOW_REPLAY_UPLOAD == 1) ){
+			$filename = preg_replace ( "(\:|\s|\-)", "", $reported_on , -1).".gz";
+			if (move_uploaded_file($_FILES['uploadedfile']['tmp_name'], $path_file_replay.$filename)) {
+				$query2 = "UPDATE $gamestable SET replay_filename = '".$filename."' WHERE reported_on = '".$reported_on."'";	
+				$result2 = mysql_query($query2) or die("fail");
+			}			
+		} 
+		else {
+			$failure = true;
+			$maxfilesizekb = (MAX_REPLAYSIZE / 1000);
+			if ($file_info['extension'] != $replayfileextension) { 
+				 $error = "You attempted to upload a replay but failed. The file you uploaded wasn't of the correct type. Instead of a *.". $replayfileextension ." file you uploaded a ". $file_info['extension'].  "-file. Please only upload valid replays.<br /><br /><b>Notice:</b> The game has <i>not</i> been reported. Try again."; 
+			}	
+			if ($_FILES["uploadedfile"]["size"] > MAX_REPLAYSIZE) {			
+				$uploadefilesizekb = ($_FILES["uploadedfile"]["size"]/1000);
+				$uploadefileoversizedkb = ($uploadefilesizekb - $maxfilesizekb);
+				$error = "You attempted to upload a replay but failed since it wasn't small enough. We only allow replays that are <= $maxfilesizekb Kb. Yours was $uploadefilesizekb Kb, which is $uploadefileoversizedkb Kb too large. Better luck with next replay....<br /><br /><b>Notice:</b> The game has <i>not</i> been reported. Try again.";
+			
+			}
+		}	
 	}
+
 		
 	// We continue out of this loop the display the default page after we have completed the updates to the database.
 }
@@ -154,7 +134,7 @@ if (!isset($_GET['reported_on'])) {
 	$_GET['reported_on'] = $reportedOn;
 }
 
-$sql = "SELECT length(replay) as is_replay, unix_timestamp(reported_on) as unixtime, reported_on, winner, loser, winner_points, loser_points, winner_elo, loser_elo, length(replay) as replay, replay_downloads, winner_comment, loser_comment, winner_stars, loser_stars, withdrawn, contested_by_loser FROM $gamestable WHERE reported_on = '$_GET[reported_on]' ORDER BY reported_on";
+$sql = "SELECT unix_timestamp(reported_on) as unixtime, reported_on, winner, loser, winner_points, loser_points, winner_elo, loser_elo, replay_filename is not null as is_replay, replay_downloads, winner_comment, loser_comment, winner_stars, loser_stars, withdrawn, contested_by_loser FROM $gamestable WHERE reported_on = '$_GET[reported_on]' ORDER BY reported_on";
 $result = mysql_query($sql, $db);
 $game = mysql_fetch_array($result); 
 // Reset the result for use by the game table display function
@@ -219,7 +199,7 @@ if (trim($game['loser_comment']) != "") {
 
 // Only display the feedback forms if a) a certain feedback hasn't been given by the loser and b) he tries to give the feedback within x days from the time the game was reported and c) the game isnt withdrawn or contested
 
-if ($game['loser'] == $_SESSION['username'] && ($game['loser_comment'] == "" || $game['winner_stars'] == "" || $game['replay'] == NULL) && (ALLOW_REPLAY_UPLOAD == 1) && (time() < $game['unixtime']+60*60*24*$reportdays) && $game['contested_by_loser'] == 0 && $game['withdrawn'] == 0) {
+if ($game['loser'] == $_SESSION['username'] && ($game['loser_comment'] == "" || $game['winner_stars'] == "" || $game['is_replay'] == "0") && (ALLOW_REPLAY_UPLOAD == 1) && (time() < $game['unixtime']+60*60*24*$reportdays) && $game['contested_by_loser'] == 0 && $game['withdrawn'] == 0) {
 
 ?>
 <br /><br />
@@ -233,7 +213,7 @@ if ($game['loser'] == $_SESSION['username'] && ($game['loser_comment'] == "" || 
 <?php 
 // Only allow loser to upload replay if the winner hasn't already done so and there is one.
 
-if (($game['replay'] == 0)  && (time() < $game['unixtime']+60*60*24*$reportdays) && (ALLOW_REPLAY_UPLOAD == 1)) { ?>
+if (($game['is_replay'] == 0)  && (time() < $game['unixtime']+60*60*24*$reportdays) && (ALLOW_REPLAY_UPLOAD == 1)) { ?>
     <input type="hidden" name="MAX_REPLAYSIZE" value="<?php echo (MAX_REPLAYSIZE * 10);?>" />
     
 	<tr><td>.<?php echo $replayfileextension ?> replay to upload</td>
