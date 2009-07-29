@@ -1,5 +1,5 @@
 <?
-define("TRIBAL_VERSION", "152"); // version number shown in footer. This = the revision number in SVN /trunk  Please change when you upgrade. Also add "Rev" in front of it if you customize the ladder code somehow and if you are not a part of the development team of tribal bliss. (we do however invite you to become so : ) 
+define("TRIBAL_VERSION", "?"); // version number shown in footer. This = the revision number in SVN /trunk  Please change when you upgrade. Also add "Rev" in front of it if you customize the ladder code somehow and if you are not a part of the development team of tribal bliss. (we do however invite you to become so : ) 
 
 $maintenanceMode = false; // Is the site under maintenance, if so set this to true and all pages will show a maintenance screen
 $backupKey = "A long password w!tH $ymb0ls is G00d"; // You can backup the database without logging in if you have access to the key below.  Change it to a secure string
@@ -13,7 +13,7 @@ $laddermailsender = "test@dot.com"; // this will be the senders email when the l
  $databaseuser = "yourinfo"; //the name of the database-user
  $databasepass = "yourinfo"; // the password to your database
  $directory ="http://yourinfo.com" ; //the location of your ladder directory (no trailing slash)
- $path_file_replay = "replay/";	// directory where the replay files are uploaded on the server. Notice that there should be a trailing slash at the end.
+ $path_file_replay = "replays/";	// directory where the replay files are uploaded on the server. Notice that there should be a trailing slash at the end.
 
 //configure the tables in the database
 
@@ -46,8 +46,29 @@ define("ANTI_MATCHSPAM_FACTOR", 0.5); // On METHOD 2 or 3, this 0 < value < 1 de
 define("GADDER_ELO_RANGE", 50); // The range in points of a rating that a player needs to be within the group leader in order to be rated as within the same group on the gadder. It works the following way: The 1:st group is based on the number one ranked player on the ladder. All who are within GADDER_ELO_RANGE of his rating are ranked as belonging to his group (the first one). As soon as a player is < GADDER_ELO_RANGE he will be placed in the next group. Summarised: Let the value reflect the point system and K-values in use and experiment with it to see if the Gadder is meaningfull. If it's not and groups too many together, then either your ladder is new with few games/players or you have set a too huge value here. Else, if the Gadder has very many groups, you have probably set the value too low: Keep in mind it's supposed to group players which it thinks are nearby or equal skillwise, saying that they're pretty much the same rank. E.g. a good default value when using standard Elo system with usual K and entry of 1500 would be somewhere between 45 - 65. This value however depends only on all the other settings made and is only valid with such parameters. Also notice that the gadder works the very same way as the ladder, with the obvious exception for the grouping and displaying of rank. Whoever is displayed in the normal ladder would appear somewhere in the gadder.
 define("GADDER_FLAGS", 0); // Should we show flags in the gadder? 1 for yes, 0 for no. Personally I find it chaotic having it enabled.
 
+/ Config XP system --------------------------------------------------------------
 
-//config etc
+// Before starting to tweak these settings please notice that the XP system is designed to measure not the skills of a player, as the Elo does, but how much a player has participated and played at the ladder. Keeping that in mind should make the Xp system work better. While tweaking the numbers you should re-load the FAQ. In it there are dynamicaly generated lists that use these settings and show you the results. Great way to find your perfect settings.
+
+define("XP_SYS_ENABLED", 1); // 1 for enabled, 0 for disabled. If it's enabled please customize the rest of the XP systems settings if you want to. Suggested ones should work very fine though for games where it takes a long time to play more than 1000 - 2000 times. NOTICE: The numbers below that are uses to config the XP system __relate and depend heavily on each other__. If you get a working XP system or not only depends on how you have configured them and how many games an average player is expected to play in total while being on the ladder. Making it to hard to get XP makes people ignore xp and the system unfun. Making it too easy to obtain XP makes it too changing and uninteresting. Find the balance for your specific game and player needs. The way XP works is easy: a) It takes the  number of wins and multiplies  them with a certain point. b) It takes the number of losses and multiplies them with a certain point. c) It adds the result, and gets the players XP. d) It then checks to see what lvl that xp correlates to. On top of that, players within certain levelintervalls (i.e. level 1 to level 4) get a level realted title, i.e. "Warlord". All this is of course customizable.
+
+define("XP_SYS_LVL_1", 10); // This is the amount of XP required to reach lvl 1. 
+
+define("XP_FOR_WIN", 1.5); // This is the amount of XP rewarded to a player for each WIN he gets.
+
+define("XP_FOR_LOSS", 1); // This is the amount of XP rewarded to a player for each LOSS he gets. It's recomended that you keep this lower than the win-equivalent or that you set it to 0. It's up to you to evaluate if it's probable that a player gains some kind of experience even when losing. Arguably, in most games, a player does so in some ways. Since the XP system is not designed to measure SKILLS but designed to measure how much a player HAS PLAYED, it would be wise to have this setting > 0. 
+
+define("XP_SYS_LVL_FACTOR", 1.5); // This is a modifier that regulates how rapid the gap/requirement inbetween different levels is when it comes to how much xp is needed to reach them. Example: It can take 10 xp to reach lvl 1, but 30 xp to reach lvl 2, or 60 xp to reach lvl 3. The differnece in this example has been 10 - 20 - 30, meaning that it becomes harder and harder to reach every new level. Please read the FAQ for formula and more details. The higher the value, the larger the demand will be inbetween levels.
+
+define("XP_SYS_TITLE_RANGE", 4); //  This number regulates the how many levels a player has to advance to gain his __first__ level based title. Keep in mind that there are only 15 titles avialable. (Yeah, we're keeping it to 15 only else titles would become meaningless since theyd be untrackable and/or fill the same function as levels)
+
+define("XP_SYS_TITLE_RANGE_MULTIPLIER", 1.025); // This is the multiplier for how many levels a player has to gain to obtain a title _after_ the first has been obtained. Works like this: If it takes 5 levels to get your first title, then it would take 6 _additional levels_ to gain the second title if the modifier is 1.2  (5 * 1.2 = 6), which would happen when you reach level 11. Then it takes additional 13 levels to obtain the third title (11 * 1.2), which would happen when you reach level 24. This is probably a bad setting if it takes forever to reach just another level, and this setting should of course be used in a way so that titles chang every now and then, but not too fast. Again, check your results in the FAQ file - theres a list of all titles and when a player would obtain them, else you have to do the math yourself.
+
+$XpTitle = array(1 => "Peasant", 2 => "Recruit", 3 => "Soldier", 4 => "Veteran", 5 => "Captain", 6 => "General", 7 => "Hero", 8 => "Legend", 9 => "Titan", 10 => "Third Angel", 11 => "Second Angel", 12 => "First Angel", 13 => "Demi God", 14 => "Minor God", 15 => "God"); // These are the 15 titles that a player can acquire and that are a summary of his lvl / xp. Only edit the text that's within the " "-signs! If you copy the syntax it's easy to add a 16:th title and so on, but it's not recomended that you do since they'll lose their function in the end.
+
+
+//config etc ------------------------------------------------------
+
 $titlebar = "Wesnoth Ladder - Competitive Gaming Ladder";
 $numindexnewbs = 3; // number of newcomers to show in index sidebar..
 $numindexresults = 10; //num of latest played games results to show in index sidebar

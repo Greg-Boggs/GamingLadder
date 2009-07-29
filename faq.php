@@ -333,6 +333,67 @@ It's all from Wesnoth and/or it's community. We've used what we could find and w
     <li>Upon requesting a dedicated section on the Wesnoth forum we got denied, because the ladder is not official.</li>
 </ul>
 
+
+<a name="CalcXP"></a><h4>How is my XP calculated?</h4>
+Every won game earns you x. Every lost game earns you y. <br><br>Formula: XP = (won games * x) + (lost games * y). <br><br>X & y are variables decided by the ladders admin. There are delicate reasons for settign them to specific values that also depend on how levels and level related titles are set up, and also by the community and the game that the ladder measures. Currently x = <?php echo XP_FOR_WIN; ?> and y = <?php echo XP_FOR_LOSS;?> 
+
+<a name="LVL"></a><h4>How much XP do I have to earn to reach a certain level?</h4>
+ The higher the level, the more XP you have to get to reach the next, so it gradually becomes harder and harder to reach a better level. Exactly how hard depends on the settings that the ladder admin(s) have done. Here's a list of some examples. Keep in mind that in reality there is no upper limitiation on what level you can reach.<br><br>Notice: Levels, titles and experience points say <i>nothing</i> about player skills. They aren't supposed to measure skill in any way. What they do however measure is how much a player has played the game on the ladder. That's really all there is to it.
+
+
+<?php
+// Shows a list of what xp is needed for a certain level
+$lvldisplay = 1;
+$xprequired = XP_SYS_LVL_1;
+
+echo "<br><br>Level 1 - ". $xprequired;
+while ($lvldisplay < 100 ) { 
+
+$xprequired = ($xprequired + XP_SYS_LVL_1  + (XP_SYS_LVL_FACTOR * $lvldisplay));
+echo "<br>Level ". ($lvldisplay+1) ." - ".$xprequired." xp";
+$lvldisplay++;
+
+}
+?>
+
+
+<a name="CalcLVL"></a><h4>How is the XP requirement for a level calculated?</h4>
+
+The Xp required to reach Level 1 is x, and decided by the ladder admin. Currently x = <?php echo XP_SYS_LVL_1;?> The requirement for the next level can be calculated by using the following easy formula:<br><br>
+
+xp to reach the previous level  + xp to reach level 1 + (level modifier * the previous level)<br><br>
+
+Let's try this out by trying to see how many XP:s are needed to reach level 2. If it takes 10 xp to reach level 1, and the level modifier is set to 1.5, we'd get the following:<br><br>
+
+10 + 10 + (1.5 * 1) = 21.5<br><br>
+
+
+
+
+
+
+<a name="titles"></a><h4>What lvl do I have to reach to earn a specific title?</h4>
+ Here's a list of the available titles that you can unlock and the level you have to reach in order to get the title:<br>
+
+<?php
+$q = XP_SYS_TITLE_RANGE;
+while ($titlefound2 < 15) {  
+	$titlefound2++;
+	$oldq = $q;
+	$q = ($q + XP_SYS_TITLE_RANGE)*XP_SYS_TITLE_RANGE_MULTIPLIER;
+			
+	echo "<br>".$XpTitle["$titlefound2"] ." - lvl ". round($oldq,0) ; 
+	}
+
+$q = XP_SYS_TITLE_RANGE;
+?>
+
+
+<a name="WrongValues"></a><h4>I really think some values/settings that are being used in the ladder are wrong. Who should I contact?</h4>
+Most things in the ladder are very customizable and should have been or actually are properly set by your ladder administration. They alone can alter most of the aspects of the ladder 
+
+
+
 <?php
 require('bottom.php');
 ?>

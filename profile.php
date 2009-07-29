@@ -3,8 +3,9 @@ session_start();
 require 'conf/variables.php';
 require_once 'autologin.inc.php';
 require_once 'include/gametable.inc.php';
-
+require 'include/xp.inc.php';
 require 'top.php';
+
 ?>
 <script type="text/javascript">
 $(document).ready(function() 
@@ -328,7 +329,7 @@ $sql = "SELECT coalesce(sum(contested_by_loser),0) from $gamestable WHERE loser 
 $result = mysql_query($sql, $db);
 list($contested) = mysql_fetch_row($result);
 
-// get the players averahe points / game...
+// get the players average points / game...
 if ($player[games] > 0) {
 	$avgPointsPerGame = round((($player[rating] - BASE_RATING)/$player[games]),2);
 } else {
@@ -397,7 +398,57 @@ echo "-";
 </tbody>
 </table>
 
+<?php
+GetLvl("$player[wins]", "$player[losses]",XP_FOR_WIN,XP_FOR_LOSS,XP_SYS_LVL_1,XP_SYS_LVL_FACTOR);
 
+
+
+
+// Fetch his lvl-related title...
+
+while ($titlefound == 0) {  
+
+	if ($PlayerLvl >= $q) {
+
+		$TitleNumber++;
+		$q = ($q + XP_SYS_TITLE_RANGE)*XP_SYS_TITLE_RANGE_MULTIPLIER;
+		
+	} else {
+		
+	$titlefound = 1;
+	
+	}
+		
+}
+
+?>
+<?php 
+// The following table and stuff should only be shown / happen if the ladder uses the XP system. It can be enabled/disabled in the config file.
+if (XP_SYS_ENABLED == 1) { ?>
+<table class="tablesorter">
+<thead>
+<tr>
+<th>Title</th>
+	<th>Level</th>
+	<th>XP</th>
+	<th>Next Lvl</th>
+		<th>Have</th>
+</tr>
+</thead>
+<tbody>
+	<tr>
+	
+	<td><?php echo $XpTitle["$TitleNumber"]; ?></td>
+	<td><?php echo $PlayerLvl; ?></td>
+	<td> <?php echo $PlayerXp; ?></td>
+	<td> <?php echo round($CountingXp,0); ?></td>
+	<td> <?php echo round(($PlayerXp/$CountingXp*100),0). "%"; ?></td>
+	
+	</tr>
+</tbody>
+</table>
+
+<?php } ?>
 
 <table class="tablesorter"><tbody><tr><td>
 <?php 
@@ -496,6 +547,7 @@ if ($player[games] > 0) {
 
 
     $sql = "SELECT reported_on, DATE_FORMAT(reported_on, '".$GLOBALS['displayDateFormat']."') as report_time, unix_timestamp(reported_on) as unixtime, winner, loser, winner_points, loser_points, winner_elo, loser_elo, replay_filename is not null as is_replay, replay_downloads, withdrawn, contested_by_loser, winner_comment, loser_comment, winner_stars, loser_stars, winner_games, loser_games FROM $gamestable WHERE winner = '$_GET[name]' OR loser = '$_GET[name]'  ORDER BY reported_on DESC LIMIT 30";
+
 
 $result = mysql_query($sql,$db);
 ?>
