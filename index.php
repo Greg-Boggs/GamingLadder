@@ -98,33 +98,37 @@ If (INDEX_COMMENT_HILITE == 1) {
 
 
 
-	$sql ="SELECT winner, loser, replay_filename is not null as is_replay, reported_on, winner_comment, loser_comment, winner_elo, loser_elo FROM $gamestable WHERE withdrawn = 0 AND contested_by_loser = 0 AND replay_filename != '' AND (winner_comment != '' || loser_comment != '') ORDER BY reported_on DESC LIMIT 0,1";
-	
-	$result = mysql_query($sql,$db);
-	$row = mysql_fetch_array($result);
-	
-	
+		$sql ="SELECT winner, loser, replay_filename is not null as is_replay, reported_on, winner_comment, loser_comment, winner_elo, loser_elo FROM $gamestable WHERE withdrawn = 0 AND contested_by_loser = 0 AND replay_filename != '' AND (winner_comment != '' || loser_comment != '') ORDER BY reported_on DESC LIMIT 0,1";
+		
+		$result = mysql_query($sql,$db);
+		$row = mysql_fetch_array($result);
+		
+		
 
-echo "<div class=\"spotlight\"><h1 class=\"spotlight\">Spotlight</h1><br /> <b>".$row['winner']." (".$row['winner_elo'].") / ".$row['loser']." (".$row['loser_elo'].")</b>";
+	echo "<div class=\"spotlight\"><h1 class=\"spotlight\">Spotlight</h1><br /> <b>".$row['winner']." (".$row['winner_elo'].") / ".$row['loser']." (".$row['loser_elo'].")</b>";
 
- if ($row[is_replay] != 0) {
-		    echo " <a href=\"download-replay.php?reported_on=$row[reported_on]\">®</a><br /><br />";
-		}
+	 if ($row[is_replay] != 0) {
+				echo " <a href=\"download-replay.php?reported_on=$row[reported_on]\">®</a><br /><br />";
+			}
 
-if (trim($row['winner_comment']) != "") {
-	echo "<i>\"".$row['winner_comment'] ."\"  </i>~".$row['winner']."<br /><br />";
-	}
-
-
-if (trim($row['loser_comment']) != "") {
-	echo "<i>\"".$row['loser_comment'] ."\"  </i>~".$row['loser'];
-	}
+	// We don't want to show the comments to members that are not logged in if comments are set to only display to logged in members...
+	if ((NONPUBLIC_REPLAY_COMMENTS == 0) || ((NONPUBLIC_REPLAY_COMMENTS == 1) && (isset($_SESSION['username'])))){
 
 
-echo "<br /></div><br />";
+		if (trim($row['winner_comment']) != "") {
+			echo "<i>\"".$row['winner_comment'] ."\"  </i>~".$row['winner']."<br /><br />";
+			}
 
+
+		if (trim($row['loser_comment']) != "") {
+			echo "<i>\"".$row['loser_comment'] ."\"  </i>~".$row['loser'];
+			}
+	} else { echo "<i>Please login to read game comments.</i>"; }
+
+	echo "<br /></div><br />";
 
 }
+
 echo "<h1>News</h1>";
 if ($_GET[readnews]) {
 $sql="SELECT * FROM $newstable WHERE news_id = '$_GET[readnews]' ORDER BY news_id DESC LIMIT 0, $newsitems";

@@ -24,6 +24,12 @@ $(document).ready(function()
             $("#gamesexpand").html("[+]");
             $("#gamesdiv").hide();
         }
+		 if ($.cookie('profileopposition') == "-") {
+            $("#gamesexpand2").html("[-]");
+        } else {
+            $("#gamesexpand2").html("[+]");
+            $("#gamesdiv2").hide();
+        }
  
         // Handle the toggle of playing expansion/collapse 
         $("#availabletoplayexpand").click(function()
@@ -47,6 +53,20 @@ $(document).ready(function()
                $.cookie('profilegames', '+', { expires: 7});
             } else {
                $("#gamesexpand").html("[-]");
+               $.cookie('profilegames', '-', { expires: 7});
+            }
+        });
+		
+		
+        // Handle the toggle of opposition expansion/collapse 
+        $("#gamesexpand2").click(function()
+        {
+            $("#gamesdiv2").slideToggle(600);
+            if ($("#gamesexpand2").html() == "[-]") {
+               $("#gamesexpand2").html("[+]");
+               $.cookie('profilegames', '+', { expires: 7});
+            } else {
+               $("#gamesexpand2").html("[-]");
                $.cookie('profilegames', '-', { expires: 7});
             }
         });
@@ -401,9 +421,6 @@ echo "-";
 <?php
 GetLvl("$player[wins]", "$player[losses]",XP_FOR_WIN,XP_FOR_LOSS,XP_SYS_LVL_1,XP_SYS_LVL_FACTOR);
 
-
-
-
 // Fetch his lvl-related title...
 
 while ($titlefound == 0) {  
@@ -416,6 +433,11 @@ while ($titlefound == 0) {
 	} else {
 		
 	$titlefound = 1;
+	
+	// If the player has a level lower than then required to obtain the first title we have to set a custom one instead.
+	if ($PlayerLvl < XP_SYS_TITLE_RANGE) {
+		$LvlRelatedTitle = "None";
+		} else { $LvlRelatedTitle = $XpTitle["$TitleNumber"];}
 	
 	}
 		
@@ -438,7 +460,7 @@ if (XP_SYS_ENABLED == 1) { ?>
 <tbody>
 	<tr>
 	
-	<td><?php echo $XpTitle["$TitleNumber"]; ?></td>
+	<td><?php echo $LvlRelatedTitle; ?></td>
 	<td><?php echo $PlayerLvl; ?></td>
 	<td> <?php echo $PlayerXp; ?></td>
 	<td> <?php echo round($CountingXp,0); ?></td>
@@ -552,6 +574,7 @@ if ($player[games] > 0) {
 $result = mysql_query($sql,$db);
 ?>
 
+
 <h2>Recent Games <a id="gamesexpand"></a></h2>
 <div id="gamesdiv">
 <table id="games" class="tablesorter">
@@ -560,6 +583,14 @@ $result = mysql_query($sql,$db);
 </table>
 </div>
 <br />
+
+
+<h2>Opposition <a id="gamesexpand2"></a></h2>
+<div id="gamesdiv2">
+<?php include 'include/opposition.inc.php'; ?>
+</div>
+
+
 <?php
 }
 require('bottom.php');
