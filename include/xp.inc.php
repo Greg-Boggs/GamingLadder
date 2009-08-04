@@ -35,24 +35,24 @@ while ($i == 0) {
 	
 		// increase the players level
 		$PlayerLvl++;
+	//DEB	echo "player is level : " . $PlayerLvl . "<br>";
 		
 		// Raise the limit for the next level
 			$CurrentXpLimit = $CountingXp;
+	//DEB		echo "$ countingXp: $CountingXp <br>";
 			$CountingXp = $CountingXp + $XpToLvl1 + ($LvlFactor * $PlayerLvl);
 			
-			// $xprequired = XP_SYS_LVL_1;
-			// $xprequired = $xprequired + XP_SYS_LVL_1  + ( XP_SYS_LVL_FACTOR * $lvldisplay);
-			
+//DEB		echo "New $ countingXp: $CountingXp <br>";
+//DEB		echo "Players XP: " . $PlayerXp . "<br>";
 			
 		// DEB echo "<br><br>Xp for Lvl ". $PlayerLvl .": ". $CurrentXpLimit . " | Next lvl: ". $CountingXp;		
 	}
 	
-	if ($PlayerXp < $CountingXp) {
+	if ($PlayerXp <= $CountingXp) {
 		// echo "<br> Found players lvl: <b> Player is lvl " . $PlayerLvl ."</b>";
 		// Break xp search Loop
 		$i = 1;
-		
-
+	//DEB	echo "<b>PlayerXp is less than CountingXP<br></b>";
 		}
 	
 	}
