@@ -2,7 +2,7 @@
 session_start();
 require('conf/variables.php');
 require('autologin.inc.php');
-require('logincheck.inc.php');
+require('logincheck.inc.php');	
 
 // We have ajax lower down on the page, we handle it here and then exit.
 // This keeps the ajax code with the page that is calling it.
@@ -19,11 +19,7 @@ if (isset($_GET['q'])) {
 }
 
 
-// Lets check to see if there are Ladder cookies to see if the user is logged in. If so, we wont show the login box....
-// First we extract the info from the cookies... There are 2 of them, one containing username, other one the password.
 require('top.php');
-
-
 
 // Now let's check if the player is allowed to report a victory at all. Players are only allowed to report x amount of games within y amount of days.
 // Example: 3 reports per 1 day, or 5 reports within a 2 day period. Any numbers go, they can be set in the configfile.
@@ -80,26 +76,28 @@ if (isset($_POST['report'])) {
 ?>
 <h3>Report Game Results</h3>
 <?php    
-    $current_player = $_SESSION['username'];
-    $sql = "SELECT name FROM $playerstable WHERE name = '".$_POST['losername']."' and Confirmation = 'Ok' ";
-    $result = mysql_query($sql, $db);
+
 
 	// Make sure the user selected a loser, this should be done in javascript.
 	if ($_POST['losername'] == "") {
-		echo "<p><b>You must select the name of the loser!</b></p><p>Please return the the <a href='report.php'>report</a> page and select a name.</p>";
+		echo "<p><b>You must select the name of the loser.</b></p><p>Please return the the <a href='report.php'>report</a> page and select a name.</p>";
 		require('bottom.php');
 		exit;
 	}
     // Make sure the selected user is actually a ladder member
+
+    $current_player = $_SESSION['username'];
+    $sql = "SELECT name FROM $playerstable WHERE name = '".$_POST['losername']."' and Confirmation = 'Ok' ";
+    $result = mysql_query($sql, $db);
+    
     if (mysql_num_rows($result) == 0) {
-        echo "<p><b>You must select a valid and confirmed ladder player!</b></p><p>Please return the the <a href='report.php'>report</a> page and select a valid opponent.</p>";
+        echo "<p><b>You must select a valid and confirmed ladder player.</b></p><p>Please return the the <a href='report.php'>report</a> page and select a valid opponent.</p>";
         require 'bottom.php';
         exit;
     }
 
 	$winner = $current_player;
 	$rowLoser = mysql_fetch_array($result);
-	// OLD $loser = $_POST['losername'];
 	$loser = $rowLoser['name'];
 	
 	if ($winner == $loser) { 
@@ -118,6 +116,7 @@ if (isset($_POST['report'])) {
     
         $elo = new Elo($db);
         $result = $elo->ReportNewGame($winner, $loser, $draw);
+	$cloneresult = $result;
         if ($result === false) {
             $failure = true;
             $error = "There was a failure in reporting your game, please try again.";
@@ -128,10 +127,7 @@ if (isset($_POST['report'])) {
 		
 		exit;
     } else {
-        // Finally we recache the ladder, it takes about 1-2 seconds with 25000 games
-        mysql_query("TRUNCATE TABLE $standingscachetable", $db);	
-        mysql_query("INSERT INTO $standingscachetable ".$cacheSql, $db);	
-		
+      
 		
 			// Save replay into system and name into db
 			// We use the tmp_name to detect if somebody actually filled in a file for upload.
@@ -161,35 +157,64 @@ if (isset($_POST['report'])) {
 				}	
 			}
 	
-	// Now that the Elo has been added into the games table, let's update the entry so that it also includes the comment & sportsmanship rating
+	// Now that the Elo has been added into the games table, let's update the entry so that it also includes the comment & sportsmanship rating, and the rank of the player at the time the game was played and the rank of the player after the game was played.
+		
+
+// Enter the players rankings when they actually played the game....
+
+// First we get the old rank from the cach table
+
+	//$OldRankWinnerResult = ;	
+	$wranksql = "SELECT name, rank FROM $standingscachetable WHERE name= '".$winner."' LIMIT 1";
+	$resultwrank = mysql_query($wranksql) or die(mysql_error());
+	$rowwrank = mysql_fetch_array($resultwrank);
 	
-	// If the winner left a comment or a sportsmanship rating we now want to update the tables, that already have the game result in them,. to include it/them. Lets choose a sql statement...
+	$lranksql = "SELECT name, rank FROM $standingscachetable WHERE name= '".$loser."' LIMIT 1";
+	$resultlrank = mysql_query($lranksql) or die(mysql_error());
+	$rowlrank = mysql_fetch_array($resultlrank);
+	
+// Then we update the gamestable with the old rank.....
+
+	$UpdateWinnerSql = "UPDATE $gamestable SET w_rank = '". $rowwrank['rank'] ."' WHERE  winner = '".$rowwrank['name']."' AND reported_on = '".$result['reportedTime']."'";	
+	$UpdateWinnerResult = mysql_query($UpdateWinnerSql) or die(mysql_error());	
+	
+		$UpdateLoserSql = "UPDATE $gamestable SET l_rank = '". $rowlrank['rank'] ."' WHERE  loser = '".$rowlrank['name']."' AND reported_on = '".$result['reportedTime']."'";	
+	$UpdateLoserResult = mysql_query($UpdateLoserSql) or die(mysql_error());	
+			
+//	}					
+							
+
+
+
+// If the winner left a comment or a sportsmanship rating we now want to update the tables, that already have the game result in them,. to include it/them. Lets choose a sql statement...
 	
 	$username =  $_SESSION['username'];
 	$sportsmanship = trim($_POST['sportsmanship']); 
 	$comment = trim($_POST['comment']);
-	
-	
+
 	if ($sportsmanship != "") { 
-			$query2 = "UPDATE $gamestable SET loser_stars = '$sportsmanship' WHERE  winner = '$username' AND reported_on = '".$result['reportedTime']."'";	
+		
+		echo "<br>Sportsmanship set. <br>";
+		$query2 = "UPDATE $gamestable SET loser_stars = '$sportsmanship' WHERE  winner = '$username' AND reported_on = '".$result['reportedTime']."'";	
 	}
 	if ($comment != "") { 
+	
 			$query2 = "UPDATE $gamestable SET winner_comment = '$comment' WHERE  winner = '$username' AND reported_on = '".$result['reportedTime']."'";	
 	}
 	
-	if ($sportsmanship != "" && $comment != "") { 
+	if (($sportsmanship != "") && ($comment != "")) {
 			$query2 = "UPDATE $gamestable SET winner_comment = '$comment', loser_stars = '$sportsmanship' WHERE  winner = '$username' AND reported_on = '".$result['reportedTime']."'";	
 	}
 	
 	// Now lets apply it if there was a comment or sportsmanship point given.
 		
-	if ($sportsmanship != "" || $comment != "") { 
-		$result2 = mysql_query($query2) or die("fail");
+	if (($sportsmanship != "") || ($comment != "")) { 
+		$result2 = mysql_query($query2) or die(mysql_error());	
     }
 
 
 ?>
-<p>Congratulations <?php echo $current_player; ?> you have defeated <?php echo $loser; ?>!</p>
+<p>Congratulations <?php echo $current_player; ?> you have defeated <?php echo $loser; ?></p>
 
 <table border="1" cellpadding="5" cellspacing="0">
 	<tr>
@@ -206,10 +231,10 @@ if (isset($_POST['report'])) {
 	<tr>
   
 		<th><?php echo $current_player; ?></th>
-        <td><?php echo $result['winnerProvisional'] ? "Yes" : "No"; ?></td>
-         <td><?php echo $result['winnerChange']; ?></td>
-		        <td><?php echo $result['winnerRating']; ?></td> 
-				        <td><?php echo $result['winnerRating'] + $result['winnerChange']; ?></td>
+        <td><?php echo $cloneresult['winnerProvisional'] ? "Yes" : "No"; ?></td>
+         <td><?php echo $cloneresult['winnerChange']; ?></td>
+		        <td><?php echo $cloneresult['winnerRating']; ?></td> 
+				        <td><?php echo $cloneresult['winnerRating'] + $cloneresult['winnerChange']; ?></td>
 							<td>?</td>
     </tr>
 	
@@ -217,12 +242,12 @@ if (isset($_POST['report'])) {
 	
 	<tr>
 			<th><?php echo $loser; ?></th>
-			<td><?php echo $result['loserProvisional'] ? "Yes" : "No"; ?></td>
-			        <td><?php echo $result['loserChange']; ?></td>
+			<td><?php echo $cloneresult['loserProvisional'] ? "Yes" : "No"; ?></td>
+			        <td><?php echo $cloneresult['loserChange']; ?></td>
 		
-        <td><?php echo $result['loserRating']; ?></td>
+        <td><?php echo $cloneresult['loserRating']; ?></td>
 		
-        <td><?php echo $result['loserRating'] + $result['loserChange']; ?></td>
+        <td><?php echo $cloneresult['loserRating'] + $cloneresult['loserChange']; ?></td>
 		
 	<td><?php echo $sportsmanship;?></td>
 	<tr>
@@ -232,8 +257,36 @@ if (isset($_POST['report'])) {
 	
     </table>
 <?php
-	echo "<p>Thank you! Information entered. Check your <a href=\"ladder.php?personalladder=".urlencode($_SESSION['username'])."\">current position.</a><br />Report Id: ".$result['reportedTime']."</p>";
-    }
+	echo "<p>Thank you! Information entered. Check your <a href=\"ladder.php?personalladder=".urlencode($_SESSION['username'])."\">current position.</a><br />Report Id: ". $cloneresult['reportedTime'] . " | " . $winner." / ". $loser ."</p>";
+    
+  // So the report was done and all that the player entered put into the db. Finally we recache the ladder, it takes about 1-2 seconds with 25000 games
+        mysql_query("TRUNCATE TABLE $standingscachetable", $db);	
+        mysql_query("INSERT INTO $standingscachetable ".$cacheSql, $db);	
+		require_once 'include/morecachestandings.inc.php';   
+		
+
+// Now we can update the games table again, this time with the players _new_ and current ranks since we just update the cache table to reflect these newest changes....
+	
+// First we get the new rank from the cach table
+
+	$wranksql = "SELECT name, rank FROM $standingscachetable WHERE name= '".$winner."' LIMIT 1";
+	$resultwrank = mysql_query($wranksql) or die(mysql_error());
+	$rowwrank = mysql_fetch_array($resultwrank);
+	
+	$lranksql = "SELECT name, rank FROM $standingscachetable WHERE name= '".$loser."' LIMIT 1";
+	$resultlrank = mysql_query($lranksql) or die(mysql_error());
+	$rowlrank = mysql_fetch_array($resultlrank);
+	
+// Then we update the gamestable with the new rank.....
+
+	$UpdateWinnerSql = "UPDATE $gamestable SET w_new_rank = '". $rowwrank['rank'] ."' WHERE  winner = '".$rowwrank['name']."' AND reported_on = '".$cloneresult['reportedTime']."'";	
+	$UpdateWinnerResult = mysql_query($UpdateWinnerSql) or die(mysql_error());	
+	
+		$UpdateLoserSql = "UPDATE $gamestable SET l_new_rank = '". $rowlrank['rank'] ."' WHERE  loser = '".$rowlrank['name']."' AND reported_on = '".$cloneresult['reportedTime']."'";	
+	$UpdateLoserResult = mysql_query($UpdateLoserSql) or die(mysql_error());	
+	
+	
+	}
 		
 } else {
 ?><table>

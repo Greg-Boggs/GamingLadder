@@ -77,4 +77,5 @@ if (isset($_SESSION['real-username'])) {
 		echo "<table width='100%' align='center'><tr bgcolor='#a1bc85'><td><p align='center'>Admin. <b>".$_SESSION['real-username']."</b> is impersonating <b>".$_SESSION['username']."</b></p></td></tr></table>";
     }
 }
+
 ?>

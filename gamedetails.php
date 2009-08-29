@@ -2,6 +2,7 @@
 session_start();
 require('conf/variables.php');
 require('autologin.inc.php');
+require_once 'include/genericfunctions.inc.php';
 
 // If it's an admin that's impersonating a player we need to always display the revokebuttons, thus we make sure they wont "time out" for admins :
 if (isset($_SESSION['real-username'])) {
@@ -121,6 +122,7 @@ if ($reRankLadder !== false) {
     // Finally we recache the ladder, it takes about 1-2 seconds with 25000 games
     mysql_query("TRUNCATE TABLE $standingscachetable", $db);	
     mysql_query("INSERT INTO $standingscachetable ".$cacheSql, $db);	
+	require_once 'include/morecachestandings.inc.php';    
 }
 
 require('top.php');
@@ -185,15 +187,16 @@ if ($game['loser'] == $_SESSION['username']) {
 
 ?>
 <?php
+
 // Display the player comments
 if (trim($game['winner_comment']) != "") {
 	echo "<h2>Comment by ". $game['winner'] .":</h2><br />";
-	echo nl2br(htmlentities($game['winner_comment']));
+	echo Linkify(nl2br(htmlentities($game['winner_comment'])));
 }
 
 if (trim($game['loser_comment']) != "") {
 	echo "<br /><h2>Comment by ". $game['loser'] .":</h2><br />";
-	echo nl2br(htmlentities($game['loser_comment']));
+	echo Linkify(nl2br(htmlentities($game['loser_comment'])));
 }
 
 

@@ -4,7 +4,9 @@ require 'conf/variables.php';
 require_once 'autologin.inc.php';
 require_once 'include/gametable.inc.php';
 require 'include/xp.inc.php';
+require 'include/activity.inc.php';
 require 'top.php';
+require 'include/genericfunctions.inc.php';
 
 ?>
 <script type="text/javascript">
@@ -75,28 +77,42 @@ $(document).ready(function()
 </script>
 
 <?php
-// Get My Ladder Rank
-$result = mysql_query($standingsSqlWithRestrictions." LIMIT ".$playersshown,$db) ;
 
-// Loop through and find me
+
+// Get profile info, like avatar, country etc... Don't mix up the different results that are dumped in $player, which is info from the playerstable, with $playercached, which is info from the cached table and only about results etc.
+
+$mysqlname = $_GET['name'];
+$result = mysql_query("SELECT * FROM $playerstable WHERE name = '$mysqlname' LIMIT 1");
+$player= mysql_fetch_array($result);
+
+
+// Get My Ladder Rank
+
+$MySQLPlayerName = $_GET['name'] ;
+
+$result = mysql_query("SELECT * FROM $standingscachetable
+WHERE name = '$MySQLPlayerName'
+ORDER BY rank DESC 
+LIMIT 1;");
+$playercached = mysql_fetch_array($result);
+
 $cur = 1;
 $rank = "";
-while ($player = mysql_fetch_array($result)) {
-    if ($player['name'] == $_GET['name']) {
-        $rank = $cur;
-        break;
-    }
-    $cur++;
-}
+$rank = $playercached['rank'];
+
  
-// If the player has no rank he is passive, so make a second query grabbing the passive players
-if ($rank == "") {
-    $result = mysql_query("select * from $standingscachetable right join $playerstable USING (name) WHERE name = '".$_GET['name']."'", $db);
-	$player = mysql_fetch_array($result);
-    $rank = "unranked";
+$MySQLgamestorank = ($gamestorank - 2); // This is needed since MySQL for some reason, in the operations below in this section, adds 2 to whatever value is set in $gamestorank in the configfile, so this fixes it.
+
+
+// A passive player is one that has 0 rank, and have played enough game in total to be included in the ladder, and also has an elo high enough to be included in the ladder. An unranked player is one that doesn't even qualify to be part of the ladder: He has a rank of 0, and hasnt played enough games in total and/or hasn't have an elo that is high enough to be included in the ladder.
+
+if (($rank == "0") && ($playercached['games'] >= $gamestorank) && ($playercached['rating'] >= $ladderminelo)) {
+
+    $rank = "(passive)"; } else if (($rank == "0") && (($playercached['games'] < $gamestorank) || ($playercached['rating'] < $ladderminelo))) {
+    $rank = "(unranked)";
 }
 
-
+GetExactActivity($_GET[name], GAMES_FOR_ACTIVE, $passivedays, $gamestable);
 
 // Get the players elo hiscore 
 
@@ -138,7 +154,7 @@ $sql=mysql_query("SELECT count(*) FROM $gamestable WHERE  winner = '$_GET[name]'
 $number=mysql_fetch_row($sql);
 $userhasrated = $userhasrated + $number[0];
 // Let's turn them into a percentage of the users total amount of played games:
-@$userhasrated = round((($userhasrated/$player[games])*100),0)."%";
+@$userhasrated = round((($userhasrated/$playercached[games])*100),0)."%";
 
 // Let's see how many times others have rated the user....
 $sql=mysql_query("SELECT count(*) FROM $gamestable WHERE  loser = '$_GET[name]' AND loser_stars > '0' AND contested_by_loser = '0' AND withdrawn = '0'");
@@ -149,7 +165,7 @@ $sql=mysql_query("SELECT count(*) FROM $gamestable WHERE  winner = '$_GET[name]'
 $number=mysql_fetch_row($sql);
 $userwasrated = $userwasrated + $number[0];
 // Let's turn them into a percentage of the users total amount of played games:
-@$userwasrated = round((($userwasrated/$player[games])*100),0)."%";
+@$userwasrated = round((($userwasrated/$playercached[games])*100),0)."%";
 
 
 
@@ -178,11 +194,12 @@ $gaveaswinnerthismanytimes = $row['count'];
 @$averagegiven = round(($gaveothersasloser+$gaveothersaswinner)/($gaveasloserthismanytimes+$gaveaswinnerthismanytimes),0);
 
 
-
+/* old by russ
 // PASSIVE CHECK: Lets get to know how many days the player has left before hes put into passive mode -----------------
 $sql = "SELECT reported_on + '".$passivedays." days' < now() AS passive, ".$passivedays." - (to_days(now()) - to_days(reported_on)) as daysleft  from $gamestable WHERE (winner = '$_GET[name]' OR loser = '$_GET[name]') AND contested_by_loser = 0 AND withdrawn = 0 ORDER BY reported_on DESC LIMIT 1";
 $result = mysql_query($sql, $db);
 list($passive, $daysleft) = mysql_fetch_row($result);
+*/
 
 if ($player["approved"] == "no") {
 $blocked = "(<font color='#FF0000'>blocked or not added yet</font>)";
@@ -236,10 +253,10 @@ if ($player['msn'] == "n/a") {
     $msnpic = "<img border='1' src='images/msn.gif' align='absmiddle' alt='msn' /></a>";
 }
 
-if ($player['games'] <= 0) {
+if ($playercached['games'] <= 0) {
     $totalpercentage = 0.000;
 } else {
-    $totalpercentage = round($player['wins'] / $player['games'] * 100, 0);
+    $totalpercentage = round($playercached['wins'] / $playercached['games'] * 100, 0);
 }
 
 ?>
@@ -250,18 +267,35 @@ if ($player['games'] <= 0) {
 <h1><?php
 
 if ($player['Confirmation'] == "Deleted") {
-	echo "<h2>The  account  of ". $player['name'] ." is deleted...</h2>For some reason the user or admin has deleted the account you are looking for. It's statistics and other info is preserved and the account can be re-activated by it's owner. We have however decided not to share the info of deleted accounts. Please contact the admin if you wish to undelete your deleted account. <br><br>";
+	echo "<h2>The  account  of ". $player['name'] ." is deleted...</h2>For some reason the user or admin has deleted the account you are looking for. It's statistics and other info is <i>preserved</i> and the account can be re-activated by it's owner. We have however decided not to share the info of deleted accounts, thus it is not public. Please contact the admin if you wish to undelete your deleted account. <br><br>";
 	
 	require('bottom.php');
 	exit;
 	}
 	
 
+if ($playercached['name'] == "") { 
+
+	// So player is not to be found in the cache table. This either means that the player a) does not exist or b) exists, but hasn't ever played a game yet. Let's find out by looking in the complete players table:
+
+	$sql99=mysql_query("SELECT count(*) FROM $playerstable WHERE  name = '$_GET[name]' LIMIT 1");
+	$doesplayerexist=mysql_fetch_row($sql99);
+
+	if ($doesplayerexist[0] != 1) {
+		echo "Thou shall not name the wrong follower.....<br></h1>Translates into: You have tried to view the profile of a player that has never existed on the ladder. Please check the spelling in the url or enter the name of one that does."; 
+
+		require 'bottom.php'; 
+		exit;
+	}
+}
+
 if ($_SESSION['username'] == $_GET[name]) {
 	    echo "<a href='edit.php'>$player[name] $blocked</a>";
 	} else {
-	    echo "$player[name] $blocked";
+	    echo "$_GET[name] $blocked";
 	}
+	
+	
 ?>
 </h1>
 
@@ -272,30 +306,50 @@ if ( $player["Titles"]  != "" ) {
 	echo "<b>" . $player["Titles"] . "</b><br />";
 }
 
-// Show if he's provisional...
+// Show if he's provisional... 
+// i cant even find this column in the db and suspect something is broken with the provisional stuff...russ? coded it and i dont even remember what it did. 
 if ( $player["provisional"]  == "1" ) {
 	echo "<a href=\"faq.php#provisional\">provisional player</a><br />";
 }
 
-if ($rank != "unranked") { 
-    if ($daysleft >= 0) {
-        echo " ($daysleft days left)";
-    }
-} 
 
+// Show info about players activity...
+
+
+	// Set the message about how many days we have until passive...
+
+if ($ExactActivity["DaysUntilPassive"] == 0) { 
+	$buffertdays = "Last day today"; 
+	} else if ($ExactActivity["DaysUntilPassive"] == 1) { 
+	$buffertdays = "Last day tomorrow";
+	} else if ($ExactActivity["DaysUntilPassive"] > 1)  {
+	$buffertdays = $ExactActivity["DaysUntilPassive"] . " days until passive";	
+}
+
+if ($rank == "(passive)") { 
+	echo "(Missing ".  $ExactActivity["GamesSurplus"] * -1 ." games. Played ". $ExactActivity["GamesPlayed"] . " in the ". $passivedays ." recent days."; }
+			
+			
+if (($rank != "(passive)") && ($rank != "(unranked)")  && ($rank > 0)) {
+	echo "(". $buffertdays . ". ". $ExactActivity["GamesPlayed"] . " games in recent ". $passivedays ." days.)"; } 
+	
+	if ($rank == "(unranked)") { 
+	echo "Need at least a) $gamestorank played games b) ". GAMES_FOR_ACTIVE ." games in the ". $passivedays ." recent days and c) $ladderminelo Elo to become ranked."; }
+	
+	
+	
+	
+	
 // If we are logged in and displaying somebody elses profile, tell us about my win/loss
-if (isset($_SESSION['username']) && $player['name'] != $_SESSION['username']) {
-    // Print the comma separator only if the player is active and we are logged in.
-    if ($rank != "unranked" && $daysleft >= 0) {
-        echo ", ";
-    }
-    require_once 'include/elo.class.php';
+if ((isset($_SESSION['username'])) && ($_GET[name] != $_SESSION['username']) && (SHOW_ELO_EXPECTED != 0)) {
+
+require_once 'include/elo.class.php';
     $elo = new Elo($db);
     $winresult = $elo->RankGame($_SESSION['username'],$player['name'], date("Y-m-d H:i:s"));
     $lossresult = $elo->RankGame($player['name'],$_SESSION['username'], date("Y-m-d H:i:s"));
     $drawresult = $elo->RankGame($player['name'],$_SESSION['username'], date("Y-m-d H:i:s"), true);
 
-    echo "Points for Win/Loss/Draw: ".$winresult['winnerChange']."/".$lossresult['loserChange']."/".$drawresult['loserChange'];
+    echo " Points for Win/Loss/Draw: ".$winresult['winnerChange']."/".$lossresult['loserChange']."/".$drawresult['loserChange'];
 }
 ?>
 </td>
@@ -350,25 +404,22 @@ $result = mysql_query($sql, $db);
 list($contested) = mysql_fetch_row($result);
 
 // get the players average points / game...
-if ($player[games] > 0) {
-	$avgPointsPerGame = round((($player[rating] - BASE_RATING)/$player[games]),2);
+if ($playercached[games] > 0) {
+	$avgPointsPerGame = round((($playercached[rating] - BASE_RATING)/$playercached[games]),2);
 } else {
     $avgPointsPerGame = 0;
 }
 
-if ($player[games] < $gamestorank) {
-    echo "unranked"; 
+if ($playercached[games] < $gamestorank) {
+    echo "(unranked)"; 
 } else {
-    // Get to know how many points the player gets in an average game... this will also say something about him as a player choosing his opponents.
-    if ($daysleft >= 0) {
+ 
+ if ($daysleft >= 0) {
         echo $rank;
     } else {
         echo "<a href=\"faq.php#passive\">(passive)</a>";
     }  
 }
-
-
-
 
 // Get average sportsmanship. This will get the points one has gotten from others while one is the loser of the game.
 $sql = "SELECT sum(loser_stars) as total_stars, count(loser_stars) as count FROM $gamestable WHERE loser = '".$_GET['name']."'  AND loser_stars IS NOT NULL";
@@ -394,21 +445,21 @@ if (($SportsmanshipRatedAsLoser+$SportsmanshipRatedAsWinner) > 0) {
 }
 ?>
 </td>
-<td><? if ($player['games'] <= 0) { echo BASE_RATING ;} else { echo round($player[rating],0) ." &nbsp; (". round($hiscore_elo,0) ." / ". round($loscore_elo,0) .")"; } ?></td>
+<td><? if ($playercached['games'] <= 0) { echo BASE_RATING ;} else { echo round($playercached[rating],0) ." &nbsp; (". round($hiscore_elo,0) ." / ". round($loscore_elo,0) .")"; } ?></td>
 <td><?echo $totalpercentage ?>%</td>
-<td><?echo "$player[wins]" ?></td>
-<td><?echo "$player[losses]" ?></td>
-<td><?echo "$player[games]" ?></td>
-<td><? if ($player['games'] > 0) { echo "$avgPointsOnWin / $avgPointsOnLoss / $avgPointsPerGame"; } else { echo "-"; } ?></td>
+<td><?echo "$playercached[wins]" ?></td>
+<td><?echo "$playercached[losses]" ?></td>
+<td><?echo "$playercached[games]" ?></td>
+<td><? if ($playercached['games'] > 0) { echo "$avgPointsOnWin / $avgPointsOnLoss / $avgPointsPerGame"; } else { echo "-"; } ?></td>
 
-<td><? if ($player['games'] > 0) { echo "$player[streak]  &nbsp;($hiscore_streak / $loscore_streak)"; } else { echo "-"; }  ?></td>
+<td><? if ($playercached['games'] > 0) { echo "$playercached[streak]  &nbsp;($hiscore_streak / $loscore_streak)"; } else { echo "-"; }  ?></td>
 <td><?echo $sportsmanship; ?></td>
 <td><?php 
 
 // Avoid division by zero problems...
 
-if ($player['games'] > 0) {
-echo sprintf("%0.0f%% (%d / %d / %d)",($withdrawn+$contestedByOthers+$contested)/($player['games']+$withdrawn+$contestedByOthers+$contested)*100, $withdrawn, $contestedByOthers, $contested);
+if ($playercached['games'] > 0) {
+echo sprintf("%0.0f%% (%d / %d / %d)",($withdrawn+$contestedByOthers+$contested)/($playercached['games']+$withdrawn+$contestedByOthers+$contested)*100, $withdrawn, $contestedByOthers, $contested);
 } else {
 echo "-";
 }
@@ -419,7 +470,7 @@ echo "-";
 </table>
 
 <?php
-GetLvl("$player[wins]", "$player[losses]",XP_FOR_WIN,XP_FOR_LOSS,XP_SYS_LVL_1,XP_SYS_LVL_FACTOR);
+GetLvl("$playercached[wins]", "$playercached[losses]",XP_FOR_WIN,XP_FOR_LOSS,XP_SYS_LVL_1,XP_SYS_LVL_FACTOR);
 
 // Fetch his lvl-related title...
 
@@ -563,9 +614,9 @@ foreach($days as $name => $abbrev) {
 	<?php } ?>
 <?php }
 
-// Only show game history if there are any played games...
+// Only show game history & opposition break down if there are any played games...
 
-if ($player[games] > 0) { 
+if ($playercached[games] > 0) { 
 
 
     $sql = "SELECT reported_on, DATE_FORMAT(reported_on, '".$GLOBALS['displayDateFormat']."') as report_time, unix_timestamp(reported_on) as unixtime, winner, loser, winner_points, loser_points, winner_elo, loser_elo, replay_filename is not null as is_replay, replay_downloads, withdrawn, contested_by_loser, winner_comment, loser_comment, winner_stars, loser_stars, winner_games, loser_games FROM $gamestable WHERE winner = '$_GET[name]' OR loser = '$_GET[name]'  ORDER BY reported_on DESC LIMIT 30";

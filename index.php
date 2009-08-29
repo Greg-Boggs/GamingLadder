@@ -3,6 +3,8 @@ session_start();
 $time = time();
 require('conf/variables.php');
 require('include/smileys.inc.php');
+require('include/genericfunctions.inc.php');
+
 ?>
 <?php
 if ($_POST[user] AND $_POST[pass]) {
@@ -116,18 +118,127 @@ If (INDEX_COMMENT_HILITE == 1) {
 
 
 		if (trim($row['winner_comment']) != "") {
-			echo "<i>\"".$row['winner_comment'] ."\"  </i>~".$row['winner']."<br /><br />";
+			echo "<i>\"".Linkify($row['winner_comment']) ."\"  </i>~".$row['winner']."<br /><br />";
 			}
 
 
 		if (trim($row['loser_comment']) != "") {
-			echo "<i>\"".$row['loser_comment'] ."\"  </i>~".$row['loser'];
+			echo "<i>\"".Linkify($row['loser_comment']) ."\"  </i>~".$row['loser'];
 			}
 	} else { echo "<i>Please login to read game comments.</i>"; }
+	
+	
+// Magic Commentator starts here ---------------------------------------------------------------
+if  ($MagicComGotEloSettings['Comments'] > 0){
+echo "<br><br>";
+$sql="SELECT * FROM $gamestable WHERE contested_by_loser = '0' AND withdrawn = '0' ORDER BY reported_on DESC LIMIT 0,1000";
 
-	echo "<br /></div><br />";
+	$result=mysql_query($sql,$db);
+	while ($RowAutoMent = mysql_fetch_array($result)){
+		
+			// Get random messages for the magic commentator... (these are set in config)
+			$MagicComRandTopX = array_rand($MagicComRandTopXMsgs,2);
+			$MagicComRandTop1st = array_rand($MagicComRandTop1stMsgs,2);
+			$MagicComRandTop2 = array_rand($MagicComRandTop2Msgs,2);
+			$MagicComRandTop5 = array_rand($MagicComRandTop5Msgs,2);
+			$MagicComRandElo = array_rand($MagicComRandEloMsgs,2);
+			
+		// Don't touch the order of the IF statements, they're exectud the mist interesting first and should be kept like they are unless you really have some wierd desire.
+		
+		
+				// Took 1:st place
+		if (($PreviousWinner != $RowAutoMent['winner']) && stristr(INDEX_MAGIC_COMMENTATOR,'Q') && (($RowAutoMent['w_rank'] > 1) || ($RowAutoMent['w_rank'] == 0)) && (($RowAutoMent['w_new_rank'] == 1) && ($RowAutoMent['w_new_rank'] > 0))) {
+				echo "<br>[". GetOnlyMonthDay($RowAutoMent['reported_on']) ."] <a href=\"profile.php?name=". $RowAutoMent['winner'] ."\">".$RowAutoMent['winner'] ."</a> ". $MagicComRandTop1stMsgs[$MagicComRandTop1st[0]];
+						// Remember the persons involved in the last display, to not show info twice in a row about the same person
+		$PreviousWinner = $RowAutoMent['winner'];
+		$PreviousLoser = $RowAutoMent['loser'];
+		$MagicCounter++;
+		}
+		
+				// Took 2:nd place
+		if (($PreviousWinner != $RowAutoMent['winner']) && stristr(INDEX_MAGIC_COMMENTATOR,'W') && (($RowAutoMent['w_rank'] > 2) || ($RowAutoMent['w_rank'] == 0)) && (($RowAutoMent['w_new_rank'] == 2) && ($RowAutoMent['w_new_rank'] > 0))) {
+				echo "<br>[". GetOnlyMonthDay($RowAutoMent['reported_on']) ."] <a href=\"profile.php?name=". $RowAutoMent['winner'] ."\">".$RowAutoMent['winner'] ."</a> ". $MagicComRandTop2Msgs[$MagicComRandTop2[0]]. " 2:nd place.";
+						// Remember the persons involved in the last display, to not show info twice in a row about the same person
+		$PreviousWinner = $RowAutoMent['winner'];
+		$PreviousLoser = $RowAutoMent['loser'];
+		$MagicCounter++;
+		}
 
-}
+
+		// Took 3:d place
+		if (($PreviousWinner != $RowAutoMent['winner']) && stristr(INDEX_MAGIC_COMMENTATOR,'E') && (($RowAutoMent['w_rank'] > 3) || ($RowAutoMent['w_rank'] == 0)) && (($RowAutoMent['w_new_rank'] == 3) && ($RowAutoMent['w_new_rank'] > 0))) {
+				echo "<br>[". GetOnlyMonthDay($RowAutoMent['reported_on']) ."] <a href=\"profile.php?name=". $RowAutoMent['winner'] ."\">".$RowAutoMent['winner'] ."</a> ". $MagicComRandTop2Msgs[$MagicComRandTop2[0]]. " 3:d place.";
+						// Remember the persons involved in the last display, to not show info twice in a row about the same person
+		$PreviousWinner = $RowAutoMent['winner'];
+		$PreviousLoser = $RowAutoMent['loser'];
+		$MagicCounter++;
+		}
+
+
+		// Entered Top 5
+		if (($PreviousWinner != $RowAutoMent['winner']) && stristr(INDEX_MAGIC_COMMENTATOR,'R') && (($RowAutoMent['w_rank'] > 5) || ($RowAutoMent['w_rank'] == 0)) && (($RowAutoMent['w_new_rank'] <= 5) && ($RowAutoMent['w_new_rank'] > 0) && ($RowAutoMent['w_new_rank'] > 3))) {
+				echo "<br>[". GetOnlyMonthDay($RowAutoMent['reported_on']) ."] <a href=\"profile.php?name=". $RowAutoMent['winner'] ."\">".$RowAutoMent['winner'] ."</a> ". $MagicComRandTop5Msgs[$MagicComRandTop5[0]]. " Top 5.";
+						$PreviousWinner = $RowAutoMent['winner'];
+		$PreviousLoser = $RowAutoMent['loser'];
+		$MagicCounter++;
+		}
+		
+
+		// Entered Top 10
+		if (($PreviousWinner != $RowAutoMent['winner']) && stristr(INDEX_MAGIC_COMMENTATOR,'T') && (($RowAutoMent['w_rank'] > 10) || ($RowAutoMent['w_rank'] == 0)) && (($RowAutoMent['w_new_rank'] <= 10) && ($RowAutoMent['w_new_rank'] > 0))) {
+
+			echo "<br>[". GetOnlyMonthDay($RowAutoMent['reported_on']) ."] <a href=\"profile.php?name=". $RowAutoMent['winner'] ."\">".$RowAutoMent['winner'] ."</a> ". $MagicComRandTopXMsgs[$MagicComRandTopX[0]]. " Top 10.";
+					$PreviousWinner = $RowAutoMent['winner'];
+		$PreviousLoser = $RowAutoMent['loser'];
+			$MagicCounter++;
+		}
+		
+		// Entered Top 20
+		
+		if (($PreviousWinner != $RowAutoMent['winner']) && stristr(INDEX_MAGIC_COMMENTATOR,'Y') && (($RowAutoMent['w_rank'] > 20) || ($RowAutoMent['w_rank'] == 0)) && (($RowAutoMent['w_new_rank'] <= 20) && ($RowAutoMent['w_new_rank'] > 0))) {
+
+			echo "<br>[". GetOnlyMonthDay($RowAutoMent['reported_on']) ."] <a href=\"profile.php?name=". $RowAutoMent['winner'] ."\">".$RowAutoMent['winner'] ."</a> ". $MagicComRandTopXMsgs[$MagicComRandTopX[0]]. " Top 20.";
+					$PreviousWinner = $RowAutoMent['winner'];
+		$PreviousLoser = $RowAutoMent['loser'];
+			$MagicCounter++;
+		
+		}
+		
+		if (($PreviousWinner != $RowAutoMent['winner']) && stristr(INDEX_MAGIC_COMMENTATOR,'L')){
+		
+		// Check if user has reachead a rating that's, for example, gone from being 15xx to 16xx, or 19xx to 20xx. Ranges are is set in the config file.
+		
+			$MCcurrentrating = $MagicComGotEloSettings['FirstRating'];
+			$WinnersEloBeforeGame = ($RowAutoMent['winner_elo'] - $RowAutoMent['winner_points']);
+			
+				while (($PreviousWinner != $RowAutoMent['winner']) && ($MCcurrentrating <= $MagicComGotEloSettings['LastRating'])){
+			
+					if (($PreviousWinner != $RowAutoMent['winner']) && ($WinnersEloBeforeGame < $MCcurrentrating) && ($RowAutoMent['winner_elo'] > $MCcurrentrating) && ($RowAutoMent['winner_elo'] < ($MCcurrentrating + $MagicComGotEloSettings['AddThis']))) {
+					
+						echo "<br>[". GetOnlyMonthDay($RowAutoMent['reported_on']) ."] <a href=\"profile.php?name=". $RowAutoMent['winner'] ."\">".$RowAutoMent['winner'] ."</a> ". $MagicComRandEloMsgs[$MagicComRandElo[0]]. " ".$MCcurrentrating ." Elo points."; 
+				
+						$PreviousWinner = $RowAutoMent['winner'];
+						$PreviousLoser = $RowAutoMent['loser'];
+							$MagicCounter++;
+				}
+				
+				$MCcurrentrating = $MCcurrentrating + $MagicComGotEloSettings['AddThis'];
+			}
+		}
+		
+		/* Show negative comments... 
+		if (($RowAutoMent['l_rank'] < 80) && ($RowAutoMent['l_new_rank'] >= 80)) {
+			echo "<br>[". GetOnlyMonthDay($RowAutoMent['reported_on'])  ."] ". $RowAutoMent['loser'] ." entered the bottom 80 at rank ". $RowAutoMent['l_new_rank'];
+		*/
+		// Check if we've shown enough comments
+		if ($MagicCounter >= $MagicComGotEloSettings['Comments'])  { break; }
+		} // Magic commentator While-loop ends here.
+	} // Magoc commentator ends here
+	
+	
+} // If comment hilite is on anything within the } will happen
+	
+
 
 echo "<h1>News</h1>";
 if ($_GET[readnews]) {
@@ -200,5 +311,6 @@ echo"<a href='index.php?readnews=$row[news_id]'>$row[date] - $row[title]</a><br>
 include ('sidebar.php'); 
 
 echo"<br>";
+require_once('include/cronjobs.inc.php');
 require('bottom.php');
 ?>

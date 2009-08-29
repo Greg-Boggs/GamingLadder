@@ -155,7 +155,14 @@ echo "</ol><br><div align='left'><a href='friends.php'><img border='0' src='grap
 // Show  number of registered CONFIRMED users
 $sql=mysql_query("SELECT count(*) FROM $playerstable WHERE Confirmation = \"Ok\" OR Confirmation = ''");
 $number=mysql_fetch_row($sql);
-echo "<br /><br /><b>Confirmed Players:</b> ".$number[0];
+echo "<br /><br /><b>Registered Players:</b> ".$number[0];
+
+
+// Number of players that have played at least one game...
+$sql=mysql_query("SELECT count(*) FROM $standingscachetable");
+$nonzeroplayers=mysql_fetch_row($sql);
+
+
 
 $sql=mysql_query("SELECT count(*) FROM $gamestable WHERE withdrawn = 0 AND contested_by_loser = 0");
 $playedgames2=mysql_fetch_row($sql);
@@ -166,7 +173,7 @@ $workingdays = round(((($playedgames2[0] * AVERAGE_GAME_LENGTH)/1440)*2),0);
 echo "<br /><b>Work days played:</b> $workingdays";
 
 // Display average number of games per user...
-echo "<br /><b>Games/Player: </b>". @round($playedgames2[0]/$number[0],2);
+echo "<br /><b>Games/Player: </b>". @round($playedgames2[0]/$nonzeroplayers[0],2);
 	
 	
 // Display number of games played within x amount of days...

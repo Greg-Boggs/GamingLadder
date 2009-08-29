@@ -8,7 +8,7 @@ $endarray = explode(" ", $endtime);
 $endtime = $endarray[1] + $endarray[0];
 $totaltime = $endtime - $starttime;
 $totaltime = round($totaltime, 5);
-echo "<p align=\"center\" class=\"copyleft\">$totaltime sec.</p>";
+echo "<p align=\"center\" class=\"copyleft\">". date('Y-m-d H:i') ." | ". $totaltime ."sec. </p>";
 ?>
 </div>
 <br /><br />

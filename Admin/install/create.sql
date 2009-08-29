@@ -79,7 +79,6 @@ CREATE TABLE `webl_vars` (
   `numgamespage` int(10) default NULL,
   `numplayerspage` int(10) default NULL,
   `statsnum` int(10) default NULL,
-  `standingsnogames` varchar(10) default NULL,
   `hotcoldnum` varchar(10) default NULL,
   `gamesmaxdayplayer` int(10) default NULL,
   `gamesmaxday` int(10) default NULL,

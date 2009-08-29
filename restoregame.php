@@ -42,7 +42,8 @@ if (isset($_POST['submit'])) {
     }
     // Finally we recache the ladder, it takes about 1-2 seconds with 25000 games
     mysql_query("TRUNCATE TABLE $standingscachetable", $db);	
-    mysql_query("INSERT INTO $standingscachetable ".$cacheSql, $db);	
+    mysql_query("INSERT INTO $standingscachetable ".$cacheSql, $db);
+	require_once 'include/morecachestandings.inc.php';       
 
     echo "<p>The ladder has been reranked after your game restoration. If there were errors, please <a href=\"contactus.php\">contact us</a>. Check the current <a href=\"ladder.php\">ladder standings</a> or return to your <a href='profile.php?name=".$_SESSION['username']."'>profile</a></p>";
 } else {

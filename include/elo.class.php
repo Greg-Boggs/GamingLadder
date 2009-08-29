@@ -38,7 +38,7 @@ class Elo {
             $row = mysql_fetch_array($result, MYSQL_ASSOC);
         }
 
-        if ($row['games'] < PROVISIONAL) {
+        if (($row['games'] < PROVISIONAL) && (PROVISIONAL_SYSTEM > 0)) {
             $row['provisional'] = true;
         } else {
             $row['provisional'] = false;
@@ -99,14 +99,25 @@ class Elo {
 
         if ($protection == true) {
             $protection = PROVISIONAL_PROTECTION;
+		//echo "2. $ protection is true and set to:  $protection";
         } else {
             $protection = 1;
         }
 
-        // Calculate the new rating
+	If ((PROVISIONAL_SYSTEM == 1) || (PROVISIONAL_SYSTEM == 2)) {
+        // Calculate the new rating when one of the prov systems are in place.
         $ratingChange = ($k * ($winState - $winExpectancy)) / $protection;
+	}
+	
+	if (PROVISIONAL_SYSTEM == 0) {
+		// Let's allow people to turn off prov systems as well...
+	 $ratingChange = ($k * ($winState - $winExpectancy));
+	}
+	
+    
 
-        return round($ratingChange);
+
+	return round($ratingChange);
     }
 
     function ApplyAntiMatchspam ($k)
@@ -132,6 +143,7 @@ class Elo {
 
     function RankGame($winner, $loser, $reportedTime, $draw = false)
     {
+		
         $result = array();
 
         $loserStats = $this->GetRating($reportedTime, $loser);
@@ -145,27 +157,50 @@ class Elo {
             $winnerState = 1;
             $loserState = 0;
         }
+	
+	
 
-        // Only protect non-provisional players to help new players find their rank faster
-        if ($winnerStats['provisional'] && $loserStats['provisional']) {
-            $loserProtection = false;
-            $winnerProtection = false;
-        } else if ($winnerStats['provisional']) {
-            $winnerProtection = false;
-            $loserProtection = true;
-/*
-  // At this time, if the non-provisional player wins, they get the normal points.
-  // If you are too far away from a provisional player, you won't get many points anyway. If you
-  // are close, you will push the provisional player away a long way.  So you don't want to play
-  // them too many times.
-        } else if ($loserStats['provisional']) {
-            $winnerProtection = true;
-            $loserProtection = false;
-*/
-        } else {
-            $winnerProtection = false;
-            $loserProtection = false;
-        }
+	if (PROVISIONAL_SYSTEM == 1) { 
+		   // Only protect non-provisional players to help new players find their rank faster
+		   if ($winnerStats['provisional'] && $loserStats['provisional']) {
+			  $loserProtection = false;
+			  $winnerProtection = false;
+			//echo "<br>System  1: Nobody is protected, loserProtection = false, winnerProtection = false.";
+		   } else if ($winnerStats['provisional']) {
+			  $winnerProtection = false;
+			  $loserProtection = true;
+			//echo "<br>System  1: Loser is protected, loserProtection = true";
+		   }  
+	/*
+	  // At this time, if the non-provisional player wins, they get the normal points.
+	  // If you are too far away from a provisional player, you won't get many points anyway. If you
+	  // are close, you will push the provisional player away a long way.  So you don't want to play
+	  // them too many times.
+		   } else if ($loserStats['provisional']) {
+			  $winnerProtection = true;
+			  $loserProtection = false;
+	*/
+		    else {
+			  $winnerProtection = false;
+			  $loserProtection = false;
+			// echo "<br>System 1: Both loser and winner protectuib = false, nobody is protected.";  
+		   }
+	}
+
+
+	if ((PROVISIONAL_SYSTEM == 2) && ($winnerStats['provisional'] || $loserStats['provisional']))  { 
+		   // eyerouges version of the provisional thing...it looks crude but eye has faith ; ) 
+				$loserProtection = true;
+				$winnerProtection = true;
+					// echo "<br>System 2: Both loser and winner protection hgas been set to true. Both are protected.<br> winnerstatsProvisional = ".$winnerStats['provisional']. "<br>loserStatsProvisional = ". $loserStats['provisional'];  
+		}
+	
+		if (PROVISIONAL_SYSTEM == 0) { 
+		   // No provisional system is being used
+		     $loserProtection = false;
+			$winnerProtection = false;
+			//echo "<br><b>Provisonal systems are offline.</b>";
+		}
 
 	$kValWinner = $this->ApplyAntiMatchspam ($this->ChooseKVal($winnerStats['rating'], $winnerStats['provisional']));
         $result['winnerChange'] = $this->CalcElo($winnerStats['rating'], $loserStats['rating'], $winnerState, $kValWinner, $winnerProtection);
@@ -175,6 +210,49 @@ class Elo {
         $result['loserChange'] = $this->CalcElo($loserStats['rating'], $winnerStats['rating'], $loserState, $kValLoser, $loserProtection);
         $result['loserRating'] = $loserStats['rating'];
 	
+	
+	// Now we have the ratings and all calculated, so it's a good time to do a final adjustment of them with the harcap/smoothcap modifiers if they are enabled in the config.  
+	
+		// First the bottom hardcap one.
+		// If the cap system is enabled and winners rating is bigger than losers then check how much bigger it is and set the points earned accordingly
+		if ((ENABLE_MAX_DIFFERENCE_SYSTEM == 1 || ENABLE_MAX_DIFFERENCE_SYSTEM == 2) && ($result['winnerRating'] > $result['loserRating']) && (($result['winnerRating'] - $result['loserRating']) >= HARDCAP_BOTTOM_RATING_DIFFERENCE)){
+
+		   $result['winnerChange'] = HARDCAP_BOTTOM_RATING_DIFFERENCE_POINTS;
+
+			// Now we check for the secondary limit....if its been reached then another point can be rewarded...
+			
+			if (($result['winnerRating'] > $result['loserRating']) && (($result['winnerRating'] - $result['loserRating']) >= HARDCAP_SECONDARY_LIMIT)){
+			  $result['winnerChange'] = HARDCAP_SECONDARY_LIMIT_POINTS;
+			}
+
+		}
+	
+		// Then the top hardcap..
+		// Like the previous but on the other end of the line
+		if ((ENABLE_MAX_DIFFERENCE_SYSTEM == 2) && ($result['winnerRating'] < $result['loserRating']) && (($result['loserRating'] - $result['winnerRating']) >= HARDCAP_TOP_RATING_DIFFERENCE)){
+		
+		   $result['winnerChange'] = HARDCAP_TOP_RATING_DIFFERENCE_POINTS;
+
+			if (($result['winnerRating'] < $result['loserRating']) && (($result['loserRating'] - $result['winnerRating']) >= HARDCAP_SECONDARY_LIMIT)){
+				$result['winnerChange'] = HARDCAP_SECONDARY_LIMIT_POINTS;
+			}
+		}
+		
+		//The last type of caps, the 3:d one:
+				if ((ENABLE_MAX_DIFFERENCE_SYSTEM == 3) && ((($result['winnerRating'] - $result['loserRating']) >= HARDCAP_SYS3_RATING_DIFFERENCE) || ((($result['winnerRating'] - $result['loserRating']) * -1) >= HARDCAP_SYS3_RATING_DIFFERENCE))) {
+		
+			$result['winnerChange'] = HARDCAP_SYS3_POINTS;
+			$result['loserChange'] = HARDCAP_SYS3_POINTS;
+		
+					if ((($result['winnerRating'] - $result['loserRating']) >= HARDCAP_SECONDARY_LIMIT) || ((($result['winnerRating'] - $result['loserRating']) * -1) >= HARDCAP_SECONDARY_LIMIT)) {
+			
+						$result['winnerChange'] = HARDCAP_SECONDARY_LIMIT_POINTS;
+						$result['loserChange'] = HARDCAP_SECONDARY_LIMIT_POINTS;
+					}
+		
+		}
+		
+		
         if ($draw === true) {
             $result['winnerStreak'] = 0;
             $result['loserStreak'] = 0;

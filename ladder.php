@@ -4,7 +4,19 @@ require('conf/variables.php');
 require_once 'autologin.inc.php';
 require('top.php');
 
-$personalladder = isset($_GET['personalladder']) ? $_GET['personalladder'] : "";
+
+if (isset($_GET['personalladder'])) {
+	$personalladder =  $_GET['personalladder'] ;
+	} else {$personalladder = "";}
+	
+	
+if (isset($_GET['archive'])) {
+	// If player wants to view an archived version of the ladder we need to fetch anoither table and perhaps get it from another database. The table name is the date when the ranking is from in the following format: YYYY_MM_DD
+	$standingscachetable = $historydatabasename.".".$_GET['archive'];
+	$archivemsg = " on ".$_GET['archive'];
+	// Clean up the info...
+	$archivemsg = str_replace("_", " ", $archivemsg);
+}
 
 ?>
 <script type="text/javascript">
@@ -16,27 +28,26 @@ $(document).ready(function()
 </script>
 <?php
 
-$result=mysql_query($standingsSqlWithRestrictions." LIMIT ".$playersshown,$db) ;
-//echo "<br />".$sql;
+// Get everyones ranking for the ladderfrom the standings cache table. There is no need for narrowing down the sql more with criterion for minimum elo and games played in total etc since the cache table has already taken care of all that. 
 
-##die ("failed to select players");
-$cur=1;
+// Fetch players rank...
 
-unset($myrank);
-while ($row = mysql_fetch_array($result)) {
-    if ($row['name'] == $personalladder) {
-        $myrank = $cur;
-        break;
-    }
-    $cur++;
-}
+$result=mysql_query("SELECT *
+FROM  $standingscachetable 
+WHERE recently_played > '0'
+AND rank != '0' AND name = '$_GET[personalladder]'
+ORDER BY rank ASC");
 
-// I'm not ranked, it's not really my section of the ladder at all.
-if (!isset($myrank)) {
-    $personalladder = "";
-}
+$personalrow = mysql_fetch_array($result);
+unset($myrank); // Why is this done?
+
+$myrank = $personalrow['rank'];
+    
+// If player is not ranked the custom version of the ladder sholdn't be displayed...
+if ($myrank == "") { $personalladder = ""; }
+
 ?>
-<h2><?php echo $personalladder ?> Ladder Standings</h2>
+<h2><?php echo $personalladder ." Ladder Standings $archivemsg</h2>";?>
 
 <table id="ladder" class="tablesorter">
 <thead>
@@ -55,35 +66,61 @@ if (!isset($myrank)) {
 <tbody>
 <?php
 // Reset the result set
-@mysql_data_seek($result, 0);
-$cur = 1;
+// @mysql_data_seek($result, 0);
+
+$RanksAfterMe = "99999999";
+if ($personalladder != "") {
+$RanksBeforeMe = $myrank - 1 - RANKED_ABOVE_PERSONAL_LADDER;
+$RanksAfterMe = $myrank + RANKED_BELOW_PERSONAL_LADDER;
+}
+// Fetch the full ladder rankings list for everyone... also join it with the players table in order to get some crap info like what avatar etc they use.
+
+$result=mysql_query("SELECT * 
+FROM $standingscachetable
+JOIN $playerstable
+ON($standingscachetable.name=$playerstable.name)
+WHERE rank > 0 AND recently_played > 0
+ORDER BY rank ASC LIMIT $RanksAfterMe");
+
+// If player wants to see a more personal and relevant ladder we need to tell mysql to start displaying the table from another position...
+if ($personalladder != "") {
+@mysql_data_seek($result, $RanksBeforeMe);
+}
+
+
+// $ladderrow = mysql_fetch_array($result);
 
 // If I don't have a rank, and requesting a personal ladder, display a message to that effect.
 if (!isset($myrank) && isset($_GET['personalladder'])) {
-    echo "<p>You are not ranked, the default ladder will be shown instead of the personal.</p>";
+    echo "<p>You are not ranked. Default ladder will be shown instead of the personal.</p>";
 }
 
-while ($row = mysql_fetch_array($result)) {
-	$namepage = "$row[name]";
-
+while ($ladderrow = mysql_fetch_array($result)) {
+	
+/*
     if (isset($myrank) && ($cur < ($myrank - 10) || $cur > ($myrank + 10))) {
         $cur++;
         continue;
     }
+*/
 
+// Set graphics for streak....
 
-if ($row[streak] >= $hotcoldnum) {
+if ($ladderrow[streak] >= $hotcoldnum) {
     $picture = 'images/streakplusplus.gif';
-} else if ($row[streak] <= -$hotcoldnum) {
+} else if ($ladderrow[streak] <= -$hotcoldnum) {
     $picture = 'images/streakminusminus.gif';
 } else if ($row[streak] > 0) {
     $picture = 'images/streakplus.gif';
-} else if ($row[streak] < 0) {
+} else if ($ladderrow[streak] < 0) {
     $picture = 'images/streakminus.gif';
 } else {
     $picture = 'images/streaknull.gif';
 }
-if (($personalladder == $namepage) || ($_SESSION['username'] == $namepage)) {
+
+//deb echo "session name: ". $_SESSION['username'] . " and ladderrow name: ". $ladderrow[name] . "<br>";
+
+if ($_SESSION['username'] == $ladderrow[name]){
 echo '<tr class="myrow">';
 } else {
 ?>
@@ -91,25 +128,26 @@ echo '<tr class="myrow">';
 <?php 
 }
 ?>
-<td><?php echo "$cur"?></td>	
-<td><?php echo "<img border='0' height='20px' src='avatars/$row[Avatar].gif' alt='avatar' />"?><a name="<?php echo $namepage ?>"></a></td>
-<td><a href='profile.php?name=<?php echo "$namepage '> $namepage"; ?></a> </td>
-<td><?php echo "$row[rating]"; ?></td>
-<td><?php printf("%.0f", $row['wins']/$row['games']*100); ?></td>
-<td><?php echo "$row[wins]" ?> </td>
-<td><?php echo "$row[losses]" ?></td>
-<td><?php echo ($row[games]); ?></td>
-<td><?php echo "$row[streak]"?></td>
+<td><?php echo $ladderrow['rank'];?></td>	
+<td><?php echo "<img border='0' height='20px' src='avatars/$ladderrow[Avatar].gif' alt='avatar' />"?><a name="<?php echo $namepage ?>"></a></td>
+<td><a href='profile.php?name=<?php echo "$ladderrow[name]'>". $ladderrow['name'];?> </a> </td>
+<td><?php echo "$ladderrow[rating]"; ?></td>
+<td><?php printf("%.0f", $ladderrow['wins']/$ladderrow['games']*100); ?></td>
+<td><?php echo "$ladderrow[wins]" ?> </td>
+<td><?php echo "$ladderrow[losses]" ?></td>
+<td><?php echo ($ladderrow[games]); ?></td>
+<td><?php echo "$ladderrow[streak]"?></td>
 </tr>
 <?php 
-	$cur++;
+	
 }
 ?>
 </tbody>
 </table>
 
-<p class="copyleft">To <i>show up</i> in the ladder above you must have played >= <?php echo "$gamestorank"; ?> games, have a rating of >= <?php echo "$ladderminelo"; ?> & have played within <?php echo "$passivedays"; ?> days. Don't worry  if you haven't played for a while. All it takes is one game to become active again. Your rating doesn't decay while you are gone. 1500 is the <i>average</i> skilled player, new players will have less and vets more. Hence, don't quit playing if you rate below 1500.</p>
-
+<br>
+<p class="copyleft">To get a ranking and compete on the ladder a player needs >= <?php echo "$gamestorank"; ?> games,  an Elo rating of >= <?php echo "$ladderminelo"; ?> & have played => <?php echo " ". GAMES_FOR_ACTIVE ." "; ?>within <?php echo "$passivedays"; ?> days. Don't worry  if you haven't played for a while. All it takes is one game to become active again. Your rating doesn't decay while you are gone. 1500 is the rating of a <i>skilled average</i> player, new players will have less and vets more.</p>
+<br>
 <?php 
 require('bottom.php');
 ?>
