@@ -568,7 +568,7 @@ if ($player[MsgMe] == "Yes") {
 
 if ($player[CanPlay] != "") { ?>
     <h2>Available to play <a id="availabletoplayexpand"></a></h2>	
-	<p class="text">Uses <?echo "$player[HaveVersion]" ?> version of Wesnoth & can usually play (GMT):</p>
+	<p class="text">Uses <?echo "$player[HaveVersion]" ?> version of Wesnoth & can usually play <?php echo " ($cfg_ladder_timezone)";?>:</p>
 <div id="availabletoplaydiv">
 	<table id="availabletoplay" class="tablesorter">
     <thead>	

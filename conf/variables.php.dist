@@ -1,5 +1,5 @@
 <?
-define("TRIBAL_VERSION", "161"); // version number shown in footer. This = the revision number in SVN /trunk  Please change when you upgrade. Also add "Rev" in front of it if you customize the ladder code somehow and if you are not a part of the development team of tribal bliss. (we do however invite you to become so : ) 
+define("TRIBAL_VERSION", "162"); // version number shown in footer. This = the revision number in SVN /trunk  Please change when you upgrade. Also add "Rev" in front of it if you customize the ladder code somehow and if you are not a part of the development team of tribal bliss. (we do however invite you to become so : ) 
 
 $maintenanceMode = false; // Is the site under maintenance, if so set this to true and all pages will show a maintenance screen
 $backupKey = "A long password w!tH $ymb0ls is G00d"; // You can backup the database without logging in if you have access to the key below.  Change it to a secure string
@@ -122,6 +122,7 @@ $XpTitle = array(1 => "Peasant", 2 => "Recruit", 3 => "Soldier", 4 => "Veteran",
 
 //config etc ------------------------------------------------------
 
+$cfg_ladder_timezone = "UTC"; // Sets what timezone the ladder will use. PLease see http://se2.php.net/manual/en/timezones.php for all options. If you have a ladder with participants from more than 1 timezone it is however best to leave it at default UTC.  If you get wrong time then you have set this to the wrong value OR the webservers time is wrongly set somewhere.
 $titlebar = "Wesnoth Ladder - Competitive Gaming Ladder";
 $numindexnewbs = 3; // number of newcomers to show in index sidebar..
 $numindexresults = 10; //num of latest played games results to show in index sidebar

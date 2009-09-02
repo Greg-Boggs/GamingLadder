@@ -3,6 +3,7 @@ session_start();
 require('conf/variables.php');
 require('autologin.inc.php');
 require('logincheck.inc.php');	
+date_default_timezone_set("$cfg_ladder_timezone");
 
 // We have ajax lower down on the page, we handle it here and then exit.
 // This keeps the ajax code with the page that is calling it.
