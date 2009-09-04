@@ -146,7 +146,7 @@ echo '<tr class="myrow">';
 </table>
 
 <br>
-<p class="copyleft">To get a ranking and compete on the ladder a player needs >= <?php echo "$gamestorank"; ?> games,  an Elo rating of >= <?php echo "$ladderminelo"; ?> & have played => <?php echo " ". GAMES_FOR_ACTIVE ." "; ?>within <?php echo "$passivedays"; ?> days. Don't worry  if you haven't played for a while. All it takes is one game to become active again. Your rating doesn't decay while you are gone. 1500 is the rating of a <i>skilled average</i> player, new players will have less and vets more.</p>
+<p class="copyleft">To get a ranking and compete on the ladder a player needs > <?php echo "$gamestorank"; ?> games,  an Elo rating of >= <?php echo "$ladderminelo"; ?> & have played >= <?php echo " ". GAMES_FOR_ACTIVE ." "; ?>within <?php echo "$passivedays"; ?> days. Don't worry  if you haven't played for a while. All it takes is one game to become active again. Your rating doesn't decay while you are gone. 1500 is the rating of a <i>skilled average</i> player, new players will have less and vets more.</p>
 <br>
 <?php 
 require('bottom.php');

@@ -9,11 +9,13 @@ function gameTableTHead()
 <th>Reported</th>
 <th>Winner</th>
 <th>Loser</th>
-<th>Winner  Rating</th>
-<th>Loser Rating</th>
-<th>Winner  Rank</th>
-<th>Loser Rank</th>
-<th>Feedback</th>
+<th  title=\"W. Elo rating after game (points earned due to the game)\">W Rating</th>
+<th title=\"L. Elo rating after game (points lost due to the game)\">L Rating</th>
+<th title=\"W. Rank when & before game was played\">W Rank</th>
+<th title=\"L. Rank when & before game was played\">L Rank</th>
+<th title=\"New W. Rank, rank of winner after game\">NW Rank</th>
+<th title=\"New L. Rank, rank of loser after game\">NL Rank</th>
+<th  title=\"Sportm. Rating given to winner / Loser, & if W or L commented\">Feedback</th>
 <th>Replay</th>
 <th>Game Detail</th>
 </tr>
@@ -69,6 +71,11 @@ function gameTableTBody($result, $playerName = null)
 		$text .= "</td>";
 		$text .= "<td>".$sdel.$row['winner_elo'].$winnerProvisional." (".$row['winner_points'].")".$edel."</td>";
 		$text .= "<td>".$sdel.$row['loser_elo'].$loserProvisional." (".$row['loser_points'].")".$edel."</td>";
+		$text .= "<td>".$sdel.$row['w_rank'].$edel."</td>";
+		$text .= "<td>".$sdel.$row['l_rank'].$edel."</td>";
+		$text .= "<td>".$sdel.$row['w_new_rank'].$edel."</td>";
+		$text .= "<td>".$sdel.$row['l_new_rank'].$edel."</td>";
+
 
 		// Put all the relevant stuff into the feedback column
 		// We only want to show stuff if there is something..else we'll show a - 

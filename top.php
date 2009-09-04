@@ -10,7 +10,7 @@ if  (($maintenanceMode == true) && (is_file('backup-db.php') == true) && (basena
 	$adminindexpage = 1;
 	}
 	
-    if ((($maintenanceMode == true) && (basename($_SERVER['SCRIPT_FILENAME']) != 'maintenance.php')) && (basename($_SERVER['SCRIPT_FILENAME']) == 'report.php') || (basename($_SERVER['SCRIPT_FILENAME']) == 'ladder.php') || (basename($_SERVER['SCRIPT_FILENAME']) == 'profile.php') || ((basename($_SERVER['SCRIPT_FILENAME']) == 'index.php') && $adminindexpage != 1)) {
+    if ((($maintenanceMode === true) && (basename($_SERVER['SCRIPT_FILENAME']) != 'maintenance.php')) && ((basename($_SERVER['SCRIPT_FILENAME']) == 'report.php') || (basename($_SERVER['SCRIPT_FILENAME']) == 'ladder.php') || (basename($_SERVER['SCRIPT_FILENAME']) == 'profile.php') || ((basename($_SERVER['SCRIPT_FILENAME']) == 'index.php') && $adminindexpage != 1))) {
         // If the site is down for maintenance, redirect to the maintenance page
         header ("Location: maintenance.php");
         exit;
