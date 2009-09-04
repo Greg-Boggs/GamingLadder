@@ -7,6 +7,7 @@ require 'include/xp.inc.php';
 require 'include/activity.inc.php';
 require 'top.php';
 require 'include/genericfunctions.inc.php';
+date_default_timezone_set("$cfg_ladder_timezone");
 
 ?>
 <script type="text/javascript">
@@ -175,7 +176,7 @@ $userwasrated = $userwasrated + $number[0];
 
 // Now let's see what the user has given other users as a sportsmanship rating, in average:
 
-$sql = "SELECT sum(winner_stars) as total_stars, count(winner_stars) as count FROM $gamestable WHERE loser = '".$_GET['name']."'  AND winner_stars IS NOT NULL AND contested_by_loser = '0' AND withdrawn = '0'";
+$sql = "SELECT sum(winner_stars) as total_stars, count(winner_stars) as count FROM $gamestable WHERE loser = '".$_GET['name']."'  AND winner_stars IS NOT NULL AND winner_stars > 0 AND contested_by_loser = '0' AND withdrawn = '0'";
 $result = mysql_query($sql, $db);
 $row = mysql_fetch_array($result);
 $gaveothersasloser= $row[total_stars];
@@ -183,7 +184,7 @@ $gaveasloserthismanytimes = $row['count'];
 @$averagegivenasloser = round(($gaveothersasloser/$gaveasloserthismanytimes),0);
 
 // What the user has given other users as a sportsmanship rating, in average, when he has been the winner:
-$sql = "SELECT sum(loser_stars) as total_stars, count(loser_stars) as count FROM $gamestable WHERE winner = '".$_GET['name']."'  AND loser_stars IS NOT NULL AND contested_by_loser = '0' AND withdrawn = '0'";
+$sql = "SELECT sum(loser_stars) as total_stars, count(loser_stars) as count FROM $gamestable WHERE winner = '".$_GET['name']."'  AND loser_stars IS NOT NULL AND loser_stars > 0 AND contested_by_loser = '0' AND withdrawn = '0'";
 $result = mysql_query($sql, $db);
 $row = mysql_fetch_array($result);
 $gaveothersaswinner= $row[total_stars];
@@ -422,14 +423,14 @@ if ($playercached[games] < $gamestorank) {
 }
 
 // Get average sportsmanship. This will get the points one has gotten from others while one is the loser of the game.
-$sql = "SELECT sum(loser_stars) as total_stars, count(loser_stars) as count FROM $gamestable WHERE loser = '".$_GET['name']."'  AND loser_stars IS NOT NULL";
+$sql = "SELECT sum(loser_stars) as total_stars, count(loser_stars) as count FROM $gamestable WHERE loser = '".$_GET['name']."'  AND loser_stars IS NOT NULL AND loser_stars > 0 ";
 $result = mysql_query($sql, $db);
 $row = mysql_fetch_array($result);
 $SportsmanshipAsLoser = $row['total_stars'];
 $SportsmanshipRatedAsLoser = $row['count'];
 
 // This will get the points one has gotten from others while one is the winner of the game.
-$sql = "SELECT sum(winner_stars) as total_stars, count(winner_stars) as count FROM $gamestable WHERE winner = '".$_GET['name']."'  AND winner_stars IS NOT NULL";
+$sql = "SELECT sum(winner_stars) as total_stars, count(winner_stars) as count FROM $gamestable WHERE winner = '".$_GET['name']."'  AND winner_stars IS NOT NULL AND winner_stars > 0";
 $result = mysql_query($sql, $db);
 $row = mysql_fetch_array($result);
 $SportsmanshipAsWinner = $row[total_stars];

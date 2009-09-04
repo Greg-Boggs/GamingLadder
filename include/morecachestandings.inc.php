@@ -35,7 +35,7 @@ if (!$result) {
 
 // 2. Select every player that has played >= x games within y most recent days and also has played => z in total on the ladder. 
 
-$MySQLgamestorank = ($gamestorank - 2); // This is needed since MySQL for some reason, in the operations below in this section, adds 2 to whatever value is set in $gamestorank in the configfile, so this fixes it.
+$MySQLgamestorank = $gamestorank;
 $MySQLgamestobeactive = GAMES_FOR_ACTIVE;
 
 
@@ -134,7 +134,7 @@ $result = mysql_query("SET @r := 0;");
 $result = mysql_query("UPDATE  
 $standingscachetable 
 SET rank = (@r := @r + 1)
-WHERE recently_played >= 1 AND rating >= $ladderminelo AND games >= $MySQLgamestorank
+WHERE recently_played >= 1 AND rating >= $ladderminelo AND games > $MySQLgamestorank
 ORDER BY rating DESC, games DESC, wins ASC");
 
 if (!$result) {

@@ -15,7 +15,8 @@ $laddermailsender = "test@dot.com"; // this will be the senders email when the l
  $directory ="http://yourinfo.com" ; //the location of your ladder directory (no trailing slash)
  $path_file_replay = "replays/";	// directory where the replay files are uploaded on the server. Notice that there should be a trailing slash at the end.
 $historydatabasename = "yourinfo"; // the name of your database that will be used for keeping snapshots of how the ladder looked on a day by day basis. Notice: Most webhosts only offer you _one_ database. This would all _work_ with just one database and you could specify the name of the same db as you did in databasename, but it's really smoother to the eye to don't mix ladder history tables with current ladder tables and use 2 separate databases. If you turn off the snapshot function (KEEP_LADDER_HISTORY = 0) you can enter whatever db name here as it won't be used at all.
-  
+define("CRONCHECK_PATH","cronchecks/"); // dir for where the cron check files are stored. It should be writable.
+
 //configure the tables in the database ...don't change these names unless you know what the tables in your db matches the names and types.
 
 $playerstable = "webl_players"; //the name of the table that contains information about the players
@@ -172,7 +173,7 @@ define("MAX_DIFFERENCE", 1000); //1200 is so high this never gets used
 // Provisional System ---------------------------------
 
 define("PROVISIONAL_SYSTEM",0); // 0 for not using any provisional system. If set to system 1 it would protect any players rating when he would lose against a provisional player. The "old" player would only lose the normal amount of points divided with PROVISIONAL_PROTECTION if he lost against the provisional player. Set to 2 to use another provisional system where _both_ players get their wins/losses of points divided by PROVISIONAL_PROTECTION when at least one of them is a provisional player.
-define("PROVISIONAL", 10); //The number of games it takes to not be provisional anymore 
+define("PROVISIONAL",10); //The number of x games a player is provisional. 
 define("PROVISIONAL_PROTECTION",4); //The amount the points that are moved is divided with when a provisional system is in use.
 
 $kArrayProvisional = array(2100 => 32, 1800 => 48, 0 => 64); // Define a Kvalue array for provisional players only, must be in descending points order.  rating => kvalue

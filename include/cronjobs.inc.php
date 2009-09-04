@@ -36,13 +36,12 @@ Current tasks that we use the fake cron for are:
 require './virtualcron.php';
 
 // [ Rank Cache ]
-
-$vcron2=new virtualcron(1440,"cachecron.txt");
+// 1440
+$vcron2=new virtualcron(1440,CRONCHECK_PATH."cachecron.txt");
 
 if ($vcron2->allowAction()) { 
-	
 
-	// Input in the log that we began this task....
+// Input in the log that we began this task....
 	$logdate = date('Y-m-d H:i:s');
 	mysql_query("INSERT INTO $cronlogtable (Cron, Time, Message) VALUES('Rank Cache', '$logdate', 'Started' ) ") or die(mysql_error());  
 
@@ -54,6 +53,7 @@ if ($vcron2->allowAction()) {
 	// Update the log that it completed..
 	mysql_query("UPDATE $cronlogtable SET Message='Ok' WHERE Time='$logdate' AND Cron = 'Rank Cache'") or die(mysql_error());  
 	
+	$cronbottommsg =  $cronbottommsg ." [updated rankings]";
 	}
 	
 	
@@ -61,7 +61,7 @@ if ($vcron2->allowAction()) {
 
 if (PURGE_GHOST_PLAYERS == 1) {
 	
-	$vcron3=new virtualcron(PURGE_GHOST_MINUTES,"ghostcron.txt");
+	$vcron3=new virtualcron(PURGE_GHOST_MINUTES,CRONCHECK_PATH."ghostcron.txt");
 	
 	if ($vcron3->allowAction()) { 
 	
@@ -101,7 +101,7 @@ if (PURGE_GHOST_PLAYERS == 1) {
 		
 		mysql_query("UPDATE $cronlogtable SET Message='$ghostmsg' WHERE Time='$logdate' AND Cron = 'Ghost Purge'") or die(mysql_error());  
 		
-		
+		$cronbottommsg =  $cronbottommsg ." [purged accounts w/ 0 games]";
 	
 	}
 
@@ -109,7 +109,7 @@ if (PURGE_GHOST_PLAYERS == 1) {
 
 // [ Daily statistics ]
 	
-$vcron4=new virtualcron(1440,"dailystatscron.txt");
+$vcron4=new virtualcron(1440,CRONCHECK_PATH."dailystatscron.txt");
 	
 if ($vcron4->allowAction()) { 
 
@@ -211,6 +211,8 @@ if ($vcron4->allowAction()) {
 	// Input all info in the statistcis table....
 	$logdate = date('Y-m-d H:i:s');
 	mysql_query("INSERT INTO $statstable (Time, Confirmed_Players, Played_Games, Games_Today, Games_Recent_7, Games_Recent_30, Ranked_Players, Replay_Downloads, Games_Rated, Avg_Sportsmanship, Contested_Games, Withdrawn_Games, Revoked_Games, Commented_Games) VALUES('$logdate','$confirmed', '$playedgames', '$test', '$recentgames[0]', '$recentgames2[0]', $rankedPlayers[0],$replaydownloads[0],$GamesWithRating,$AverageSporsmanship, $contestedgames, $withdrawngames, $revokedgames,$commentedgames)") or die(mysql_error());  
+	
+	$cronbottommsg =  $cronbottommsg ." [ladder stats logged]";
 		
 
 }
@@ -218,9 +220,9 @@ if ($vcron4->allowAction()) {
 
 // [ Ladder Snapshots ]
 if (KEEP_LADDER_HISTORY == 1) {
-	$vcron5=new virtualcron(1440,"ladderhistorycron.txt");
+	$vcron5=new virtualcron(1440,CRONCHECK_PATH."ladderhistorycron.txt");
 	
-	if ($vcron4->allowAction()) {
+	if ($vcron5->allowAction()) {
 		
 		$logdate = date('Y_m_d');
 		$target = $historydatabasename .".". $logdate; 
@@ -228,7 +230,7 @@ if (KEEP_LADDER_HISTORY == 1) {
 		
 		mysql_query("DROP TABLE IF EXISTS $target;") or die(mysql_error());
 		mysql_query("CREATE TABLE  $target SELECT * FROM $source WHERE rank > 0;") or die(mysql_error());  
-		
+		$cronbottommsg =  $cronbottommsg ." [archieved ladder rankings]";
 	}	
 	
 }

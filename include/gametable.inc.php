@@ -11,6 +11,8 @@ function gameTableTHead()
 <th>Loser</th>
 <th>Winner  Rating</th>
 <th>Loser Rating</th>
+<th>Winner  Rank</th>
+<th>Loser Rank</th>
 <th>Feedback</th>
 <th>Replay</th>
 <th>Game Detail</th>
@@ -46,8 +48,8 @@ function gameTableTBody($result, $playerName = null)
     	} else if ($row['contested_by_loser'] <> 0) {
         	$loserContested = "**";
     	}
-    	$winnerProvisional = $row['winner_games'] < PROVISIONAL ? "p" : "";
-    	$loserProvisional = $row['loser_games'] < PROVISIONAL ? "p" : "";
+    	$winnerProvisional = $row['winner_games'] <= PROVISIONAL ? "p" : "";
+    	$loserProvisional = $row['loser_games'] <= PROVISIONAL ? "p" : "";
 
 		$text .= "<tr><td>";
         $text .= $sdel.$row['reported_on'].$edel;
@@ -70,12 +72,12 @@ function gameTableTBody($result, $playerName = null)
 
 		// Put all the relevant stuff into the feedback column
 		// We only want to show stuff if there is something..else we'll show a - 
-		if ($row['winner_stars'] == NULL || $row['winner_stars'] == "" ) {
+		if ($row['winner_stars'] == NULL || $row['winner_stars'] == "" || $row['winner_stars'] == "0" ) {
 			$winnerstars = "-";
 		} else {
 		    $winnerstars = $row['winner_stars'];
 		}
-		if ($row['loser_stars'] == NULL || $row['loser_stars'] == "") {
+		if ($row['loser_stars'] == NULL || $row['loser_stars'] == "" || $row['loser_stars'] == "0") {
 			$loserstars = "-";
 		} else {
 			$loserstars = $row['loser_stars'];

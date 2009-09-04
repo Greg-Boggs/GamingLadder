@@ -63,20 +63,25 @@ By counting this way and by cutting away one day (and it's games) at a time we c
 	$searchingpassivedays = $DaysUntilPassive;
 	//DEB echo "(66) $ gamesactivitysurplus: $gamesactivitysurplus <br>"; 
 
-	while  ($gamesactivitysurplus >= 0 )  {
+	while  (($gamesactivitysurplus >= 0 ) && ($searchingpassivedays > 0)) {
+		
 		
 		$sqlplayed = mysql_query("SELECT count(*) FROM $GamesTable WHERE  (winner =  '$PlayersName' OR loser =  '$PlayersName' ) AND contested_by_loser = '0' AND withdrawn = '0' AND reported_on > (now( ) - INTERVAL $searchingpassivedays DAY)");
 		
 		$numberplayed = mysql_fetch_row($sqlplayed);
+
+				
 		
 		// Cut away the games that were played furthest away the current date. (This variable is used in the sql below)
 		$searchingpassivedays--;
-
+		
 		$hasplayedgames2 = $numberplayed[0];
 
 			if ($hasplayedgames2 >= $GamesUntilPassive) {
 			$buffertdays++;
-			} else { break;}
+			
+			} else { 
+			break;}
 	}
 
 // Let's put all the info in the global array so it can be used elsewhere...

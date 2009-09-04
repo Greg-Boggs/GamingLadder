@@ -1,3 +1,26 @@
+This is mainly a bug fix release, so nothing blazing here except for discreet improvement.
+
 // New
 
-- Timezone for the whole ladder can be set by admin. Default is UTC, which is best to keep if there are players from more than one timezone. Setting is also shown in profile and footer.
+- footer shows when the fcron has done something to the ladder to the visitor that triggered it.
+
+- Graphics to the maintenance screen shown to users: Thanks to the wesnoth.org community for it's amazing visuals. Please visit the site and check out the game.
+
+
+// Fixes 
+
+- Important: The number of games a provisional player has to play before becoming a non-provisional is now correct, corresponding with the settings in the cfg. On LoW this value was 9 due to code error (again), when it was set to 10 in the cfg. The same goes for the games a player needed to play before he gets a ranking at all, it was 8 due to some earlier attempts to mend another bug that was fixed, while it was really set to 10 in cfg.
+
+- Maintenance mode no longer blocks admin from accessing the admin interface.
+
+- Check files for FCron are now in a separate dir for write permission reasons, path is configurable.
+
+- FCronjobs for archieving the ladder day by day had a bug leading to the snapshots not being taken at all some times. 
+
+- Sportsmanship points in games history and also in profile would be too low when doing a foonky db imports where NULL was replaced by 0. 
+
+- Time display error related to UTC on profile & maintenance page.
+
+- On some PHP setups one additional day was somehow added in the buffert days a player has to play a game in to count as active. (Okey, so that's barely readable English...)
+
+- Rerank logs are now gathered in /logs instead of loosely on the server

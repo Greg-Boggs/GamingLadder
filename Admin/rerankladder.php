@@ -1,16 +1,13 @@
 ﻿<?php
-session_start();
-require_once '../conf/variables.php';
-// Checks if we have logged in, and will return the appropriate page if we haven't.  Therefor it may not return, it may exit.
+@session_start(); // Don't know how to fix the warning it generates, nor what causes it...so let's supress it in all my wisdom ~eyerouge 
 $GLOBALS['prefix'] = "../";
+require('./../conf/variables.php');
 require_once 'security.inc.php';
-require('../top.php');
+require('./../top.php');
 require '../include/genericfunctions.inc.php';
 require '../include/elo.class.php';
-
 // Set filename for the logfile...
-$reranklogfile = date(y_m_d) ."_rerank_logs";
-
+$reranklogfile = "../logs/".date(y_m_d) ."_rerank_logs";
 // Initialise misc. variables needed to handle the batching
 $CurrentBatch = 1; 
 $CurrentStart = 0;

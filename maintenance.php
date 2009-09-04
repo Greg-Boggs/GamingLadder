@@ -1,9 +1,11 @@
 <?php
 require 'conf/variables.php';
 require 'top.php';
+date_default_timezone_set("$cfg_ladder_timezone");
 ?>
-<h1>Maintenance</h1>
-<p>The ladder is currently undergoing maintenance to improve the service we provide, please try again later.</p>
+
+<img src="images/maintenance.png">
+
 <?php
 require 'bottom.php';
 ?>

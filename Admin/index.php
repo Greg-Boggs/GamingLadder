@@ -6,6 +6,7 @@ if (isset($_GET['logout'])) {
 $GLOBALS['prefix'] = "../";
 require('./../conf/variables.php');
 require('./../top.php');
+date_default_timezone_set("$cfg_ladder_timezone");
 ?>
 <p class="header">Admin section.</p>
 <?php

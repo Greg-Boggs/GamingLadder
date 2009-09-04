@@ -38,7 +38,7 @@ class Elo {
             $row = mysql_fetch_array($result, MYSQL_ASSOC);
         }
 
-        if (($row['games'] < PROVISIONAL) && (PROVISIONAL_SYSTEM > 0)) {
+        if (($row['games'] <= PROVISIONAL) && (PROVISIONAL_SYSTEM > 0)) {
             $row['provisional'] = true;
         } else {
             $row['provisional'] = false;
