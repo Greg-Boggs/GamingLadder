@@ -14,7 +14,7 @@ if ($_POST[user] AND $_POST[pass]) {
 	$fpass = $_POST[pass];
 	
 	
-// Lets hinder players who havent verified their mail from loging in / creating logged in cookies...
+// Lets hinder players who havent verified their mail from logging in / creating logged in cookies...
 //eye Check if the player has verified his email by clicking the activation link...
 
 $sql="SELECT * FROM $playerstable WHERE name = '$fname'";
@@ -24,7 +24,7 @@ $sql="SELECT * FROM $playerstable WHERE name = '$fname'";
 		
 	if ($row[Confirmation] != "" AND $row[Confirmation] == "Deleted") {
 		require('top.php');
-		echo "<b>You cant login because your account was deleted either on your request or by admin.</b><br><br>Feel free to contact us if you want to re-enable your account: All the data associated with it has been saved and can easily be restored by admin.";
+		echo "<b>You can't login because your account was deleted either on your request or by admin.</b><br><br>Feel free to contact us if you want to re-enable your account: All the data associated with it has been saved and can easily be restored by admin.";
 		require('bottom.php');
 		exit;		
 		}
@@ -32,14 +32,14 @@ $sql="SELECT * FROM $playerstable WHERE name = '$fname'";
 	
 	if ($row[Confirmation] != "" AND $row[Confirmation] != "Ok") {
 		require('top.php');
-		echo "<b>You cant login because you have not activated your account.</b><br /><br />When you registered a mail was sent to you containing a unique <i>activation link</i>. Please find that mail and click the activation link. Dont forget to check your spam box, as some services wrongly flag our activation mail as spam. <br><br>Feel free to contact us if you are sure that you have missplaced your activation email.";
+		echo "<b>You can't login because you have not activated your account.</b><br /><br />When you registered a mail was sent to you containing a unique <i>activation link</i>. Please find that mail and click the activation link. Don't forget to check your spam box, as some services wrongly flag our activation mail as spam. <br><br>Feel free to contact us if you are sure that you have misplaced your activation email.";
 		require('bottom.php');
 		exit;		
 		}
 
-// Okey, we have no check that the user is verified and can let him in...
-// Lets generate the encrypted pass, after all, its the one thats stored in the database... we do it by applying the salt and hashing it twice.
-// We need to take the users real pass, "encrypt" it the same way we did when he registered, and then compare the results.
+// Ok, we have checked that the user is verified and can let him in...
+// Let's generate the encrypted pass, after all, it's the one that's stored in the database... we do it by applying the salt and hashing it twice.
+// We need to take the user's real pass, "encrypt" it the same way we did when he registered, and then compare the results.
 // The salt is read from the config file.
 
 $passworddb = $salt.$fpass;
@@ -158,7 +158,7 @@ $sql="SELECT * FROM $gamestable WHERE contested_by_loser = '0' AND withdrawn = '
 		
 				// Took 2:nd place
 		if (($PreviousWinner != $RowAutoMent['winner']) && stristr(INDEX_MAGIC_COMMENTATOR,'W') && (($RowAutoMent['w_rank'] > 2) || ($RowAutoMent['w_rank'] == 0)) && (($RowAutoMent['w_new_rank'] == 2) && ($RowAutoMent['w_new_rank'] > 0))) {
-				echo "<br>[". GetOnlyMonthDay($RowAutoMent['reported_on']) ."] <a href=\"profile.php?name=". $RowAutoMent['winner'] ."\">".$RowAutoMent['winner'] ."</a> ". $MagicComRandTop2Msgs[$MagicComRandTop2[0]]. " 2:nd place.";
+				echo "<br>[". GetOnlyMonthDay($RowAutoMent['reported_on']) ."] <a href=\"profile.php?name=". $RowAutoMent['winner'] ."\">".$RowAutoMent['winner'] ."</a> ". $MagicComRandTop2Msgs[$MagicComRandTop2[0]]. " 2nd place.";
 						// Remember the persons involved in the last display, to not show info twice in a row about the same person
 		$PreviousWinner = $RowAutoMent['winner'];
 		$PreviousLoser = $RowAutoMent['loser'];
@@ -168,7 +168,7 @@ $sql="SELECT * FROM $gamestable WHERE contested_by_loser = '0' AND withdrawn = '
 
 		// Took 3:d place
 		if (($PreviousWinner != $RowAutoMent['winner']) && stristr(INDEX_MAGIC_COMMENTATOR,'E') && (($RowAutoMent['w_rank'] > 3) || ($RowAutoMent['w_rank'] == 0)) && (($RowAutoMent['w_new_rank'] == 3) && ($RowAutoMent['w_new_rank'] > 0))) {
-				echo "<br>[". GetOnlyMonthDay($RowAutoMent['reported_on']) ."] <a href=\"profile.php?name=". $RowAutoMent['winner'] ."\">".$RowAutoMent['winner'] ."</a> ". $MagicComRandTop2Msgs[$MagicComRandTop2[0]]. " 3:d place.";
+				echo "<br>[". GetOnlyMonthDay($RowAutoMent['reported_on']) ."] <a href=\"profile.php?name=". $RowAutoMent['winner'] ."\">".$RowAutoMent['winner'] ."</a> ". $MagicComRandTop2Msgs[$MagicComRandTop2[0]]. " 3rd place.";
 						// Remember the persons involved in the last display, to not show info twice in a row about the same person
 		$PreviousWinner = $RowAutoMent['winner'];
 		$PreviousLoser = $RowAutoMent['loser'];
