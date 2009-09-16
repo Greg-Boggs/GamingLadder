@@ -42,7 +42,7 @@ $result = mysql_query($sql, $db);
 
 while ($row = mysql_fetch_array($result)) {
     // Set the time they wanted to search for a game...
-    $inactive = time()-(60*60*$row[time]);
+    $inactive = time()-(60*60*$row['time']);
 
     // Delete the entry if the time has passed...
     if ($row['entered'] < $inactive) {
@@ -66,7 +66,7 @@ if ((mysql_num_rows($result)==0) && isset($_SESSION['username'])) {
 	
 	while ($row = mysql_fetch_array($result)) {
 	
-		$timeleft = $row[entered]-(time()-(60*60*$row[time]));
+		$timeleft = $row['entered']-(time()-(60*60*$row['time']));
 		print("<li><a href=\"profile.php?name=$row[username]\">$row[username]</a> ($row[rating])<br> ".TimeConvert($timeleft)." - $row[meetingplace]</li>
 		");
 	}
@@ -103,7 +103,7 @@ if ((mysql_num_rows($result)==0) && isset($_SESSION['username'])) {
 	while ($bajs = mysql_fetch_array($result)) { 
         echo "<li><a href=\"profile.php?name=$bajs[0]\">$bajs[0]</a> / <a href=\"profile.php?name=$bajs[1]\">$bajs[1]</a>";
         // show replay link or not?
-        if ($bajs[is_replay] != 0) {
+        if ($bajs['is_replay'] != 0) {
 		    echo " <a href=\"download-replay.php?reported_on=$bajs[reported_on]\">®</a></li>";
 		}
         echo "</li>";
