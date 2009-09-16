@@ -261,8 +261,8 @@ if (isset($_POST['report'])) {
 	echo "<p>Thank you! Information entered. Check your <a href=\"ladder.php?personalladder=".urlencode($_SESSION['username'])."\">current position.</a><br />Report Id: ". $cloneresult['reportedTime'] . " | " . $winner." / ". $loser ."</p>";
     
   // So the report was done and all that the player entered put into the db. Finally we recache the ladder, it takes about 1-2 seconds with 25000 games
-        mysql_query("TRUNCATE TABLE $standingscachetable", $db);	
-        mysql_query("INSERT INTO $standingscachetable ".$cacheSql, $db);	
+        mysql_query("TRUNCATE TABLE $standingscachetable", $db) or die(mysql_error());
+        mysql_query("INSERT INTO $standingscachetable ".$cacheSql, $db) or die(mysql_error());
 		require_once 'include/morecachestandings.inc.php';   
 		
 
