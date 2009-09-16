@@ -102,7 +102,7 @@ $rank = "";
 $rank = $playercached['rank'];
 
  
-$MySQLgamestorank = ($gamestorank - 2); // This is needed since MySQL for some reason, in the operations below in this section, adds 2 to whatever value is set in $gamestorank in the configfile, so this fixes it.
+$MySQLgamestorank = $gamestorank; 
 
 
 // A passive player is one that has 0 rank, and have played enough game in total to be included in the ladder, and also has an elo high enough to be included in the ladder. An unranked player is one that doesn't even qualify to be part of the ladder: He has a rank of 0, and hasnt played enough games in total and/or hasn't have an elo that is high enough to be included in the ladder.

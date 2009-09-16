@@ -53,14 +53,18 @@ $(document).ready(function()
 <table id="games" class="tablesorter">
 <thead>
 <tr>
-<th>Reported Time</th>
+<th>Reported</th>
 <th>Winner</th>
 <th>Loser</th>
-<th>Winner New Rating</th>
-<th>Loser New Rating</th>
-<th>Feedback</th>
+<th  title="W. Elo rating after game (points earned due to the game)">W Rating</th>
+<th title="L. Elo rating after game (points lost due to the game)">L Rating</th>
+<th title="W. Rank when & before game was played">W Rank</th>
+<th title="L. Rank when & before game was played">L Rank</th>
+<th title="New W. Rank, rank of winner after game">NW Rank</th>
+<th title="New L. Rank, rank of loser after game">NL Rank</th>
+<th  title="Sportm. Rating given to winner / Loser, & if W or L commented">Feedback</th>
 <th>Replay</th>
-<th>Game Details</th>
+<th>Details</th>
 </tr>
 <tr>
 <td><select name="reporteddirection">
@@ -85,6 +89,10 @@ $(document).ready(function()
     </select>
     <input type="text" value="<?php echo $searchArray['loserrating']; ?>" name="loserrating" size="3" />
 </td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
 <td>&nbsp;</td>
 <td><select name="replay">
     <option <?php if ($searchArray['replay'] == "") echo "selected='selected'"; ?> value="">All</option>
@@ -143,7 +151,7 @@ if ($searchArray['reporteddirection'] != "" && $searchArray['reportdate'] != "")
 }
 
 // Build the select
-$sql = "SELECT withdrawn, contested_by_loser, DATE_FORMAT(reported_on, '".$GLOBALS['displayDateFormat']."') as report_time, reported_on, winner, loser, winner_points, loser_points, winner_elo, loser_elo, replay_filename as is_replay, replay_downloads, winner_stars, loser_stars FROM $gamestable WHERE $where ORDER BY reported_on DESC LIMIT 250";
+$sql = "SELECT withdrawn, contested_by_loser, DATE_FORMAT(reported_on, '".$GLOBALS['displayDateFormat']."') as report_time, reported_on, winner, loser, winner_points, loser_points, winner_elo, loser_elo, w_rank, l_rank, w_new_rank, l_new_rank, replay_filename as is_replay, replay_downloads, winner_stars, loser_stars FROM $gamestable WHERE $where ORDER BY reported_on DESC LIMIT 250";
 
 $result = mysql_query($sql, $db);
 echo gameTableTBody($result);
