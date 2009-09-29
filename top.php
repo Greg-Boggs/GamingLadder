@@ -69,7 +69,9 @@ font-size: 12 px;
   </div>
 <?php
     require('menu.php');
-	
+    if  ($G_CFG_multiladder == true){
+    include('ladderselect.php');
+    }
 ?>
 </div>
 

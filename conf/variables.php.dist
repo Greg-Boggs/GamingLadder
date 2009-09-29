@@ -1,8 +1,34 @@
 <?
-define("TRIBAL_VERSION", "168"); // version number shown in footer. This = the revision number in SVN /trunk  Please change when you upgrade. Also add "Rev" in front of it if you customize the ladder code somehow and if you are not a part of the development team of tribal bliss. (we do however invite you to become so : ) 
+define("TRIBAL_VERSION", "169"); // version number shown in footer. This = the revision number in SVN /trunk  Please change when you upgrade. Also add "Rev" in front of it if you customize the ladder code somehow and if you are not a part of the development team of tribal bliss. (we do however invite you to become so : ) 
 
 $maintenanceMode = false; // Is the site under maintenance, if so set this to true and all pages will show a maintenance screen
 $backupKey = "A long password w!tH $ymb0ls is G00d"; // You can backup the database without logging in if you have access to the key below.  Change it to a secure string
+
+//Multiladder settings
+
+  $G_CFG_multiladder = false; //Switch to enable multiple ladders (true/false)
+  $G_CFG_default_ladder_id = "default"; //Id of the ladder you want to call by default, dont change it with only one ladder running!!! otherwise config-file is missing  
+  
+  if ($G_CFG_multiladder == true){
+
+    $G_CFG_enabled_ladder_list = array(1 => 'default', 'default1'); //here are the possible ladders included (important for menu generation), pay attention to the name because it will grab the configfile according to "yourname"_conf.php 
+  
+    //next lines are all about to grab the config file for the specific ladder
+
+    //first, set session variable called ladder_id, point it to default ladder if it doesnt exist
+    if (!isset ($_SESSION['ladder_id'])){
+      $_SESSION['ladder_id'] = $G_CFG_default_ladder_id;
+    }
+    //if 'ladder' is set with url-parameter, change session variable according to it
+    if (isset ($_GET['ladder'])){
+      $_SESSION['ladder_id'] = $_GET['ladder'];
+    }
+    //finally include the configuration for the defined ladder
+    include($_SESSION['ladder_id'].'_conf.php');
+  }
+    else {
+      include($G_CFG_default_ladder_id.'_conf.php');
+    }
 
 //configure database info
 
