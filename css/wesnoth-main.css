@@ -341,6 +341,7 @@ blockquote {
   background: #272727 url('navbg.png') repeat-x bottom;
   text-align: center;
   border-top: 1px solid #595959;
+  color: #B48648;
 }
 
 #nav ul, #nav li {

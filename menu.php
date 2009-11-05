@@ -24,11 +24,33 @@ if ($maintenanceMode <> true) {
     ?>
 	<li><a href="faq.php">FAQ</a></li>
 	</ul>
+
+<?php 
+//next lines create an additional menu with the only purpose of accessing different ladders
+//checks if multiladder is enabled and then reads the $G_CFG_enabled_ladder_list array and will create for each entry a link plus $_GET Parameter
+//
+if  ($G_CFG_multiladder == true){?>
+    <br></br>
+    <ul style="font-size: x-small;">
+	<li><b>Ladderselection:</b></li>
+	<?
+	foreach($G_CFG_enabled_ladder_list as $key => $value) { 
+	echo "<li><a href=\"index.php?ladder=".$value."\">".$value."</a></li>";
+	}
+	?>
+    </ul>
+<?php
+}
+?>
+
 </div>
 <?php
  } else {
 ?>
 <div id="nav"></div>
+
 <?php
 }
 ?>
+
+
