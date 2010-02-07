@@ -1,4 +1,8 @@
 <?
+// Debug Meldungen einschalten
+//error_reporting(E_ALL);
+//ini_set('display_errors', TRUE); 
+
 session_start();
 $time = time();
 require('conf/variables.php');

@@ -643,6 +643,14 @@ $result = mysql_query($sql,$db);
 </div>
 
 
+<?php 
+
+// display the elo/game chart if it is set in the main config 
+if  ($G_CFG_enable_graph_creation == TRUE){?>
+    <h2>Graph <a id="graph"></a></h2>
+    <div id="graph"> <?php include 'pChart/elo_time_graph.php'; ?> </div>
+<?php  } ?>
+
 <?php
 }
 require('bottom.php');
