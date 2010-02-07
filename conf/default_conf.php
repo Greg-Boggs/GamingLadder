@@ -7,10 +7,10 @@ $backupKey = "password"; // You can backup the database without logging in if yo
 $adminemail = "spam@THIS.com";
 $laddermailsender = "test@dot.com"; // this will be the senders email when the ladder sends a mail to someone... 
  $databaseserver = "localhost"; //usually localhost
- $databasename = "ladder"; //the name of your database
- $databaseuser = "Tesafilmchen"; //the name of the database-user
- $databasepass = "q15gtz"; // the password to your database
- $directory ="http://localhost/~micha/gamingladder/gamingladder/trunk/" ; //the location of your ladder directory (no trailing slash)
+ $databasename = "yourinfo"; //the name of your database
+ $databaseuser = "yourinfo"; //the name of the database-user
+ $databasepass = "yourinfo"; // the password to your database
+ $directory ="yourinfo" ; //the location of your ladder directory (no trailing slash)
  $path_file_replay = "replays/";	// directory where the replay files are uploaded on the server. Notice that there should be a trailing slash at the end.
 $historydatabasename = "yourinfo"; // the name of your database that will be used for keeping snapshots of how the ladder looked on a day by day basis. Notice: Most webhosts only offer you _one_ database. This would all _work_ with just one database and you could specify the name of the same db as you did in databasename, but it's really smoother to the eye to don't mix ladder history tables with current ladder tables and use 2 separate databases. If you turn off the snapshot function (KEEP_LADDER_HISTORY = 0) you can enter whatever db name here as it won't be used at all.
 define("CRONCHECK_PATH","cronchecks/"); // dir for where the cron check files are stored. It should be writable.
