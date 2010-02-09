@@ -7,14 +7,17 @@ INSTALLATION
 0) Extract the file into the directory you want.
 
 1) Copy 'conf/variables.php.dist' to 'conf/variables.php' and edit the 
-settings. Only the database settings are required initially.
+settings.
 
-2) Extract the file to set up the empty database (located in the conf directory):
+2) Copy 'conf/default_conf.php.dist' to 'conf/default_conf.php' Only the database settings are required initially. 
+If you want an additional ladder, copy 'conf/default1_conf.php.dist' to 'conf/default1_conf.php', define the database setting and set the $G_CFG_multiladder in 'conf/variables.php' to TRUE
+
+3) Extract the file to set up the empty database (located in the conf directory):
 gunzip __EmptyDB_rev2__.sql.gz
 
-3) Create the MySQL database
+4) Create the MySQL database
 mysql -uusername -p databasename < __EmptyDB_rev2__.sql
 
-4) That's it! Run index.php from the directory you've installed into and all should be working.
+5) That's it! Run index.php from the directory you've installed into and all should be working.
 
-5) Go to https://sourceforge.net/projects/gamingladder for more information
+6) Go to https://sourceforge.net/projects/gamingladder for more information

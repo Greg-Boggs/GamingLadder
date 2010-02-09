@@ -1,11 +1,4 @@
 <?php
-
-$teamladdermode = TRUE; //switch for enabling 2v2 teamladder
-$teamtable = "webl_teams"; //name of the table that stores the information about the teams
-
-define ("TEAM_MEMBER_NUMBER", 4); // defines of how many people form a team (2 for 2v2 ladder...)
-
-
 $maintenanceMode = false; // Is the site under maintenance, if so set this to true and all pages will show a maintenance screen
 $backupKey = "password"; // You can backup the database without logging in if you have access to the key below.  Change it to a secure string
 
@@ -165,7 +158,7 @@ define("PURGE_GHOST_MINUTES",20160);  // After a player has registered he has th
 $passivedays = 30; // number of days a player has to play a game before he's put in passive rating mode
 define("GAMES_FOR_ACTIVE",1); // Number of minimum games that have to be played within the x latest days for a player to be considered as active. If the number of games go below this number within the given timeframe the player is considered passive. Example: We want the players to play at least 2 games within the 7 latest days, then we'd set: $passivedays = 7 and GAMES_FOR_ACTIVE to 2. Example: If it's enough to play just 1 game a month to be considered as active then set it to: $passivedays = 30 and GAMES_FOR_ACTIVE to 1.
 $ladderminelo = 1300; // all players that have this or higher elo rating will be listed in the ladder... the rest are not _visible_ in it.
-$gamestorank = 1; // number of games a player must have played in order to get a ranking (not the same as getting an elo rating!)
+$gamestorank = 10; // number of games a player must have played in order to get a ranking (not the same as getting an elo rating!)
 $playersshown = 200; //Number of players to show per php query on stats
 
 // Define a Kvalue array, must be in descending points order.  rating => kvalue
