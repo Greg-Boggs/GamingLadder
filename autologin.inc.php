@@ -1,5 +1,4 @@
-<?php 
-require_once('conf/variables.php');
+<?php
 
 // Lets check to see if there are Ladder cookies to see if the user is logged in.
 

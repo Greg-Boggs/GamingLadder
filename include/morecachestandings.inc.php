@@ -42,7 +42,7 @@ $MySQLgamestobeactive = GAMES_FOR_ACTIVE;
 
 TimerOn();
 
-if ($AdminIsReRankingTheWholeThing != 1){
+if (isset($AdminIsReRankingTheWholeThing) != 1){
 	// Please notice that the recently_played column either shows 0 if a player has not managed to play x games within y days, or, if he has played x games or more within y days, it will actually contain the number of games. This means that only time a player has a 0 in this column is if he's considered to be incactive due to not having played enough games. If a player has played 3 games within y amount of days, and the ladder requires the player ti have played 4 games in y amount of days, then this column would show 0, and not 3, as one might easily think.
 	$result = mysql_query("insert into temp_played (name, recently_played)
 	(

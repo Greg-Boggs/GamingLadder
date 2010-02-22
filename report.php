@@ -1,8 +1,7 @@
 <?php
 session_start();
-require('conf/variables.php');
 require('autologin.inc.php');
-require('logincheck.inc.php');	
+require('logincheck.inc.php'); //this file calls variable.conf.php	
 date_default_timezone_set("$cfg_ladder_timezone");
 
 // We have ajax lower down on the page, we handle it here and then exit.
@@ -59,7 +58,7 @@ if (isset($_POST['report'])) {
 	
 		
 	// Get the current time as unix epoch
-	$currenttime = date(U);
+	$currenttime = date('U');
 
 	// The format of the date in the mysql is 2008-08-23 03:12:14
 
