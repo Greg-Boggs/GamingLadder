@@ -7,60 +7,60 @@ include 'include/avatars.inc.php';
 <p class="header">Join.</p>
 <p class="text">
 <?
-if ($_POST[submit]) {
-	$name = trim(strip_tags($_POST[name]));
-	$passworddb = trim(strip_tags($_POST[passworddb]));
-	$passworddb2 = trim(strip_tags($_POST[passworddb2]));
-	$msn = trim(strip_tags($_POST[msn]));
-	$icq = trim(strip_tags($_POST[icq]));
-	$aim = trim(strip_tags($_POST[aim]));
-	$mail = trim(strip_tags($_POST[mail]));
-	$WesVersion = $_POST[version];
-	$MsgMeToPlay = $_POST[msgme];
+if (isset ($_POST['submit'])) {
+	$name = trim(strip_tags($_POST['name']));
+	$passworddb = trim(strip_tags($_POST['passworddb']));
+	$passworddb2 = trim(strip_tags($_POST['passworddb2']));
+	$msn = trim(strip_tags($_POST['msn']));
+	$icq = trim(strip_tags($_POST['icq']));
+	$aim = trim(strip_tags($_POST['aim']));
+	$mail = trim(strip_tags($_POST['mail']));
+	$WesVersion = $_POST['version'];
+	$MsgMeToPlay = $_POST['msgme'];
 	$length = strlen($name);
 	
-	if ($_POST[MonM] != "") {$CanPlay = "$CanPlay $_POST[MonM]";}
-	if ($_POST[MonN] != "") {$CanPlay = "$CanPlay $_POST[MonN]";}
-	if ($_POST[MonA] != "") {$CanPlay = "$CanPlay $_POST[MonA]";}
-	if ($_POST[MonE] != "") {$CanPlay = "$CanPlay $_POST[MonE]";}
-	if ($_POST[MonNi] != "") {$CanPlay = "$CanPlay $_POST[MonNi]";}
+	if (isset($_POST['MonM']) != "") {$CanPlay = "$CanPlay $_POST[MonM]";}
+	if (isset($_POST['MonN']) != "") {$CanPlay = "$CanPlay $_POST[MonN]";}
+	if (isset($_POST['MonA']) != "") {$CanPlay = "$CanPlay $_POST[MonA]";}
+	if (isset($_POST['MonE']) != "") {$CanPlay = "$CanPlay $_POST[MonE]";}
+	if (isset($_POST['MonNi']) != "") {$CanPlay = "$CanPlay $_POST[MonNi]";}
 	
-	if ($_POST[TueM] != "") {$CanPlay = "$CanPlay $_POST[TueM]";}
-	if ($_POST[TueN] != "") {$CanPlay = "$CanPlay $_POST[TueN]";}
-	if ($_POST[TueA] != "") {$CanPlay = "$CanPlay $_POST[TueA]";}
-	if ($_POST[TueE] != "") {$CanPlay = "$CanPlay $_POST[TueE]";}
-	if ($_POST[TueNi] != "") {$CanPlay = "$CanPlay $_POST[TueNi]";}
+	if (isset($_POST['TueM']) != "") {$CanPlay = "$CanPlay $_POST[TueM]";}
+	if (isset($_POST['TueN']) != "") {$CanPlay = "$CanPlay $_POST[TueN]";}
+	if (isset($_POST['TueA']) != "") {$CanPlay = "$CanPlay $_POST[TueA]";}
+	if (isset($_POST['TueE']) != "") {$CanPlay = "$CanPlay $_POST[TueE]";}
+	if (isset($_POST['TueNi']) != "") {$CanPlay = "$CanPlay $_POST[TueNi]";}
 	
-	if ($_POST[WedM] != "") {$CanPlay = "$CanPlay $_POST[WedM]";}
-	if ($_POST[WedN] != "") {$CanPlay = "$CanPlay $_POST[WedN]";}
-	if ($_POST[WedA] != "") {$CanPlay = "$CanPlay $_POST[WedA]";}
-	if ($_POST[WedE] != "") {$CanPlay = "$CanPlay $_POST[WedE]";}
-	if ($_POST[WedNi] != "") {$CanPlay = "$CanPlay $_POST[WedNi]";}
+	if (isset($_POST['WedM']) != "") {$CanPlay = "$CanPlay $_POST[WedM]";}
+	if (isset($_POST['WedN']) != "") {$CanPlay = "$CanPlay $_POST[WedN]";}
+	if (isset($_POST['WedA']) != "") {$CanPlay = "$CanPlay $_POST[WedA]";}
+	if (isset($_POST['WedE']) != "") {$CanPlay = "$CanPlay $_POST[WedE]";}
+	if (isset($_POST['WedNi']) != "") {$CanPlay = "$CanPlay $_POST[WedNi]";}
 	
-	if ($_POST[ThuM] != "") {$CanPlay = "$CanPlay $_POST[ThuM]";}
-	if ($_POST[ThuN] != "") {$CanPlay = "$CanPlay $_POST[ThuN]";}
-	if ($_POST[ThuA] != "") {$CanPlay = "$CanPlay $_POST[ThuA]";}
-	if ($_POST[ThuE] != "") {$CanPlay = "$CanPlay $_POST[ThuE]";}
-	if ($_POST[ThuNi] != "") {$CanPlay = "$CanPlay $_POST[ThuNi]";}
+	if (isset($_POST['ThuM']) != "") {$CanPlay = "$CanPlay $_POST[ThuM]";}
+	if (isset($_POST['ThuN']) != "") {$CanPlay = "$CanPlay $_POST[ThuN]";}
+	if (isset($_POST['ThuA']) != "") {$CanPlay = "$CanPlay $_POST[ThuA]";}
+	if (isset($_POST['ThuE']) != "") {$CanPlay = "$CanPlay $_POST[ThuE]";}
+	if (isset($_POST['ThuNi']) != "") {$CanPlay = "$CanPlay $_POST[ThuNi]";}
 	
 		
-	if ($_POST[FriM] != "") {$CanPlay = "$CanPlay $_POST[FriM]";}
-	if ($_POST[FriN] != "") {$CanPlay = "$CanPlay $_POST[FriN]";}
-	if ($_POST[FriA] != "") {$CanPlay = "$CanPlay $_POST[FriA]";}
-	if ($_POST[FriE] != "") {$CanPlay = "$CanPlay $_POST[FriE]";}
-	if ($_POST[FriNi] != "") {$CanPlay = "$CanPlay $_POST[FriNi]";}
+	if (isset($_POST['FriM']) != "") {$CanPlay = "$CanPlay $_POST[FriM]";}
+	if (isset($_POST['FriN']) != "") {$CanPlay = "$CanPlay $_POST[FriN]";}
+	if (isset($_POST['FriA']) != "") {$CanPlay = "$CanPlay $_POST[FriA]";}
+	if (isset($_POST['FriE']) != "") {$CanPlay = "$CanPlay $_POST[FriE]";}
+	if (isset($_POST['FriNi']) != "") {$CanPlay = "$CanPlay $_POST[FriNi]";}
 			
-	if ($_POST[SatM] != "") {$CanPlay = "$CanPlay $_POST[SatM]";}
-	if ($_POST[SatN] != "") {$CanPlay = "$CanPlay $_POST[SatN]";}
-	if ($_POST[SatA] != "") {$CanPlay = "$CanPlay $_POST[SatA]";}
-	if ($_POST[SatE] != "") {$CanPlay = "$CanPlay $_POST[SatE]";}
-	if ($_POST[SatNi] != "") {$CanPlay = "$CanPlay $_POST[SatNi]";}
+	if (isset($_POST['SatM']) != "") {$CanPlay = "$CanPlay $_POST[SatM]";}
+	if (isset($_POST['SatN']) != "") {$CanPlay = "$CanPlay $_POST[SatN]";}
+	if (isset($_POST['SatA']) != "") {$CanPlay = "$CanPlay $_POST[SatA]";}
+	if (isset($_POST['SatE']) != "") {$CanPlay = "$CanPlay $_POST[SatE]";}
+	if (isset($_POST['SatNi']) != "") {$CanPlay = "$CanPlay $_POST[SatNi]";}
 		
-	if ($_POST[SunM] != "") {$CanPlay = "$CanPlay $_POST[SunM]";}
-	if ($_POST[SunN] != "") {$CanPlay = "$CanPlay $_POST[SunN]";}
-	if ($_POST[SunA] != "") {$CanPlay = "$CanPlay $_POST[SunA]";}
-	if ($_POST[SunE] != "") {$CanPlay = "$CanPlay $_POST[SunE]";}
-	if ($_POST[SunNi] != "") {$CanPlay = "$CanPlay $_POST[SunNi]";}		
+	if (isset($_POST['SunM']) != "") {$CanPlay = "$CanPlay $_POST[SunM]";}
+	if (isset($_POST['SunN']) != "") {$CanPlay = "$CanPlay $_POST[SunN]";}
+	if (isset($_POST['SunA']) != "") {$CanPlay = "$CanPlay $_POST[SunA]";}
+	if (isset($_POST['SunE']) != "") {$CanPlay = "$CanPlay $_POST[SunE]";}
+	if (isset($_POST['SunNi']) != "") {$CanPlay = "$CanPlay $_POST[SunNi]";}		
 		
 	
 	if ($passworddb == "") {
@@ -177,7 +177,7 @@ else{
 
 <b>Multiple accounts are forbidden</b>. If you have problems with your account or registration please read the rules & faq. Contact us <i>after</i> that if you're problems remain. By registering you agree to all the ladder rules.
 
-<form method="post" action="<?php echo $PHP_SELF?>">
+<form method="post" action="<?php echo $_SERVER['PHP_SELF']?>">
 <table border="0" cellpadding="0">
 <tr>
 <td><p class="text"><b>Nickname:</b></p></td>
