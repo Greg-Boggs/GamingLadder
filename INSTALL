@@ -1,23 +1,23 @@
 REQUIREMENTS
 
-0) The Gaming Ladder requires a web server with at least PHP version ??? running MySQL version ???.
+1) The Gaming Ladder requires a web server with at least PHP version ??? running MySQL version ???.
 
 INSTALLATION
 
-0) Extract the file into the directory you want.
+1) Grab the latest ladder release from our /trunk from sourceforge SVN. 
+You can either do it by checking them out or by browsing the SVN and pressing the download tar-ball-link at the bottom of the page.  
+Url: http://gamingladder.svn.sourceforge.net/viewvc/gamingladder/trunk/
 
-1) Copy 'conf/variables.php.dist' to 'conf/variables.php' and edit the 
-settings.
+2) Copy 'conf/variables.php.dist' to 'conf/variables.php' and edit the settings.
 
-2) Copy 'conf/default_conf.php.dist' to 'conf/default_conf.php' Only the database settings are required initially. 
+3) Copy 'conf/default_conf.php.dist' to 'conf/default_conf.php' Only the database settings are required initially. 
 If you want an additional ladder, copy 'conf/default1_conf.php.dist' to 'conf/default1_conf.php', define the database setting and set the $G_CFG_multiladder in 'conf/variables.php' to TRUE
 
-3) Extract the file to set up the empty database (located in the conf directory):
-gunzip __EmptyDB_rev2__.sql.gz
+4) Create a database with any tool you like and then use the extract file from __EmptyDB_revX__.sql.gz as an import to your new database. The file is  located in the /conf directory.
+A good tool to use for all this is phpmyadmin. 
 
-4) Create the MySQL database
-mysql -uusername -p databasename < __EmptyDB_rev2__.sql
-
-5) That's it! Run index.php from the directory you've installed into and all should be working.
-
-6) Go to https://sourceforge.net/projects/gamingladder for more information
+5) Run index.php from the directory you've installed the ladder into and all should be working. Create a user that you want to make admin.
+Once it's properly registered edit your database with your favourite tools and visit the table webl_players. In it you must locate the newly create dplayer and change his "is_admin" from 0 to 1. 
+He/she is now an admin, and can login to the Admin interface by visiting http://yourladder.com/Admin using his user/pass that you created when you registered him/her. 
+ 
+6) Go to https://sourceforge.net/projects/gamingladder for more information or mail us at spam at eyerouge dot com.

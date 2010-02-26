@@ -17,14 +17,15 @@ define("CRONCHECK_PATH","cronchecks/"); // dir for where the cron check files ar
 
 //configure the tables in the database ...don't change these names unless you know what the tables in your db matches the names and types.
 
-$playerstable = "webl_players"; //the name of the table that contains information about the players
- $gamestable = "webl_games"; //the name of the table that stores the played games
- $newstable = "webl_news"; // the name of the table that stores the news
-  $admintable = "webl_admin"; //name of the table that stores the admin login information
-  $waitingtable = "webl_waiting"; //name of the table that stores the players waiting for a game...
- $standingscachetable = "webl_standings_cache"; // important cache, improves and makes up for mysql-sickness.
- $cronlogtable = "webl_cron_log"; // name of table that stores the info about when a fake cron job was (supposedly) ran.
-  $statstable = "webl_stats"; //table that has stats logged about how many players there have been each date etc.
+$playerstable = "webl_players2"; //the name of the table that contains information about the players. Notice the number 2 on the end if the tablenames. If you run a 3:d ladder it should be changed to 3 in the config file for that ladder, and 4 in the 4:th etc _if_  you run all the ladders in the _same_ database. (If you don't then please disregard all this) This is not necessary but a good and easy naming convention. You are however free to name the tables to almost whatever you want within MySQL naming restrictions. What's important is that __each ladder uses unique table names__, thus a prefix or postfix before/after the standard names is recomended. 
+
+ $gamestable = "webl_games2"; //the name of the table that stores the played games
+ $newstable = "webl_news2"; // the name of the table that stores the news
+  $admintable = "webl_admin2"; //name of the table that stores the admin login information
+  $waitingtable = "webl_waiting2"; //name of the table that stores the players waiting for a game...
+ $standingscachetable = "webl_standings_cache2"; // important cache, improves and makes up for mysql-sickness.
+ $cronlogtable = "webl_cron_log2"; // name of table that stores the info about when a fake cron job was (supposedly) ran.
+  $statstable = "webl_stats2"; //table that has stats logged about how many players there have been each date etc.
   $mailhost = "my.smtp.server";
 
 //config security

@@ -1,16 +1,22 @@
 <?
 define("TRIBAL_VERSION", "175"); // version number shown in footer. This = the revision number in SVN /trunk  Please change when you upgrade. Also add "Rev" in front of it if you customize the ladder code somehow and if you are not a part of the development team of tribal bliss. (we do however invite you to become so : ) 
+/*
+
+Please Notice: 	The only lines which you are supposed to config according to your own needs
+						are the ones where the comment has *** in it in the start.
+						The rest of the comments are just that - comments -  and not something which you should manipulate in any way. 
+*/
 
 //Multiladder settings
 
-  $G_CFG_multiladder = false; //Switch to enable multiple ladders (true/false)
-  $G_CFG_default_ladder_id = "default"; //Id of the ladder you want to call by default, dont change it with only one ladder running!!! otherwise config-file is missing  
+  $G_CFG_multiladder = false; // *** Switch to enable multiple ladders (true/false) ***
+  $G_CFG_default_ladder_id = "default"; // *** Id of the ladder you want to call by default, dont change it with only one ladder running!!! otherwise config-file is missing ***
   
   if ($G_CFG_multiladder == true){
 
-    $G_CFG_enabled_ladder_list = array(1 => 'default', 'default1'); //here are the possible ladders included (important for menu generation), pay attention to the name because it will grab the configfile according to "yourname"_conf.php 
+    $G_CFG_enabled_ladder_list = array(1 => 'default', 'default1'); // *** Here the ladders that we want to include are listed. This is only active if the multiladder option is set to TRUE and it's important for the menu generation. Pay attention to the spelling of the names because it will use the exact name to grab the proper configfile for each ladder. Example: If the ladders name in the array list is set to "2vs" then it would get the settings for that ladder from "/conf/2vs2_conf.php" ***
   
-    //next lines are all about to grab the config file for the specific ladder
+    //next lines are all about to grab the config file for the specific ladder.
 
     //first, set session variable called ladder_id, point it to default ladder if it doesnt exist
     if (!isset ($_SESSION['ladder_id'])){
@@ -27,11 +33,10 @@ define("TRIBAL_VERSION", "175"); // version number shown in footer. This = the r
       include($G_CFG_default_ladder_id.'_conf.php');
     }
 
-//switch to turn off/on the automatically generated elo/game charts in the profile page (important: pChart uses GD library, so be sure its part of your PHP installation before enable it)
-  $G_CFG_enable_graph_creation = false; //Switch to enable graph generation (true/false)
+  $G_CFG_enable_graph_creation = false; // *** Switch to enable graph generation (true/false) switch to turn off/on the automatically generated elo/game charts in the profile page (important: pChart uses GD library, so be sure its part of your PHP installation before enable it) ***
 
 
-// Config ends here! Don't edit anything beyond this line unless you know what your doing! ----------------------
+// CONFIG ENDS HERE! Don't edit anything beyond this line unless you know what your doing! ----------------------
 
 $latestGameSql = "select name, max(latest_game) as latest_game from (
 select name, max(reported_on) as latest_game FROM $playerstable JOIN $gamestable ON (name = winner) WHERE contested_by_loser = 0 AND withdrawn = 0 GROUP BY 1
