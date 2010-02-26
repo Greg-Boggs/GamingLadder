@@ -62,7 +62,7 @@ $MagicComRandEloMsgs = array("has ascended to the heady heights of ", "is now ov
 // Anti Match Spam Config ----------------------------
 
 // Measures against match spam (players gaining advantage by merely being more active than others)
-define("ANTI_MATCHSPAM_METHOD", 1); // 0 for none [default], 1 for cap on X matches / Y days, 2 for fixed k penalty factor after cap, 3 for dynamic factor
+define("ANTI_MATCHSPAM_METHOD", 0); // 0 for none [default], 1 for cap on X matches / Y days, 2 for fixed k penalty factor after cap, 3 for dynamic factor
 define("ANTI_MATCHSPAM_NUMGAMES", 14); // Amount of games (victories) a player can report within period x, where x is an amount of days. e.g. 14
 define("ANTI_MATCHSPAM_DAYS", 7); // The player can play <= y games within x days. If he exceeds that number he can't report the game. e.g. 7 for one week
 define("ANTI_MATCHSPAM_FACTOR", 0.5); // On METHOD 2 or 3, this 0 < value < 1 determines the point reduction above NUMGAMES (less value = more punishment) Recommendation: 0.5
@@ -122,14 +122,14 @@ $XpTitle = array(1 => "Peasant", 2 => "Recruit", 3 => "Soldier", 4 => "Veteran",
 //config etc ------------------------------------------------------
 
 $cfg_ladder_timezone = "UTC"; // Sets what timezone the ladder will use. PLease see http://se2.php.net/manual/en/timezones.php for all options. If you have a ladder with participants from more than 1 timezone it is however best to leave it at default UTC.  If you get wrong time then you have set this to the wrong value OR the webservers time is wrongly set somewhere.
-$titlebar = "Wesnoth Ladder - Competitive Gaming Ladder";
+$titlebar = "Name of Game Here -  Competitive Gaming Ladder";
 $numindexnewbs = 3; // number of newcomers to show in index sidebar..
 $numindexresults = 10; //num of latest played games results to show in index sidebar
 $numindexhiscore = 10; //number of people listed in the hiscore in the index sidebar
 $numindexnews = 10; // news items displayed at index bottom...
 $newsitems = 3; //news items to show full text of...this needs to be fixed - index shows 3 even if it says 5 in here.. lol
 $numindexdeled = 5; // how many deleted games are shown at index.
-define("MIN_GAMES_REPORT_POPUP", 30); // Players who have reported (won) less than this many games will get to see a pop up asking them if they are sure they want to report.
+define("MIN_GAMES_REPORT_POPUP", 20); // Players who have reported (won) less than this many games will get to see a pop up asking them if they are sure they want to report.
 define("COUNT_GAMES_OF_LATEST_DAYS", 1); // amount of days we're gonne count the most recent played games in to display in index sidebar
 define("MIN_COUNT_GAMES_OF_LATEST_DAYS", 1); // minimum amount of games that need to have been played within the x most recent days to show the amount of games the x most recent days
 define("AVERAGE_GAME_LENGTH", 40); // amount of minutes the average game is expected to last. This is used for calcuating work-hours spent on gaming in the sidebar.
@@ -170,9 +170,9 @@ define("MAX_DIFFERENCE", 1000); //1200 is so high this never gets used
 
 // Provisional System ---------------------------------
 
-define("PROVISIONAL_SYSTEM",0); // 0 for not using any provisional system. If set to system 1 it would protect any players rating when he would lose against a provisional player. The "old" player would only lose the normal amount of points divided with PROVISIONAL_PROTECTION if he lost against the provisional player. Set to 2 to use another provisional system where _both_ players get their wins/losses of points divided by PROVISIONAL_PROTECTION when at least one of them is a provisional player.
+define("PROVISIONAL_SYSTEM",0); // 0 for not using any provisional system. If set to system 1 it would protect any players rating when he would lose against a provisional player. The "old" player would only lose the normal amount of points divided with PROVISIONAL_PROTECTION if he lost against the provisional player. Setting this to "1" is not recommended and makes little sense. Set to 2 to use another provisional system where _both_ players get their wins/losses of points divided by PROVISIONAL_PROTECTION when at least one of them is a provisional player.
 define("PROVISIONAL",10); //The number of x games a player is provisional. 
-define("PROVISIONAL_PROTECTION",4); //The amount the points that are moved is divided with when a provisional system is in use.
+define("PROVISIONAL_PROTECTION",2); //The amount the points that are moved is divided with when a provisional system is in use.
 
 $kArrayProvisional = array(2100 => 32, 1800 => 48, 0 => 64); // Define a Kvalue array for provisional players only, must be in descending points order.  rating => kvalue
 
