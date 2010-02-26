@@ -1,4 +1,5 @@
 <?
+session_start();
 $page = "join";
 require('conf/variables.php');
 require('top.php');
