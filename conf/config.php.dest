@@ -1,0 +1,57 @@
+<?php
+    /*
+	*
+    * Config: Object, contains modified properties. Now, we can create different configurations, like:
+	* $config1 = new Config(); $config2 = new Config(array(param => value));
+	* @author Khramkov Ivan.
+	* 
+	*/
+    class Config {
+		/*
+		* The location of your ladder directory (no trailing slash)
+		*@var string
+		*/
+		var $directory = 'smth';
+		/*
+		* MySQL server
+		*@var string
+		*/
+		var $mysql_server = 'localhost';
+		/*
+		* The name of the database-user
+		*@var string
+		*/
+	    var $mysql_user = 'user';
+		/*
+		* The password to your database
+		*@var string
+		*/
+		var $mysql_password = 'pass';
+		/*
+		* The name of your database
+		*@var string
+		*/
+		var $mysql_database_name = 'dbase';
+		/*
+		* The location of your SMARTY templates
+		*@var string
+		*/
+	    var $smarty_templates_path = '/home/ladder/trunk/templates/';
+		/*
+		* The location of your SMARTY compiled templates
+		*@var string
+		*/
+		var $smarty_templates_c_path ='/home/ladder/trunk/templates_c/';
+		/*
+		* The location of your SMARTY cache
+		*@var string
+		*/
+		var $smarty_cache_path = '/home/ladder/trunk/cache/';
+		
+		function  __construct($params = NULL) {
+		    //I think, here should be some personalization code...
+		}
+	}
+	//TODO:
+	//All of configuration settings put into this class... (of cource, it will be long work, so this class copies some settings...)
+?>

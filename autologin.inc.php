@@ -11,7 +11,7 @@ if (!isset($_SESSION['real-username'])) {
 		$passincookie =  $_COOKIE["LadderofWesnoth2"];
 		
 		// Now lets compare the cookies with the database. If there is a playername and pass that corresponds, he's logged in...
-		$sql = "SELECT * FROM $playerstable WHERE name='$nameincookie' AND passworddb='$passincookie'";
+		$sql = "SELECT * FROM `$playerstable` WHERE `name`='$nameincookie' AND `passworddb`='$passincookie'";
 		$result = mysql_query($sql,$db);
 		$bajs = mysql_fetch_array($result); 
 		

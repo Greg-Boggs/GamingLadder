@@ -102,9 +102,7 @@ if (isset ($_POST['submit'])) {
 	$passworddb = $salt.$passworddb;
 	$passworddb = md5($passworddb); 
 	$passworddb = md5($passworddb); 	
-	
-		
-		
+
 	$sql="SELECT * FROM $playerstable WHERE name = '$name'";
 	$result=mysql_query($sql,$db);
 	$samenick = mysql_num_rows($result);
