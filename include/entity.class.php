@@ -1,7 +1,7 @@
 <?php
     /*
 	*
-    * Entity: object representation of database table entity...
+        * Entity: object representation of database table entity...
 	* @author Khramkov Ivan.
 	* 
 	*/
@@ -22,9 +22,8 @@
 		 return $result;
 	}
 	
-	require_once(dirname(__FILE__).'/simple.class.php');
-	
-    class Entity extends Simple{
+	require_once(dirname(__FILE__).'/db.class.php');
+    class Entity extends DB{
 		/*
 		* Fields of entity with assigned values
 		*@var array
@@ -51,25 +50,25 @@
 			$empty = true;
 			if (isset($table_name)) {
 		        $this->table_name = $table_name;
-				$this->db->query = new DB_Query_SELECT();
+				$this->query = new DB_Query_SELECT();
 				if (get_class($params) == 'DB_Condition') {
 				    $empty = false;
-				    $this->db->query->setup(array('*'), $this->table_name, $params);
+				    $this->query->setup(array('*'), $this->table_name, $params);
 				}
 				else {
-				    $this->db->query->setup(array('*'), $this->table_name);
+				    $this->query->setup(array('*'), $this->table_name);
 				    if (!is_array($params) && isset($params)) {
 				        $params = array('id', $params);
 				    }
 				    if (isset($params[0])) {
 					    $empty = false;
 			            for ($i = 0; $i < count($params); $i += 2) {
-				            $this->db->query->add_condition($params[$i], $params[$i + 1]);
+				            $this->query->add_condition($params[$i], $params[$i + 1]);
 				        }
 				    }
 				}
 				if(!$empty) {
-				    $this->properties = $this->db->get_row();
+				    $this->properties = $this->get_row();
 				    $this->id = $this->properties['id'];
 				}
 			}
@@ -118,11 +117,11 @@
 		*/
 		public function save() {
 		    if (!$this->id) {
-			    $this->id = $this->db->insert($this->properties, $this->table_name);
+			    $this->id = $this->insert($this->properties, $this->table_name);
 				$this->properties['id'] = $this->id;
 			}   
 			else {
-			    $this->db->update($this->properties, $this->table_name, new DB_Condition('id', $this->id));
+			    $this->update($this->properties, $this->table_name, new DB_Condition('id', $this->id));
 			} 
 		}
 		/*
@@ -130,9 +129,9 @@
 		*@param array $linked
 		*/
 		public function delete($linked = array()) {
-		    $this->db->delete($this->table_name, new DB_Condition('id', $this->id));
+		    $this->delete($this->table_name, new DB_Condition('id', $this->id));
 			foreach ($linked as $table_name => $field) {
-			    $this->db->delete($table_name, new DB_Condition($field, $this->id));    
+			    $this->delete($table_name, new DB_Condition($field, $this->id));    
 			}
 		}
 	}

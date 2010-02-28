@@ -1,16 +1,16 @@
 <?php
     /*
 	*
-    * DB: Driver, which works with MySQL database
+         * DB: Driver, which works with MySQL database
 	* @author Khramkov Ivan.
 	* 
 	*/
-    class DB extends Config{
+    class DB {
 	    /*
 		* Database link identifier
 		*@var integer
 		*/
-	    var $db_handle;
+	    private $db_handle;
 		/*
 		* Object model, wich works with database queries.
 		*@var object

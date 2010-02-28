@@ -1,7 +1,7 @@
 <?php
     /*
 	*
-    * HTML: Manage templates and HTML representation of data
+        * HTML: Manage templates and HTML representation of data
 	* @author Khramkov Ivan.
 	* 
 	*/
