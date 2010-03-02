@@ -71,12 +71,13 @@ $result = mysql_query($sql,$db);
 
 //calulate the $SkipLabels used in drawScale to display only around 10 Labels/Ticks (avoiding too much labels)
  $skiplabels = round($numberofgames/10); 
-
+ if ($skiplabels < 1) {$skiplabels = 1;} //avoid division through zero
+  
 // Initialise the graph   
- $image = new pChart(700,230);
+ $image = new pChart(800,230);
  $image->setFontProperties("pChart/Fonts/tahoma.ttf",8);
  $image->setColorPalette(231, 217, 190,0);  //set the line color 
- $image->setGraphArea(100,30,680,190);   
+ $image->setGraphArea(100,30,780,190);   
  $image->drawGraphArea(255,255,255,FALSE);
  $image->drawScale($imagedata->GetData(),$imagedata->GetDataDescription(),SCALE_NORMAL,100,100,100,TRUE,0,2,FALSE,$skiplabels);   
   
@@ -96,12 +97,5 @@ $result = mysql_query($sql,$db);
 ?> <img src="pChart/img/<?echo $_GET['name']?>.png">  <?php 
 }
 
-//rest is just for testing purposes
-//echo "<br />";
-//$blub = date ("Y-m-d H:i:s", filemtime($filename));
-//echo $blub;echo "file";echo "<br />";
-//echo $lastgamedate;echo "game";echo "<br />";
-//echo $skiplabels;
-//var_dump($skiplabels);
 ?>
 
