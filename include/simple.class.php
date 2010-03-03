@@ -1,12 +1,12 @@
 <?php
     /*
-	*
-         * Simple: simple class, provides database and html interface...
-	* @author Khramkov Ivan.
-	* 
-	*/
-	require_once(dirname(__FILE__).'/entity.class.php');
-	require_once(dirname(__FILE__).'/html.class.php');
+    *
+    * Simple: simple class, provides database and html interface...
+    * @author Khramkov Ivan.
+    * 
+    */
+    require_once(dirname(__FILE__).'/entity.class.php');
+    require_once(dirname(__FILE__).'/html.class.php');
     class Simple extends Entity {
 		/*
 		* Configuration
@@ -25,7 +25,7 @@
 		function __construct($config, $table_name = NULL, $params = array()) {
 		    parent::__construct($config, $table_name, $params);
 		    $this->config = $config;
-			$this->html = new HTML($this->config);
+		    $this->html = new HTML($this->config);
 		}
 		/*
 		* Destructor

@@ -1,7 +1,7 @@
 <?php
     /*
 	*
-         * view_controller: class displays content of the message
+    * view_controller: class displays content of the message
 	* @author Khramkov Ivan.
 	* 
 	*/
@@ -17,7 +17,7 @@
 		*@param array $params
 		*/
 		public function run($params = array()) {
-	        $this->html->smarty->assign('content', 'TODO: a lot of...');
+	        $this->html->assign('content', 'TODO: a lot of...');
 			$this->display();
 		}
 	}

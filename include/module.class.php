@@ -1,10 +1,10 @@
 <?php
     /*
-	*
-         * Module: abstract class, represents abstract module.
-	* @author Khramkov Ivan.
-	* 
-	*/
+    *
+    * Module: abstract class, represents abstract module.
+    * @author Khramkov Ivan.
+    * 
+    */
     require_once(dirname(__FILE__).'/simple.class.php');
     class Module extends Simple {
 	    /*
@@ -19,7 +19,7 @@
 		*/
 	    function __construct($config, $id = NULL) {
 		    $table_name = 'module_'.$this->name;
-			$params = ($id)? array('id', $id) : array();
+		    $params = ($id)? array('id', $id) : array();
 		    parent::__construct($config, $table_name, $params);
 		}
 		/*
@@ -31,7 +31,7 @@
 		    if (file_exists($path)) {
 			    require_once($path);
 				eval('$controller = new '.$controller_name.'_controller($this->config);');
-				$controller->html->smarty->template_dir = dirname(__FILE__).'/../modules/'.$this->name.'/templates/';
+				$controller->html->set_template_dir(dirname(__FILE__).'/../modules/'.$this->name.'/templates/');
 				$controller->run();
 			}
 			else {

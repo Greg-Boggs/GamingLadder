@@ -1,16 +1,16 @@
 <?php
     /*
 	*
-         * Controler: abstract class, represents module controller.
+    * Controler: abstract class, represents module controller.
 	* @author Khramkov Ivan.
 	* 
 	*/
     require_once(dirname(__FILE__).'/simple.class.php');
     class Controller extends Simple {
 	    /*
-		* Name of the controller
-		*@var string
-		*/
+	    * Name of the controller
+	    *@var string
+	    */
 	    protected $name;
 		/*
 		* Constructor
@@ -23,7 +23,7 @@
 		*@function display
 		*/
 		public function display() {
-		    echo $this->html->smarty->fetch($this->name.'.tpl');
+		    echo $this->html->fetch($this->name.'.tpl');
 		}
 		/*
 		*@function run

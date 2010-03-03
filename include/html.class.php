@@ -10,7 +10,7 @@
 		* Smarty engine
 		*@var object
 		*/
-		var $smarty;
+		private $smarty;
 		/*
 		* Constructor
 		*@param object $config
@@ -28,7 +28,36 @@
 		function __destruct() {
 		    unset($this->smarty);
 		}
-		
+		/*
+		*@function assign
+		*@param string $param_name
+		*@param variant|null $param_value
+		*/
+		public function assign($param_name, $param_value) {
+		    $this->smarty->assign($param_name, $param_value);
+		}
+		/*
+		*@function fetch
+		*@param string $template_path
+		*@return string
+		*/
+		public function fetch($template_path) {
+		    return $this->smarty->fetch($template_path);
+		}
+		/*
+		*@function get_template_dir
+		*@return string
+		*/
+		public function get_template_dir() {
+		    return $this->smarty->template_dir;
+		}
+		/*
+		*@function set_template_dir
+		*@param string $template_dir
+		*/
+		public function set_template_dir($template_dir) {
+		    $this->smarty->template_dir = $template_dir;
+		}
 	}
 	//TODO:
 	//write function when it'll be required...
