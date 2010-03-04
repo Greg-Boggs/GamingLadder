@@ -52,32 +52,32 @@
 		*/
 	    function __construct($config, $table_name = NULL, $params = array()) {
 	        $this->db = new DB($config);
-		$empty = true;
-		if (isset($table_name)) {
-		    $this->table_name = $table_name;
-		    $this->db->query = new DB_Query_SELECT();
-		    if (get_class($params) == 'DB_Condition') {
-		        $empty = false;
-		        $this->db->query->setup(array('*'), $this->table_name, $params);
-		    }
-		    else {
-		        $this->db->query->setup(array('*'), $this->table_name);
-		        if (!is_array($params) && isset($params)) {
-		            $params = array('id', $params);
-		        }
-		        if (isset($params[0])) {
+		    $empty = true;
+		    if (isset($table_name)) {
+		        $this->table_name = $config->db_prefix.'_'.$table_name;
+		        $this->db->query = new DB_Query_SELECT();
+		        if (get_class($params) == 'DB_Condition') {
 		            $empty = false;
-		            for ($i = 0; $i < count($params); $i += 2) {
-		                $this->db->query->add_condition($params[$i], $params[$i + 1]);
-		    	    }
-                        }
+		            $this->db->query->setup(array('*'), $this->table_name, $params);
+		        }
+		        else {
+		            $this->db->query->setup(array('*'), $this->table_name);
+		            if (!is_array($params) && isset($params)) {
+		                $params = array('id', $params);
+		            }
+		            if (isset($params[0])) {
+		                $empty = false;
+		                for ($i = 0; $i < count($params); $i += 2) {
+		                    $this->db->query->add_condition($params[$i], $params[$i + 1]);
+		    	        }
                     }
-		    if(!$empty) {
-		        $this->properties = $this->db->get_row();
-			$this->id = $this->properties['id'];
+                }
+		        if(!$empty) {
+		            $this->properties = $this->db->get_row();
+			        $this->id = $this->properties['id'];
+		        }
 		    }
-		}
-            }
+        }
 		/*
 		* Destructor
 		*/
@@ -89,7 +89,7 @@
 		*@param string $method
 		*@return array|null $params
 		*/
-		private function __call($method, $params = NULL) {
+		protected function __call($method, $params = NULL) {
 		    //get or set value from entity..
 		    $method = get_method($method);
 			switch ($method[0]) {

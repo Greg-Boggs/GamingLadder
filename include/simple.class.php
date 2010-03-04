@@ -12,7 +12,7 @@
 		* Configuration
 		*@var object
 		*/
-		var $config;
+		private $config;
 		/*
 		* HTML object
 		*@var object
@@ -42,6 +42,20 @@
 		*/
 		public function error($message, $error_code = 404) {
 		    throw new Exception($message, $error_code);
+		}
+		/*
+		*@function get_config
+		*@return object
+		*/
+		public function get_config() {
+		    return $this->config;
+		}
+		/*
+		*@function set_config
+		*@param object $config
+		*/
+		public function set_config($config) {
+		    $this->config = $config;
 		}
 	}
 ?>

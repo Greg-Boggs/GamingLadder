@@ -20,4 +20,28 @@
 	else {//If nothing in the request
 	    echo "TODO: default controller...";// Default action...
 	}
+	echo "<p>Now, tests...<ul>";
+	echo "<li> Simple create message, save and delete...";
+	unset($message);
+	$message = new Message($config);
+	$message->set_content('Test content');
+	$time = time();
+	$message->set_sent_date($time);
+	$message->save();
+	echo "...message created at ".date("G:i:s", $time)."...<br />";
+	$mid = $message->get_id();
+	unset($message);
+	$message = new Message($config, array('id', $mid));
+	echo "Content of message with id = $mid: '<i>".
+	    $message->get_content()."</i>'. This message was sent at ".
+		date('G:i:s', $message->get_sent_date());
+	$message->delete();
+	echo "...deleted.</li>";
+	echo "<li> Send message from me to me...";
+	$message = new Message($config);
+	$message->send(1, 1, 'Topic', 'Content');
+	echo "Message with id = ".$message->get_id()." was sent with content = '<i>".$message->get_content()."</i>'...";
+	echo "</li></ul>";
+	$message->delete();
+	unset($message);
 ?>

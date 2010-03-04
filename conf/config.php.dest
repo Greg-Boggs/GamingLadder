@@ -33,6 +33,11 @@
 		*/
 		var $mysql_database_name = 'dbase';
 		/*
+		* Database table prefix (without '_')
+		*@var string
+		*/
+		var $db_prefix = 'webl';
+		/*
 		* The location of your SMARTY templates
 		*@var string
 		*/
@@ -47,9 +52,23 @@
 		*@var string
 		*/
 		var $smarty_cache_path = '/home/ladder/trunk/cache/';
-		
+                /*
+		* Sets what timezone the ladder will use. PLease see http://se2.php.net/manual/en/timezones.php for all options. 
+		* If you have a ladder with participants from more than 1 timezone it is however best to leave it at default UTC.  
+		* If you get wrong time then you have set this to the wrong value OR the webservers time is wrongly set somewhere.
+		*@var string
+		*/
+		var $cfg_ladder_timezone = 'UTC';
+		/*
+		* Constructor
+		*@param array $params
+		*/
 		function  __construct($params = NULL) {
-		    //I think, here should be some personalization code...
+		    if (isset($params)) {
+		        foreach ($params as $param_name => $value) {
+			        eval('$this->'.$param_name.' = '.$value.';');
+			    }
+			}
 		}
 	}
 	//TODO:

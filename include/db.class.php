@@ -330,7 +330,7 @@
 			    $vars[] = "`".$var."`";
 				$values[] = "'".mysql_escape_string("$value")."'";
 			}
-		    return "INSERT INTO `".Config::mysql_database_name."`.`".$this->table."` (".implode(',', $vars).") VALUES (".implode(',', $values).")";
+		    return "INSERT INTO `".$this->table."` (".implode(',', $vars).") VALUES (".implode(',', $values).")";
 		}
 	}
 	/*
