@@ -51,32 +51,13 @@
 		*@param object|array|null $params
 		*/
 	    function __construct($config, $table_name = NULL, $params = array()) {
-	        $this->db = new DB($config);
-		    $empty = true;
-		    if (isset($table_name)) {
-		        $this->table_name = $config->db_prefix.'_'.$table_name;
-		        $this->db->query = new DB_Query_SELECT();
-		        if (get_class($params) == 'DB_Condition') {
-		            $empty = false;
-		            $this->db->query->setup(array('*'), $this->table_name, $params);
-		        }
-		        else {
-		            $this->db->query->setup(array('*'), $this->table_name);
-		            if (!is_array($params) && isset($params)) {
-		                $params = array('id', $params);
-		            }
-		            if (isset($params[0])) {
-		                $empty = false;
-		                for ($i = 0; $i < count($params); $i += 2) {
-		                    $this->db->query->add_condition($params[$i], $params[$i + 1]);
-		    	        }
-                    }
-                }
-		        if(!$empty) {
-		            $this->properties = $this->db->get_row();
+	        if ($config) {
+			    $db = $this->get_all_from_base($config, $table_name, $params);
+			    if ($db) {
+			        $this->properties = $this->db->get_row();
 			        $this->id = $this->properties['id'];
 		        }
-		    }
+			}
         }
 		/*
 		* Destructor
@@ -145,6 +126,50 @@
 			foreach ($linked as $table_name => $field) {
 			    $this->db->delete($table_name, new DB_Condition($field, $this->id));    
 			}
+		}
+		
+		public function get_entities($config, $table_name = NULL, $params = array(), $order = NULL, $limit = NULL) {
+		    $result = array();
+	        $db = $this->get_all_from_base($config, $table_name, $params, $order, $limit);
+			if ($db) {
+			    $items = $this->db->get_all();
+			    for ($i = 0; $i < count($items); $i ++) {
+				    $result[$i] = new Entity(NULL);
+					$result[$i]->properties = $items[$i];
+				}
+		    }
+			return $result;
+		}
+			
+		private function get_all_from_base($config, $table_name = NULL, $params = array(), $order = NULL, $limit = NULL) {
+		    $this->db = new DB($config);
+		    $empty = true;
+		    if (isset($table_name)) {
+			    $empty = false;
+		        $this->table_name = $config->db_prefix.'_'.$table_name;
+		        $this->db->query = new DB_Query_SELECT();
+				if ($order) {
+				    $this->db->query->set_order_by($order[0], $order[1]);
+				}
+				if ($limit) {
+				    $this->db->query->set_limit($limit[0], $limit[1]);
+				}
+		        if (get_class($params) == 'DB_Condition') {
+		            $this->db->query->setup(array('*'), $this->table_name, $params);
+		        }
+		        else {
+		            $this->db->query->setup(array('*'), $this->table_name);
+		            if (!is_array($params) && isset($params)) {
+		                $params = array('id', $params);
+		            }
+		            if (isset($params[0])) {
+		                for ($i = 0; $i < count($params); $i += 2) {
+		                    $this->db->query->add_condition($params[$i], $params[$i + 1]);
+		    	        }
+                    }
+                }
+			}
+			return ($empty)? NULL : $this->db;
 		}
 	}
 ?>

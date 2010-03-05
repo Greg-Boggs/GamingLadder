@@ -70,6 +70,10 @@ function udate($format, $utimestamp = null){
 
 // echo udate('H:i:s.u'); // 19:40:56.78128
 
+//Function sets the first letter of the string $str to upper case...
+function first_letter($str) {
+    return strtoupper(substr($str, 0, 1)).substr($str, 1);
+}
 
 
 

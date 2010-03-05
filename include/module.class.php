@@ -37,25 +37,5 @@
 			    throw new Exception('No controller!');
 			}
 		}
-		/*
-		*@function get_module
-		*@param string $module_name
-		*@param array|null $params
-		*@param object|null $config
-		*/
-		public function get_module($module_name, $params = NULL, $config = NULL) {
-		     $path = dirname(__FILE__).'/../modules/'.$module_name.'/'.$module_name.'.class.php';
-			 if (file_exists($path)) {
-			     require_once($path);
-				 $config = ($config)? $config : $this->get_config();
-				 eval(
-				     '$module = new '.strtoupper(substr($module_name, 0, 1)).substr($module_name, 1).'($config, $params);'
-				 );
-				 return $module;
-			 }
-			 else {
-			     throw new Exception('No module!');
-			 }
-		}
 	}
 ?>

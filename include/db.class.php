@@ -187,7 +187,7 @@
 		*@return object
 		*/
 		public function execute($mysql_handle) {
-		    //echo $this->to_string()."<br />";
+		    //echo "<div style='font-size: 10px;'>".$this->to_string()."</div>";
 		    $result = mysql_query($this->to_string(), $mysql_handle);
 			$mysql_error = mysql_error($mysql_handle);
 			if ($mysql_error) {
@@ -432,7 +432,7 @@
 	    function __construct($param, $value, $oper = NULL, $glue = DB_Condition::DB_COND_AND) {
 		    $this->param = $param;
 	        $this->value =  (is_object($value))? $value : new DB_Condition_Value($value);
-			$this->operator = (isset($oper))? $oper : new DB_Operator();
+			$this->operator = (is_object($oper))? $oper : new DB_Operator($oper);
 			$this->glue = $glue;
 		}
 		/*
@@ -457,13 +457,14 @@
 		*@param object $oper
 		*@param string $glue
 		*/
-		public function add_cond ($param, $value, $oper, $glue = DB_Condition::DB_COND_AND) {
+		public function add_cond ($param, $value, $oper = NULL, $glue = DB_Condition::DB_COND_AND) {
 		    if (isset($this->condition)) {
                 $this->_add_cond($this->condition->condition, array($param, $value, $oper, $glue));
 			}
 			else {
 			    $this->condition = new DB_Condition($param, $value, $oper, $glue);
 			}
+			return $this;
 		} 
 		/*
 		*@function to_string
@@ -645,12 +646,12 @@
 		* "From row" index
 		*@var integer
 		*/
-		var $from;
+		private $from;
 		/*
 		* Count of rows to be gotten...
 		*@var integer
 		*/
-		var $number;
+		private $number;
 		/*
 		* Constructor
 		*@param integer $from
@@ -665,7 +666,7 @@
 		*@return string
 		*/
 		public function to_string () {
-		    return ($from)? "LIMIT $from".(($number)? ", $number" : "") : "";
+		    return ($this->from)? "LIMIT ".$this->from.(($this->number)? ", ".$this->number : "") : "";
 		}
 		
 	}

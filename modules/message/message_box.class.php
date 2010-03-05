@@ -1,28 +1,24 @@
 <?php
     /*
 	*
-    * User module, represents user...
+    * Message box module, represents private message box...
 	* @author Khramkov Ivan.
 	* 
 	*/
     require_once(dirname(__FILE__).'/../../include/module.class.php');
-    class User extends Module {
+    class Message_box extends Module {
 	    /*
 		* Name of the module
 		*@var string
 		*/
-	    protected $name = 'user';
+	    protected $name = 'message';
 		/*
 		* Constructor
 		*@param object $config
-		*@param integer|null $user_id
+		*@param array|null $params
 		*/
 	    function __construct($config, $params = NULL) {
-		    Simple::__construct($config, 'players', $params);
-		}
-		
-		public function get_id() {
-		    return parent::__call('get_player_id');
+		    parent::__construct($config, $params);
 		}
 	}
 ?>

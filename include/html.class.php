@@ -21,6 +21,9 @@
 		    $this->smarty->template_dir = $config->smarty_templates_path;
 		    $this->smarty->compile_dir = $config->smarty_templates_c_path;
             $this->smarty->cache_dir = $config->smarty_cache_path;
+			$this->smarty->register_object('html_entity', $this, array(
+			    'redirect'), 
+			false);
 		}
 		/*
 		* Destructor
@@ -57,6 +60,16 @@
 		*/
 		public function set_template_dir($template_dir) {
 		    $this->smarty->template_dir = $template_dir;
+		}
+		
+		public function restore_template($array) {
+		    foreach($array as $param => $value) {
+			    $this->smarty->assign($param, $value);
+			}
+		}
+		
+		public function redirect($url) {
+		    return "<script type = 'text/javascript'>window.location.href = '$url';</script>";
 		}
 	}
 	//TODO:
