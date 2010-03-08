@@ -109,7 +109,7 @@
 		private function check_string_latin($params, $onerror, $suspect) {
 		    return array(
 			    'suspect' => $suspect,
-			    'result' => (preg_match("/^[a-zA-Z0-9_]+$/", $params['suspect']) && is_string($params['suspect'])), 
+			    'result' => (preg_match("/^[a-zA-Z0-9_ ]+$/", $params['suspect']) && is_string($params['suspect'])), 
 				'onerror' => $onerror
 			);
 		}

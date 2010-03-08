@@ -51,12 +51,16 @@
 		*@param object|array|null $params
 		*/
 	    function __construct($config, $table_name = NULL, $params = array()) {
-	        if ($config) {
-			    $db = $this->get_all_from_base($config, $table_name, $params);
-			    if ($db) {
+	        if ($config && count($params)) {
+			    $this->db = $this->get_all_from_base($config, $table_name, $params);
+			    if ($this->db) {
 			        $this->properties = $this->db->get_row();
 			        $this->id = $this->properties['id'];
 		        }
+			}
+			else {
+			    $this->db = new DB($config);
+		        $this->table_name = $config->db_prefix.'_'.$table_name;
 			}
         }
 		/*
@@ -134,7 +138,7 @@
 			if ($db) {
 			    $items = $this->db->get_all();
 			    for ($i = 0; $i < count($items); $i ++) {
-				    $result[$i] = new Entity(NULL);
+				    $result[$i] = new Entity($config, $table_name);
 					$result[$i]->properties = $items[$i];
 				}
 		    }
@@ -159,16 +163,11 @@
 		        }
 		        else {
 		            $this->db->query->setup(array('*'), $this->table_name);
-		            if (!is_array($params) && isset($params)) {
-		                $params = array('id', $params);
-		            }
-		            if (isset($params[0])) {
-		                for ($i = 0; $i < count($params); $i += 2) {
-		                    $this->db->query->add_condition($params[$i], $params[$i + 1]);
-		    	        }
-                    }
+		            for ($i = 0; $i < count($params); $i += 2) {
+		                $this->db->query->add_condition($params[$i], $params[$i + 1]);
+		    	    }
                 }
-			}
+            }
 			return ($empty)? NULL : $this->db;
 		}
 	}
