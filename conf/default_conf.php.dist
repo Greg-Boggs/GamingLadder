@@ -17,18 +17,21 @@ define("CRONCHECK_PATH","cronchecks/"); // dir for where the cron check files ar
 
 //configure the tables in the database ...don't change these names unless you know what the tables in your db matches the names and types.
 
-$playerstable = "webl_players"; //the name of the table that contains information about the players
- $gamestable = "webl_games"; //the name of the table that stores the played games
- $newstable = "webl_news"; // the name of the table that stores the news
-  $admintable = "webl_admin"; //name of the table that stores the admin login information
+  $playerstable = "webl_players"; //the name of the table that contains information about the players
+  $gamestable = "webl_games"; //the name of the table that stores the played games
+  $newstable = "webl_news"; // the name of the table that stores the news
   $waitingtable = "webl_waiting"; //name of the table that stores the players waiting for a game...
- $standingscachetable = "webl_standings_cache"; // important cache, improves and makes up for mysql-sickness.
- $cronlogtable = "webl_cron_log"; // name of table that stores the info about when a fake cron job was (supposedly) ran.
+  $standingscachetable = "webl_standings_cache"; // important cache, improves and makes up for mysql-sickness.
+  $cronlogtable = "webl_cron_log"; // name of table that stores the info about when a fake cron job was (supposedly) ran.
   $statstable = "webl_stats"; //table that has stats logged about how many players there have been each date etc.
   $mailhost = "my.smtp.server";
 
 //config security
 $salt = "yourinfo"; // WARNING: If you have a running ladder with registered users DONT ever change the salt! Nobody will be able to login then, ever, if you lose the salt. Change this once before people start signing up with new accounts.
+
+//config for visual stuff
+  $ladder_logo = "graphics/wesnoth-logo.png";
+
 
 //config stuff that has to do with the registration process...
 define("REG_MIN_NICKLENGTH", 3); //Minimum number of characters allowed in a registrants nickname

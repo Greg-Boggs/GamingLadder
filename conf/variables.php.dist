@@ -1,5 +1,5 @@
 <?
-define("TRIBAL_VERSION", "187"); // version number shown in footer. This = the revision number in SVN /trunk  Please change when you upgrade. Also add "Rev" in front of it if you customize the ladder code somehow and if you are not a part of the development team of tribal bliss. (we do however invite you to become so : ) 
+define("TRIBAL_VERSION", "188"); // version number shown in footer. This = the revision number in SVN /trunk  Please change when you upgrade. Also add "Rev" in front of it if you customize the ladder code somehow and if you are not a part of the development team of tribal bliss. (we do however invite you to become so : ) 
 /*
 
 Please Notice: 	The only lines which you are supposed to config according to your own needs

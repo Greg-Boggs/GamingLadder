@@ -65,7 +65,7 @@ font-size: 12 px;
 ?>
 <div id="header">
   <div id="logo">
-    <a href="<?php echo "./";?>"><img alt="Ladder logo" src="<?php echo $GLOBALS['prefix'] ?>graphics/wesnoth-logo.png" /></a>
+    <a href="<?php echo "./";?>"><img alt="Ladder logo" src="<?php echo $ladder_logo?>" /></a>
   </div>
 <?php
     require('menu.php');
