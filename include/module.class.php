@@ -24,14 +24,15 @@
 		/*
 		*@function run_controller
 		*@param string $controller_name
+		*@param array $params
 		*/
-		public function run_controller ($controller_name) {
+		public function run_controller ($controller_name, $params = array()) {
 		    $path = dirname(__FILE__).'/../modules/'.$this->name.'/controllers/'.$controller_name.'_controller.php';
 		    if (file_exists($path)) {
 			    require_once($path);
 				eval('$controller = new '.$controller_name.'_controller($this->get_config());');
 				$controller->html->set_template_dir(dirname(__FILE__).'/../modules/'.$this->name.'/templates/');
-				$controller->run();
+				$controller->run($params);
 			}
 			else {
 			    throw new Exception('No controller!');

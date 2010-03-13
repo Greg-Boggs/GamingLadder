@@ -47,6 +47,10 @@
 		public function fetch($template_path) {
 		    return $this->smarty->fetch($template_path);
 		}
+		
+		public function display($template_path) {
+		    $this->smarty->display($template_path);
+		}
 		/*
 		*@function get_template_dir
 		*@return string
@@ -71,7 +75,10 @@
 		public function redirect($url) {
 		    return "<script type = 'text/javascript'>window.location.href = '$url';</script>";
 		}
+		
+		public function debug() {
+		    $this->smarty->debugging = true;
+		}
+		
 	}
-	//TODO:
-	//write function when it'll be required...
 ?>

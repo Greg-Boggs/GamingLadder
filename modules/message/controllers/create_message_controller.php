@@ -18,7 +18,7 @@
 		*@param array $params
 		*/
 		public function run($params = array()) {
-            $user = $this->get_user();
+		    $user = $this->get_user();
 			$checker = new FormValidator();
 			$form = $this->get_request('form');
 			if ($form) {

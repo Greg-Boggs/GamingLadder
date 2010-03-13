@@ -133,16 +133,35 @@
 		}
 		
 		public function get_entities($config, $table_name = NULL, $params = array(), $order = NULL, $limit = NULL) {
-		    $result = array();
-	        $db = $this->get_all_from_base($config, $table_name, $params, $order, $limit);
-			if ($db) {
-			    $items = $this->db->get_all();
-			    for ($i = 0; $i < count($items); $i ++) {
-				    $result[$i] = new Entity($config, $table_name);
-					$result[$i]->properties = $items[$i];
-				}
+		    $this->get_all_from_base($config, $table_name, $params, $order, $limit);
+		    return $this->get_list_of_entities($config, $table_name);
+		}
+		
+		public function get_entities_from($config, $to_table_name, $from_table_name, $params = array('id', 'id'), $condition = array(), $order = NULL, $limit = NULL) {
+		    $query = new DB_Query_SELECT();
+			if (get_class($condition) == 'DB_Condition') {
+		        $query->setup(array($params[1]), $config->db_prefix.'_'.$from_table_name, $condition);
 		    }
-			return $result;
+		    else {
+		        $query->setup(array($params[1]), $config->db_prefix.'_'.$from_table_name);
+		        for ($i = 0; $i < count($condition); $i += 2) {
+		            $query->add_condition($condition[$i], $condition[$i + 1]);
+		    	}
+            }
+			if ($order) {
+		        $query->set_order_by($order[0], $order[1]);
+			}
+			if ($limit) {
+			    $query->set_limit($limit[0], $limit[1]);
+			}
+			$this->db = new DB($config);
+			$this->db->query = new DB_Query_SELECT();
+			$this->db->query->setup(
+			    array('*'), 
+				$config->db_prefix.'_'.$to_table_name, 
+				new DB_Condition($params[0], new DB_Condition_value($query), new DB_Operator('IN'))
+			);
+			return $this->get_list_of_entities($config, $to_table_name);
 		}
 			
 		private function get_all_from_base($config, $table_name = NULL, $params = array(), $order = NULL, $limit = NULL) {
@@ -169,6 +188,18 @@
                 }
             }
 			return ($empty)? NULL : $this->db;
+		}
+		
+		private function get_list_of_entities($config, $table_name) {
+		    $result = array();
+			if ($this->db) {
+			    $items = $this->db->get_all();
+			    for ($i = 0; $i < count($items); $i ++) {
+				    $result[$i] = new Entity($config, $table_name);
+					$result[$i]->properties = $items[$i];
+				}
+		    }
+			return $result;
 		}
 	}
 ?>

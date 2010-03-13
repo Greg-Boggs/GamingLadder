@@ -16,17 +16,21 @@
     <a href = "message.php?action=show_message_box">Message box</a>
     <hr />
 <?php
+    //*************************************************
 	//It's for test now... 
+	//*************************************************
 	$config = new Config();//Create the config object...
 	$actions = array(
-	    'create_message' => 'message',
-	    'show_message_box' => 'message_box'
+	    'create_message' => array('message', 'message'),
+		'view' => array('message', 'message'),
+		'thread' => array('topic', 'topic'),
+	    'show_message_box' => array('message_box', 'message')
 	);
-	$module_name = $actions[$_GET['action']];
+	$ac_box = $actions[$_GET['action']];
 	try {
-	    if (isset($module_name)) {
-	        require_once("modules/message/$module_name.class.php");
-	        eval('$module = new '.first_letter($module_name).'($config);');
+	    if (isset($ac_box)) {
+	        require_once("modules/".$ac_box[1]."/".$ac_box[0].".class.php");
+	        eval('$module = new '.first_letter($ac_box[0]).'($config);');
 		    $module->run_controller($_GET['action']);
 	    }
 	    else {

@@ -16,14 +16,9 @@
 		*@function run
 		*@param array $params
 		*/
-		const error_permission = 'You have not permission to access into the message box';
 		public function run($params = array()) {
 			//Define current user...
 			$user = $this->get_user();
-			//If user does not exists (maybe, user is guest)...
-			if (!$user->get_id()) {
-			    throw new Exception(self::error_permission);
-			}
 			$box = $this->get_request('box');
 			$box = ($box)? $box : 'inbox';
 			//Get topics...
