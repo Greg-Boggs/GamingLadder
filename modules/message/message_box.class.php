@@ -20,13 +20,17 @@
 	    function __construct($config, $params = NULL) {
 		    parent::__construct($config, $params);
 		}
-		
+		/*
+		*@function run_controller
+		*@param string $controller_name
+		*@return string
+		*/
 		public function run_controller($controller_name) {
 		    $user = $this->get_user();
 			if (!$user->get_id()) {
 			    $this->error('You have not permission to access to the message service');
 			}
-			parent::run_controller($controller_name, $user);
+			return parent::run_controller($controller_name, $user);
 		}
 	}
 ?>

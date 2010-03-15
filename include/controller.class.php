@@ -13,6 +13,11 @@
 	    */
 	    protected $name;
 		/*
+	    * Returned content
+	    *@var string
+	    */
+		var $content;
+		/*
 		* Constructor
 		*@param object $config
 		*/
@@ -21,9 +26,15 @@
 		}
 		/*
 		*@function display
+		*@param boolean $only_current_content
 		*/
-		public function display() {
-		    echo $this->html->fetch($this->name.'.tpl');
+		public function display($only_current_content = false) {
+		    $this->content = $this->html->fetch($this->name.'.tpl');
+			//if we don't want to include content to the main page (useful for AJAX requests)...
+			if ($only_current_content) {
+			    echo $this->content;
+			    exit;
+			}
 		}
 		/*
 		*@function run

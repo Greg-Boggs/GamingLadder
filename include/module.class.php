@@ -25,6 +25,7 @@
 		*@function run_controller
 		*@param string $controller_name
 		*@param array $params
+		*@return string
 		*/
 		public function run_controller ($controller_name, $params = array()) {
 		    $path = dirname(__FILE__).'/../modules/'.$this->name.'/controllers/'.$controller_name.'_controller.php';
@@ -33,6 +34,7 @@
 				eval('$controller = new '.$controller_name.'_controller($this->get_config());');
 				$controller->html->set_template_dir(dirname(__FILE__).'/../modules/'.$this->name.'/templates/');
 				$controller->run($params);
+				return $controller->content;
 			}
 			else {
 			    throw new Exception('No controller!');

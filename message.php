@@ -9,20 +9,15 @@
 	require 'conf/variables.php';
 	require 'conf/config.php';
 	require_once 'autologin.inc.php';
-	require 'top.php';
-?>
-    <a href = "message.php?action=create_message">Compose message</a>
-    &nbsp;|&nbsp;
-    <a href = "message.php?action=show_message_box">Message box</a>
-    <hr />
-<?php
-    //*************************************************
+	//*************************************************
 	//It's for test now... 
 	//*************************************************
+	$result = '';
 	$config = new Config();//Create the config object...
 	$actions = array(
 	    'create_message' => array('message', 'message'),
 		'view' => array('message', 'message'),
+		'view_content' => array('message', 'message'),
 		'thread' => array('topic', 'topic'),
 	    'show_message_box' => array('message_box', 'message')
 	);
@@ -31,14 +26,23 @@
 	    if (isset($ac_box)) {
 	        require_once("modules/".$ac_box[1]."/".$ac_box[0].".class.php");
 	        eval('$module = new '.first_letter($ac_box[0]).'($config);');
-		    $module->run_controller($_GET['action']);
+		    $result = $module->run_controller($_GET['action']);// What's the controller returns (HTML, text)...
 	    }
 	    else {
 	        //Smth for default...
-		    echo "Action '<i>".$_GET['action']."</i>' is not specified in the section context...";
+		    $result = "Action '<i>".$_GET['action']."</i>' is not specified in the section context...";
 	    }
 	}
 	catch (Exception $e) {
-	    echo $e->getMessage();
+	    $result = $e->getMessage();
 	}
+	require 'top.php';
+?>
+<a href = "message.php?action=create_message">Compose message</a>
+&nbsp;|&nbsp;
+<a href = "message.php?action=show_message_box">Message box</a>
+<hr />
+<?
+    echo $result;
+    require_once('bottom.php');
 ?>

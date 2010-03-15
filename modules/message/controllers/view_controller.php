@@ -14,13 +14,16 @@
 	    protected $name = 'view';
 		/*
 		*@function run
-		*@param array $params
+		*@param object $user
 		*/
 		public function run($user) {
 		    $topic_id = (integer)($this->get_request('topic'));
 		    $topic = $this->get_module('topic', array('id', $topic_id));
 			if (!$topic->get_id()) {
 			    $this->error("Topic doesn't exist!");
+			}
+			if ($topic->get_sender_id() != $user->get_id() && $topic->get_reciever_id() != $user->get_id()) {
+			    $this->error('You have not permission to view this message');
 			}
 			$message = $this->get_module('message', array('topic_id', $topic->get_id()));
 			if (!$message->get_id()) {

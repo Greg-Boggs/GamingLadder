@@ -20,7 +20,10 @@
 	    function __construct($config, $params = NULL) {
 		    Simple::__construct($config, 'players', $params);
 		}
-		
+		/*
+		*@function get_id
+		*@param array $params
+		*/
 		public function get_id() {
 		    return parent::__call('get_player_id');
 		}

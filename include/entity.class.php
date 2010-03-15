@@ -52,7 +52,7 @@
 		*/
 	    function __construct($config, $table_name = NULL, $params = array()) {
 	        if ($config && count($params)) {
-			    $this->db = $this->get_all_from_base($config, $table_name, $params);
+			    $this->db = $this->_get_all_from_base($config, $table_name, $params);
 			    if ($this->db) {
 			        $this->properties = $this->db->get_row();
 			        $this->id = $this->properties['id'];
@@ -131,12 +131,30 @@
 			    $this->db->delete($table_name, new DB_Condition($field, $this->id));    
 			}
 		}
-		
+		/*
+		*@function get_entities
+		*@param object $config
+   	    *@param string|null $table_name
+		*@param array $params
+		*@param array|null $order
+		*@param array|null $limit
+		*@return array
+		*/
 		public function get_entities($config, $table_name = NULL, $params = array(), $order = NULL, $limit = NULL) {
-		    $this->get_all_from_base($config, $table_name, $params, $order, $limit);
-		    return $this->get_list_of_entities($config, $table_name);
+		    $this->_get_all_from_base($config, $table_name, $params, $order, $limit);
+		    return $this->_get_list_of_entities($config, $table_name);
 		}
-		
+		/*
+		*@function get_entities_from
+		*@param object $config
+   	    *@param string $to_table_name
+		*@param string $from_table_name
+		*@param array $params
+		*@param array|object $condition
+		*@param array|null $order
+		*@param array|null $limit
+		*@return array
+		*/
 		public function get_entities_from($config, $to_table_name, $from_table_name, $params = array('id', 'id'), $condition = array(), $order = NULL, $limit = NULL) {
 		    $query = new DB_Query_SELECT();
 			if (get_class($condition) == 'DB_Condition') {
@@ -161,10 +179,18 @@
 				$config->db_prefix.'_'.$to_table_name, 
 				new DB_Condition($params[0], new DB_Condition_value($query), new DB_Operator('IN'))
 			);
-			return $this->get_list_of_entities($config, $to_table_name);
+			return $this->_get_list_of_entities($config, $to_table_name);
 		}
-			
-		private function get_all_from_base($config, $table_name = NULL, $params = array(), $order = NULL, $limit = NULL) {
+		/*
+		*@function _get_all_from_base
+		*@param object $config
+   	    *@param string $table_name
+		*@param array $params
+		*@param array|null $order
+		*@param array|null $limit
+		*@return object|null
+		*/	
+		private function _get_all_from_base($config, $table_name = NULL, $params = array(), $order = NULL, $limit = NULL) {
 		    $this->db = new DB($config);
 		    $empty = true;
 		    if (isset($table_name)) {
@@ -189,8 +215,13 @@
             }
 			return ($empty)? NULL : $this->db;
 		}
-		
-		private function get_list_of_entities($config, $table_name) {
+		/*
+		*@function _get_list_of_entities
+		*@param object $config
+   	    *@param string $table_name
+		*@return array
+		*/
+		private function _get_list_of_entities($config, $table_name) {
 		    $result = array();
 			if ($this->db) {
 			    $items = $this->db->get_all();

@@ -427,9 +427,9 @@
 		*@param string $param
 		*@param object|string|integer|float $value
 		*@param object|null $oper
-		*@param string $glue
+		*@param array $glue
 		*/
-	    function __construct($param, $value, $oper = NULL, $glue = DB_Condition::DB_COND_AND) {
+	    function __construct($param, $value, $oper = NULL, $glue = array("", false)) {
 		    $this->param = $param;
 	        $this->value =  (is_object($value))? $value : new DB_Condition_Value($value);
 			$this->operator = (is_object($oper))? $oper : new DB_Operator($oper);
@@ -457,7 +457,7 @@
 		*@param object $oper
 		*@param string $glue
 		*/
-		public function add_cond ($param, $value, $oper = NULL, $glue = DB_Condition::DB_COND_AND) {
+		public function add_cond ($param, $value, $oper = NULL, $glue = array("", false)) {
 		    if (isset($this->condition)) {
                 $this->_add_cond($this->condition->condition, array($param, $value, $oper, $glue));
 			}
@@ -471,23 +471,18 @@
 		*@return string
 		*/
 		public function to_string() {
-		    $cond = $this;
-			$str = "";
-		    $glue = "";
-			while(isset($cond)) {
-			    $str .= " $glue `".$cond->param."` ".$cond->operator->to_string()." ".$cond->value->to_string();
-				$glue = $cond->glue;
-				$cond = $cond->condition;
-			}
-			return $str;
-		}
+		    return " `".$this->param."` ".$this->operator->to_string()." ".$this->value->to_string().
+			       " ".$this->glue[0]." ".(($this->glue[1])? "(" : "").
+				   ((isset($this->condition))? $this->condition->to_string() : "").
+				   (($this->glue[1])? ")" : "");
+		    }
 		
 		/*
 		*@function _add_cond
 		*@param object $condition
 		*@param array $cond
 		*/
-		private function _add_cond(DB_Condition $condition, $cond) {
+		private function _add_cond(&$condition, $cond) {
 		    if (isset($condition)) {
 			    $this->_add_cond($condition->condition, $cond);
 			}

@@ -58,7 +58,7 @@
 		* If you get wrong time then you have set this to the wrong value OR the webservers time is wrongly set somewhere.
 		*@var string
 		*/
-		var $cfg_ladder_timezone = 'UTC';
+		var $ladder_timezone = 'UTC';
 		/*
 		* Constructor
 		*@param array $params

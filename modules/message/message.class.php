@@ -21,15 +21,6 @@
 		    parent::__construct($config, $params);
 		}
 		/*
-		*@function get_sent_message
-		*@param string $controller_name
-		*/
-		public function get_sent_date() {
-		    $this->get_module('user', array('player_id', $this->get_sender_id()));
-			$seconds = parent::__call('get_sent_date');
-			return $seconds;
-		}
-		/*
 		*@function send
 		*@param integer $sender_id
 		*@param integer $reciever_id
@@ -58,13 +49,17 @@
 			//Look, we leave topic!
 			
 		}
-		
+		/*
+		*@function run_controller
+		*@param string $controller_name
+		*@return string
+		*/
 		public function run_controller($controller_name) {
 			$user = $this->get_user();
 			if (!$user->get_id()) {
 			    $this->error('You have not permission to access to the message service');
 			}
-			parent::run_controller($controller_name, $user);
+			return parent::run_controller($controller_name, $user);
 		}
 	}
 ?>
