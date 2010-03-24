@@ -1,6 +1,6 @@
 <p align="center" class="copyleft">
 <?php 
-if ($cronbottommsg != "" && $cronbottommsg != " "){
+if (isset($cronbottommsg)){
 echo "<b>$cronbottommsg</b><br>"; 
 }
 ?>the ladder is not in any way associated with the official wesnoth forum, it's moderators and/or the developers of Wesnoth.

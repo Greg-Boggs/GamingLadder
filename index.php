@@ -12,10 +12,10 @@ date_default_timezone_set("$cfg_ladder_timezone");
 
 ?>
 <?php
-if ($_POST[user] AND $_POST[pass]) {
+if (isset($_POST['user']) AND isset($_POST['pass'])) {
 
-	$fname = $_POST[user];
-	$fpass = $_POST[pass];
+	$fname = $_POST['user'];
+	$fpass = $_POST['pass'];
 	
 	
 // Lets hinder players who havent verified their mail from logging in / creating logged in cookies...
@@ -26,7 +26,7 @@ $sql="SELECT * FROM $playerstable WHERE name = '$fname'";
 	$row = mysql_fetch_array($result);
 	
 		
-	if ($row[Confirmation] != "" AND $row[Confirmation] == "Deleted") {
+	if ($row['Confirmation'] != "" AND $row['Confirmation'] == "Deleted") {
 		require('top.php');
 		echo "<b>You can't login because your account was deleted either on your request or by admin.</b><br><br>Feel free to contact us if you want to re-enable your account: All the data associated with it has been saved and can easily be restored by admin.";
 		require('bottom.php');
@@ -34,7 +34,7 @@ $sql="SELECT * FROM $playerstable WHERE name = '$fname'";
 		}
 	
 	
-	if ($row[Confirmation] != "" AND $row[Confirmation] != "Ok") {
+	if ($row['Confirmation'] != "" AND $row['Confirmation'] != "Ok") {
 		require('top.php');
 		echo "<b>You can't login because you have not activated your account.</b><br /><br />When you registered a mail was sent to you containing a unique <i>activation link</i>. Please find that mail and click the activation link. Don't forget to check your spam box, as some services wrongly flag our activation mail as spam. <br><br>Feel free to contact us if you are sure that you have misplaced your activation email.";
 		require('bottom.php');
@@ -60,8 +60,8 @@ $passworddb = md5($passworddb);
 	 if ("$bajs[player_id]" > 0) {
 		
 		// Set cookies... 776000 sec = 3 months before they expire.
-		setcookie ("LadderofWesnoth1", $bajs[name], $time+7776000); 
-		setcookie ("LadderofWesnoth2", $bajs[passworddb], $time+7776000); 
+		setcookie ("LadderofWesnoth1", $bajs['name'], $time+7776000); 
+		setcookie ("LadderofWesnoth2", $bajs['passworddb'], $time+7776000); 
         $_SESSION['username'] = $bajs['name'];
         $_SESSION['real-username'] = $bajs['name'];
 		header("Location: index.php");
@@ -114,7 +114,7 @@ If (INDEX_COMMENT_HILITE == 1) {
 
 	echo "<div class=\"spotlight\"><h1 class=\"spotlight\">Spotlight</h1><br /> <b>".$row['winner']." (".$row['winner_elo'].") / ".$row['loser']." (".$row['loser_elo'].")</b>";
 
-	 if ($row[is_replay] != 0) {
+	 if ($row['is_replay'] != 0) {
 				echo " <a href=\"download-replay.php?reported_on=$row[reported_on]\">®</a><br /><br />";
 			}
 
@@ -137,6 +137,13 @@ If (INDEX_COMMENT_HILITE == 1) {
 if  ($MagicComGotEloSettings['Comments'] > 0){
 echo "<br><br>";
 $sql="SELECT * FROM $gamestable WHERE contested_by_loser = '0' AND withdrawn = '0' ORDER BY reported_on DESC LIMIT 0,1000";
+
+
+	//set some variables used in the next step (to avoid undefined variables notice)
+	    $PreviousWinner = "";
+	    $MagicCounter = 0;
+
+
 
 	$result=mysql_query($sql,$db);
 	while ($RowAutoMent = mysql_fetch_array($result)){
@@ -238,7 +245,7 @@ $sql="SELECT * FROM $gamestable WHERE contested_by_loser = '0' AND withdrawn = '
 		// Check if we've shown enough comments
 		if ($MagicCounter >= $MagicComGotEloSettings['Comments'])  { break; }
 		} // Magic commentator While-loop ends here.
-	} // Magoc commentator ends here
+	} // Magic commentator ends here
 	
 	
 } // If comment hilite is on anything within the } will happen
@@ -246,7 +253,7 @@ $sql="SELECT * FROM $gamestable WHERE contested_by_loser = '0' AND withdrawn = '
 
 
 echo "<h1>News</h1>";
-if ($_GET[readnews]) {
+if (isset($_GET['readnews'])) {
 $sql="SELECT * FROM $newstable WHERE news_id = '$_GET[readnews]' ORDER BY news_id DESC LIMIT 0, $newsitems";
 $result=mysql_query($sql,$db);
 $row = mysql_fetch_array($result);
@@ -287,7 +294,7 @@ print("
    news with a lower id than 45. That's what the following does, and we simply alter the sql query depending on if he views the
   index page or if he has clicked a specific news item...
 */
-if ($_GET[readnews]) {
+if (isset($_GET['readnews'])) {
 
 $query = "SELECT COUNT(*) FROM $newstable"; 
 $result = mysql_query($query,$db) or die(mysql_error());

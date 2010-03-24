@@ -15,7 +15,7 @@ if (!isset($_SESSION['real-username'])) {
 		$result = mysql_query($sql,$db);
 		$bajs = mysql_fetch_array($result); 
 		
-		if ($bajs[player_id] > 0) { 
+		if ($bajs['player_id'] > 0) { 
             $_SESSION['username'] = $bajs['name'];
             $_SESSION['real-username'] = $bajs['name'];
 		}
