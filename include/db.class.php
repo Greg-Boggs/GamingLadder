@@ -90,6 +90,52 @@
 			return $tmp[$field];
 		}
 		/*
+		*@function select_values
+		*@param string $table
+		*@param string $param
+		*@param object|null $condition
+		*@return array
+		*/
+		public function select_values($table, $param = 'id', $condition = NULL) {
+			$result = $this->_get_all($table, $condition);
+			$array = array();
+			while($row = mysql_fetch_assoc($result)) {
+			    $array[] = $row[$param];
+			}
+			return $array;   
+		}
+		/*
+		*@function select_pairs
+		*@param string $table
+		*@param string $value
+		*@param string $label
+		*@param object|null $condition
+		*@return array
+		*/
+		public function select_pairs($table, $value = 'id', $label = 'name', $condition = NULL) {
+		    $result = $this->_get_all($table, $condition);
+			$array = array();
+			while($row = mysql_fetch_assoc($result)) {
+			    $array[$row[$value]] = $row[$label];
+			}
+			return $array;
+		    
+		}
+		/*
+		*@function select_maxmin
+		*@param string $table
+		*@param string $param
+		*@param boolean $max
+		*@param object|null $condition
+		*@return array
+		*/
+		public function select_function($table, $param = 'id', $function = 'max', $condition = NULL) {
+		    $this->query = new DB_Query_SELECT($this->db_handle);
+			$this->query->setup(array("$function($param)"), $table, $condition);
+			return $this->get_value("$function(`$param`)");
+		    
+		}
+		/*
 		*@function insert
 		*@param array $params
 		*@param string $table
@@ -132,6 +178,12 @@
 			}
 			$query .= " ($str, PRIMARY KEY (`id`)) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1";
 		    return $this->execute($query);
+		}
+		
+		private function _get_all($table, $condition = NULL) {
+		    $this->query = new DB_Query_SELECT($this->db_handle);
+			$this->query->setup(array('*'), $table, $condition);
+			return  $this->query->execute($this->db_handle);
 		}
 	}
 	
@@ -187,7 +239,7 @@
 		*@return object
 		*/
 		public function execute($mysql_handle) {
-		    //echo "<div style='font-size: 10px;'>".$this->to_string()."</div>";
+		    echo "<div style='font-size: 10px;'>".$this->to_string()."</div>";
 		    $result = mysql_query($this->to_string(), $mysql_handle);
 			$mysql_error = mysql_error($mysql_handle);
 			if ($mysql_error) {
@@ -215,17 +267,32 @@
 		*@param string $param
 		*@param string|integer|float|null $value
 		*@param object|string|null $oper
+		*@param array|null $glue
 		*@return object
 		*/
-        public function add_condition ($param, $value, $oper = NULL) {
+        public function add_condition ($param, $value, $oper = NULL, $glue = NULL) {
 		    if (!is_object($oper)) {
 		        $oper = new DB_Operator($oper);
 			}
 		    if (isset($this->condition)) {
-			    $this->condition->add_cond($param, new DB_Condition_Value($value), $oper);
+			    $this->condition->add_cond($param, new DB_Condition_Value($value), $oper, $glue);
 			}
 			else {
-			    $this->condition = new DB_Condition($param, new DB_Condition_Value($value), $oper);
+			    $this->condition = new DB_Condition($param, new DB_Condition_Value($value), $oper, $glue);
+			}
+			return $this;
+		}
+		/*
+		*@function add_condition2
+		*@param object $condition
+		*@return object
+		*/
+        public function add_condition2 ($condition) {
+		    if (isset($this->condition)) {
+			    $this->condition->add_cond2($condition);
+			}
+			else {
+			    $this->condition = $condition;
 			}
 			return $this;
 		}
@@ -236,7 +303,13 @@
 		*/
 		protected function quote_params($params) {
 		    for ($i = 0; $i < count($params); $i ++) {
-			    $params[$i] = ($params[$i] == '*')? $params[$i] : '`'.$params[$i].'`';
+			    $function = preg_match('/([\w]{1,}\()([\w]{1,})(\))/', $params[$i], $matches);
+			    if ($function) {
+				    $params[$i] = $matches[1].'`'.$matches[2].'`)';
+				}
+				else {
+			        $params[$i] = ($params[$i] == '*')? $params[$i] : '`'.$params[$i].'`';
+				}
 			}
 			return $params;
 		}
@@ -398,11 +471,6 @@
 	    const DB_COND_AND = 'AND';
 		const DB_COND_OR = 'OR';
 		/*
-		* MySQL condition object
-		*@var object
-		*/
-		private $condition;
-		/*
 		* MySQL condition param
 		*@var string
 		*/
@@ -418,10 +486,15 @@
 		*/
 		private $operator;
 		/*
-		* MySQL conditions glue
-		*@var string
+		* MySQL condition object
+		*@var object
 		*/
-		private $glue;
+		protected $condition;
+		/*
+		* MySQL conditions glue
+		*@var array
+		*/
+		protected $glue;
 		/*
 		* Constructor
 		*@param string $param
@@ -430,7 +503,7 @@
 		*@param array $glue
 		*/
 	    function __construct($param, $value, $oper = NULL, $glue = array("", false)) {
-		    $this->param = $param;
+	        $this->param = $param;
 	        $this->value =  (is_object($value))? $value : new DB_Condition_Value($value);
 			$this->operator = (is_object($oper))? $oper : new DB_Operator($oper);
 			$this->glue = $glue;
@@ -448,14 +521,21 @@
 		*@param object|string|integer|float $value
 		*/
 		public function add_value ($value) {
-		    $this->value = value;
+		    $this->value = $value;
+		}
+		/*
+		*@function add_glue
+		*@param array $glue
+		*/
+		public function add_glue ($glue) {
+		    $this->glue = $glue;
 		}
 		/*
 		*@function add_cond
 		*@param string $param
 		*@param object|string|integer|float $value
 		*@param object $oper
-		*@param string $glue
+		*@param array $glue
 		*/
 		public function add_cond ($param, $value, $oper = NULL, $glue = array("", false)) {
 		    if (isset($this->condition)) {
@@ -463,6 +543,19 @@
 			}
 			else {
 			    $this->condition = new DB_Condition($param, $value, $oper, $glue);
+			}
+			return $this;
+		}
+		/*
+		*@function add_cond2
+		*@param object $condition
+		*/
+		public function add_cond2 ($condition) {
+		    if (isset($this->condition)) {
+                $this->_add_cond($this->condition->condition, $condition);
+			}
+			else {
+			    $this->_add_cond($this->condition, $condition);
 			}
 			return $this;
 		} 
@@ -487,10 +580,52 @@
 			    $this->_add_cond($condition->condition, $cond);
 			}
 			else {
-			    $condition = new DB_Condition ($cond[0], $cond[1], $cond[2], $cond[3]);
+			    $condition = (is_object($cond))? $cond : new DB_Condition ($cond[0], $cond[1], $cond[2], $cond[3]);
 			}
 		}
 		
+	}
+	/*
+	*
+    * DB_Match: MySQL full text matching
+	* 
+	*/
+	class DB_Match extends DB_Condition {
+		/*
+		* Table fields to be matched...
+		*@var array
+		*/
+		private $fields = array();
+		/*
+		* MySQL matching value
+		*@var string
+		*/
+		private $value;
+		/*
+		* Constructor
+		*@param array $fields
+		*@param string $value
+		*/
+	    function __construct($fields, $value, $glue = array("", false)) {
+		    $this->fields = $fields;
+	        $this->value = $value;
+			$this->glue = $glue;
+		} 
+		/*
+		*@function add_fields
+		*@param array $fields
+		*/
+		public function add_fields ($fields) {
+		    array_merge($this->fields, $fields);
+		}
+		/*
+		*@function to_string
+		*@return string
+		*/
+		public function to_string() {
+		    return " MATCH (`".join('`,', $this->fields)."`) AGAINST ('".$this->value."')"." ".$this->glue[0]." ".
+			       (($this->glue[1])? "(" : "").((isset($this->condition))? $this->condition->to_string() : "").(($this->glue[1])? ")" : "");
+	    }
 	}
 	
     /*

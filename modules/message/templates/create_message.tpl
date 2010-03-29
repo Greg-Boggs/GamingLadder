@@ -10,11 +10,7 @@
                     <strong>Reciever:</strong>
                 </td>
                 <td>
-                    <select name = "reciever">
-                        {foreach from=$users item="user"}
-                            <option value = "{$user->get_player_id()}" {if $reciever == $user->get_player_id()}selected{/if}>{$user->get_name()}</option>
-                        {/foreach}
-                    </select>
+                    {html_options options=$users name="reciever" selected=$reciever}
                     {if $errors}<br />{$errors.reciever}{/if}
                 </td>
             </tr>

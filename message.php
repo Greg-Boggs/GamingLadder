@@ -19,7 +19,9 @@
 		'view' => array('message', 'message'),
 		'view_content' => array('message', 'message'),
 		'thread' => array('topic', 'topic'),
-	    'show_message_box' => array('message_box', 'message')
+	    'show_message_box' => array('message_box', 'message'),
+		'search_message' => array('message_box', 'message'),
+		'get_players' => array('user', 'user')
 	);
 	$ac_box = $actions[$_GET['action']];
 	try {
@@ -41,6 +43,8 @@
 <a href = "message.php?action=create_message">Compose message</a>
 &nbsp;|&nbsp;
 <a href = "message.php?action=show_message_box">Message box</a>
+&nbsp;|&nbsp;
+<a href = "message.php?action=search_message">Search</a>
 <hr />
 <?
     echo $result;

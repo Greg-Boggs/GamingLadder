@@ -49,10 +49,11 @@
 		*@param object $config
 		*@param string|null $table_name
 		*@param object|array|null $params
+		*@param array|null $order
 		*/
-	    function __construct($config, $table_name = NULL, $params = array()) {
+	    function __construct($config, $table_name = NULL, $params = array(), $order = NULL) {
 	        if ($config && count($params)) {
-			    $this->db = $this->_get_all_from_base($config, $table_name, $params);
+			    $this->db = $this->_get_all_from_base($config, $table_name, $params, $order);
 			    if ($this->db) {
 			        $this->properties = $this->db->get_row();
 			        $this->id = $this->properties['id'];
@@ -101,12 +102,11 @@
 		/*
 		*@function get_entity
 		*@param string|null $table_name
-		*@param string|null $param
-		*@param string|integer|float|null $value
+		*@param object|array|null $params
 		*@return object
 		*/
-		public function get_entity($table_name = NULL, $param = NULL, $value = NULL) {
-		    return new Entity($base_name, $entity_name, array($param, $value));
+		public function get_entity($table_name = NULL, $params = NULL, $order = NULL) {
+		    return new Entity($table_name, $params, $order);
 		}
 		/*
 		*@function save
@@ -162,8 +162,14 @@
 		    }
 		    else {
 		        $query->setup(array($params[1]), $config->db_prefix.'_'.$from_table_name);
-		        for ($i = 0; $i < count($condition); $i += 2) {
-		            $query->add_condition($condition[$i], $condition[$i + 1]);
+		        $c = count($condition);
+		        for ($i = 0; $i < $c; $i += 2) {
+				    if ($c > 2 && $i < $c - 2) {
+		                $query->add_condition($condition[$i], $condition[$i + 1], new DB_Operator('='), array('AND', false));
+				    }
+					else {
+					    $query->add_condition($condition[$i], $condition[$i + 1]);
+					}
 		    	}
             }
 			if ($order) {
@@ -203,13 +209,19 @@
 				if ($limit) {
 				    $this->db->query->set_limit($limit[0], $limit[1]);
 				}
-		        if (get_class($params) == 'DB_Condition') {
+		        if (get_class($params) == 'DB_Condition' || get_class($params) == 'DB_Match') {
 		            $this->db->query->setup(array('*'), $this->table_name, $params);
 		        }
 		        else {
 		            $this->db->query->setup(array('*'), $this->table_name);
-		            for ($i = 0; $i < count($params); $i += 2) {
-		                $this->db->query->add_condition($params[$i], $params[$i + 1]);
+		            $c = count($params);
+		            for ($i = 0; $i < $c; $i += 2) {
+					    if ($c > 2 && $i < $c - 2) {
+		                    $this->db->query->add_condition($params[$i], $params[$i + 1], new DB_Operator('='), array('AND', false));
+						}
+						else {
+						    $this->db->query->add_condition($params[$i], $params[$i + 1]);
+						}
 		    	    }
                 }
             }

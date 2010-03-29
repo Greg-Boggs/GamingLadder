@@ -40,8 +40,8 @@
 		    return $this->get_module('user', array('player_id', $this->get_reciever_id()));
 		}
 		
-		public function get_sent_date() {
-		    return date('d.m.Y H:i:s', parent::__call('get_sent_date'));
+		public function get_sent_date() {;
+		    return date('d.m.Y H:i:s', $this->tz_offset + parent::__call('get_sent_date'));
 		}
 		
 		public function get_read_date() {

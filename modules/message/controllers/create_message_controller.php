@@ -39,7 +39,8 @@
 				$message->send($user->get_id(), $reciever, $topic);
 			}
 			else {
-			    $this->html->assign('users', $this->get_entities($this->get_config(), 'players'));
+			    $db = new DB($this->get_config());
+			    $this->html->assign('users', $db->select_pairs($this->get_config()->db_prefix.'_players', 'player_id'));
 		        $this->html->assign('message', (($message)? $message : $this->get_module('message')));
 				$this->html->assign('topic', (($topic)? $topic : ''));
 				$this->html->assign('reciever', (($reciever)? $reciever : 0));
