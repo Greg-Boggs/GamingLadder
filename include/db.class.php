@@ -239,7 +239,7 @@
 		*@return object
 		*/
 		public function execute($mysql_handle) {
-		    echo "<div style='font-size: 10px;'>".$this->to_string()."</div>";
+		    //echo "<div style='font-size: 10px;'>".$this->to_string()."</div>";
 		    $result = mysql_query($this->to_string(), $mysql_handle);
 			$mysql_error = mysql_error($mysql_handle);
 			if ($mysql_error) {
@@ -626,6 +626,44 @@
 		    return " MATCH (`".join('`,', $this->fields)."`) AGAINST ('".$this->value."')"." ".$this->glue[0]." ".
 			       (($this->glue[1])? "(" : "").((isset($this->condition))? $this->condition->to_string() : "").(($this->glue[1])? ")" : "");
 	    }
+	}
+	
+	class DB_Condition_List extends DB_Condition {
+		/*
+		* MySQL condition list
+		*@var array
+		*/
+		private $condition_list;
+		/*
+		* Constructor
+		*@param string $param
+		*@param object|string|integer|float $value
+		*@param object|null $oper
+		*@param array $glue
+		*/
+	    function __construct($condition_list) {
+	        $this->condition_list = $condition_list;
+		}
+		/*
+		* Destructor
+		*/
+		function __destruct() {
+		    unset($this->condition_list);
+		}
+		/*
+		*@function to_string
+		*@return string
+		*/
+		public function to_string() {
+		    $result = '(';
+			for ($i = 0; $i < count($this->condition_list); $i += 4) {
+				    $result .= (isset($this->condition_list[$i - 1]))? $this->condition_list[$i - 1].' ' : '';
+			        $result .= ' '.$this->condition_list[$i]->to_string().' ';
+					$result .= (isset($this->condition_list[$i + 1]))? $this->condition_list[$i + 1].' ' : '';
+					$result .= (isset($this->condition_list[$i + 2]))? $this->condition_list[$i + 2]->to_string().' ' : '';
+			}
+		    return $result.')';
+	    } 
 	}
 	
     /*

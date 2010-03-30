@@ -16,9 +16,9 @@
 		*@function run
 		*@param object $user
 		*/
-		public function run($user) {
+		public function run() {
 		    $user_id = (integer)($this->get_request('user'));
-			if ($user_id != $user->get_id()) {
+			if (!$this->acl->check_access($user_id)) {
 			    $this->error('You have not permission to view this message');
 			}
 		    $topic_id = (integer)($this->get_request('topic'));

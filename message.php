@@ -18,6 +18,7 @@
 	    'create_message' => array('message', 'message'),
 		'view' => array('message', 'message'),
 		'view_content' => array('message', 'message'),
+		'delete_message' => array('message', 'message'),
 		'thread' => array('topic', 'topic'),
 	    'show_message_box' => array('message_box', 'message'),
 		'search_message' => array('message_box', 'message'),

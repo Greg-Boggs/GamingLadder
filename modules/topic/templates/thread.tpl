@@ -6,7 +6,7 @@
 			    topic.append($('#loader').css('display', 'block'));
 			    topic.load(
 				    'message.php?action=view_content', 
-					{user: {/literal}{$user->get_id()}{literal}, topic: topic_id},
+					{user: {/literal}{$user->get_player_id()}{literal}, topic: topic_id},
 				    function (){collapse(topic_id);}
 				);
 			}
@@ -22,6 +22,7 @@
         <div style = "cursor: pointer; border: dashed 1px #000000;" onclick = "javascript: collapse({$topic->get_id()});">
             <div style = "float: left;" align="left">
                 <strong>Sent:</strong> {$topic->get_sent_date()}
+                {if $show_topic_title}<b><i>{$topic->get_topic()}</i></b>{/if}
             </div>
             <div align="right">
                 {assign var="sender" value = $topic->get_sender()}

@@ -1,6 +1,6 @@
 {if $sent}
     Your message is sent! Wait, you will automatically redirect...
-    Click <a href = 'message.php?action=show_message_box'>here</a> to nredirect manualy.
+    Click <a href = 'message.php?action=show_message_box'>here</a> to redirect manualy.
     {html_entity->redirect url='message.php?action=show_message_box'}
 {else}
     <form action="" method = "post">

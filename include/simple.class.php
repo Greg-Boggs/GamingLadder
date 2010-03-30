@@ -7,6 +7,7 @@
     */
     require_once(dirname(__FILE__).'/entity.class.php');
     require_once(dirname(__FILE__).'/html.class.php');
+	require_once(dirname(__FILE__).'/acl.class.php');
 	require_once(dirname(__FILE__).'/genericfunctions.inc.php');
     class Simple extends Entity {
 		/*
@@ -20,6 +21,11 @@
 		*/
 		var $html;
 		/*
+		* ACL
+		*@var object
+		*/
+		var $acl;
+		/*
 		* Constructor
 		*@param object $config
 		*/
@@ -29,6 +35,7 @@
 			date_default_timezone_set($config->ladder_timezone);
 		    $this->html = new HTML($this->config);
 			$this->html->register_object('application', $this, array('load_module'));
+		    $this->acl = new ACL($this->config);
 		}
 		/*
 		* Destructor
@@ -36,6 +43,7 @@
 		function __destruct() {
 		    unset($this->config);
 		    unset($this->html);
+			unset($this->acl);
 			parent::__destruct();
 		}
         /*
@@ -134,21 +142,6 @@
 			    $result = (isset($_GET[$param_name]))? $_GET[$param_name] : $_POST[$param_name];
 			}
 			return $result;
-		}
-		/*
-		*@function get_session
-		*@param string $param_name
-		*return variant;
-		*/
-		public function get_session($param_name) {
-		    return $_SESSION[$param_name];
-		}
-		/*
-		*@function get_user
-		*return object;
-		*/
-		public function get_user() {
-		    return $this->get_module('user', array('name', $this->get_session('username')));
 		}
 	}
 ?>

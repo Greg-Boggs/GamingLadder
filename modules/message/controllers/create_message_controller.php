@@ -18,7 +18,7 @@
 		*@param array $params
 		*/
 		public function run($params = array()) {
-		    $user = $this->get_user();
+		    $user = $this->acl->get_user();
 			$checker = new FormValidator();
 			$form = $this->get_request('form');
 			if ($form) {
@@ -36,7 +36,7 @@
 			}
 			if ($checker->check() && $form) {
 			    $this->html->assign('sent', 1);
-				$message->send($user->get_id(), $reciever, $topic);
+				$message->send($user->get_player_id(), $reciever, $topic);
 			}
 			else {
 			    $db = new DB($this->get_config());

@@ -157,7 +157,7 @@
 		*/
 		public function get_entities_from($config, $to_table_name, $from_table_name, $params = array('id', 'id'), $condition = array(), $order = NULL, $limit = NULL) {
 		    $query = new DB_Query_SELECT();
-			if (get_class($condition) == 'DB_Condition') {
+			if (is_object($condition)) {
 		        $query->setup(array($params[1]), $config->db_prefix.'_'.$from_table_name, $condition);
 		    }
 		    else {
@@ -209,7 +209,7 @@
 				if ($limit) {
 				    $this->db->query->set_limit($limit[0], $limit[1]);
 				}
-		        if (get_class($params) == 'DB_Condition' || get_class($params) == 'DB_Match') {
+		        if (is_object($params)) {
 		            $this->db->query->setup(array('*'), $this->table_name, $params);
 		        }
 		        else {

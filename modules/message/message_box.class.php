@@ -26,11 +26,10 @@
 		*@return string
 		*/
 		public function run_controller($controller_name) {
-		    $user = $this->get_user();
-			if (!$user->get_id()) {
+			if (!$this->acl->check_access()) {
 			    $this->error('You have not permission to access to the message service');
 			}
-			return parent::run_controller($controller_name, $user);
+			return parent::run_controller($controller_name);
 		}
 	}
 ?>

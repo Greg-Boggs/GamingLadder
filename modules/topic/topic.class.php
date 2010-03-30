@@ -21,14 +21,10 @@
 		    parent::__construct($config, $params);
 		}
 		
-		public function run_controller($controller_name, $topic_id) {
-		    $user = $this->get_user();
-			if (!$user->get_id()) {
+		public function run_controller($controller_name, $params = array()) {
+		    if (!$this->acl->check_access()) {
 			    $this->error('You have not permission to access to the message service');
 			}
-			$params = array();
-			$params['id'] = $topic_id;
-			$params['user'] = $user;
 			return parent::run_controller($controller_name, $params);
 		}
 		
@@ -46,6 +42,21 @@
 		
 		public function get_read_date() {
 		    return date('d.m.Y H:i:s', parent::__call('get_read_date'));
+		}
+		
+		public function delete ($box, $totally = false) {
+		    if ($totally) {
+			    parent::__call('delete', array(array($this->get_config()->db_prefix().'_module_message' => 'topic_id')));
+			}
+			else {
+			    if ($box == 'outbox') {
+				    $this->set_deleted_by_sender(1);
+				}
+				else {
+				    $this->set_deleted_by_reciever(1);
+				}
+				$this->save();
+			}
 		}
 	}
 ?>
