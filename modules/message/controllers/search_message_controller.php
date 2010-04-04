@@ -17,6 +17,7 @@
 		*@param array $params
 		*/
 		public function run($params = array()) {
+		    $items_per_page = 10;
 		    $user = $this->acl->get_user();
 		    $box = $this->get_request('box');
 		    $goal = $this->get_request('goal');
@@ -113,9 +114,16 @@
 				if ($condition_users) {
 				    $condition = new DB_Condition_List(array($condition, 'AND', $condition_users));
 				}
-				$results = $this->get_modules('topic', $condition);
+				$init = $this->get_request('p_c_p');
+				$init = ($init)? $init : 0;
+				$results = $this->get_modules('topic', $condition, array('sent_date', 'DESC'), array($init, $items_per_page));
 				$this->html->assign('result', 1);
-			    $this->html->assign('results', ((count($results))? $results : NULL));
+			    $this->html->assign('results', ((count($results))? array(
+				    'results' => $results, 
+					'total_count' => $this->get_modules_count('topic', $condition),
+					'url' => 'javascript: getResults();',
+					'is_js' => true
+				) : NULL));
 				$this->display(true);
 			}
 			else {

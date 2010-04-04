@@ -1,4 +1,4 @@
-<?php /* Smarty version 2.6.26, created on 2010-03-15 16:58:51
+<?php /* Smarty version 2.6.26, created on 2010-04-04 17:10:29
          compiled from view.tpl */ ?>
 <?php $this->assign('sender', $this->_tpl_vars['topic']->get_sender()); ?>
 <?php $this->assign('reciever', $this->_tpl_vars['topic']->get_reciever()); ?>

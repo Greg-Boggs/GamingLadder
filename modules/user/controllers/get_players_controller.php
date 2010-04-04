@@ -17,9 +17,9 @@
 		*@param array $params
 		*/
 		public function run($params = array()) {
-		    $name_prefix = str_replace(' ', '', $this->get_request('name_prefix'));
-			$users = $this->get_entities($this->get_config(), 'players', new DB_Condition('name', "%$name_prefix%", new DB_Operator('LIKE')));
-			$result = "{'users': [";
+		    $prefix = str_replace(' ', '', $this->get_request('prefix'));
+			$users = $this->get_entities($this->get_config(), 'players', new DB_Condition('name', "%$prefix%", new DB_Operator('LIKE')));
+			$result = "{'values': [";
 			if (!count($users)) {
 			    $result .= "]}";
 			}

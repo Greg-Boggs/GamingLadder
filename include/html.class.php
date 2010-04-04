@@ -24,7 +24,8 @@
 			);
 			$this->register_object('html_entity', $this, array(
 			    'redirect',
-				'loader'
+				'loader',
+				'paginate'
 			));
 		}
 		/*
@@ -108,6 +109,40 @@
 		    $template = $this->_get_template();
 			$template->assign('text', $text);
 			return $template->fetch('loader.tpl');
+		}
+		/*
+		*@function paginate
+		*@param integer $total
+		*@param string $url
+		*@param integer $items_per_page
+		*@return string
+		*/
+		public function paginate ($total, $url, $items_per_page = 10, $is_js_url = false) {
+			$pre_pages_count = 5;
+			$post_pages_count = 5;
+		    if ($is_js_url) {
+			   $url = explode('(', $url);
+			   $url = $url[0];
+			}
+		    $template = $this->_get_template();
+			$current_page = ($_GET['p_c_p'])? $_GET['p_c_p'] : 0;
+			$count = ($total % $items_per_page)? 1 : 0;
+			$count += (integer)($total / $items_per_page);
+			$initial_count = $current_page/$items_per_page - $pre_pages_count;
+			$initial_count = ($initial_count >= 0)? $initial_count : 0;
+			$pages = array();
+			$j = $initial_count * $items_per_page;
+			for ($i = $initial_count; $i < $count && $i < $initial_count + $pre_pages_count + $post_pages_count; $i ++) {
+			    $pages[$i + 1] = $j;
+				$j += $items_per_page;
+			}
+			$template->assign('pages', $pages);
+			$template->assign('current_page', $current_page);
+			$template->assign('last_page', $items_per_page * $count - $items_per_page);
+			$template->assign('url', $url);
+			$template->assign('items_per_page', $items_per_page);
+			$template->assign('is_js_url', $is_js_url);
+			return $template->fetch('paginator.tpl');
 		}
 		/*
 		*Undocumented method now...

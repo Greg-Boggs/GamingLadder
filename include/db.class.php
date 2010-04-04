@@ -834,7 +834,7 @@
 		*@return string
 		*/
 		public function to_string () {
-		    return ($this->from)? "LIMIT ".$this->from.(($this->number)? ", ".$this->number : "") : "";
+		    return "LIMIT ".$this->from.(($this->number)? ", ".$this->number : "");
 		}
 		
 	}

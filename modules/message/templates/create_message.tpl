@@ -1,8 +1,20 @@
 {if $sent}
-    Your message is sent! Wait, you will automatically redirect...
+    Your message is sent! Wait, you will be automatically redirected...
     Click <a href = 'message.php?action=show_message_box'>here</a> to redirect manualy.
     {html_entity->redirect url='message.php?action=show_message_box'}
 {else}
+    {literal}
+        <script type = "text/javascript">
+		    function getUsers(field, dest) {
+		    autoComplete(
+			    field.value, 
+				'message.php?action=get_players', 
+				dest, 
+				field
+			);
+		}
+        </script>
+    {/literal}
     <form action="" method = "post">
         <table>
             <tr>
@@ -10,7 +22,8 @@
                     <strong>Reciever:</strong>
                 </td>
                 <td>
-                    {html_options options=$users name="reciever" selected=$reciever}
+                    <input type = "text" name = "reciever" value = "{$reciever->get_name()}" onkeyup = "javascript: getUsers(this, $('#players'));" class = "value_list" />
+                    <div id = "players" class = "value_list"></div>
                     {if $errors}<br />{$errors.reciever}{/if}
                 </td>
             </tr>
@@ -19,7 +32,7 @@
                     <strong>Topic:</strong>
                 </td>
                 <td>
-                    <input name = "topic" id = "topic" value = "{$topic}" maxlength="64" />
+                    <input name = "topic" id = "topic" value = "{$topic}" maxlength="64" class = "value_list" />
                     <br />
                     {if $errors}<br />{$errors.topic}{/if}
                 </td>

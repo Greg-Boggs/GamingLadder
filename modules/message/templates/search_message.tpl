@@ -1,105 +1,29 @@
 {if !$result}
 {literal}
-    <style type = "text/css">
-	    #json, #users {
-		    display: none;
-		}
-		
-		#users {
-		    position: absolute; 
-			border: 1px solid #000000; 
-			background-color: #FFFFFF;
-		}
-		
-		.user_list {
-		    width: 200px;
-		}
-		
-		.user_list_item {
-		    cursor: pointer;
-		}
-		
-		.user_list_item:hover {
-		    color: #FFFFFF;
-		    background-color: #000000;
-		}
-		
-	</style>
-    
     <script type = "text/javascript">
 	    $(function() {
 		    $("#init_date").datepicker();
 		    $("#last_date").datepicker();
 			$('input').change(function() {
-		        get_results();
+		        getResults();
 		    });
 		    $('select').change(function() {
-		        get_results();
+		        getResults();
 		    });
 	    });
-
-	    function refreshList(list) {
-		    list.text('');
-			list.hide();
-		}
 		
-        function get_users(field, dest) {
-		    //Block, which contains list of matched users...
-		    ulist = dest;
-			name_prefix = field.value;
-			//If more, than one user in list...
-			if (name_prefix.indexOf(',') > -1) {
-			    name_prefix = name_prefix.split(',');
-				//get last name_prefix in list...
-			    name_prefix = name_prefix[name_prefix.length - 1];
-			}
-			//Minimal length required...
-			if (name_prefix.length < 3) {
-			    refreshList(ulist);
-			    return false;
-			}
-			//Block, which contains JSON code...
-		    var json = $('#json');
-			//Get users list...
-	        json.load(
-		        'message.php?action=get_players', 
-		        {name_prefix: name_prefix},
-				function () {
-				    refreshList(ulist);
-				    var users = eval('r = ' + $('#json').html());
-					//array of users: [{id: id, name: name}, ..]
-					users = users.users;
-					//if no user returned...
-					if (!users.length) {
-			            return false;
-			        }
-			        for (i in users) {
-					    user = $('<div class = "user_list_item">' + users[i].name + '</div>');
-					    //If click item...
-						user.click(function() {
-						    //if more than one items, replace last...
-						    if (field.value.indexOf(',') > -1) {
-							    val = field.value.split(',');
-								val[val.length - 1] = $(this).html();
-							}
-							else {
-							    val = $(this).html();
-							}
-						    field.value = (field.value.indexOf(',') > -1)? val.join(',') : val;
-							ulist.hide();
-							field.focus();
-							get_results();
-						});
-			            ulist.append(user);
-			        }
-					ulist.show();
-				}
+        function getUsers(field, dest) {
+		    autoComplete(
+			    field.value, 
+				'message.php?action=get_players', 
+				dest, 
+				field
 			);
 		}
 		
-		function get_results() {
+		function getResults(current_page) {
 		    $('#search_result').load(
-		        'message.php?action=search_message', 
+		        'message.php?action=search_message' + '&p_c_p=' + ((current_page)? current_page : 0), 
 		        {
 				    form: 1,
 					box: $('select[name=box]').val(),
@@ -123,7 +47,7 @@
 		}
     </script>
 {/literal}
-<form action="" method = "post" onsubmit = "javascript: get_results(); return false;">
+<form action="" method = "post" onsubmit = "javascript: getResults(); return false;">
     <table>
         {if $user->get_is_admin()}
             <tr>
@@ -134,8 +58,8 @@
                 </td>
                 <td valign="top">
                     <div>
-                        <input type = "text" name = "player" value = "" onkeyup = "javascript: get_users(this, $('#players'));" class = "user_list" />
-                        <div id = "players" class = "user_list">
+                        <input type = "text" name = "player" value = "" onkeyup = "javascript: getUsers(this, $('#players'));" class = "value_list" />
+                        <div id = "players" class = "value_list">
                         </div>
                     </div>
                 </td>
@@ -173,8 +97,8 @@
             </td>
             <td valign="top">
                 <div>
-                    <input type = "text" name = "users" value = "" onkeyup = "javascript: get_users(this, $('#users2'));" class = "user_list" />
-                    <div id = "users2" class = "user_list">
+                    <input type = "text" name = "users" value = "" onkeyup = "javascript: getUsers(this, $('#users2'));" class = "value_list" />
+                    <div id = "users2" class = "value_list">
                     </div>
                 </div>
             </td>
@@ -212,7 +136,6 @@
     </table>
     <input type = "submit" value = "Search" />
 </form>
-<div id = "json"></div>
 <div id = "search_result" style = "width: 100%"></div>
 {else}
 <h2 style = "border: 0;">Search Results</h2>

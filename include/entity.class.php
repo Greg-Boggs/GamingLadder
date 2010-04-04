@@ -145,6 +145,17 @@
 		    return $this->_get_list_of_entities($config, $table_name);
 		}
 		/*
+		*@function get_entities_count
+		*@param object $config
+   	        *@param string|null $table_name
+		*@param array $params
+		*@return integer
+		*/
+		public function get_entities_count($config, $table_name = NULL, $params = array()) {
+		    $this->_get_all_from_base($config, $table_name, $params, $order, $limit);
+		    return $this->db->get_row_count();
+		}
+		/*
 		*@function get_entities_from
 		*@param object $config
    	    *@param string $to_table_name

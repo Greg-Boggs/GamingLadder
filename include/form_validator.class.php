@@ -15,6 +15,7 @@
 		const VAR_STRING_MAX_LENGTH = 'string_max_length';
 		const VAR_STRING_MIN_LENGTH = 'string_min_length';
 		const VAR_REQUIRED = 'required';
+		const VAR_CALL_BACK = 'call_back';
 		const METHOD_POST = 'POST';
 		const METHOD_GET = 'GET';
 		/*
@@ -153,7 +154,7 @@
 		    );
 		}
 		/*
-		*@function check_number
+		*@function check_required
 		*@param array $params
 		*@param string $onerror
 		*@param string $suspect
@@ -162,6 +163,19 @@
 		    return array(
 			    'suspect' => $suspect,
 			    'result' => (isset($params['suspect']) && !empty($params['suspect'])), 
+				'onerror' => $onerror
+			);
+		}
+		/*
+		*@function call_back
+		*@param array $params
+		*@param string $onerror
+		*@param string $suspect
+		*/
+		private function check_call_back($params, $onerror, $suspect) {
+		    return array(
+			    'suspect' => $suspect,
+			    'result' => ($params['params']['result']), 
 				'onerror' => $onerror
 			);
 		}

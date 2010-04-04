@@ -30,6 +30,7 @@ if  (($maintenanceMode == true) && (is_file('backup-db.php') == true) && (basena
 <script type="text/javascript" src="<?php echo $GLOBALS['prefix'] ?>jquery/tablesorter/jquery.tablesorter.pager.js"></script>
 <script type="text/javascript" src="<?php echo $GLOBALS['prefix'] ?>jquery/tooltip.js"></script>
 <script type="text/javascript" src="<?php echo $GLOBALS['prefix'] ?>jquery/ui/jquery-ui-1.7.2.custom.js"></script>
+<script type="text/javascript" src="<?php echo $GLOBALS['prefix'] ?>jquery/utils.js"></script>
 <link rel="stylesheet" type="text/css" href="<?php echo $GLOBALS['prefix'] ?>css/wesnoth-main.css" />
 <link rel="stylesheet" type="text/css" href="<?php echo $GLOBALS['prefix'] ?>css/sorter.css" />
 <link rel="stylesheet" type="text/css" href="<?php echo $GLOBALS['prefix'] ?>css/jquery.autocomplete.css" />

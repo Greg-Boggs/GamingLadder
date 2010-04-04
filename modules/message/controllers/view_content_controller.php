@@ -18,7 +18,7 @@
 		*/
 		public function run() {
 		    $user_id = (integer)($this->get_request('user'));
-			if (!$this->acl->check_access($user_id)) {
+			if (!$this->acl->check_access(array($user_id))) {
 			    $this->error('You have not permission to view this message');
 			}
 		    $topic_id = (integer)($this->get_request('topic'));

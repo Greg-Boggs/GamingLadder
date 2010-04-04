@@ -117,6 +117,17 @@
 			 }
 		}
 		/*
+		*@function get_modules_count
+		*@param string $module_name
+		*@param array|null $params
+		*@param object|null $config
+		*@return integer
+		*/
+		public function get_modules_count($module_name, $params = array(), $config = NULL) {
+	        $config = ($config)? $config : $this->get_config();
+			return $this->get_entities_count($config, 'module_'.$module_name, $params);
+		}
+		/*
 		*@function load_module
 		*@param string $module_name
 		*@param string $module_action

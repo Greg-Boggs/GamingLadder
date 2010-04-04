@@ -1221,3 +1221,51 @@ div.gallerytext {
    margin:0px;
    padding:4px 2px;   
 }
+
+/* Begins message module */
+#json, div.value_list {
+    display: none;
+}
+
+.value_list {
+    width: 200px;
+}
+
+div.value_list {
+	position: absolute; 
+	border: 1px solid #000000; 
+	background-color: #FFFFFF;
+	height: 300px;
+	overflow: auto;
+}
+		
+.value_list_item {
+    cursor: pointer;
+}
+		
+.value_list_item:hover {
+    color: #FFFFFF;
+	background-color: #000000;
+}
+
+.paginator {
+    font-size: 12px;
+}
+
+.page_number {
+    padding: 1px;
+	width: 1.5em;
+	height: 1.5em;
+	text-align: center;
+	vertical-align: middle;
+}
+
+.page_number a{
+    font-size: 10px;
+	font-weight: normal;
+}
+
+.paginator div{
+    float: left;
+	margin: 0.5em;
+}
