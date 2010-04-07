@@ -21,6 +21,8 @@
 			$user = $this->acl->get_user();
 			if ($user->get_is_admin() && $this->get_request('totally')) {
 			    //TODO: delete message from db...
+				echo "TODO: delete message from db...";
+				exit;
 			}
 			else {
 			    $topics = (array)$this->get_request('messages');
@@ -35,6 +37,7 @@
 				    }
 				}
 			}
+			$this->html->assign('url', 'message.php?action=show_message_box&box='.$this->get_request('box').'&player='.$this->get_request('player'));
 			$this->display();
 		}
 	}

@@ -33,4 +33,6 @@
     </div>
 {/foreach}
 {html_entity->loader}
-{html_entity->paginate total=$total url=$url items_per_page=$items_per_page is_js_url=$is_js}
+{if $topics}
+    {html_entity->paginate total=$total url=$url items_per_page=$items_per_page is_js_url=$is_js}
+{/if}

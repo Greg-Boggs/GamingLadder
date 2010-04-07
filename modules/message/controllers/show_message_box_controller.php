@@ -17,16 +17,30 @@
 		*@param array $params
 		*/
 		public function run($params = array()) {
+		    $items_per_page = 30;
 			//Define current user...
 			$user = $this->acl->get_user();
 			$box = $this->get_request('box');
 			$box = ($box)? $box : 'inbox';
+			$player_name = $this->get_request('player', array('POST', 'GET'));
+			$player = ($user->get_is_admin() && isset($player_name))? 
+			    $this->get_entity($this->get_config(), 'players', array('name', $player_name)) : $user;
+			$player = ($player->get_player_id())? $player : $user;
 			//Get topics...
-			$condition = new DB_Condition((($box == 'inbox')? 'reciever_id' : 'sender_id'), $user->get_player_id(), '=', array('AND', false));
+			$condition = new DB_Condition((($box == 'inbox')? 'reciever_id' : 'sender_id'), $player->get_player_id(), '=', array('AND', false));
 		    $condition->add_cond((($box == 'inbox')? 'deleted_by_reciever' : 'deleted_by_sender'), 0);
-			$topics = $this->get_entities($this->get_config(), 'module_topic', $condition, array('sent_date', 'DESC'), array(0, 30));
+			$init = $this->get_request('p_c_p');
+			$init = ($init)? $init : 0;
+			$total = $this->get_entities_count($this->get_config(), 'module_topic', $condition);
+			$topics = $this->get_entities($this->get_config(), 'module_topic', $condition, array('sent_date', 'DESC'), array($init, $items_per_page));
+			$url = $_SERVER['REQUEST_URI'];
+			$this->html->assign('user', $user);
+			$this->html->assign('player', $player);
 	        $this->html->assign('topics', $topics);
 			$this->html->assign('box', $box);
+			$this->html->assign('total', $total);
+			$this->html->assign('url', $url);
+			$this->html->assign('items_per_page', $items_per_page);
 			$this->display();
 		}
 	}

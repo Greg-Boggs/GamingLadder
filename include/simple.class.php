@@ -141,13 +141,23 @@
 		/*
 		*@function get_request
 		*@param string $param_name
-		*@param string|null $request_method
+		*@param array|string|null $request_method
 		*return string;
 		*/
 		public function get_request($param_name, $request_method = NULL) {
 		    $result = NULL;
 		    if ($request_method) {
-			    eval('$result = $_'.strtoupper($request_method).'[$param_name];');
+			    if (is_array($request_method)) {
+				    foreach ($request_method as $key => $method) {
+					    eval('$result = $_'.strtoupper($method).'[$param_name];');
+						if (isset($result)) {
+						    return $result;
+						}
+					}
+				}
+				else {
+			        eval('$result = $_'.strtoupper($request_method).'[$param_name];');
+				}
 			}
 			else {
 			    $result = (isset($_GET[$param_name]))? $_GET[$param_name] : $_POST[$param_name];
