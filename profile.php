@@ -541,6 +541,13 @@ if ($_SESSION['username'] && $player[MsgMe] == "Yes") {
 </tbody>
 </table>
 
+<table class="tablesorter"><tbody><tr><td>
+<a href = "message.php?action=create_message&amp;reciever=<?=$player[name];?>">Send me a message</a>
+</td>
+</tr>
+</tbody>
+</table>
+
 <?php // Only show contact info if the user wants to be contacted 
 if ($player[MsgMe] == "Yes") {
 ?>
@@ -568,7 +575,7 @@ if ($player[MsgMe] == "Yes") {
 <?php 
 
 if ($player[CanPlay] != "") { ?>
-    <h2>Available to play <a id="availabletoplayexpand"></a></h2>	
+    <h2>Available to play <a style = "cursor: pointer;" id="availabletoplayexpand"></a></h2>	
 	<p class="text">Uses <?echo "$player[HaveVersion]" ?> version of Wesnoth & can usually play <?php echo " ($cfg_ladder_timezone)";?>:</p>
 <div id="availabletoplaydiv">
 	<table id="availabletoplay" class="tablesorter">

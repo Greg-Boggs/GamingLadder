@@ -22,6 +22,8 @@
 		    $box = $this->get_request('box');
 		    $goal = $this->get_request('goal');
 			$fromwhere = $this->get_request('fromwhere');
+			$status = $this->get_request('status');
+			$signature = $this->get_request('signature');
 			$users = $this->get_request('users');
 			$users = (!empty($users))? explode(',', $users) : array();
 			//***
@@ -56,6 +58,22 @@
 						'AND',
 						new DB_Condition('deleted_by_reciever', 0)
 					));
+				}
+				//Look at the read or unread messages
+				$condition_status = NULL;
+				if ($status < 2) {
+				    $condition_status = new DB_Condition('read_date', 0, new DB_Operator((($status)? '=' : '>')));
+				}
+				if ($condition_status) {
+				    $condition_box = new DB_Condition_List(array($condition_box, 'AND', $condition_status));
+				}
+				//Loo at the signature
+				$condition_signature = NULL;
+				if ($signature) {
+				    $condition_signature = new DB_Condition('signature', $signature);
+				}
+				if ($condition_signature) {
+				    $condition_box = new DB_Condition_List(array($condition_box, 'AND', $condition_signature));
 				}
 				//Look, where fulltext search is required...
 				if (!$goal || $goal == 2) {

@@ -49,5 +49,8 @@
         </table>
         <input name = "form" type = "hidden" value = "1" />
         <input type = "submit" value = "Send" />
+		{if $user->get_is_admin()}
+		    <input type = "checkbox" value = "a" name = "admin_sent" /> Send as Admin
+		{/if}
     </form>
 {/if}

@@ -29,6 +29,8 @@
 					box: $('select[name=box]').val(),
 					goal: $('select[name=goal]').val(),
 					fromwhere: $('select[name=fromwhere]').val(),
+					status: $('select[name=status]').val(),
+					signature: $('select[name=signature]').val(),
 					users: $('input:text[name=users]').val(),
 					init_date: $('input:text[name=init_date]').val(),
 					last_date: $('input:text[name=last_date]').val(),
@@ -86,6 +88,32 @@
                     <option value = "0">Topic</option>
                     <option value = "1">Message Body</option>
                     <option value = "2">Both: topic and message body</option>
+                </select>
+            </td>
+        </tr>
+		<tr>
+            <td align="right">
+                <strong>Message status:</strong>
+            </td>
+            <td>
+                <select name = "status">
+                    <option value = "0">Read</option>
+                    <option value = "1">Unread</option>
+                    <option value = "2" selected="selected">Both: read and unread</option>
+                </select>
+            </td>
+        </tr>
+		<tr>
+            <td align="right">
+                <strong>Message signature:</strong>
+            </td>
+            <td>
+                <select name = "signature">
+                    <option value = "u">From user</option>
+                    <option value = "a">From admin</option>
+                    <option value = "s">System</option>
+					<option value = "w">Warning</option>
+					<option value = "0">Either</option>
                 </select>
             </td>
         </tr>

@@ -24,6 +24,7 @@
 		'search_message' => array('message_box', 'message'),
 		'get_players' => array('user', 'user')
 	);
+	$_GET['action'] = (isset($_GET['action']))? $_GET['action'] : 'show_message_box';
 	$ac_box = $actions[$_GET['action']];
 	try {
 	    if (isset($ac_box)) {

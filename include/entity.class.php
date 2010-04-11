@@ -75,7 +75,7 @@
 		*@param string $method
 		*@return array|null $params
 		*/
-		protected function __call($method, $params = NULL) {
+		public function __call($method, $params = NULL) {
 		    //get or set value from entity..
 		    $method = get_method($method);
 			switch ($method[0]) {

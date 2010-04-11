@@ -27,8 +27,11 @@
 			    $this->get_entity($this->get_config(), 'players', array('name', $player_name)) : $user;
 			$player = ($player->get_player_id())? $player : $user;
 			//Get topics...
-			$condition = new DB_Condition((($box == 'inbox')? 'reciever_id' : 'sender_id'), $player->get_player_id(), '=', array('AND', false));
-		    $condition->add_cond((($box == 'inbox')? 'deleted_by_reciever' : 'deleted_by_sender'), 0);
+			$condition = new DB_Condition((($box == 'inbox')? 'reciever_id' : 'sender_id'), $player->get_player_id());
+			//Admin can see every message: deleted by user also...
+		    if(!$user->get_is_admin()) {
+			    $condition = new DB_Condition_List(array($condition, 'AND', new DB_Condition((($box == 'inbox')? 'deleted_by_reciever' : 'deleted_by_sender'), 0)));
+			}
 			$init = $this->get_request('p_c_p');
 			$init = ($init)? $init : 0;
 			$total = $this->get_entities_count($this->get_config(), 'module_topic', $condition);

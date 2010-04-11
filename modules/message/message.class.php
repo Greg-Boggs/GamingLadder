@@ -26,14 +26,16 @@
 		*@param integer $reciever_id
 		*@param string $topic_title
 		*@param string $content
+		*@param string $signature
 		*TODO: add some special parameters, such as system signature, etc...
 		*/
-		public function send($sender_id, $reciever_id, $topic_title) {
+		public function send($sender_id, $reciever_id, $topic_title, $signature) {
 			//Get topic object
 			$topic = $this->get_module('topic');
 			$topic->set_topic($topic_title);
 			$topic->set_sender_id($sender_id);
 			$topic->set_reciever_id($reciever_id);
+			$topic->set_signature((($signature)? $signature : 'u'));
 			$this->save();
 			$topic->set_sent_date(time());
 			$topic->save();

@@ -41,12 +41,13 @@
 		}
 		
 		public function get_read_date() {
-		    return date('d.m.Y H:i:s', parent::__call('get_read_date'));
+		    $date = parent::__call('get_read_date');
+		    return ($date)? date('d.m.Y H:i:s', $this->tz_offset + $date) : NULL;
 		}
 		
-		public function delete ($box, $totally = false) {
+		public function delete_topic ($box, $totally = false) {
 		    if ($totally) {
-			    parent::__call('delete', array(array($this->get_config()->db_prefix().'_module_message' => 'topic_id')));
+			    $this->delete(array($this->get_config()->db_prefix.'_module_message' => 'topic_id'));
 			}
 			else {
 			    if ($box == 'outbox') {

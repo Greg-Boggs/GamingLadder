@@ -40,7 +40,13 @@
             {foreach from=$topics item="topic"}
                 <tr>
                     <td>
-                        <a href = "message.php?action=view&topic={$topic->get_id()}">{$topic->get_topic()}</a>
+					    {if !$topic->get_read_date()}
+						    <strong>
+					    {/if}
+                        <a href = "message.php?action=view&topic={$topic->get_id()}">{$topic->get_topic()}</a>{if $topic->get_deleted_by_sender() || $topic->get_deleted_by_reciever()}&nbsp;<span style = "color: red; font-size: 10px;">[deleted]</span>{/if}
+						{if !$topic->get_read_date()}
+						    </strong>
+					    {/if}
                     </td>
                     <td>
                         <input type = "checkbox" name = "messages[]" value = "{$topic->get_id()}" /><br />

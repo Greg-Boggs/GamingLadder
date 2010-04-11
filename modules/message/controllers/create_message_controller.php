@@ -37,11 +37,16 @@
 			}
 			if ($checker->check() && $form) {
 			    $this->html->assign('sent', 1);
-				$message->send($user->get_player_id(), $reciever->get_player_id(), $topic);
+				$message->send(
+				    $user->get_player_id(), 
+					$reciever->get_player_id(), 
+					$topic, 
+					$this->get_request('admin_sent')
+				);
 			}
 			else {
 			    $db = new DB($this->get_config());
-			    $this->html->assign('users', $db->select_pairs($this->get_config()->db_prefix.'_players', 'player_id'));
+				$this->html->assign('user', $user);
 		        $this->html->assign('message', (($message)? $message : $this->get_module('message')));
 				$this->html->assign('topic', (($topic)? $topic : ''));
 				$this->html->assign('reciever', $reciever);

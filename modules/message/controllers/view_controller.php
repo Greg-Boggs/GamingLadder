@@ -30,6 +30,10 @@
 			if (!$message->get_id()) {
 			    $this->error("Message doesn't exist");
 			}
+			if (!$topic->get_read_date() && $user->get_player_id() == $topic->get_reciever_id()) {
+			    $topic->set_read_date(time());
+				$topic->save();
+			}
 			$this->html->assign('user', $user);
 	        $this->html->assign('topic', $topic);
 			$this->html->assign('message', $message);
