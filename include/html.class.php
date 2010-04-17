@@ -170,7 +170,7 @@
 		*/
 		private function _get_template() {
 		    $root = dirname(__FILE__).'/..';
-		    return $this->_get_smarty("$root/templates", "$root/templates_c", "$root/cache");
+		    return $this->_get_smarty("$root/templates", $this->smarty->compile_dir, $this->smarty->cache_dir);
 		}
 		
 	}

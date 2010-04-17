@@ -38,7 +38,7 @@
 					{/literal}
 					    {if $user->get_is_admin()}
 						    player: $('input:text[name=player]').val(),
-							deleted: $('input:checkbox[name=deleted]').val(),
+							hide_deleted: $('input:checkbox[name=hide_deleted]').val(),
 						{/if}
 					{literal}
 					all_w: $('input:checkbox[name=all_w]').val()
@@ -153,10 +153,10 @@
         {if $user->get_is_admin()}
             <tr>
                 <td align="right">
-                <strong>Show deleted:</strong>
+                <strong>Hide deleted:</strong>
             </td>
             <td>
-                <input type = "checkbox" value = "0" name = "deleted" onchange = "javascript: this.value = (this.value == '1')? 0 : 1;" />
+                <input type = "checkbox" value = "1" name = "hide_deleted" checked = "checked" onchange = "javascript: this.value = (this.value == '1')? 0 : 1;" />
             </td>
             </tr>
         {/if}

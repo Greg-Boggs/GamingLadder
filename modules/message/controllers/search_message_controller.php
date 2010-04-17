@@ -30,7 +30,7 @@
 			//If user is admin...
 			$player = $this->get_request('player');
 			$player = (!empty($player))? $player : NULL;
-			$deleted = $this->get_request('deleted');
+			$hide_deleted = $this->get_request('hide_deleted');
 			//***
 			$init_date = strtotime($this->get_request('init_date'));
 			$last_date = strtotime($this->get_request('last_date'));
@@ -40,17 +40,19 @@
 			if ($form) {
 			    //Admin can search every message...
 			    if ($user->get_is_admin() && $player) {
+				    //Admin searches $player messages 
 				    $player = $this->get_entity($this->get_config(), 'players', array('name', $player));
 				    $user_id = $player->get_player_id();
 				}
 				else {
+				    //Admin searches his messages
 			        $user_id = $user->get_player_id();
 				}
 			    $condition_box = new DB_Condition((($box)? 'sender_id' : 'reciever_id'), $user_id);
 				if ($box == 2) {
 				    $condition_box = new DB_Condition_List(array($condition_box, 'OR', new DB_Condition('reciever_id', $user_id)));
 				}
-				if (!$deleted) {
+				if ($hide_deleted) {
 				    $condition_box = new DB_Condition_List(array(
 					    $condition_box,
 						'AND',

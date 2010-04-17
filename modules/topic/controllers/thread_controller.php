@@ -19,16 +19,24 @@
 		public function run($params = 0) {
 		    $items_per_page = 10;
 		    $user = $this->acl->get_user();
-			$how_topic_title = false;//if we view thred by one topic, then we don't need to view topic title in each message...
+			$show_topic_title = false;//if we view thred by one topic, then we don't need to view topic title in each message...
 			if (!is_array($params)) {
 		        $topic = $this->get_module('topic', array('id', $params));
 			    if (!$topic->get_id()) {
 			        $this->error("Topic doesn't exist!");
 			    }
-			    $condition = new DB_Condition('id', $params, '!=', array('AND', false));
-			    $condition->add_cond('topic', $topic->get_topic(), '=', array('AND', true))->
-			                add_cond('sender_id', $user->get_player_id(), '=', array('OR', false))->
-			                add_cond('reciever_id', $user->get_player_id());
+				$condition = new DB_Condition_List(array(
+				    new DB_Condition('sender_id', $user->get_player_id()),
+					'OR',
+					new DB_Condition('reciever_id', $user->get_player_id())
+				));
+				$condition = new DB_Condition_List(array(
+				    $condition,
+					'AND',
+					new DB_Condition('topic', $topic->get_topic()),
+					'AND',
+					new DB_Condition('id', $params, '!=')
+				));
 				$init = $this->get_request('p_c_p');
 				$init = ($init)? $init : 0;
 				$total = $this->get_modules_count('topic', $condition);

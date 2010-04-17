@@ -36,6 +36,10 @@
 			$topic->set_sender_id($sender_id);
 			$topic->set_reciever_id($reciever_id);
 			$topic->set_signature((($signature)? $signature : 'u'));
+			//Escape html entities from message if user sent
+			if ($signature == 'u' || !$signature) {
+			    $this->set_content(htmlspecialchars($this->get_content()));
+			}
 			$this->save();
 			$topic->set_sent_date(time());
 			$topic->save();

@@ -18,19 +18,21 @@
 	</script>
 {/literal}
 {foreach from=$topics item="topic"}
-    <div>
-        <div style = "cursor: pointer; border: dashed 1px #000000;" onclick = "javascript: collapse({$topic->get_id()});">
-            <div style = "float: left;" align="left">
-                <strong>Sent:</strong> {$topic->get_sent_date()}
-                {if $show_topic_title}<b><i>{$topic->get_topic()}</i></b>{/if}
+    {if (!$topic->get_deleted_by_sender() && $user->get_player_id()==$topic->get_sender_id()) ||  (!$topic->get_deleted_by_reciever() && $user->get_player_id()==$topic->get_reciever_id()) || $user->get_is_admin()}
+	    <div>
+            <div style = "cursor: pointer; border: dashed 1px #000000;" onclick = "javascript: collapse({$topic->get_id()});">
+                <div style = "float: left;" align="left">
+                    <strong>Sent:</strong> {$topic->get_sent_date()}
+                    {if $show_topic_title}<b><i>{$topic->get_topic()}</i></b>{/if}
+                </div>
+                <div align="right">
+                    {assign var="sender" value = $topic->get_sender()}
+                    <strong>From:</strong> <a href = "profile.php?name={$sender->get_name()}">{$sender->get_name()}</a>
+                </div>
             </div>
-            <div align="right">
-                {assign var="sender" value = $topic->get_sender()}
-                <strong>From:</strong> <a href = "profile.php?name={$sender->get_name()}">{$sender->get_name()}</a>
-            </div>
+            <div id = "topic_content_{$topic->get_id()}" style = "display: none;"></div>
         </div>
-        <div id = "topic_content_{$topic->get_id()}" style = "display: none;"></div>
-    </div>
+	{/if}
 {/foreach}
 {html_entity->loader}
 {if $topics}
