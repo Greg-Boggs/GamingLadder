@@ -2,6 +2,36 @@
 // All pages that include the menu should have started the session is they want to use logged in information
 
 if ($maintenanceMode <> true) {
+
+if ($CFG_teamladder == true){?>
+<div id="nav">
+  <ul>
+	<li><a href="team_create.php">CreateTeam</a></li>
+	<li><a href="ladder.php">Ladder</a></li>
+	<li><a href="team_report.php">Report</a></li>
+	<li><a href="team_profile.php">Profile</a></li>
+  </ul>
+
+<?php 
+//next lines create an additional menu with the only purpose of accessing different ladders
+//checks if multiladder is enabled and then reads the $G_CFG_enabled_ladder_list array and will create for each entry a link plus $_GET Parameter
+//
+if  ($G_CFG_multiladder == true){?>
+    <br></br>
+    <ul style="font-size: x-small;">
+	<li><b>Ladderselection:</b></li>
+	<?
+	foreach($G_CFG_enabled_ladder_list as $key => $value) { 
+	echo "<li><a href=\"index.php?ladder=".$value."\">".$value."</a></li>";
+	}
+	?>
+    </ul>
+<?php
+}
+?>
+
+</div> <?
+}else{
 ?>
 <div id="nav">
   <ul>
@@ -45,7 +75,7 @@ if  ($G_CFG_multiladder == true){?>
 
 </div>
 <?php
- } else {
+} } else {
 ?>
 <div id="nav"></div>
 

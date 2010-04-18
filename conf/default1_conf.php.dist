@@ -2,6 +2,14 @@
 $maintenanceMode = false; // Is the site under maintenance, if so set this to true and all pages will show a maintenance screen
 $backupKey = "password"; // You can backup the database without logging in if you have access to the key below.  Change it to a secure string
 
+
+
+//settings teamladder
+//is it a teamladder? true/false
+// IMPORTANT to get the basic teamladder  working right now you have to replace after the line  "// CONFIG ENDS HERE! ....." everything that says "$playerstable" with "$teamtable"
+$CFG_teamladder = false;
+define ("NUMBER_MEMBERS",2); //set how many players per team, maximum number in sql database is 3 right now
+
 //configure database info
 
 $adminemail = "spam@THIS.com";
@@ -19,6 +27,7 @@ define("CRONCHECK_PATH","cronchecks/"); // dir for where the cron check files ar
 
   $playerstable = "webl_players"; //the name of the table that contains information about the players. Dont change it.. if you do... each player have to register himself again for this specific ladder.  
   //Notice the number 2 on the end if the tablenames. If you run a 3:d ladder it should be changed to 3 in the config file for that ladder, and 4 in the 4:th etc _if_  you run all the ladders in the _same_ database. (If you don't then please disregard all this) This is not necessary but a good and easy naming convention. You are however free to name the tables to almost whatever you want within MySQL naming restrictions. What's important is that __each ladder uses unique table names__, thus a prefix or postfix before/after the standard names is recomended. 
+  $teamstable ="webl_teams_2"; //the name of the table that stores the team information  
   $gamestable = "webl_games_2"; //the name of the table that stores the played games
   $newstable = "webl_news_2"; // the name of the table that stores the news
   $waitingtable = "webl_waiting_2"; //name of the table that stores the players waiting for a game...
@@ -199,5 +208,28 @@ $system = 'elorating';
 $pointswin = 2;
 $pointsloss = -1;
 
+// CONFIG ENDS HERE! Don't edit anything beyond this line unless you know what your doing! ----------------------
+
+$latestGameSql = "select name, max(latest_game) as latest_game from (
+select name, max(reported_on) as latest_game FROM $playerstable JOIN $gamestable ON (name = winner) WHERE contested_by_loser = 0 AND withdrawn = 0 GROUP BY 1
+UNION ALL
+select name, max(reported_on) as latest_game FROM $playerstable JOIN $gamestable ON (name = loser) WHERE contested_by_loser = 0 AND withdrawn = 0 GROUP BY 1
+) latest_game GROUP BY 1";  
+
+$cacheSql = "(name, reported_on, rating, wins, losses, games, streak) 
+		select * from (select a.name, g.reported_on, 
+        CASE WHEN g.winner = a.name THEN g.winner_elo ELSE g.loser_elo END as rating,
+        CASE WHEN g.winner = a.name THEN g.winner_wins ELSE g.loser_wins END as wins,
+        CASE WHEN g.winner = a.name THEN g.winner_losses ELSE g.loser_losses END as losses,
+        CASE WHEN g.winner = a.name THEN g.winner_games ELSE g.loser_games END as games,
+        CASE WHEN g.winner = a.name THEN g.winner_streak ELSE g.loser_streak END as streak
+        FROM ($latestGameSql) a JOIN $gamestable g ON (g.reported_on = a.latest_game)) standings ";
+
+
+// This selects the standings against every player
+$standingsSql = "select * from $standingscachetable join $playerstable USING (name)";
+
+// Apply the restrictions to standings
+$standingsSqlWithRestrictions = $standingsSql." WHERE reported_on > now() - interval $passivedays day AND rating >= $ladderminelo AND games >= $gamestorank ORDER BY 3 desc, 6 desc";
 
 ?>

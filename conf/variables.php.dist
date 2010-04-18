@@ -1,5 +1,5 @@
 <?
-define("TRIBAL_VERSION", "197"); // version number shown in footer. This = the revision number in SVN /trunk  Please change when you upgrade. Also add "Rev" in front of it if you customize the ladder code somehow and if you are not a part of the development team of tribal bliss. (we do however invite you to become so : ) 
+define("TRIBAL_VERSION", "198"); // version number shown in footer. This = the revision number in SVN /trunk  Please change when you upgrade. Also add "Rev" in front of it if you customize the ladder code somehow and if you are not a part of the development team of tribal bliss. (we do however invite you to become so : ) 
 /*
 
 Please Notice: 	The only lines which you are supposed to config according to your own needs
@@ -35,30 +35,7 @@ Please Notice: 	The only lines which you are supposed to config according to you
 
   $G_CFG_enable_graph_creation = false; // *** Switch to enable graph generation (true/false) switch to turn off/on the automatically generated elo/game charts in the profile page (important: pChart uses GD library, so be sure its part of your PHP installation before enable it) ***
 
-
 // CONFIG ENDS HERE! Don't edit anything beyond this line unless you know what your doing! ----------------------
-
-$latestGameSql = "select name, max(latest_game) as latest_game from (
-select name, max(reported_on) as latest_game FROM $playerstable JOIN $gamestable ON (name = winner) WHERE contested_by_loser = 0 AND withdrawn = 0 GROUP BY 1
-UNION ALL
-select name, max(reported_on) as latest_game FROM $playerstable JOIN $gamestable ON (name = loser) WHERE contested_by_loser = 0 AND withdrawn = 0 GROUP BY 1
-) latest_game GROUP BY 1";  
-
-$cacheSql = "(name, reported_on, rating, wins, losses, games, streak) 
-		select * from (select a.name, g.reported_on, 
-        CASE WHEN g.winner = a.name THEN g.winner_elo ELSE g.loser_elo END as rating,
-        CASE WHEN g.winner = a.name THEN g.winner_wins ELSE g.loser_wins END as wins,
-        CASE WHEN g.winner = a.name THEN g.winner_losses ELSE g.loser_losses END as losses,
-        CASE WHEN g.winner = a.name THEN g.winner_games ELSE g.loser_games END as games,
-        CASE WHEN g.winner = a.name THEN g.winner_streak ELSE g.loser_streak END as streak
-        FROM ($latestGameSql) a JOIN $gamestable g ON (g.reported_on = a.latest_game)) standings ";
-
-
-// This selects the standings against every player
-$standingsSql = "select * from $standingscachetable join $playerstable USING (name)";
-
-// Apply the restrictions to standings
-$standingsSqlWithRestrictions = $standingsSql." WHERE reported_on > now() - interval $passivedays day AND rating >= $ladderminelo AND games >= $gamestorank ORDER BY 3 desc, 6 desc";
 
 
 // variabledb.php used to connect to the database, I've added a temporary hack here to do that in the config file, it should be
