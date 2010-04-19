@@ -1,7 +1,7 @@
 <?php
     /*
 	*
-    * get_players_controller: class returns JSON representation of players list...
+        * get_players_controller: class returns JSON representation of players list...
 	* @author Khramkov Ivan.
 	* 
 	*/

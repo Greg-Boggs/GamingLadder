@@ -41,14 +41,6 @@
 	    $result = $e->getMessage();
 	}
 	require 'top.php';
-?>
-<a href = "message.php?action=create_message">Compose message</a>
-&nbsp;|&nbsp;
-<a href = "message.php?action=show_message_box">Message box</a>
-&nbsp;|&nbsp;
-<a href = "message.php?action=search_message">Search</a>
-<hr />
-<?
     echo $result;
     require_once('bottom.php');
 ?>

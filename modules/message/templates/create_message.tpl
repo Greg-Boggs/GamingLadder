@@ -15,42 +15,48 @@
 		}
         </script>
     {/literal}
-    <form action="" method = "post">
-        <table>
-            <tr>
-                <td>
-                    <strong>Reciever:</strong>
-                </td>
-                <td>
-                    <input type = "text" name = "reciever" value = "{$reciever->get_name()}" onkeyup = "javascript: getUsers(this, $('#players'));" class = "value_list" />
-                    <div id = "players" class = "value_list"></div>
-                    {if $errors}<br />{$errors.reciever}{/if}
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <strong>Topic:</strong>
-                </td>
-                <td>
-                    <input name = "topic" id = "topic" value = "{$topic}" maxlength="64" class = "value_list" />
-                    <br />
-                    {if $errors}<br />{$errors.topic}{/if}
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <strong>Message:</strong>
-                </td>
-                <td>
-                    <textarea name = "content">{$message->get_content()}</textarea>
-                    {if $errors}<br />{$errors.content}{/if}
-                </td>
-            </tr>
-        </table>
-        <input name = "form" type = "hidden" value = "1" />
-        <input type = "submit" value = "Send" />
-		{if $user->get_is_admin()}
-		    <input type = "checkbox" value = "a" name = "admin_sent" /> Send as Admin
-		{/if}
-    </form>
+	<div class = "column" style = "margin-left: 5%;">
+	    {html_entity->message_box_menu selected=0}
+	</div>
+	<div class = "column" style = "width: auto;">
+	    <form action="" method = "post">
+	        <div class = "block_create_message">
+                <div class = "wrapper">
+                    <div>
+				        <strong>Reciever:</strong>
+			        </div>
+				    <div class = "block_select_user block">    
+                        <input type = "text" name = "reciever" value = "{$reciever->get_name()}" onkeyup = "javascript: getUsers(this, $('#players'));" class = "value_list" />
+                        <div id = "players" class = "value_list"></div>
+                        {if $errors}<br />{$errors.reciever}{/if}
+				    </div>
+				</div>
+                <div class = "wrapper">
+                    <div>
+					    <strong>Topic:</strong>
+					</div>
+					<div class = "block">
+					    <input name = "topic" id = "topic" class = "textfield" value = "{$topic}" maxlength="64" class = "value_list" />
+                        {if $errors}<br />{$errors.topic}{/if}
+					</div>
+                </div>
+				<div class = "wrapper">
+				    <div>
+					    <strong>Message:</strong>
+					</div>
+					<div class = "block">
+					    <textarea name = "content">{$message->get_content()}</textarea>
+                        {if $errors}<br />{$errors.content}{/if}
+					</div>
+				</div>
+			</div>
+            <input name = "form" type = "hidden" value = "1" />
+            <input type = "submit" class = "button" value = "Send" />
+		    {if $user->get_is_admin()}
+		        <input type = "checkbox" value = "a" name = "admin_sent" /> Send as Admin
+		    {/if}
+        </form>
+	</div>
 {/if}
+<div style = "clear: both;">
+</div>

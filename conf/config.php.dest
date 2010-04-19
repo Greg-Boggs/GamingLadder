@@ -46,12 +46,12 @@
 		* The location of your SMARTY compiled templates
 		*@var string
 		*/
-		var $smarty_templates_c_path ='/home/ladder/trunk/custom/templates_c/';
+		var $smarty_templates_c_path ='/home/ladder/trunk/share/templates_c/';
 		/*
 		* The location of your SMARTY cache
 		*@var string
 		*/
-		var $smarty_cache_path = '/home/ladder/trunk/custom/cache/';
+		var $smarty_cache_path = '/home/ladder/trunk/share/cache/';
                 /*
 		* Sets what timezone the ladder will use. PLease see http://se2.php.net/manual/en/timezones.php for all options. 
 		* If you have a ladder with participants from more than 1 timezone it is however best to leave it at default UTC.  

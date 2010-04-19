@@ -25,7 +25,8 @@
 			$this->register_object('html_entity', $this, array(
 			    'redirect',
 				'loader',
-				'paginate'
+				'paginate',
+				'message_box_menu'
 			));
 		}
 		/*
@@ -143,6 +144,16 @@
 			$template->assign('items_per_page', $items_per_page);
 			$template->assign('is_js_url', $is_js_url);
 			return $template->fetch('paginator.tpl');
+		}
+		/*
+		*@function message_box_menu
+		*@param integer $selected
+		*@return string
+		*/
+		public function message_box_menu($selected = 0) {
+		    $template = $this->_get_template();
+			$template->assign('selected', $selected);
+			return $template->fetch('message_box_menu.tpl');
 		}
 		/*
 		*Undocumented method now...

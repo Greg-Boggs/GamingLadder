@@ -1,6 +1,6 @@
 {literal}
     <script type = "text/javascript">
-	    function collapse(topic_id) {
+		function collapse(topic_id) {
 		    var topic = $('#topic_content_' + topic_id);
 		    if (!topic.html().length) {
 			    topic.append($('#loader').css('display', 'block'));

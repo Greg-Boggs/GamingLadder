@@ -354,7 +354,7 @@ blockquote {
   padding: 0 5px;
 }
 
-#nav a {
+#nav a, .message_box_menu a {
   /*color: #A74;*/
   /*color: #DBB672;*/
   color: #B48648;
@@ -1222,34 +1222,13 @@ div.gallerytext {
    padding:4px 2px;   
 }
 
-/* Begins message module */
-#json, div.value_list {
-    display: none;
+.wrapper {
+    clear: both;
 }
 
-.value_list {
-    width: 200px;
-}
-
-div.value_list {
-	position: absolute; 
-	border: 1px solid #000000; 
-	background-color: #FFFFFF;
-	height: 300px;
-	overflow: auto;
-}
-		
-.value_list_item {
-    cursor: pointer;
-}
-		
-.value_list_item:hover {
-    color: #FFFFFF;
-	background-color: #000000;
-}
-
+/*Paginator*/
 .paginator {
-    font-size: 12px;
+    font-size: 10px;
 }
 
 .page_number {
@@ -1268,4 +1247,134 @@ div.value_list {
 .paginator div{
     float: left;
 	margin: 0.5em;
+}
+
+/*Select user block*/
+
+.block_select_user div{
+    width: 100%;
+}
+
+#json, .block_select_user div.value_list {
+    display: none;
+}
+
+.block_select_user div.value_list {
+	position: absolute; 
+	border: 1px solid #000000; 
+	background-color: #FFFFFF;
+	height: 300px;
+	overflow: auto;
+	margin-left: 0px;
+	top: auto;
+}
+
+.block_select_user input.button {
+    width: 40px;
+}
+
+.block_select_user .value_list, .block_select_user input.textfield  {
+    width: 100px;
+}
+		
+.block_select_user .value_list_item {
+    cursor: pointer;
+}
+		
+.block_select_user .value_list_item:hover {
+    color: #FFFFFF;
+	background-color: #000000;
+}
+
+/*Message box column*/
+.column {
+    width: 150px;
+	float: left;
+	margin-right: 30px;
+	font-size: 10px;
+}
+
+.column div.block {
+    margin: 5px;
+}
+
+.column input, .column select, .column textarea{
+	font-size: 10px;
+}
+
+/*Message box menu*/
+
+.message_box_menu {
+    width: auto;
+	height: 70px;
+	background-color: #000000;
+	text-align: center;
+	padding-top: 20px;
+	font-size: 14px;
+}
+
+.message_box_menu div {
+    width: 100%;
+}
+
+.message_box_menu div.selected_item a {
+    text-decoration: underline;
+}
+
+/*Select box*/
+
+.select_box {
+    font-size: 14px;
+}
+
+.select_box div.selected_item {
+    font-weight: bold;
+}
+
+/*Message List*/
+.message_list {
+    margin-top: 30px;
+}
+
+.message_list .wrapper {
+	height: 2em;
+}
+
+.message_list .wrapper div, .block_search_message .wrapper div{
+    float: left;
+}
+
+.message_list .message_date {
+    width: 110px;
+	color: #666666;
+	overflow: hidden;
+}
+
+.message_list .message_title {
+    width: 400px;
+	overflow: hidden;
+}
+
+.message_list .message_title:hover {
+    background-color: #CCCCCC;
+}
+
+/*Create message block */
+
+.block_create_message input, .block_create_message textarea {
+    width: 200px;
+}
+
+/*search message block*/
+
+.block_search_message {
+    margin-top: 30px;
+}
+
+.block_search_message .wrapper {
+    height: 3em;
+}
+
+.block_search_message .wrapper div {
+    margin-right: 10px;
 }

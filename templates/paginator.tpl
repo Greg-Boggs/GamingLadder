@@ -5,7 +5,7 @@
 	    {assign var="prev" value=0}
 	{/if}
     <div>
-	    <a href = "{$url}{if $is_js_url}({$prev});{else}&amp;p_c_p={$prev}{/if}" title = "Previous page"><</a>
+	    <a href = "{$url}{if $is_js_url}({$prev});{else}&amp;p_c_p={$prev}{/if}" title = "Previous page">&lt;</a>
 	</div>
     {foreach from=$pages key="i" item="page"}
         <div class = "page_number">
@@ -24,7 +24,7 @@
 	    {assign var="next" value=$last_page}
 	{/if}
     <div>
-	    <a href = "{$url}{if $is_js_url}({$next});{else}&amp;p_c_p={$next}{/if}" title = "Next page">></a>
+	    <a href = "{$url}{if $is_js_url}({$next});{else}&amp;p_c_p={$next}{/if}" title = "Next page">&gt;</a>
 	</div>
 </div>
 <div style = "clear: both;"></div>

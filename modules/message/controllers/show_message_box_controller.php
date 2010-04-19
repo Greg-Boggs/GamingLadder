@@ -24,7 +24,7 @@
 			$box = ($box)? $box : 'inbox';
 			$player_name = $this->get_request('player', array('POST', 'GET'));
 			$player = ($user->get_is_admin() && isset($player_name))? 
-			    $this->get_entity($this->get_config(), 'players', array('name', $player_name)) : $user;
+			$this->get_entity($this->get_config(), 'players', array('name', $player_name)) : $user;
 			$player = ($player->get_player_id())? $player : $user;
 			//Get topics...
 			$condition = new DB_Condition((($box == 'inbox')? 'reciever_id' : 'sender_id'), $player->get_player_id());
@@ -35,7 +35,7 @@
 			$init = $this->get_request('p_c_p');
 			$init = ($init)? $init : 0;
 			$total = $this->get_entities_count($this->get_config(), 'module_topic', $condition);
-			$topics = $this->get_entities($this->get_config(), 'module_topic', $condition, array('sent_date', 'DESC'), array($init, $items_per_page));
+			$topics = $this->get_modules('topic', $condition, array('sent_date', 'DESC'), array($init, $items_per_page));
 			$url = $_SERVER['REQUEST_URI'];
 			$this->html->assign('user', $user);
 			$this->html->assign('player', $player);
