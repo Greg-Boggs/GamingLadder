@@ -18,13 +18,12 @@ $result = mysql_query($sql,$db);
 	}
 
 //provide the path for a possible already existent image
-$filename = "pChart/img/".$_GET['name'].".png";
-
+$filename = $G_CFG_pChartimagepath.$_GET['name'].".png";
 
 // if the image already exists and it was created after the last game skip the image creating part and just display the already existent file 
 
 if (file_exists($filename) && date ("Y-m-d H:i:s'.", filemtime($filename)) > $lastgamedate)
-      { ?> <img src="pChart/img/<?echo $_GET['name']?>.png"> <?php }
+      { ?> <img src="<?echo $G_CFG_pChartimagepath, $_GET['name']?>.png"> <?php }
     
 else {
 //if no image was found or image is older than last game create a new graph
@@ -79,7 +78,7 @@ $result = mysql_query($sql,$db);
  $image->setColorPalette(231, 217, 190,0);  //set the line color 
  $image->setGraphArea(100,30,780,190);   
  $image->drawGraphArea(255,255,255,FALSE);
- $image->drawScale($imagedata->GetData(),$imagedata->GetDataDescription(),SCALE_NORMAL,100,100,100,TRUE,0,2,FALSE,$skiplabels);   
+ $image->drawScale($imagedata->GetData(),$imagedata->GetDataDescription(),SCALE_NORMAL,100,100,100,TRUE,0,0,FALSE,$skiplabels);   
   
  // Draw the 1500 elo line   
  $image->setFontProperties("pChart/Fonts/tahoma.ttf",6);   
@@ -91,10 +90,10 @@ $result = mysql_query($sql,$db);
   
  // Finish the graph   
  $image->setFontProperties("pChart/Fonts/tahoma.ttf",10);   
- $image->Render("pChart/img/".$_GET['name'].".png");
+ $image->Render($G_CFG_pChartimagepath.$_GET['name'].".png");
 
 //and finally...display the new graph
-?> <img src="pChart/img/<?echo $_GET['name']?>.png">  <?php 
+?> <img src="<?echo $G_CFG_pChartimagepath.$_GET['name']?>.png">  <?php 
 }
 
 ?>

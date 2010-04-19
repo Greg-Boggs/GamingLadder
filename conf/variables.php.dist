@@ -1,5 +1,5 @@
 <?
-define("TRIBAL_VERSION", "199"); // version number shown in footer. This = the revision number in SVN /trunk  Please change when you upgrade. Also add "Rev" in front of it if you customize the ladder code somehow and if you are not a part of the development team of tribal bliss. (we do however invite you to become so : ) 
+define("TRIBAL_VERSION", "200"); // version number shown in footer. This = the revision number in SVN /trunk  Please change when you upgrade. Also add "Rev" in front of it if you customize the ladder code somehow and if you are not a part of the development team of tribal bliss. (we do however invite you to become so : ) 
 /*
 
 Please Notice: 	The only lines which you are supposed to config according to your own needs
@@ -34,6 +34,7 @@ Please Notice: 	The only lines which you are supposed to config according to you
     }
 
   $G_CFG_enable_graph_creation = false; // *** Switch to enable graph generation (true/false) switch to turn off/on the automatically generated elo/game charts in the profile page (important: pChart uses GD library, so be sure its part of your PHP installation before enable it) ***
+  $G_CFG_pChartimagepath ="share/images/pChart/"; // dir for where the pChart generated graphs are stored. It should be writable.
 
 // CONFIG ENDS HERE! Don't edit anything beyond this line unless you know what your doing! ----------------------
 
