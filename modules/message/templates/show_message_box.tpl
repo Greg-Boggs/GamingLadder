@@ -39,29 +39,34 @@
 		</div>
     </div>
 </div>
-<div class = "column" style = "width: auto;">
+<div class = "column" style = "width: 70%;">
     <form action = "message.php?action=delete_message" method = "post">
         <div class = "message_list">
             {foreach from=$topics item="topic"}
-			    <div class = "wrapper">
+			    <div class = "wrapper {cycle name="lines" values="selected,"}">
 				    <div class = "message_date">
-					    [{$topic->get_sent_date()}]:
+					    <img src = "images/date.png" alt = "[{$topic->get_sent_date()}]" title = "{if $box=='outbox'}Sent{else}Recieved{/if}: {$topic->get_sent_date()}" />
+					</div>
+					<div class = "message_user" style = "color: #{cycle name="users" values="909786,B2B9A8"};">
+					    {if $box=='inbox'}From{else}To{/if}
+						{if $box=='inbox'}{$topic->get_sender()->get_name()}{else}{$topic->get_reciever()->get_name()}{/if}
+						:&nbsp;
 					</div>
                     <div class = "message_title">
                         {if !$topic->get_read_date()}
 					        <strong>
 					    {/if}
+                        <a href = "message.php?action=view&amp;topic={$topic->get_id()}">{$topic->get_topic()}</a>
 						{if $user->get_is_admin()}
 					        {if ($topic->get_deleted_by_sender() && $box=='outbox') || ($topic->get_deleted_by_reciever() && $box=='inbox')}
-					            <span style = "color: red; font-size: 10px;">[deleted]</span>&nbsp;
+					            (<img src = "images/deleted.png" alt = "[deleted]" title = "Deleted" class = "deleted" />)
 				            {/if}
 					    {/if}
-                        <a href = "message.php?action=view&amp;topic={$topic->get_id()}">{$topic->get_topic()}</a>
 					    {if !$topic->get_read_date()}
 					        </strong>
 					    {/if}
                     </div>
-                    <div>
+                    <div style = "width: 7%; text-align: right;">
 				        <input type = "checkbox" name = "messages[]" value = "{$topic->get_id()}" /><br />
                     </div>
 				</div>

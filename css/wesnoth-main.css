@@ -1307,7 +1307,8 @@ div.gallerytext {
 .message_box_menu {
     width: auto;
 	height: 70px;
-	background-color: #000000;
+	background-color: #272727;
+	border: 1px solid #585858;
 	text-align: center;
 	padding-top: 20px;
 	font-size: 14px;
@@ -1336,27 +1337,35 @@ div.gallerytext {
     margin-top: 30px;
 }
 
+.message_list .message_date {
+    width: 20px;
+	color: #666666;
+	overflow: hidden;
+}
+
+.message_list .message_title {
+    width: 80%;
+	overflow: hidden;
+}
+
+.message_list .message_title img.deleted{
+    height: 1em;
+}
+.message_list .message_user {
+    font-size: 10px;
+    font-style: italic;
+}
+
+.message_list .selected {
+	background-color: #CED5C4;
+}
+
 .message_list .wrapper {
 	height: 2em;
 }
 
 .message_list .wrapper div, .block_search_message .wrapper div{
     float: left;
-}
-
-.message_list .message_date {
-    width: 110px;
-	color: #666666;
-	overflow: hidden;
-}
-
-.message_list .message_title {
-    width: 400px;
-	overflow: hidden;
-}
-
-.message_list .message_title:hover {
-    background-color: #CCCCCC;
 }
 
 /*Create message block */
@@ -1377,4 +1386,25 @@ div.gallerytext {
 
 .block_search_message .wrapper div {
     margin-right: 10px;
+}
+
+/* Message block (view message) */
+
+.message .topic {
+    text-align: center;
+}
+
+/*Message thread */
+
+.thread .wrapper {
+    border-top: 1px solid #272727;
+}
+
+.thread .wrapper .message_user{
+	width: 12%;
+}
+
+.thread .wrapper .message_view{
+    text-align: right;
+	width: 5%;
 }

@@ -22,6 +22,7 @@
 			$checker = new FormValidator();
 			$form = $this->get_request('form');
 			$reciever_name = $this->get_request('reciever');
+			$topic = $this->get_request('topic', 'GET');
 			$reciever = $this->get_entity($this->get_config(), 'players', array('name', $reciever_name));
 			if ($form) {
 			    $checker->add_checking('topic', FormValidator::VAR_REQUIRED, 'Topic is required!')->
@@ -32,7 +33,7 @@
 			              add_checking('topic', FormValidator::VAR_STRING_MAX_LENGTH, 'Max topic length is 64 symbols!', array('max_length' => 64));
 		        $message = $this->get_module('message');
 			    $message->set_content($this->get_request('content'));
-				$topic = $this->get_request('topic');
+				$topic = $this->get_request('topic', 'POST');
 				$this->html->restore_template($_POST);
 			}
 			if ($checker->check() && $form) {

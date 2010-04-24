@@ -1,1 +1,1 @@
-{$content}
+<pre>{$content}</pre>

@@ -52,7 +52,7 @@
 <div class = "column" style = "margin-left: 5%;">
     {html_entity->message_box_menu selected=2}
 </div>
-<div class = "column" style = "width: auto;">
+<div class = "column" style = "width: 70%;">
     <form action="" method = "post" id = "search_form" onsubmit = "javascript: getResults(); return false;">
         <div class = "block_search_message">
             {if $user->get_is_admin()}
@@ -168,13 +168,13 @@
         </div>
         <input type = "submit" value = "Search" />
     </form>
-    <div id = "search_result" style = "width: 100%">
-	</div>
+</div>
+<div id = "search_result" style = "width: 100%; font-size: 10px;">
 </div>
 {else}
     <h2 style = "border: 0;">Search Results</h2>
     {if $results}
-        <div style = "width: 80%;">
+        <div>
             {application->load_module module_name='topic' module_action='thread' param=$results}
         </div>
     {else}
