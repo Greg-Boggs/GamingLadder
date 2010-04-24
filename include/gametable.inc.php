@@ -27,11 +27,11 @@ function gameTableTBody($result, $playerName = null)
     $text = "<tbody>";
 
     while ($row = mysql_fetch_array($result)) {
-        if ($row["recorded"] == "yes") {
-    	    $status = "recorded";
-	    } else {
-    	    $status = "pending";
-	    }
+//         if ($row["recorded"] == "yes") {
+//     	    $status = "recorded";
+// 	    } else {
+//     	    $status = "pending";
+// 	    }
 
 	    $undoDeleteLink = "";
 	    // Strike through games that aren't counted
@@ -56,14 +56,14 @@ function gameTableTBody($result, $playerName = null)
 		$text .= "<tr><td>";
         $text .= $sdel.$row['reported_on'].$edel;
 		$text .= "</td><td>";
-	    if ($row[winner] == $playerName) { 
+	    if ($row['winner'] == $playerName) { 
   	    	$text .= $sdel.$row['winner'].$winnerWithdrew.$edel;
     	} else {
         	$text .= $sdel."<a href=\"profile.php?name=$row[winner]\">$row[winner]</a>".$winnerWithdrew.$edel;
     	}
 		$text .= "</td><td>";
 
-		if ($row[loser] == $playerName) {
+		if ($row['loser'] == $playerName) {
 			$text .= $sdel."$row[loser]".$loserContested.$edel; 
 		} else {
 			$text .= $sdel."<a href=\"profile.php?name=$row[loser]\">$row[loser]</a>".$loserContested.$edel;

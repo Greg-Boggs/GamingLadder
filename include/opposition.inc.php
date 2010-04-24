@@ -144,8 +144,8 @@ foreach ($people as $name) {
 			$inflationpoint = $inflationpoint  + ($row['winner_elo'] - $opcurrentelo[$z]); 
 			
 			// Now let's see if the opponent was over or underrated during that specific game. If he was, then we count _the game_ as a game against an overrated opponent.
-			if ($row['winner_elo'] > ($opcurrentelo[$z] + DELTA_OVER_UNDER_RATED))  { $overratedgames++; }
-			if ($row['winner_elo'] < ($opcurrentelo[$z] - DELTA_OVER_UNDER_RATED))  { $underratedgames++; }
+			if ($row['winner_elo'] > ($opcurrentelo[$z] + 'DELTA_OVER_UNDER_RATED'))  { $overratedgames++; }
+			if ($row['winner_elo'] < ($opcurrentelo[$z] - 'DELTA_OVER_UNDER_RATED'))  { $underratedgames++; }
 			
 			
 			}
@@ -156,8 +156,8 @@ foreach ($people as $name) {
 			// If we're the winner, then the opponent must be the loser...
 			$inflationpoint = $inflationpoint  + ($row['loser_elo'] - $opcurrentelo[$z]); 
 			
-			if ($row['loser_elo'] > ($opcurrentelo[$z]+ DELTA_OVER_UNDER_RATED))  { $overratedgames++; }
-			if ($row['loser_elo'] < ($opcurrentelo[$z] - DELTA_OVER_UNDER_RATED))  { $underratedgames++; }
+			if ($row['loser_elo'] > ($opcurrentelo[$z]+ 'DELTA_OVER_UNDER_RATED'))  { $overratedgames++; }
+			if ($row['loser_elo'] < ($opcurrentelo[$z] - 'DELTA_OVER_UNDER_RATED'))  { $underratedgames++; }
 			
 			
 			//DEB 	echo "<br>loser: " . $row['loser'] ." (". $opcurrentelo[$z] .  ")  // winner: ".$row['winner'] ." <br>".  $row['loser'] ." elo in game: ".$row['loser_elo'] . "  // current total inflationpoint: $inflationpoint <br><hr><br>" ;
@@ -210,6 +210,11 @@ foreach ($people as $name) {
 }
 	
 // Lets sum upp all inflations against all players...	
+  
+      //variables declaration
+      $totaloppinflation = "";
+      $totalgamesoverrated = "";
+      $totalgamesunderrated = "";
 foreach($inflation as $mumman) {
 	$totaloppinflation = $totaloppinflation + $mumman;
 }

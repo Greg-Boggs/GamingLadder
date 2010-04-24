@@ -31,7 +31,7 @@ if (isset ($_POST['submit'])) {
 	//teamname checking
 	    if ($teamname == "") { echo "Please enter a teamname."; }
 	    elseif (($length > REG_MAX_NICKLENGTH) || ($length < REG_MIN_NICKLENGTH)) { echo "The teamname you entered is invalid. It must be ".  REG_MIN_NICKLENGTH ." to ". REG_MAX_NICKLENGTH ." characters long.<br />Please go back to correct the error by selecting a different username."; }
-	    elseif (!preg_match("/^[a-zA-Z0-9\-\_]+$/i", $teamname)) { echo "You're only allowed to use standard aA-zZ 0-9 alphanumerical characters and the - and _ signs. <br>Please enter a valid teamname.";	}
+	    elseif (!preg_match("/^[a-zA-Z0-9\-\_[:space:]]+$/i", $teamname)) { echo "You're only allowed to use standard aA-zZ 0-9 alphanumerical characters and the - and _ signs. <br>Please enter a valid teamname.";	}
 	    else {
 	      
 	      if ($approve == 'yes') { $approved = 'no'; }

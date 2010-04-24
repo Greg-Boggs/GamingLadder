@@ -25,7 +25,7 @@ $CountingXp = $XpToLvl1;
 $XpFromWins = ($wins * $XpForWin);
 $XpFromLosses = ($losses * $XpForLoss);
 $PlayerXp = ($XpFromLosses + $XpFromWins);
-
+$i = 0;
 
 
 while ($i == 0) {
