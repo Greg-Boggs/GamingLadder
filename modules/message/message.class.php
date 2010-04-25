@@ -51,7 +51,7 @@
 		*TODO: solve, how delete message...
 		*/
 		public function delete() {
-		    parent::delete(array($this->get_config()->db_prefix.'_message_relation' => 'message_id'));
+		    parent::delete(array($this->get_config()->get_db_prefix().'_message_relation' => 'message_id'));
 			//Look, we leave topic!
 			
 		}

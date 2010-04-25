@@ -32,7 +32,7 @@
 		function __construct($config, $table_name = NULL, $params = array()) {
 		    parent::__construct($config, $table_name, $params);
 		    $this->config = $config;
-			date_default_timezone_set($config->ladder_timezone);
+			date_default_timezone_set($config->get_ladder_timezone());
 		    $this->html = new HTML($this->config);
 			$this->html->register_object('application', $this, array('load_module'));
 		    $this->acl = new ACL($this->config);

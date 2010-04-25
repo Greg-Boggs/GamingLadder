@@ -1298,6 +1298,11 @@ div.gallerytext {
     margin: 5px;
 }
 
+.column .error{
+    margin: 10px;
+	margin-top: 0px;
+}
+
 .column input, .column select, .column textarea{
 	font-size: 10px;
 }
@@ -1407,4 +1412,31 @@ div.gallerytext {
 .thread .wrapper .message_view{
     text-align: right;
 	width: 5%;
+}
+.thread .thread .message_title {
+    display: none;
+}
+
+.thread .thread .message_user {
+    width: 90%;
+	font-size: 12px;
+}
+
+/*Message Alert*/
+.message_alert {
+    margin-top: -5px;
+}
+
+.message_alert div {
+    float: left;
+	font-size: 14px;
+	font-weight: normal;
+}
+
+.message_alert div a{
+    color: #000000;
+}
+
+.message_alert div img {
+    height: 1.3em;
 }

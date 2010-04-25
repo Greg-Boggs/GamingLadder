@@ -21,8 +21,8 @@
 		*@param object $config
 		*/
 	    function __construct($config) {
-			$this->db_handle = mysql_connect($config->mysql_server, $config->mysql_user, $config->mysql_password);
-			mysql_select_db($config->mysql_database_name, $this->db_handle);
+			$this->db_handle = mysql_connect($config->get_databaseserver(), $config->get_databaseuser(), $config->get_databasepass());
+			mysql_select_db($config->get_databasename(), $this->db_handle);
 			mysql_query('SET NAMES utf8', $this->db_handle);
 		}
 		/*

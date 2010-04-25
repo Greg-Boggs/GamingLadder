@@ -19,6 +19,7 @@
 	    {html_entity->message_box_menu selected=0}
 	</div>
 	<div class = "column" style = "width: auto;">
+	    {if $errors}<div class = "error"><strong>{$errors.spam}</strong></div>{/if}
 	    <form action="" method = "post">
 	        <div class = "block_create_message">
                 <div class = "wrapper">
@@ -28,7 +29,7 @@
 				    <div class = "block_select_user block">    
                         <input type = "text" name = "reciever" value = "{$reciever->get_name()}" onkeyup = "javascript: getUsers(this, $('#players'));" class = "value_list" />
                         <div id = "players" class = "value_list"></div>
-                        {if $errors}<br />{$errors.reciever}{/if}
+                        {if $errors}<div class = "error">{$errors.reciever}</div>{/if}
 				    </div>
 				</div>
                 <div class = "wrapper">
@@ -37,7 +38,7 @@
 					</div>
 					<div class = "block">
 					    <input name = "topic" id = "topic" class = "textfield" value = "{$topic}" maxlength="64" class = "value_list" />
-                        {if $errors}<br />{$errors.topic}{/if}
+                        {if $errors}<div class = "error">{$errors.topic}</div>{/if}
 					</div>
                 </div>
 				<div class = "wrapper">
@@ -46,7 +47,7 @@
 					</div>
 					<div class = "block">
 					    <textarea name = "content">{$message->get_content()}</textarea>
-                        {if $errors}<br />{$errors.content}{/if}
+                        {if $errors}<div class = "error">{$errors.content}</div>{/if}
 					</div>
 				</div>
 			</div>

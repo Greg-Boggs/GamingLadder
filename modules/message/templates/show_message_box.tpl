@@ -42,6 +42,9 @@
 <div class = "column" style = "width: 70%;">
     <form action = "message.php?action=delete_message" method = "post">
         <div class = "message_list">
+		    <a href = "message.php?unread=1">Only unread messages</a>
+	        &nbsp;|&nbsp;
+	        <a href = "message.php">All messages</a>
             {foreach from=$topics item="topic"}
 			    <div class = "wrapper {cycle name="lines" values="selected,"}">
 				    <div class = "message_date">

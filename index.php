@@ -104,7 +104,6 @@ require('top.php');
 If (INDEX_COMMENT_HILITE == 1) {
 
 
-
 		$sql ="SELECT winner, loser, replay_filename is not null as is_replay, reported_on, winner_comment, loser_comment, winner_elo, loser_elo FROM $gamestable WHERE withdrawn = 0 AND contested_by_loser = 0 AND replay_filename != '' AND (winner_comment != '' || loser_comment != '') ORDER BY reported_on DESC LIMIT 0,1";
 		
 		$result = mysql_query($sql,$db);

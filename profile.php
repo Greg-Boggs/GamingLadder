@@ -291,10 +291,40 @@ if ($playercached['name'] == "") {
 }
 
 if ($_SESSION['username'] == $_GET[name]) {
-	    echo "<a href='edit.php'>$player[name] $blocked</a>";
-	} else {
-	    echo "$_GET[name] $blocked";
-	}
+    include_once('conf/config.php');
+    include_once('include/entity.class.php');
+	$config = new Config();
+	$user = new Entity($config, 'players', array(name, $_SESSION['username']));
+	$dbo = new DB($config);
+	$cond = new DB_Condition_List(array(
+        new DB_Condition('reciever_id', $user->get_player_id()),
+		'AND',
+		new DB_Condition('deleted_by_reciever', 0)
+	));
+	$condition = new DB_Condition_List(array(
+	    $cond,
+		'AND',
+		new DB_Condition('read_date', 0)
+	)); 
+	$unread_messages = $dbo->select_function($config->get_db_prefix().'_module_topic', 'id', 'count', $condition);
+	$all_messages = $dbo->select_function($config->get_db_prefix().'_module_topic', 'id', 'count', $cond);
+	unset($dbo);
+	unset($user);
+    ?>
+    <a href='edit.php'><?=$player[name];?> <?=$blocked;?></a>
+	<div class = "message_alert">
+	    <div>
+		    <img src = "images/message.png" alt = "Private Messages" title = "Private Messages" />:&nbsp;
+		</div>
+		<div>
+		    <strong><a href = "message.php?unread=1" title = "Unread messages"><?=$unread_messages;?></a></strong>/<a href = "message.php" title = "All messages"><?=$all_messages;?></a>
+		</div>
+	</div>
+	<?php
+} 
+else {
+    echo "$_GET[name] $blocked";
+}
 	
 	
 ?>

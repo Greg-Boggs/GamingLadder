@@ -152,7 +152,7 @@
 			        $db = new DB($this->get_config());
 				    $condition = new DB_Condition('sender_id', $user->get_player_id(), '=', array('OR', false));
 				    $condition->add_cond('reciever_id', $user->get_player_id());
-				    $init_date = date('m/d/Y', $db->select_function($this->get_config()->db_prefix.'_module_topic', 'sent_date', 'min', $condition));
+				    $init_date = date('m/d/Y', $db->select_function($this->get_config()->get_db_prefix().'_module_topic', 'sent_date', 'min', $condition));
 			    }
 			    if (empty($last_date)) {
 			        $last_date = date('m/d/Y');

@@ -16,14 +16,14 @@ $historydatabasename = "yourinfo"; // the name of your database that will be use
 define("CRONCHECK_PATH","share/cronchecks/"); // dir for where the cron check files are stored. It should be writable.
 
 //configure the tables in the database ...don't change these names unless you know what the tables in your db matches the names and types.
-
-  $playerstable = "webl_players"; //the name of the table that contains information about the players
-  $gamestable = "webl_games"; //the name of the table that stores the played games
-  $newstable = "webl_news"; // the name of the table that stores the news
-  $waitingtable = "webl_waiting"; //name of the table that stores the players waiting for a game...
-  $standingscachetable = "webl_standings_cache"; // important cache, improves and makes up for mysql-sickness.
-  $cronlogtable = "webl_cron_log"; // name of table that stores the info about when a fake cron job was (supposedly) ran.
-  $statstable = "webl_stats"; //table that has stats logged about how many players there have been each date etc.
+  $db_prefix = "webl"; //Prefix of tables in the database...
+  $playerstable = $db_prefix."_players"; //the name of the table that contains information about the players
+  $gamestable = $db_prefix."_games"; //the name of the table that stores the played games
+  $newstable = $db_prefix."_news"; // the name of the table that stores the news
+  $waitingtable = $db_prefix."_waiting"; //name of the table that stores the players waiting for a game...
+  $standingscachetable = $db_prefix."_standings_cache"; // important cache, improves and makes up for mysql-sickness.
+  $cronlogtable = $db_prefix."_cron_log"; // name of table that stores the info about when a fake cron job was (supposedly) ran.
+  $statstable = $db_prefix."_stats"; //table that has stats logged about how many players there have been each date etc.
   $mailhost = "my.smtp.server";
 
 //config security
@@ -69,6 +69,7 @@ define("ANTI_MATCHSPAM_METHOD", 0); // 0 for none [default], 1 for cap on X matc
 define("ANTI_MATCHSPAM_NUMGAMES", 14); // Amount of games (victories) a player can report within period x, where x is an amount of days. e.g. 14
 define("ANTI_MATCHSPAM_DAYS", 7); // The player can play <= y games within x days. If he exceeds that number he can't report the game. e.g. 7 for one week
 define("ANTI_MATCHSPAM_FACTOR", 0.5); // On METHOD 2 or 3, this 0 < value < 1 determines the point reduction above NUMGAMES (less value = more punishment) Recommendation: 0.5
+define("ANTI_MATCHSPAM_MESSAGE_TIME", 30); // User has an ability to send message (after he's sent one), after this number of seconds.
 
 
 // Elo Cap Config -----------------------------------------
@@ -222,5 +223,11 @@ $standingsSql = "select * from $standingscachetable join $playerstable USING (na
 
 // Apply the restrictions to standings
 $standingsSqlWithRestrictions = $standingsSql." WHERE reported_on > now() - interval $passivedays day AND rating >= $ladderminelo AND games >= $gamestorank ORDER BY 3 desc, 6 desc";
+
+//Smarty settings...
+$smarty_templates_path = "templates"; //Path to templates...
+$smarty_templates_c_path = "share/templates_c";// Path to compiled templates...
+$smarty_cache_path = "share/cache";// path to cache...
+
 
 ?>

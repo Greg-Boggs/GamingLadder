@@ -31,6 +31,9 @@
             			  add_checking('content', FormValidator::VAR_REQUIRED, 'Content is required!')->
 				          add_checking('topic', FormValidator::VAR_STRING_LATIN, 'Unsupported symbols in topic!')->
 			              add_checking('topic', FormValidator::VAR_STRING_MAX_LENGTH, 'Max topic length is 64 symbols!', array('max_length' => 64));
+				$db = new DB($this->get_config());
+				$last_time = $db->select_function($this->get_config()->get_db_prefix().'_module_topic', 'sent_date', 'max', new DB_Condition('sender_id', $user->get_player_id()));
+				$checker->add_checking('spam', FormValidator::VAR_CALL_BACK, 'Wait for '.ANTI_MATCHSPAM_MESSAGE_TIME.' seconds before sending another message', array('result' => (time() - $last_time > ANTI_MATCHSPAM_MESSAGE_TIME)));
 		        $message = $this->get_module('message');
 			    $message->set_content($this->get_request('content'));
 				$topic = $this->get_request('topic', 'POST');

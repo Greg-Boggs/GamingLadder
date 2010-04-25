@@ -30,7 +30,9 @@
 	<div style = "text-align: right;">
 	    <a href = "message.php?action=create_message&amp;reciever={$sender->get_name()}&amp;topic={$topic->get_topic()|escape:'url'}"><img src = "images/reply.png" alt = "" />Reply</a>
 	</div>
-	<strong>Thread of topic:</strong>
-    {application->load_module module_name='topic' module_action='thread' param=$topic->get_id()}
+	<strong>Thread of topic "{$topic->get_topic()}":</strong>
+	<div class = "thread">
+        {application->load_module module_name='topic' module_action='thread' param=$topic->get_id()}
+	</div>
 <a href = "javascript: history.back();">Back</a>
 </div>

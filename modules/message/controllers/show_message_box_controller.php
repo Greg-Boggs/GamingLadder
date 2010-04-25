@@ -22,6 +22,7 @@
 			$user = $this->acl->get_user();
 			$box = $this->get_request('box');
 			$box = ($box)? $box : 'inbox';
+			$unread = $this->get_request('unread');
 			$player_name = $this->get_request('player', array('POST', 'GET'));
 			$player = ($user->get_is_admin() && isset($player_name))? 
 			$this->get_entity($this->get_config(), 'players', array('name', $player_name)) : $user;
@@ -31,6 +32,9 @@
 			//Admin can see every message: deleted by user also...
 		    if(!$user->get_is_admin()) {
 			    $condition = new DB_Condition_List(array($condition, 'AND', new DB_Condition((($box == 'inbox')? 'deleted_by_reciever' : 'deleted_by_sender'), 0)));
+			}
+			if (isset($unread)) {
+			    $condition = new DB_Condition_List(array($condition, 'AND', new DB_Condition('read_date', 0)));
 			}
 			$init = $this->get_request('p_c_p');
 			$init = ($init)? $init : 0;

@@ -47,7 +47,7 @@
 		
 		public function delete_topic ($box, $totally = false) {
 		    if ($totally) {
-			    $this->delete(array($this->get_config()->db_prefix.'_module_message' => 'topic_id'));
+			    $this->delete(array($this->get_config()->get_db_prefix().'_module_message' => 'topic_id'));
 			}
 			else {
 			    if ($box == 'outbox') {

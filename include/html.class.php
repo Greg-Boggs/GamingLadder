@@ -18,9 +18,9 @@
 		function __construct($config) {
 		    require_once(dirname(__FILE__).'/SMARTY/libs/Smarty.class.php');
 			$this->smarty = $this->_get_smarty(
-			    $config->smarty_templates_path, 
-				$config->smarty_templates_c_path,
-				$config->smarty_cache_path
+			    $config->get_smarty_templates_path(), 
+				$config->get_smarty_templates_c_path(),
+				$config->get_smarty_cache_path()
 			);
 			$this->register_object('html_entity', $this, array(
 			    'redirect',

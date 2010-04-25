@@ -5,23 +5,7 @@
 	* @author Khramkov Ivan.
 	* 
 	*/
-	/*
-	*@function get_method
-	*@param string $method_str
-	*@return array
-	*/
-    function get_method($method_str) {
-	     $result = explode('_', $method_str);
-		 if (count($result) > 2) {
-		     $tmp = $result;
-			 array_shift($result);
-			 $result = implode('_', $result);
-			 $tmp[1] = $result;
-			 $result = $tmp;
-		 }
-		 return $result;
-	}
-	
+	include_once('genericfunctions.inc.php');
     require_once(dirname(__FILE__).'/db.class.php');
     class Entity {
 		/*
@@ -61,7 +45,7 @@
 			}
 			else {
 			    $this->db = new DB($config);
-		        $this->table_name = $config->db_prefix.'_'.$table_name;
+		        $this->table_name = $config->get_db_prefix().'_'.$table_name;
 			}
         }
 		/*
@@ -169,10 +153,10 @@
 		public function get_entities_from($config, $to_table_name, $from_table_name, $params = array('id', 'id'), $condition = array(), $order = NULL, $limit = NULL) {
 		    $query = new DB_Query_SELECT();
 			if (is_object($condition)) {
-		        $query->setup(array($params[1]), $config->db_prefix.'_'.$from_table_name, $condition);
+		        $query->setup(array($params[1]), $config->get_db_prefix().'_'.$from_table_name, $condition);
 		    }
 		    else {
-		        $query->setup(array($params[1]), $config->db_prefix.'_'.$from_table_name);
+		        $query->setup(array($params[1]), $config->get_db_prefix().'_'.$from_table_name);
 		        $c = count($condition);
 		        for ($i = 0; $i < $c; $i += 2) {
 				    if ($c > 2 && $i < $c - 2) {
@@ -193,7 +177,7 @@
 			$this->db->query = new DB_Query_SELECT();
 			$this->db->query->setup(
 			    array('*'), 
-				$config->db_prefix.'_'.$to_table_name, 
+				$config->get_db_prefix().'_'.$to_table_name, 
 				new DB_Condition($params[0], new DB_Condition_value($query), new DB_Operator('IN'))
 			);
 			return $this->_get_list_of_entities($config, $to_table_name);
@@ -212,7 +196,7 @@
 		    $empty = true;
 		    if (isset($table_name)) {
 			    $empty = false;
-		        $this->table_name = $config->db_prefix.'_'.$table_name;
+		        $this->table_name = $config->get_db_prefix().'_'.$table_name;
 		        $this->db->query = new DB_Query_SELECT();
 				if ($order) {
 				    $this->db->query->set_order_by($order[0], $order[1]);
