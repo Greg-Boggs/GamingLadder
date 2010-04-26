@@ -320,6 +320,8 @@ if ($_SESSION['username'] == $_GET[name]) {
 		    <strong><a href = "message.php?unread=1" title = "Unread messages"><?=$unread_messages;?></a></strong>/<a href = "message.php" title = "All messages"><?=$all_messages;?></a>
 		</div>
 	</div>
+    <div style = "clear: both;">
+    </div>
 	<?php
 } 
 else {
@@ -664,7 +666,7 @@ $result = mysql_query($sql,$db);
 ?>
 
 
-<h2>Recent Games <a id="gamesexpand"></a></h2>
+<h2>Recent Games <a id="gamesexpand" style = "cursor: pointer;"></a></h2>
 <div id="gamesdiv">
 <table id="games" class="tablesorter">
 	<?php echo gameTableTHead(); ?>
@@ -674,7 +676,7 @@ $result = mysql_query($sql,$db);
 <br />
 
 
-<h2>Opposition <a id="gamesexpand2"></a></h2>
+<h2>Opposition <a id="gamesexpand2" style = "cursor: pointer;"></a></h2>
 <div id="gamesdiv2">
 <?php include 'include/opposition.inc.php'; ?>
 </div>
