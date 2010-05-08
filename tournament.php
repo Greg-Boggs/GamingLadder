@@ -1,7 +1,7 @@
 <?php
     /*
 	*
-        * Message section
+         * Tournament section
 	*@author Khramkov Ivan.
 	* 
 	*/
@@ -9,19 +9,16 @@
 	require 'conf/variables.php';
 	require 'conf/config.php';
 	require_once 'autologin.inc.php';
+	//*************************************************
+	//It's for test now... 
+	//*************************************************
 	$result = '';
 	$config = new Config();//Create the config object...
 	$actions = array(
-	    'create_message' => array('message', 'message'),
-		'view' => array('message', 'message'),
-		'view_content' => array('message', 'message'),
-		'delete_message' => array('message', 'message'),
-		'thread' => array('topic', 'topic'),
-	    'show_message_box' => array('message_box', 'message'),
-		'search_message' => array('message_box', 'message'),
-		'get_players' => array('user', 'user')
+	    'create_tournament' => array('tournament', 'tournament'),
+		'list_tournaments' => array('tournament', 'tournament')
 	);
-	$_GET['action'] = (isset($_GET['action']))? $_GET['action'] : 'show_message_box';
+	$_GET['action'] = (isset($_GET['action']))? $_GET['action'] : 'list_tournaments';
 	$ac_box = $actions[$_GET['action']];
 	try {
 	    if (isset($ac_box)) {
