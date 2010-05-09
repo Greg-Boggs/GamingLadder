@@ -1361,10 +1361,6 @@ div.gallerytext {
     font-style: italic;
 }
 
-.message_list .selected {
-	background-color: #CED5C4;
-}
-
 .message_list .wrapper {
 	height: 2em;
 }
@@ -1439,4 +1435,13 @@ div.gallerytext {
 
 .message_alert div img {
     height: 1.3em;
+}
+
+.selected {
+	background-color: #CED5C4;
+}
+
+/* Tournament list */
+
+.tournament_list .join {
 }

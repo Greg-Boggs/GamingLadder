@@ -1,8 +1,8 @@
 <?php
     /*
 	*
-    * thread_controller: class displays dialog by specified topic
-	* @author Khramkov Ivan.
+        * thread_controller: class displays dialog by specified topic
+	* @ author Khramkov Ivan.
 	* 
 	*/
     require_once(dirname(__FILE__).'/../../../include/controller.class.php');
