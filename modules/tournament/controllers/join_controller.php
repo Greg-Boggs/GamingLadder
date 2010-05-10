@@ -44,6 +44,7 @@
 			    $tournament->set_sign_up_ends(time());
 				$tournament->set_play_starts(time() + 33);
 				$tournament->save();
+				$tournament->build_table();
 				$tournament->send_notification('Tournament notification!', 'TODO: template...');
 			}
 			echo "{'success': 1}";

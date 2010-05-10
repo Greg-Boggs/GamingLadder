@@ -18,7 +18,7 @@
 		*@param array|null $params
 		*/
 	    function __construct($config, $params = NULL) {
-		    parent::__construct($config, $params);
+		    parent::__construct($config, $params);			
 		}
 		
 		private function _get_formatted_date($date, $format = ".") {
@@ -99,6 +99,41 @@
 					$title,
 					's'
 				);
+			}
+		}
+		
+		public function get_system_type () {
+		    return ($this->get_type())? 'knock out' : 'circular';
+		}
+		
+		public function build_table() {
+		    if (!$this->get_type()) {
+			    $this->_create_initial_table($this->get_players());
+			}
+			else {
+			    $players = $this->get_players();
+				shuffle($players);
+			    $this->_create_initial_table($players, 1);
+			}
+		}
+		
+		private function _create_initial_table($players, $stage = 0) {
+		   $pids = array();
+		   for ($i = 0; $i < count($players); $i ++) {
+			    for ($j = $i + 1; $j < count($players); $j ++) {
+				    $table = $this->get_entity($this->get_config(), 'module_tournament_table');
+					$table->set_tournament_id($this->get_id());
+					$table->set_first_participant($players[$i]->get_player_id());
+					$table->set_second_participant($players[$j]->get_player_id());
+					if ($stage) {
+					    if (!in_array($players[$i]->get_player_id(), $pids) && !in_array($players[$j]->get_player_id(), $pids)) {
+					        $table->set_stage($stage);
+							$pids[] = $players[$i]->get_player_id();
+							$pids[] = $players[$j]->get_player_id();
+						}
+				    }
+					$table->save();
+				}
 			}
 		}
 	}

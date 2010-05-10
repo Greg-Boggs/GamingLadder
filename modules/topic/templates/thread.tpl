@@ -27,7 +27,7 @@
 		        <img src = "images/date.png" alt = "[{$topic->get_sent_date()}]" title = "Sent: {$topic->get_sent_date()}" />
 			</div>
 			<div class = "message_user" style = "color: #{cycle name="users" values="909786,B2B9A8"};">
-			    <span>From <a style = "color: #909786;" href = "profile.php?name={$sender->get_name()}">{$sender->get_name()}</a> to <a style = "color:  #909786;" href = "profile.php?name={$reciever->get_name()}">{$reciever->get_name()}</a>:&nbsp;</span>
+			    <span>From {if $topic->get_signature() != 's'}<a style = "color: #909786;" href = "profile.php?name={$sender->get_name()}">{$sender->get_name()}</a>{else}<a href = "/" style = "color: #909786;">System</a>{/if} to <a style = "color:  #909786;" href = "profile.php?name={$reciever->get_name()}">{$reciever->get_name()}</a>:&nbsp;</span>
 			</div>
 			<div class = "message_title">
                 {$topic->get_topic()}

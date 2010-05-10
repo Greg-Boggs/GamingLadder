@@ -45,17 +45,22 @@
 		    <a href = "message.php?box={$box}&amp;player={$player->get_name()}&amp;unread=1">Only unread messages</a>
 	        &nbsp;|&nbsp;
 	        <a href = "message.php?box={$box}&amp;player={$player->get_name()}">All messages</a>
+			<table width = "100%">
             {foreach from=$topics item="topic"}
-			    <div class = "wrapper {cycle name="lines" values="selected,"}">
-				    <div class = "message_date">
+			    <tr {cycle name="lines" values='class = "selected",'}>
+				    <td class = "message_date">
 					    <img src = "images/date.png" alt = "[{$topic->get_sent_date()}]" title = "{if $box=='outbox'}Sent{else}Recieved{/if}: {$topic->get_sent_date()}" />
-					</div>
-					<div class = "message_user" style = "color: #{cycle name="users" values="909786,B2B9A8"};">
+					</td>
+					<td class = "message_user" style = "color: #{cycle name="users" values="909786,B2B9A8"};">
 					    {if $box=='inbox'}From{else}To{/if}
-						{if $box=='inbox'}{$topic->get_sender()->get_name()}{else}{$topic->get_reciever()->get_name()}{/if}
+						{if $topic->get_signature() != 's'}
+						    {if $box=='inbox'}{$topic->get_sender()->get_name()}{else}{$topic->get_reciever()->get_name()}{/if}
+					    {else}
+						    <a href = "/">System</a>
+						{/if}
 						:&nbsp;
-					</div>
-                    <div class = "message_title">
+					</td>
+                    <td class = "message_title">
                         {if !$topic->get_read_date()}
 					        <strong>
 					    {/if}
@@ -68,17 +73,19 @@
 					    {if !$topic->get_read_date()}
 					        </strong>
 					    {/if}
-                    </div>
-                    <div style = "width: 7%; text-align: right;">
+                    </td>
+                    <td align = "right">
 				        <input type = "checkbox" name = "messages[]" value = "{$topic->get_id()}" /><br />
-                    </div>
-				</div>
+                    </td>
+				</tr>
             {foreachelse}
-                <div>
-			        No messages in <strong>{$box}</strong>
-                </div>
+                <tr>
+				    <td>
+			            No messages in <strong>{$box}</strong>
+                    </td>
+				</tr>
             {/foreach}
-        </div>
+        </table>
         <input type = "hidden" name = "box" value = "{$box}" />
 		<input type = "hidden" name = "player" value = "{$player->get_name()}" />
 		<div style = "clear: both;">

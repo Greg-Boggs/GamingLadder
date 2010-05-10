@@ -70,13 +70,15 @@
 		}
 		/*
 		*@function get_module
-		*@param string $module_name
+		*@param array|string $module
 		*@param array|null $params
 		*@param object|null $config
 		*@return object
 		*/
-		public function get_module($module_name, $params = NULL, $config = NULL) {
-		    $path = dirname(__FILE__).'/../modules/'.$module_name.'/'.$module_name.'.class.php';
+		public function get_module($module, $params = NULL, $config = NULL) {
+		    $module_section = (is_array($module))? $module[1] : $module;
+			$module_name = (is_array($module))? $module[0] : $module;
+		    $path = dirname(__FILE__).'/../modules/'.$module_section.'/'.$module_name.'.class.php';
 			if (file_exists($path)) {
 			    require_once($path);
 				$config = ($config)? $config : $this->get_config();
@@ -91,18 +93,20 @@
 		}
 		/*
 		*@function get_modules
-		*@param string $module_name
+		*@param array|string $module
 		*@param array|null $params
 		*@param array|null $order
 		*@param array|null $limit
 		*@param object|null $config
 		*@return object
 		*/
-		public function get_modules($module_name, $params = array(), $order = NULL, $limit = NULL, $config = NULL) {
+		public function get_modules($module, $params = array(), $order = NULL, $limit = NULL, $config = NULL) {
 	        $config = ($config)? $config : $this->get_config();
+			$module_section = (is_array($module))? $module[1] : $module;
+			$module_name = (is_array($module))? $module[0] : $module;
 		    $entities = $this->get_entities($config, 'module_'.$module_name, $params, $order, $limit);
 			$result = array();
-		    $path = dirname(__FILE__).'/../modules/'.$module_name.'/'.$module_name.'.class.php';
+		    $path = dirname(__FILE__).'/../modules/'.$module_section.'/'.$module_name.'.class.php';
 			if (file_exists($path)) {
 			    require_once($path);
 				$class_name = first_letter($module_name);

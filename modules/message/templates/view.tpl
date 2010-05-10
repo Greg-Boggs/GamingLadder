@@ -6,7 +6,7 @@
 <div class = "column">
     <div style = "margin-top: 30px; font-size: 12px;">
 	    <div>
-            <strong>Sender:</strong> <a href = "profile.php?name={$sender->get_name()}">{$sender->get_name()}</a>
+            <strong>Sender:</strong> {if $topic->get_signature() != 's'}<a href = "profile.php?name={$sender->get_name()}">{$sender->get_name()}</a>{else}<a href = "/">System</a>{/if}
 		</div>
         <div>
 		    <strong>Reciever:</strong> <a href = "profile.php?name={$reciever->get_name()}">{$reciever->get_name()}</a>

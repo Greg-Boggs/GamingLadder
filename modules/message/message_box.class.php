@@ -1,7 +1,7 @@
 <?php
     /*
 	*
-    * Message box module, represents private message box...
+        * Message box module, represents private message box...
 	* @author Khramkov Ivan.
 	* 
 	*/

@@ -68,6 +68,10 @@ if (isset ($_POST['submit'])) {
 		echo "Please enter a password.";
 	}
 	
+	else if (strtolower($name) == 'system') {
+	    echo "Sorry, but <strong>$name</strong> is reserved name!";
+	}
+	
 	
 	else if ($passworddb != $passworddb2) {	echo "Passwords don't match. Please retype the passwords..<br>";	}
 	

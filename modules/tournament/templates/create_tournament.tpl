@@ -20,7 +20,7 @@
 		    <strong>Type:</strong>
 		</div>
 		<div class = "block">
-		    <input type = "radio" name = "type" value = "1" {if !$tournament->get_type()}checked = "checked"{/if} /> League
+		    <input type = "radio" name = "type" value = "1" {if !$tournament->get_type()}checked = "checked"{/if} /> Circular
 			&nbsp;
 			<input type = "radio" name = "type" value = "2" {if $tournament->get_type()}checked = "checked"{/if} /> Knock out
 		</div>

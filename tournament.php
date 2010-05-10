@@ -19,7 +19,8 @@
 		'list_tournaments' => array('tournament', 'tournament'),
 		'join' => array('tournament', 'tournament'),
 		'view_tournament' => array('tournament', 'tournament'),
-		'get_joined_players' => array('tournament', 'tournament')
+		'get_joined_players' => array('tournament', 'tournament'),
+		'get_stroke' => array('tournament_table', 'tournament')
 	);
 	$_GET['action'] = (isset($_GET['action']))? $_GET['action'] : 'list_tournaments';
 	$ac_box = $actions[$_GET['action']];
