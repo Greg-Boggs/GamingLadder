@@ -109,6 +109,18 @@
 			return NULL;
 		}
 		
+		public function get_the_row_by_stage($stage, $participant) {
+		    foreach($this->rows as $key => $row) {
+			    if (
+				    ($row->get_first_participant() == $participant || $row->get_second_participant() == $participant) && 
+					$row->get_stage() == $stage
+				) {
+				    return $row;
+				}
+			}
+			return NULL;
+		}
+		
 		public function get_knock_out_stage_situation($stage) {
 		    $pids = array();
 			$pairs = array();
@@ -127,7 +139,7 @@
 			}
 			$this->pairs = $pairs;
 			//Search fo free participant
-			$players = $this->get_ordered_participants_by_stage(0);
+			$players = $this->get_ordered_participants_by_stage($stage - 1);
 			$free = 0;
 			foreach ($players as $key => $player) {
 			    if (!in_array($player->get_player_id(), $pids)) {

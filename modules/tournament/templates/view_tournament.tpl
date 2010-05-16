@@ -18,6 +18,15 @@
 				}
 			);
 		}
+		function get_valid_games() {
+		    $('#valid_games').load(
+			    'tournament.php?action=get_valid_games',
+				{tid: {/literal}{$tournament->get_id()}{literal}},
+				function() {
+				    $('#valid_games').show();
+				}
+			);
+		}
 	</script>
 {/literal}
 <h1>{$tournament->get_name()}</h1>
@@ -65,4 +74,13 @@
 	<div class = "list_content" id = "tournament_stroke">
 	</div>
 </div>
+{if $tournament->is_user_joined($user->get_player_id())}
+    <div class = "list">
+        <div class = "list_header" onclick = "javascript: get_valid_games();">
+	        <strong>Report game</strong>
+	    </div>
+	    <div class = "list_content" id = "valid_games">
+	    </div>
+    </div>
+{/if}
 <a href = "javascript: history.back();">Back</a>

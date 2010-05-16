@@ -1,7 +1,7 @@
 <?php
     /*
 	*
-        * join_controller: class joins player to the tournament
+        * get_joined_players_controller: class returns list of joined players for the current tournament
 	* @author Khramkov Ivan.
 	* 
 	*/
