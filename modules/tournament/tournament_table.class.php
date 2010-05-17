@@ -162,13 +162,62 @@
 		}
 		
 		public function get_winner() {
-		    $this->get_knock_out_stage_situation($this->stage);
-		    if (count($this->pairs) == 1 && !$this->free) {
-			    $row = $this->get_the_row($this->pairs[0]['first']->get_player_id(), $this->pairs[0]['second']->get_player_id());
-			    $player = ($row->get_first_result() > $row->get_second_result())? $row->get_first_participant() : $row->get_second_participant();
-				return ($player == $this->pairs[0]['first']->get_player_id())? $this->pairs[0]['first'] : $this->pairs[0]['second'];
+		    $result = $this->get_entity($this->get_config(), 'tournament_result', array('tournament_id', $this->get_tournament_id()));
+			return ($result->get_id())? $this->get_participant_by_id($result->get_winner_id()) : NULL;
+		}
+		
+		public function set_winner($tournament) {
+		    if ($tournament->get_type()) {
+			    //Get the winner of the last stage...
 			}
-			return NULL;
+			else {
+			    //Calculate count for every player...
+				$players = $this->_get_total_score();
+				//Get players with maximal count
+				$max = -1;
+				$maximals = array();
+				foreach ($players as $pid => $info) {
+				    $max = ($max <= $info['count'])? $info['count'] : $max;
+				}
+				foreach ($players as $pid => $info) {
+				    if ($info['count'] == $max) {
+					    $maximals[] = $pid;
+					}
+				}
+				//Calculate Berger Coefficient.
+				$max_id = 0;
+				$max = 0;
+				foreach ($maximals as $key => $pid) {
+				    $tmp = $this->_get_berger_coefficient($pid, $players);
+				    if ($max <= $tmp) {
+					    $max = $tmp;
+						$max_id = $pid;
+					}
+				}				
+				$result = $this->get_entity($this->get_config(), 'tournament_result', array('tournament_id', $tournament->get_id()));
+				$result->set_winner_id($max_id);
+				$result->save();
+				return $this->get_participant_by_id($max_id);
+			}
+		}
+		
+		private function _get_total_score() {
+		    $users = array();
+		    foreach($this->rows as $key => $row) {
+			    $users[$row->get_first_participant()]['count'] += $row->get_first_result();
+				$users[$row->get_first_participant()]['competitors'][] = $row->get_second_participant();
+				$users[$row->get_second_participant()]['count'] += $row->get_second_result();
+				$users[$row->get_second_participant()]['competitors'][] = $row->get_first_participant();
+			}
+			return $users;
+		}
+		
+		private function _get_berger_coefficient($pid, $players) {
+	        $result = 0;
+		    foreach ($players[$pid]['competitors'] as $key => $id) {
+			    $result += $players[$id]['count'];
+			}
+			return $result;
 		}
 		
 	}

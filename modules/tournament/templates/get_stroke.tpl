@@ -1,4 +1,5 @@
 {if $table}
+    {assign var="winner" value=$table->get_winner()}
     <table class = "stroke" width = "100%">
 	    {assign var="participants" value=$table->get_ordered_participants()}
 		<tr>
@@ -9,12 +10,6 @@
 					    Stage&nbsp;{$smarty.section.td.index+1}
 					</th>
 				{/section}
-				{assign var="winner" value=$table->get_winner()}
-				{if $winner}
-			        <th>
-					    Winner
-				    </th>
-				{/if}
 		    {else}
 			    <th>
 		            &nbsp;
@@ -71,7 +66,7 @@
 						    {$stage_pairs.free->get_name()}&nbsp;is free.
 						{/if}
 					{else}
-					    {if $winner}
+					    {if $winner->get_id()}
 						    {$winner->get_name()} is winner
 						{/if}
 					{/if}
@@ -79,6 +74,9 @@
 				{/section}
 		{/if}
 	</table>
+	{if $winner->get_player_id()}
+	    Tournament finished. {$winner->get_name()} is winner.
+	{/if}
 {else}
     Tournament is not played yet!
 {/if}

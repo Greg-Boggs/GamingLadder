@@ -59,12 +59,6 @@
 							  array('result' => (intval($_POST['max_participants']) > $_POST['min_participants']))
 						  )->
 						  add_checking(
-						      'games_to_play', 
-							  FormValidator::VAR_CALL_BACK, 
-							  'Number of required games must be an integer number greater than zero!', 
-							  array('result' => (intval($_POST['games_to_play']) && $_POST['games_to_play'] > 0))
-						  )->
-						  add_checking(
 						      'date_signup_end', 
 							  FormValidator::VAR_CALL_BACK, 
 							  'Malformed signup dates: write its number representation look like: '.
@@ -130,7 +124,6 @@
 				$tournament->set_play_ends(strtotime($this->get_request('date_play_end')));
 				$tournament->set_min_participants($this->get_request('min_participants'));
 				$tournament->set_max_participants($this->get_request('max_participants'));
-				$tournament->set_games_to_play((($this->get_request('games_to_play'))? $this->get_request('games_to_play') : 1));
 				$this->html->restore_template($_POST);
 			}
 			if ($checker->check() && $form) {

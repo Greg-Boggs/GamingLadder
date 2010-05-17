@@ -11,7 +11,10 @@
 			    No valid games.
 			</div>
         {/foreach}
-        <input type = "submit" value = "Report" />
+		<input type = "hidden" name = "tid" value = "{$tid}" />
+        {if $games}
+		    <input type = "submit" value = "Report" />
+		{/if}
 	</form>
 </div>
 <div style = "clear: both;">

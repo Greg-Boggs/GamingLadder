@@ -92,15 +92,6 @@
 			{if $errors}<div class = "error">{$errors.max_participants}</div>{/if}
 		</div>
     </div>
-	<div class = "wrapper">
-	    <div>
-		    <strong>Number of games to play:</strong>
-		</div>
-		<div class = "block">
-		    <input type = "text" name = "games_to_play" value = "{if $tournament->get_games_to_play()}{$tournament->get_games_to_play()}{else}1{/if}" />
-			{if $errors}<div class = "error">{$errors.games_to_play}</div>{/if}
-		</div>
-    </div>
     <input name = "form" type = "hidden" value = "1" />
     <input type = "submit" class = "button" value = "Create" />
 </form>

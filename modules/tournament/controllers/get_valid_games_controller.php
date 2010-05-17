@@ -26,6 +26,7 @@
 			    echo "{'error': 'Unknown tournament!'}";
 				exit;
 			}
+			$this->html->assign('tid', $this->tournament->get_id());
 			$this->html->assign(
 			    'games', 
 				(($this->tournament->get_type())? $this->_get_games_for_knock_out() : $this->_get_games_for_circular())
@@ -70,14 +71,21 @@
 				    $arr[] = 'OR';
 				}	
 			}
-			$condition = new DB_Condition_List(array(
-			    new DB_Condition_List($arr),
-				'AND',
-				new DB_Condition('winner', $user->get_name()),
-				'AND',
-				new DB_Condition('reported_on', date('Y-m-d h:i:s', $this->tournament->get_play_starts()), new DB_Operator('>='))
-			));
-			return $this->get_entities($this->get_config(), 'games', $condition);
+			if (count($arr)) {
+			    $condition = new DB_Condition_List(array(
+			        new DB_Condition_List($arr),
+				    'AND',
+				    new DB_Condition('winner', $user->get_name()),
+				    'AND',
+				    new DB_Condition('reported_on', date('Y-m-d h:i:s', $this->tournament->get_play_starts()), new DB_Operator('>=')),
+					'AND',
+					$this->_get_unused_games_condition()
+			    ));
+			    return $this->get_entities($this->get_config(), 'games', $condition);
+			}
+			else {
+			    return NULL;
+			}
 		}
 		
 		private function _get_games_for_knock_out() {
@@ -99,13 +107,24 @@
 					'AND',
 					new DB_Condition('loser', new DB_Condition_Value($query_name), new DB_Operator('IN')),
 				    'AND',
-				    new DB_Condition('reported_on', date('Y-m-d h:i:s', $this->tournament->get_play_starts()), new DB_Operator('>='))
+				    new DB_Condition('reported_on', date('Y-m-d h:i:s', $this->tournament->get_play_starts()), new DB_Operator('>=')),
+					'AND',
+					$this->_get_unused_games_condition()
 			    ));
 			    return $this->get_entities($this->get_config(), 'games', $condition);
 			}
 			else {
 			    return NULL;
 			}
+		}
+		
+		private function _get_unused_games_condition() {
+		    $query = new DB_Query_SELECT();
+		    $query->setup(
+			    array('game_dt'), 
+				$this->get_config()->get_db_prefix().'_module_tournament_table'
+			);
+		    return new DB_Condition('reported_on', new DB_Condition_Value($query), new DB_Operator('IN', 1));
 		}
 	}
 ?>
