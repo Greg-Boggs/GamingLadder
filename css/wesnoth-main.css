@@ -1442,6 +1442,29 @@ div.gallerytext {
 }
 
 /* Tournament list */
-
 .tournament_list .join {
+}
+
+/* Tournament view */
+
+.list_content, .list_header {
+}
+
+.list_header {
+    color: #B48648;
+    cursor: pointer;
+	border-top: 1px solid #FFFFFF;
+	background-color: #272727;
+	padding-left: 10px;
+}
+
+/*Tournament stroke */
+.stroke {
+    font-size: 10px;
+}
+
+.stroke td{
+    text-align: center;
+	border-top: 1px solid #000000;
+	border-right: 1px solid #000000;
 }

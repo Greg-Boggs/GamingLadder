@@ -22,7 +22,7 @@
 			}
 			$state = $tournament->get_state();
 			if (!$state['value']) {
-			    $this->assign($tables, NULL);
+			    $this->html->assign('table', NULL);
 			}
 			else {
 			    $this->html->assign('tournament', $tournament);

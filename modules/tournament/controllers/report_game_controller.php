@@ -19,18 +19,22 @@
 		    $user = $this->acl->get_user();
 		    $tournament = $this->get_module('tournament', array('id', $this->get_request('tid')));
 			if (!$tournament->get_id()) {
-			    $this->error('Unknown tournament!');
+			    echo 'Unknown tournament!';
+				exit;
 			}
 			$game = $this->get_entity($this->get_config(), 'games', array('reported_on', $this->get_request('game')));
 			$existed_row = $this->get_entity($this->get_config(), 'module_tournament_table', array('game_dt', $game->get_reported_on()));
 			if ($existed_row->get_id()) {
-			    $this->error('Game is already used in another tournament game!');
+			    echo 'Game is already used in another tournament game!';
+				exit;
 			}
 			if (!$game->get_winner()) {
-			    $this->error('Unknown game!');
+			    echo 'Unknown game!';
+				exit;
 			}
 			if ($game->get_winner() != $user->get_name()) {
-			    $this->error('You are not able to report this game, because you are not the winner in the game!');
+			    echo 'You are not able to report this game, because you are not the winner in the game!';
+				exit;
 			}
 			$query_name = new DB_Query_SELECT();
 			$query_name->setup(
@@ -58,14 +62,8 @@
 				new DB_Condition('tournament_id', $tournament->get_id())
 			);
 			if ($tournament->get_type()) {
-			    $query = new DB_Query_SELECT();
-				$query->setup(
-				    array('max(stage)'), 
-					$this->get_config()->get_db_prefix().'_module_tournament_table', 
-					new DB_Condition('tournament_id', $tournament->get_id())
-				);
 			    $arr[] = 'AND';
-				$arr[] = new DB_Condition('stage', new DB_Condition_Value($query));        
+				$arr[] = new DB_Condition('current', 1);        
 			}
 			$condition = new DB_Condition_List($arr);
 			$row = $this->get_entity($this->get_config(), 'module_tournament_table', $condition);
@@ -81,11 +79,11 @@
 			$row->set_game_dt($game->get_reported_on());
 			$row->save();
 			if ($tournament->get_type()) {
-			    $this->_set_next_stage($row, $competitor);
+			    $this->_set_next_stage($row, $user, $competitor);
 			}
 			$this->html->assign('winner', $this->_check_end($tournament));
 			$this->html->assign('tid', $tournament->get_id());
-			$this->display();
+			$this->display(true);
 		}
 		
 		private function _check_end($tournament) {
@@ -101,41 +99,91 @@
 			return NULL;
 		}
 		
-		private function _set_next_stage($row, $competitor) {
+		private function _set_next_stage($row, $user, $competitor) {
 		    //delete pairs with looser...
 		    $db = new DB($this->get_config());
 			$db->delete(
 			    $this->get_config()->get_db_prefix().'_module_tournament_table', 
 				new DB_Condition_List(array(
-				    new DB_Condition('first_participant', $competitor),
-					'OR',
-					new DB_Condition('second_participant', $competitor)
+				    new DB_Condition_List(array(
+				        new DB_Condition('first_participant', $competitor),
+					    'OR',
+					    new DB_Condition('second_participant', $competitor)
+					)),
+					'AND',
+					new DB_Condition('tournament_id', $row->get_tournament_id()),
+					'AND',
+					new DB_Condition('game_dt', '0000-00-00 00:00:00')
 				))
 			);
-			//change current stage...
-			$row->set_stage($row->get_stage() + 1);
-			$row->save();
-			//Get new current stage row...
-			$query = new DB_Query_SELECT();
-			$query->setup(
-			    array('min(stage)'), 
-				$this->get_config()->get_db_prefix().'_module_tournament_table', 
-				new DB_Condition('tournament_id', $row->get_tournament_id())
-			);
-		    $new_row = $this->get_entity(
-			    $this->get_config(),
-				'module_tournament_table',
+			//Set new stage for rows, where winner is (if participant already is in row with new stage - don't modify this)...
+			$new_stage = $row->get_stage() + 1;
+			$db = new DB($this->get_config());
+			$condition = new DB_Condition_List(array(
+			    new DB_Condition('tournament_id', $row->get_tournament_id()),
+				'AND',
+				new DB_Condition('game_dt', '0000-00-00 00:00:00'),
+				'AND',
 				new DB_Condition_List(array(
-				    new DB_Condition('stage', new DB_Condition_Value($query)),
-					'AND',
-					new DB_Condition('id', $row->get_id(), new DB_Operator('!='))
-				)),
-				array('id', 'ASC')
+				    new DB_Condition('first_participant', $user->get_player_id()),
+					'OR',
+					new DB_Condition('second_participant', $user->get_player_id())
+				))
+			));
+			$db->update(
+			    array('stage' => $new_stage), 
+				$this->get_config()->get_db_prefix().'_module_tournament_table', 
+				$condition
 			);
-			if ($new_row->get_id()) {
-			    $new_row->set_stage($new_row->get_stage() + 1);
-			    $new_row->save();
+			//if no unplayed rows with current stage - change current stage..
+			$condition = new DB_Condition_List(array(
+			    new DB_Condition('tournament_id', $row->get_tournament_id()),
+				'AND',
+				new DB_Condition('game_dt', '0000-00-00 00:00:00'),
+				'AND',
+				new DB_Condition('stage', $row->get_stage())
+			));
+			if (!$db->select_function(
+			    $this->get_config()->get_db_prefix().'_module_tournament_table', 
+				'id', 
+				'count',
+				$condition
+			)) {
+			    //Set free player, if count of new pairs is odd...
+				$condition = new DB_Condition_List(array(
+			        new DB_Condition('tournament_id', $row->get_tournament_id()),
+				    'AND',
+				    new DB_Condition('game_dt', '0000-00-00 00:00:00'),
+				    'AND',
+				    new DB_Condition('stage', $new_stage)
+			    ));
+				$rows = $this->get_entities($this->get_config(), 'module_tournament_table', $condition);
+				$pids = array();
+		        for ($i = 0; $i < count($rows); $i ++) {
+				    if (
+					    !in_array($rows[$i]->get_first_participant(), $pids) && 
+						!in_array($rows[$i]->get_second_participant(), $pids)
+					) {
+				        $pids[] = $rows[$i]->get_first_participant();
+						$pids[] = $rows[$i]->get_second_participant();
+				    }
+					else {
+					    $rows[$i]->set_stage(0);
+						$rows[$i]->set_current(0);
+						$rows[$i]->save();
+					}
+				}
+		        $condition = new DB_Condition_List(array(
+			        new DB_Condition('tournament_id', $row->get_tournament_id()),
+				    'AND',
+				    new DB_Condition('stage', $row->get_stage() + 1)
+				));
+			    $db->update(
+			        array('current' => 1), 
+				    $this->get_config()->get_db_prefix().'_module_tournament_table', 
+			  	    $condition
+			    );
 			}
-		}
+        }
 	}
 ?>

@@ -14,6 +14,7 @@
 	//*************************************************
 	$result = '';
 	$config = new Config();//Create the config object...
+	date_default_timezone_set($config->get_cfg_ladder_timezone());
 	$actions = array(
 	    'create_tournament' => array('tournament', 'tournament'),
 		'list_tournaments' => array('tournament', 'tournament'),
@@ -22,7 +23,7 @@
 		'get_joined_players' => array('tournament', 'tournament'),
 		'get_valid_games' => array('tournament', 'tournament'),
 		'report_game' => array('tournament', 'tournament'),
-		'get_stroke' => array('tournament_table', 'tournament')
+		'get_stroke' => array('tournament', 'tournament')
 	);
 	$_GET['action'] = (isset($_GET['action']))? $_GET['action'] : 'list_tournaments';
 	$ac_box = $actions[$_GET['action']];

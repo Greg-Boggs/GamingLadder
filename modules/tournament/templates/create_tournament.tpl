@@ -61,28 +61,6 @@
     </div>
 	<div class = "wrapper">
 	    <div>
-		    <strong>Signup dates:</strong>
-		</div>
-		<div class = "block">
-		    Start:&nbsp;<input type = "text" name = "date_signup_start" id = "date_signup_start" value = "{$tournament->get_date("sign_up_starts", "/")}" />
-			End:&nbsp;<input type = "text" name = "date_signup_end" id = "date_signup_end" value = "{$tournament->get_date("sign_up_ends", "/")}" />
-			{if $errors}<div class = "error">{$errors.date_signup_start}</div>{/if}
-			{if $errors}<div class = "error">{$errors.date_signup_end}</div>{/if}
-		</div>
-    </div>
-	<div class = "wrapper">
-	    <div>
-		    <strong>Play dates:</strong>
-		</div>
-		<div class = "block">
-		    Start:&nbsp;<input type = "text" name = "date_play_start" id = "date_play_start" value = "{$tournament->get_date("play_starts", "/")}" />
-			End:&nbsp;<input type = "text" name = "date_play_end" id = "date_play_end" value = "{$tournament->get_date("play_ends", "/")}" />
-			{if $errors}<div class = "error">{$errors.date_play_start}</div>{/if}
-			{if $errors}<div class = "error">{$errors.date_play_end}</div>{/if}
-		</div>
-    </div>
-	<div class = "wrapper">
-	    <div>
 		    <strong>Number of participants:</strong>
 		</div>
 		<div class = "block">

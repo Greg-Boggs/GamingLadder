@@ -1,7 +1,6 @@
 {if $table}
     {assign var="winner" value=$table->get_winner()}
     <table class = "stroke" width = "100%">
-	    {assign var="participants" value=$table->get_ordered_participants()}
 		<tr>
 		    {if $tournament->get_type()}
 			    {assign var="td_count" value=$table->get_knock_out_stage_count()}
@@ -11,7 +10,8 @@
 					</th>
 				{/section}
 		    {else}
-			    <th>
+			    {assign var="participants" value=$table->get_ordered_participants()}
+			    <th style = "width: 3%;">
 		            &nbsp;
 		        </th>
 			    <th>
@@ -26,7 +26,7 @@
 		</tr>
 		{if !$tournament->get_type()}
 	        {foreach from=$participants key="key" item="participant"}
-		        <tr>
+		        <tr {cycle name="lines" values="class='selected',"}>
                     <td>
 				        {$key+1}
 				    </td>
@@ -54,28 +54,24 @@
 				</tr>
 		    {/foreach}
 		{else}
-		    {section name="td" start=0 loop=$td_count+1}
+		    {section name="td" start=0 loop=$td_count}
 		        <td>
 				    {assign var="stage_pairs" value=$table->get_knock_out_stage_situation($smarty.section.td.index+1)}
 				    {if $smarty.section.td.index!=$td_count}
-					    {foreach from=$stage_pairs.rows item="row"}
-						    {$row.first->get_name()}&nbsp;v/s&nbsp;{$row.second->get_name()}
+					    {foreach from=$stage_pairs item="row"}
+						    <div {if $row->get_game_dt() != '0000-00-00 00:00:00'}style="color: red;"{/if}>
+							    {$table->get_participant_by_id($row->get_first_participant())->get_name()}
+								&nbsp;v/s&nbsp;
+								{$table->get_participant_by_id($row->get_second_participant())->get_name()}
+							</div>
 						{/foreach}
-					    {if $stage_pairs.free}
-						    <br />
-						    {$stage_pairs.free->get_name()}&nbsp;is free.
-						{/if}
-					{else}
-					    {if $winner->get_id()}
-						    {$winner->get_name()} is winner
-						{/if}
 					{/if}
 				</td>
 				{/section}
 		{/if}
 	</table>
 	{if $winner->get_player_id()}
-	    Tournament finished. {$winner->get_name()} is winner.
+	    Tournament is finished. {$winner->get_name()} is winner.
 	{/if}
 {else}
     Tournament is not played yet!

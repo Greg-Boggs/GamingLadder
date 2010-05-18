@@ -23,7 +23,7 @@
 		public function run() {
 		    $this->tournament = $this->get_module('tournament', array('id', $this->get_request('tid')));
 			if (!$this->tournament->get_id()) {
-			    echo "{'error': 'Unknown tournament!'}";
+			    echo "Unknown tournament!";
 				exit;
 			}
 			$this->html->assign('tid', $this->tournament->get_id());
@@ -90,9 +90,25 @@
 		
 		private function _get_games_for_knock_out() {
 		    $user = $this->acl->get_user();
-			$table = $this->get_module(array('tournament_table', 'tournament'), array('tournament_id', $this->tournament->get_id()));
-			$row = $table->get_the_row_by_stage($table->get_knock_out_stage_count(), $user->get_player_id());
-			if ($row && $row->get_game_dt() == '0000-00-00 00:00:00') {
+			$condition = new DB_Condition_List(array(
+			    new DB_Condition('tournament_id', $this->tournament->get_id()),
+				'AND',
+				new DB_Condition('game_dt', '0000-00-00 00:00:00'),
+				'AND',
+				new DB_Condition('current', 1),
+				'AND',
+				new DB_Condition_List(array(
+				    new DB_Condition('first_participant', $user->get_player_id()),
+					'OR',
+					new DB_Condition('second_participant', $user->get_player_id())
+				))
+			));
+			$row = $this->get_entity(
+			    $this->get_config(), 
+				'module_tournament_table',
+				$condition
+			);
+			if ($row->get_id()) {
 			    $query_name = new DB_Query_SELECT();
 				$uid = ($row->get_first_participant() != $user->get_player_id())? 
 				    $row->get_first_participant() :
@@ -107,7 +123,7 @@
 					'AND',
 					new DB_Condition('loser', new DB_Condition_Value($query_name), new DB_Operator('IN')),
 				    'AND',
-				    new DB_Condition('reported_on', date('Y-m-d h:i:s', $this->tournament->get_play_starts()), new DB_Operator('>=')),
+				    new DB_Condition('reported_on', date('Y-m-d h:i:s', $this->tournament->get_play_starts() - 100), new DB_Operator('>=')),
 					'AND',
 					$this->_get_unused_games_condition()
 			    ));

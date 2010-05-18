@@ -235,6 +235,7 @@
 			    for ($i = 0; $i < count($items); $i ++) {
 				    $result[$i] = new Entity($config, $table_name);
 					$result[$i]->properties = $items[$i];
+					$result[$i]->id = $items[$i]['id'];
 				}
 		    }
 			return $result;

@@ -30,7 +30,7 @@
 				</td>
 				<td align = "center">
 			        <div class = "join" id = "join_to_{$tournament->get_id()}">
-					    {if !$state.value}
+					    {if $user && !$state.value}
 						    {if $tournament->is_user_joined($user->get_player_id())}Joined{else}<a href = "javascript: join_tournament({$tournament->get_id()});" title = "Join the tournament">Join</a>{/if}
 						{else}
 						    -

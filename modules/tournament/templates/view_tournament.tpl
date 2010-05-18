@@ -45,14 +45,6 @@
 	</tr>
 	<tr>
 	    <td align = "right">
-		    <strong>{if !$state.value}Sign up will end{else}{if $state.value==2}Playing ended{else}Playing will end{/if}{/if}:</strong>
-		</td>
-		<td>
-		    {if !$state.value}{$tournament->get_date("sign_up_ends", ".")}{else}{$tournament->get_date("play_ends", ".")}{/if}
-		</td>
-	</tr>
-	<tr>
-	    <td align = "right">
 		    <strong>State:</strong>
 		</td>
 		<td>
@@ -74,7 +66,7 @@
 	<div class = "list_content" id = "tournament_stroke">
 	</div>
 </div>
-{if $tournament->is_user_joined($user->get_player_id())}
+{if $user && $tournament->is_user_joined($user->get_player_id()) && $state.value < 2}
     <div class = "list">
         <div class = "list_header" onclick = "javascript: get_valid_games();">
 	        <strong>Report game</strong>

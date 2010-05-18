@@ -62,10 +62,10 @@
 		
 		public function get_state() {
 		    return (
-			    ($this->get_sign_up_ends() >= time())? 
-				    array('value' => 0, 'title' => 'Signing up') : 
-					(($this->get_play_ends() >= time())? 
-					    array('value' => 1, 'title' => 'Playing') : array('value' => 2, 'title' => 'Played')
+			    ($this->get_play_ends())? 
+				    array('value' => 2, 'title' => 'Played') : 
+					(($this->get_play_starts())? 
+					    array('value' => 1, 'title' => 'Playing') : array('value' => 0, 'title' => 'Signing up')
 				)
 			);
 		}
@@ -128,6 +128,7 @@
 					if ($stage) {
 					    if (!in_array($players[$i]->get_player_id(), $pids) && !in_array($players[$j]->get_player_id(), $pids)) {
 					        $table->set_stage($stage);
+							$table->set_current(1);
 							$pids[] = $players[$i]->get_player_id();
 							$pids[] = $players[$j]->get_player_id();
 						}
