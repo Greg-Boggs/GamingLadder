@@ -1,5 +1,6 @@
 {literal}
     <script type = "text/javascript">
+	    //<![CDATA[
 	    function join_tournament(tid) {
 		    $.ajax({
 			    url: 'tournament.php?action=join',
@@ -10,33 +11,90 @@
 					    alert(result.error);
 					}
 					else {
-					    $('#join_to_' + tid).html('Joined');
+					    $('#join_to_' + tid).html('<img src = "images/signed_up.png" alt = "Signed up" title = "Signed up" />');
 					}
 				}
 			})
 		}
-	</script>
+		//]]>
 {/literal}
+{if $user && $user->get_is_admin()}
+    {literal}
+		function delete_tournament(tid) {
+		    $.ajax({
+			    url: 'tournament.php?action=delete_tournament',
+				data: {tid: tid},
+				success: function(json) {
+				    eval('var result = ' + json + ';');
+					if (result.error) {
+					    alert(result.error);
+					}
+					else {
+					    window.location.reload();
+					}
+				}
+			})
+		}
+    {/literal}
+{/if}
+</script>
 <div class = "tournament_list">
-    {if $user && $user->get_is_admin()}
-	    <a href = "tournament.php?action=create_tournament" title = "Create a tournament">Create a tournament</a>
-	{/if}
 	<table width = "100%">
-        {foreach from=$tournaments item="tournament"}
+	    <tr>
+	        <th>
+		        &nbsp;
+		    </th>
+	        <th>
+		        Tournament
+		    </th>
+		    <th>
+		        Type
+		    </th>
+		    <th>
+		        Number of participants
+		    </th>
+		    <th>
+		        State
+		    </th>
+			{if $user && $user->get_is_admin()}
+			    <th>
+				    &nbsp;
+				</th>
+			{/if}
+		</tr>
+        {foreach from=$tournaments item="tournament" key="key"}
 		    {assign var="state" value=$tournament->get_state()}
 	        <tr {cycle name="lines" values='class="selected",'}>
 			    <td>
+				    {$key+1}
+				</td>
+			    <td>
 				    <a href = "tournament.php?action=view_tournament&amp;tid={$tournament->get_id()}">{$tournament->get_name()}</a>
 				</td>
-				<td align = "center">
+				<td>
+				    {$tournament->get_system_type()}
+				</td>
+				<td>
+				    {$tournament->get_joined_participants()} of {$tournament->get_max_participants()}
+				</td>
+				<td align = "center" width = "5%">
 			        <div class = "join" id = "join_to_{$tournament->get_id()}">
 					    {if $user && !$state.value}
-						    {if $tournament->is_user_joined($user->get_player_id())}Joined{else}<a href = "javascript: join_tournament({$tournament->get_id()});" title = "Join the tournament">Join</a>{/if}
+						    {if $tournament->is_user_joined($user->get_player_id())}<img src = "images/signed_up.png" alt = "Signed up" title = "Signed up" />{else}<a href = "javascript: join_tournament({$tournament->get_id()});" title = "Join the tournament"><img src = "images/sign_up.png" alt = "Sign up" title = "Sign up" /></a>{/if}
 						{else}
-						    -
+						    {if $state.value < 2}
+							    <img src = "images/playing.png" alt = "Tournament is playing" title = "Tournament is playing" />
+							{else}
+							    <img src = "images/played.png" alt = "Tournament is played" title = "Tournament is played" />
+							{/if}
 						{/if}
 					</div>
 				</td>
+				{if $user && $user->get_is_admin()}
+			        <td align = "right">
+				        <a href = "javascript: delete_tournament({$tournament->get_id()});" title = "Remove tournament"><img src = "images/deleted.png" alt = "[delete]" /></a>
+				    </td>
+			    {/if}
 			</tr>
         {foreachelse}
             <tr>
@@ -46,6 +104,9 @@
 			</tr>
         {/foreach}
 	</table>
+	{if $user && $user->get_is_admin()}
+	    <a href = "tournament.php?action=create_tournament" title = "Create a tournament"><img src = "images/add.png" alt = "Create a tournament" />&nbsp;Create a tournament</a>
+	{/if}
 </div>
 <div style = "clear: both;">
 </div>

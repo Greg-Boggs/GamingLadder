@@ -38,6 +38,11 @@
 		*/
 		private $free = NULL;
 		/*
+		* Circular total score
+		*@var array
+		*/
+		private $total_score;
+		/*
 		* Constructor
 		*@param object $config
 		*@param array|null $params
@@ -93,15 +98,21 @@
 			return NULL;
 		}
 		
-		public function get_knock_out_stage_situation($stage) {
-		    $pids = array();
-			$pairs = array();
-		    $rows = $this->get_entities(
-			    $this->get_config(), 
-				'module_tournament_table', 
-				array('stage', $stage, 'current', 1, 'tournament_id', $this->get_tournament_id())
-			);
-			return $rows;
+		public function get_situation($stage = NULL) {
+		    if ($stage) {
+		        $pids = array();
+			    $pairs = array();
+		        $rows = $this->get_entities(
+			        $this->get_config(), 
+				    'module_tournament_table', 
+				    array('stage', $stage, 'current', 1, 'tournament_id', $this->get_tournament_id())
+			    );
+				return $rows;
+			}
+			else {
+			    $this->total_score = $this->_get_total_score();
+			}
+			
 		}
 		
 		public function get_knock_out_stage_count() {
@@ -121,7 +132,22 @@
 		
 		public function get_winner() {
 		    $result = $this->get_entity($this->get_config(), 'tournament_result', array('tournament_id', $this->get_tournament_id()));
-			return ($result->get_id())? $this->get_participant_by_id($result->get_winner_id()) : NULL;
+			if ($result->get_id()) {
+			    if ($result->get_winner_id() > 0) {
+			        return $this->get_participant_by_id($result->get_winner_id());
+                }
+                else if ($result->get_winner_id() == 0) {
+                    return NULL;
+				}
+				else {
+				    $player = $this->get_entity($this->get_config(), 'players');
+					$player->set_name('Tie');
+					$player->set_player_id(-1);
+					return $player;
+					
+				}
+			}
+			return NULL;
 		}
 		
 		public function set_winner($tournament) {
@@ -168,13 +194,20 @@
 				//Calculate Berger Coefficient.
 				$max_id = 0;
 				$max = 0;
+				$bcs = array();
 				foreach ($maximals as $key => $pid) {
 				    $tmp = $this->_get_berger_coefficient($pid, $players);
+					$bcs[$tmp][] = $pid;
 				    if ($max <= $tmp) {
 					    $max = $tmp;
 						$max_id = $pid;
 					}
-				}				
+				}
+				//if we have more than one equal b.coeffs,
+				if (count($bcs[$max]) > 1) {
+				    $max_id = -1;
+				}
+			    $max_id = ($max_id > 0)? $bcs[$max][0] : $max_id;
 				$result = $this->get_entity(
 				    $this->get_config(), 
 					'tournament_result', 
@@ -182,28 +215,43 @@
 				);
 				$result->set_winner_id($max_id);
 				$result->save();
-				$winner = $this->get_participant_by_id($max_id);
+				$winner = ($max_id > -1)? $this->get_participant_by_id($max_id) : NULL; 
 			}
 			$tournament->set_play_ends(time());
 			$tournament->save();
 			return $winner;
 		}
 		
+		public function get_total_for_participant($uid) {
+		    return array(
+			    'total' => $this->total_score[$uid]['count'], 
+				'bc' => $this->_get_berger_coefficient($uid, $this->total_score)
+			);
+		}
+		
 		private function _get_total_score() {
 		    $users = array();
 		    foreach($this->rows as $key => $row) {
-			    $users[$row->get_first_participant()]['count'] += $row->get_first_result();
-				$users[$row->get_first_participant()]['competitors'][] = $row->get_second_participant();
-				$users[$row->get_second_participant()]['count'] += $row->get_second_result();
-				$users[$row->get_second_participant()]['competitors'][] = $row->get_first_participant();
+			    $fp = $row->get_first_participant();
+				$sp = $row->get_second_participant();
+			    $users[$fp]['count'] += $row->get_first_result();
+				if ($row->get_first_result()) {
+				    $users[$fp]['competitors'][] = $sp;
+				}
+				$users[$sp]['count'] += $row->get_second_result();
+				if ($row->get_second_result()) {
+				    $users[$sp]['competitors'][] = $fp;
+				}
 			}
 			return $users;
 		}
 		
 		private function _get_berger_coefficient($pid, $players) {
 	        $result = 0;
-		    foreach ($players[$pid]['competitors'] as $key => $id) {
-			    $result += $players[$id]['count'];
+			if ($players[$pid]['competitors']) {
+		        foreach ($players[$pid]['competitors'] as $key => $id) {
+			        $result += $players[$id]['count'];
+			    }
 			}
 			return $result;
 		}

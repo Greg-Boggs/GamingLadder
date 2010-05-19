@@ -1,13 +1,11 @@
-<div class = "list thread" style = "margin-top: 0;">
+<ul>
     {foreach from=$players item="player"}
-        <div class = "wrapper {cycle name="lines" values="selected,"}">
-            <div class = "message_title">
-                <a href = "profile.php?name={$player->get_name()}">{$player->get_name()}</a>
-	        </div>
-        </div>
+        <li {cycle name="lines" values="class = 'selected',"}>
+            <a href = "profile.php?name={$player->get_name()}">{$player->get_name()}</a>
+        </li>
     {foreachelse}
         No players.
     {/foreach}
-</div>
+</ul>
 <div style = "clear: both;">
 </div>

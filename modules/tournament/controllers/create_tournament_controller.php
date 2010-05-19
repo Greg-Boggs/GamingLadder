@@ -47,19 +47,19 @@
 						      'min_participants', 
 							  FormValidator::VAR_CALL_BACK, 
 							  'Min. number of participants must be an integer number greater than 1!', 
-							  array('result' => (intval($_POST['min_participants']) && $_POST['min_participants'] > 1))
+							  array('result' => (intval($this->get_request('min_participants')) && $this->get_request('min_participants') > 1))
 						  )->
 						  add_checking(
 						      'max_participants', 
 							  FormValidator::VAR_CALL_BACK, 
-							  'Max. number of participants must be an integer number greater than zero!', 
-							  array('result' => (intval($_POST['max_participants']) && $_POST['max_participants'] > 0))
+							  'Max. number of participants must be an integer number greater than 2!', 
+							  array('result' => (intval($this->get_request('max_participants')) && $this->get_request('max_participants') > 0))
 						  )->
 						  add_checking(
 						      'max_participants', 
 							  FormValidator::VAR_CALL_BACK, 
-							  'Max. number of participants must be greater than min. number of participants!', 
-							  array('result' => (intval($_POST['max_participants']) > $_POST['min_participants']))
+							  'Max. number of participants must be greater or equal min. number of participants!', 
+							  array('result' => (intval($this->get_request('max_participants')) >= $this->get_request('min_participants')))
 						  );
 			    $tournament = $this->get_module('tournament');
 				$tournament->set_type($this->get_request('type') - 1);

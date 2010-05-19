@@ -77,7 +77,7 @@
 				    'AND',
 				    new DB_Condition('winner', $user->get_name()),
 				    'AND',
-				    new DB_Condition('reported_on', date('Y-m-d h:i:s', $this->tournament->get_play_starts()), new DB_Operator('>=')),
+				    new DB_Condition('reported_on', date('Y-m-d h:i:s', $this->tournament->get_play_starts() - 100), new DB_Operator('>=')),
 					'AND',
 					$this->_get_unused_games_condition()
 			    ));
@@ -123,7 +123,11 @@
 					'AND',
 					new DB_Condition('loser', new DB_Condition_Value($query_name), new DB_Operator('IN')),
 				    'AND',
-				    new DB_Condition('reported_on', date('Y-m-d h:i:s', $this->tournament->get_play_starts() - 100), new DB_Operator('>=')),
+				    new DB_Condition(
+					    'reported_on', 
+						date('Y-m-d h:i:s', $this->tournament->get_play_starts() - 100), 
+						new DB_Operator('>=')
+					),
 					'AND',
 					$this->_get_unused_games_condition()
 			    ));

@@ -1442,12 +1442,31 @@ div.gallerytext {
 }
 
 /* Tournament list */
-.tournament_list .join {
+.tournament_list {
+    font-size: 10px;
+}
+
+.tournament_list table{
+    margin-bottom: 10px;
+}
+
+.tournament_list table th{
+    text-align: left;
 }
 
 /* Tournament view */
 
-.list_content, .list_header {
+#join {
+    font-size: 10px;
+}
+
+.list {
+    width: 100%;
+	overflow: auto;
+}
+
+.list_content {
+    font-size: 10px;
 }
 
 .list_header {
@@ -1459,12 +1478,14 @@ div.gallerytext {
 }
 
 /*Tournament stroke */
-.stroke {
-    font-size: 10px;
-}
 
 .stroke td{
     text-align: center;
 	border-top: 1px solid #000000;
 	border-right: 1px solid #000000;
+}
+
+.stroke td table, .stroke td table td{
+    border: none;
+	text-align: left;
 }
