@@ -122,7 +122,7 @@
 		    
 		}
 		/*
-		*@function select_maxmin
+		*@function select_function
 		*@param string $table
 		*@param string $param
 		*@param boolean $max
@@ -636,10 +636,7 @@
 		private $condition_list;
 		/*
 		* Constructor
-		*@param string $param
-		*@param object|string|integer|float $value
-		*@param object|null $oper
-		*@param array $glue
+		*@param array $condition_list
 		*/
 	    function __construct($condition_list) {
 	        $this->condition_list = $condition_list;

@@ -18,6 +18,7 @@
 		*@param integer|null $user_id
 		*/
 	    function __construct($config, $params = NULL) {
+		    $this->section = $this->name;
 		    Simple::__construct($config, 'players', $params);
 		}
 		/*

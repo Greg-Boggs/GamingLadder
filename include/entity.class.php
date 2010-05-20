@@ -84,15 +84,6 @@
 		    $this->properties = $properties;
 		}
 		/*
-		*@function get_entity
-		*@param string|null $table_name
-		*@param object|array|null $params
-		*@return object
-		*/
-		public function get_entity($table_name = NULL, $params = NULL, $order = NULL) {
-		    return new Entity($table_name, $params, $order);
-		}
-		/*
 		*@function save
 		*/
 		public function save() {
@@ -116,9 +107,19 @@
 			}
 		}
 		/*
+		*@function get_entity
+		*@param object $config
+		*@param string|null $table_name
+		*@param object|array|null $params
+		*@return object
+		*/
+		public function get_entity($config, $table_name = NULL, $params = NULL, $order = NULL) {
+		    return new Entity($config, $table_name, $params, $order);
+		}
+		/*
 		*@function get_entities
 		*@param object $config
-   	    *@param string|null $table_name
+   	         *@param string|null $table_name
 		*@param array $params
 		*@param array|null $order
 		*@param array|null $limit
