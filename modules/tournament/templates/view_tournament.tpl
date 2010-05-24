@@ -48,6 +48,7 @@
 		}
 	</script>
 {/literal}
+{assign var="winner" value=$tournament->get_table()->get_winner()}
 <h1>{$tournament->get_name()}</h1>
 <table>
     <tr>
@@ -66,6 +67,16 @@
 		    {$state.title}{if !$tournament->is_user_joined($user->get_player_id())}&nbsp;(<span id = "join"><a href = "javascript: join_tournament({$tournament->get_id()});" title = "Join the tournament">Sign up&nbsp;<img src = "images/sign_up.png" alt = "Sign up" title = "Sign up" /></a></span>){/if}
 		</td>
 	</tr>
+	{if $winner}
+	    <tr>
+	        <td align = "right">
+		        <strong>Winner:</strong>
+		    </td>
+		    <td>
+		        <a href = "profile.php?name={$winner->get_name()}">{$winner->get_name()}</a>
+		    </td>
+	    </tr>
+	{/if}
 </table>
 <h3>Information</h3>
 <pre>{$tournament->get_information()}</pre>

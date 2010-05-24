@@ -19,16 +19,18 @@
 		public function run($params = 0) {
 		    $items_per_page = 10;
 		    $user = $this->acl->get_user();
+			$name = $this->get_request('player');
+			$player = ($name && $name != $user->get_name())? $this->get_module('user', array('name', $name)) : $user;
 			$show_topic_title = false;//if we view thred by one topic, then we don't need to view topic title in each message...
 			if (!is_array($params)) {
 		        $topic = $this->get_module('topic', array('id', $params));
 			    if (!$topic->get_id()) {
 			        $this->error("Topic doesn't exist!");
-			    }
+			    } 
 				$condition = new DB_Condition_List(array(
-				    new DB_Condition('sender_id', $user->get_player_id()),
+				    new DB_Condition('sender_id', $player->get_player_id()),
 					'OR',
-					new DB_Condition('reciever_id', $user->get_player_id())
+					new DB_Condition('reciever_id', $player->get_player_id())
 				));
 				$condition = new DB_Condition_List(array(
 				    $condition,

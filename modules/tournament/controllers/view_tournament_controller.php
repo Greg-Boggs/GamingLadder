@@ -24,6 +24,7 @@
 			}
 			$this->html->assign('user', $user);
 	        $this->html->assign('tournament', $tournament);
+			$this->html->assign('tournament', $tournament);
 			$this->html->assign('state', $tournament->get_state());
 			$this->display();
 		}

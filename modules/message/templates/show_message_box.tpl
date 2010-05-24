@@ -64,7 +64,7 @@
                         {if !$topic->get_read_date()}
 					        <strong>
 					    {/if}
-                        <a href = "message.php?action=view&amp;topic={$topic->get_id()}">{$topic->get_topic()}</a>
+                        <a href = "message.php?action=view&amp;topic={$topic->get_id()}&amp;player={$player->get_name()}">{$topic->get_topic()}</a>
 						{if $user->get_is_admin()}
 					        {if ($topic->get_deleted_by_sender() && $box=='outbox') || ($topic->get_deleted_by_reciever() && $box=='inbox')}
 					            (<img src = "images/deleted.png" alt = "[deleted]" title = "Deleted" class = "deleted" />)

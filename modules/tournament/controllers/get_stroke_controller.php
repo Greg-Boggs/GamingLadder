@@ -26,10 +26,7 @@
 			}
 			else {
 			    $this->html->assign('tournament', $tournament);
-			    $this->html->assign('table', $this->get_module(
-				    array('tournament_table', 'tournament'), 
-					array('tournament_id', $tournament->get_id()))
-				);
+			    $this->html->assign('table', $tournament->get_table());
 			}
 			$this->display(true);
 		}

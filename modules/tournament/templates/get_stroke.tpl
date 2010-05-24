@@ -28,6 +28,9 @@
 				<th style = "width: 5%;">
 				    Berger Coeff.
 				</th>
+				<th style = "width: 5%;" valign = "bottom">
+				    Place
+				</th>
 		    {/if}
 		</tr>
 		{if !$tournament->get_type()}
@@ -64,6 +67,9 @@
 					</td>
 					<td>
 					    {$total_score.bc}
+					</td>
+					<td>
+					    {$table->get_place_for_participant($participant->get_player_id())}
 					</td>
 				</tr>
 		    {/foreach}

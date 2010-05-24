@@ -43,6 +43,11 @@
 		*/
 		private $total_score;
 		/*
+		* Circular total places
+		*@var array
+		*/
+		private $total_places = NULL;
+		/*
 		* Constructor
 		*@param object $config
 		*@param array|null $params
@@ -223,10 +228,25 @@
 		}
 		
 		public function get_total_for_participant($uid) {
-		    return array(
+		    if (!$this->total_places) {
+			    $this->_calculate_places();
+			}
+		    $result = array(
 			    'total' => $this->total_score[$uid]['count'], 
-				'bc' => $this->_get_berger_coefficient($uid, $this->total_score)
+				'bc' => $this->total_places['bc'][$uid]
 			);
+			return $result;
+		}
+		
+		public function get_place_for_participant($uid) {
+		    $result = count($this->total_places['count']);
+		    foreach ($this->total_places['count'] as $key => $value) {
+			    if ($uid == $key) {
+				    return $result;
+				}
+				$result --;
+			}
+			return 0;
 		}
 		
 		private function _get_total_score() {
@@ -253,6 +273,18 @@
 			        $result += $players[$id]['count'];
 			    }
 			}
+			return $result;
+		}
+		
+		private function _calculate_places() {
+		    $result = array();
+		    foreach ($this->total_score as $uid => $info) {
+			    $bc = $this->_get_berger_coefficient($uid, $this->total_score);
+			    $result['count'][$uid] = (double)($info['count'].'.'.$bc);
+				$result['bc'][$uid] = $bc;
+			}
+			asort($result['count']);
+			$this->total_places = $result;
 			return $result;
 		}
 		

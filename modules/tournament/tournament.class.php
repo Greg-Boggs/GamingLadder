@@ -50,6 +50,11 @@
 			$entity_->save();
 			unset($entity);
 		}
+		
+		public function get_table() {
+		    return $this->get_module(array('tournament_table', 'tournament'), array('tournament_id', $this->get_id()));
+		}
+		
 		public function get_joined_participants() {
 		    $db = new DB($this->get_config());
 			return $db->select_function(
@@ -63,7 +68,7 @@
 		public function get_state() {
 		    return (
 			    ($this->get_play_ends())? 
-				    array('value' => 2, 'title' => 'Played') : 
+				    array('value' => 2, 'title' => 'Finished') : 
 					(($this->get_play_starts())? 
 					    array('value' => 1, 'title' => 'Playing') : array('value' => 0, 'title' => 'Signing up')
 				)
