@@ -146,8 +146,12 @@
 				}
 				else {
 				    $player = $this->get_entity($this->get_config(), 'players');
-					$player->set_name('Tie');
-					$player->set_player_id(-1);
+					$pid = -1;
+					switch ($result->get_winner_id()) {
+					    case -1: $player->set_name('Tie'); break;
+						case -2: $player->set_name('Ended before it started'); break;
+					}
+					$player->set_player_id($pid);
 					return $player;
 					
 				}
@@ -170,17 +174,24 @@
 					'AND',
 					new DB_Condition('stage', new DB_Condition_Value($query), new DB_Operator('IN'))
 				));
-				$row = $this->get_entity($this->get_config(), 'module_tournament_table', $condition);
+				$rows = $this->get_entities($this->get_config(), 'module_tournament_table', $condition);
 				$result = $this->get_entity(
 				    $this->get_config(), 
 					'tournament_result', 
 					array('tournament_id', $tournament->get_id())
 				);
-				$result->set_winner_id(
-				    (($row->get_first_result())? $row->get_first_participant() : $row->get_second_participant())
-				);
-				$result->save();
-				$winner = $this->get_participant_by_id($result->get_winner_id());
+				if (count($rows) > 1) {
+				    $result->set_winner_id(-1);
+					$result->save();
+					$winner = $this->get_winner();
+				}
+				else {
+				    $result->set_winner_id(
+				        (($rows[0]->get_first_result())? $rows[0]->get_first_participant() : $rows[0]->get_second_participant())
+				    );
+					$result->save();
+					$winner = $this->get_participant_by_id($result->get_winner_id());
+				}
 			}
 			else {
 			    //Calculate count for every player...
@@ -278,6 +289,9 @@
 		
 		private function _calculate_places() {
 		    $result = array();
+			if (!$this->total_score) {
+			    $this->_get_total_score();
+			}
 		    foreach ($this->total_score as $uid => $info) {
 			    $bc = $this->_get_berger_coefficient($uid, $this->total_score);
 			    $result['count'][$uid] = (double)($info['count'].'.'.$bc);

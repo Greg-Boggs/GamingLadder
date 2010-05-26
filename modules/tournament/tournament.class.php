@@ -18,16 +18,40 @@
 		*@param array|null $params
 		*/
 	    function __construct($config, $params = NULL) {
-		    parent::__construct($config, $params);			
-		}
-		
-		private function _get_formatted_date($date, $format = ".") {
-		    if (!$date) {
-			    return '';
+		    parent::__construct($config, $params);	
+			if (!$this->get_id()) {
+			    return true;
 			}
-		    return ($format == "/")? date('m'.$format.'d'.$format.'Y', $date) : date('d'.$format.'m'.$format.'Y', $date);
+			//If signig up date is expired...
+			$cojp = $this->get_joined_participants();
+			if ($this->get_sign_up_ends() < time() && $cojp < $this->get_min_participants()) {
+			    $result = $this->get_entity($this->get_config(), 'tournament_result', array('tournament_id', $this->get_id()));
+				$result->set_winner_id(-2);
+				$result->save();
+			    $this->set_play_ends(time());
+				$this->set_min_participants(0);
+				$this->save();
+				return true;
+			}
+			if ($this->get_sign_up_ends() < time() && $cojp < $this->get_max_participants()) {
+				$this->set_max_participants($cojp);
+				$this->save();
+				return true;
+			}
+			//If playing date is expired
+			else {
+                $table = $this->get_table();
+				if ($this->get_play_ends() < time() && $table->get_winner() == 0) {
+				    $table->set_winner($this);
+                }  
+			}
 		}
-		
+		/*
+		*@function get_date
+		*@param string $period
+		*@param string $format
+		*@return string
+		*/
 		public function get_date($period = 'signup_starts', $format = '.') {
 		    eval('$date = $this->_get_formatted_date($this->get_'.$period.'(), $format);');
 			return $date;
@@ -67,9 +91,9 @@
 		
 		public function get_state() {
 		    return (
-			    ($this->get_play_ends())? 
+			    ($this->get_play_ends() <= time())? 
 				    array('value' => 2, 'title' => 'Finished') : 
-					(($this->get_play_starts())? 
+					(($this->get_play_starts() <= time())? 
 					    array('value' => 1, 'title' => 'Playing') : array('value' => 0, 'title' => 'Signing up')
 				)
 			);
@@ -141,6 +165,13 @@
 					$table->save();
 				}
 			}
+		}
+		
+		private function _get_formatted_date($date, $format = ".") {
+		    if (!$date) {
+			    return '';
+			}
+		    return ($format == "/")? date('m'.$format.'d'.$format.'Y', $date) : date('d'.$format.'m'.$format.'Y', $date);
 		}
 	}
 ?>

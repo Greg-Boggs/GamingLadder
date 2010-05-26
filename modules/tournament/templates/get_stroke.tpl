@@ -1,4 +1,4 @@
-{if $table}
+{if $table && $table->get_tournament_id()}
     {assign var="winner" value=$table->get_winner()}
     <table class = "stroke" width = "100%">
 		<tr>

@@ -229,5 +229,17 @@ $smarty_templates_path = "templates"; //Path to templates...
 $smarty_templates_c_path = "share/templates_c";// Path to compiled templates...
 $smarty_cache_path = "share/cache";// path to cache...
 
+//Tournament system...
+//List of fields, used in tournament filters
+//array(table_name.field_name => readable_field_title)
+//write table_name without any prefix.
+$tournament_filter_fields = array(
+    'players.country' => "Player's Country",
+	'standings_cache.games' => 'Number of played games',
+	'players.HaveVersion' => 'Version of Wesnoth',
+	'players.ip' => 'IP address',
+	'players.name' => "Player's Name",
+	'standings_cache.raiting' => "Player's raiting"
+);
 
 ?>

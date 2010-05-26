@@ -60,6 +60,9 @@
 			    <th>
 				    &nbsp;
 				</th>
+			    <th>
+				    &nbsp;
+				</th>
 			{/if}
 		</tr>
         {foreach from=$tournaments item="tournament" key="key"}
@@ -91,6 +94,9 @@
 					</div>
 				</td>
 				{if $user && $user->get_is_admin()}
+				    <td align = "right">
+				        <a href = "tournament.php?action=create_tournament&amp;tid={$tournament->get_id()}" title = "Edit tournament"><img src = "images/edit.png" alt = "[delete]" /></a>
+				    </td>
 			        <td align = "right">
 				        <a href = "javascript: delete_tournament({$tournament->get_id()});" title = "Remove tournament"><img src = "images/deleted.png" alt = "[delete]" /></a>
 				    </td>

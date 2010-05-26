@@ -17,13 +17,15 @@
 	date_default_timezone_set($config->get_cfg_ladder_timezone());
 	$actions = array(
 	    'create_tournament' => array('tournament', 'tournament'),
+		'create_filter' => array('tournament_filter', 'tournament'),
 		'list_tournaments' => array('tournament', 'tournament'),
+		'list_filters' => array('tournament_filter', 'tournament'),
 		'join' => array('tournament', 'tournament'),
 		'view_tournament' => array('tournament', 'tournament'),
 		'get_joined_players' => array('tournament', 'tournament'),
 		'get_valid_games' => array('tournament', 'tournament'),
-		'report_game' => array('tournament', 'tournament'),
 		'get_stroke' => array('tournament', 'tournament'),
+		'report_game' => array('tournament', 'tournament'),
 		'delete_tournament' => array('tournament', 'tournament')
 	);
 	$_GET['action'] = (isset($_GET['action']))? $_GET['action'] : 'list_tournaments';

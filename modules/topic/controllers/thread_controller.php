@@ -20,7 +20,9 @@
 		    $items_per_page = 10;
 		    $user = $this->acl->get_user();
 			$name = $this->get_request('player');
-			$player = ($name && $name != $user->get_name())? $this->get_module('user', array('name', $name)) : $user;
+			$player = ($name && $name != $user->get_name() && $user->get_is_admin())? 
+			    $this->get_module('user', array('name', $name)) : 
+				$user;
 			$show_topic_title = false;//if we view thred by one topic, then we don't need to view topic title in each message...
 			if (!is_array($params)) {
 		        $topic = $this->get_module('topic', array('id', $params));

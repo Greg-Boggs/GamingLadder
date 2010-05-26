@@ -64,7 +64,7 @@
 		    <strong>State:</strong>
 		</td>
 		<td>
-		    {$state.title}{if !$tournament->is_user_joined($user->get_player_id())}&nbsp;(<span id = "join"><a href = "javascript: join_tournament({$tournament->get_id()});" title = "Join the tournament">Sign up&nbsp;<img src = "images/sign_up.png" alt = "Sign up" title = "Sign up" /></a></span>){/if}
+		    {$state.title}{if !$state.value && !$tournament->is_user_joined($user->get_player_id())}&nbsp;(<span id = "join"><a href = "javascript: join_tournament({$tournament->get_id()});" title = "Join the tournament">Sign up&nbsp;<img src = "images/sign_up.png" alt = "Sign up" title = "Sign up" /></a></span>){/if}
 		</td>
 	</tr>
 	{if $winner}

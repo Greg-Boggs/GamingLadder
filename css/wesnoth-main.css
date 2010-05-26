@@ -1465,7 +1465,7 @@ div.gallerytext {
 	overflow: auto;
 }
 
-.list_content {
+.list_content * {
     font-size: 10px;
 }
 
