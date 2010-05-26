@@ -56,7 +56,11 @@
 		    eval('$date = $this->_get_formatted_date($this->get_'.$period.'(), $format);');
 			return $date;
 		}
-		
+		/*
+		*@function is_user_joined
+		*@param integer $uid
+		*@return integer
+		*/
 		public function is_user_joined($uid) {
 		    $entity = $this->get_entity(
 			    $this->get_config(), 
@@ -65,7 +69,11 @@
 			);
 			return ($entity->get_id())? 1 : 0;
 		}
-		
+		/*
+		*@function join
+		*@param integer $entity_id
+		*@param integer $entity_type
+		*/
 		public function join($entity_id, $entity_type = 0) {
 		    $entity_ = $this->get_entity($this->get_config(), 'tournament_entity');
 			$entity_->set_tournament_id($this->get_id());
@@ -74,11 +82,17 @@
 			$entity_->save();
 			unset($entity);
 		}
-		
+		/*
+		*@function get_table
+		*@return object
+		*/
 		public function get_table() {
 		    return $this->get_module(array('tournament_table', 'tournament'), array('tournament_id', $this->get_id()));
 		}
-		
+		/*
+		*@function get_joined_participants
+		*@return integer
+		*/
 		public function get_joined_participants() {
 		    $db = new DB($this->get_config());
 			return $db->select_function(
@@ -88,7 +102,10 @@
 				new DB_Condition('tournament_id', $this->get_id())
 			);
 		}
-		
+		/*
+		*@function get_state()
+		*@return array
+		*/
 		public function get_state() {
 		    return (
 			    ($this->get_play_ends() <= time())? 
@@ -98,7 +115,10 @@
 				)
 			);
 		}
-		
+		/*
+		*@function get_players
+		*@return array
+		*/
 		public function get_players() {
 		    $query = new DB_Query_SELECT();
 			$query->setup(
@@ -116,7 +136,11 @@
 				new DB_Condition('player_id', new DB_Condition_Value($query), new DB_Operator('IN'))
 			);
 		}
-		
+		/*
+		*@function send_notification
+		*@param string $title
+		*@param string $text
+		*/
 		public function send_notification($title, $text) {
 			$players = $this->get_players();
 			foreach ($players as $key => $player) {
@@ -130,11 +154,16 @@
 				);
 			}
 		}
-		
+		/*
+		*@function get_system_type
+		*@return string
+		*/
 		public function get_system_type () {
 		    return ($this->get_type())? 'knock out' : 'circular';
 		}
-		
+		/*
+		*@function build_table
+		*/
 		public function build_table() {
 		    if (!$this->get_type()) {
 			    $this->_create_initial_table($this->get_players());
