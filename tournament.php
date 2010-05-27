@@ -26,7 +26,8 @@
 		'get_valid_games' => array('tournament', 'tournament'),
 		'get_stroke' => array('tournament', 'tournament'),
 		'report_game' => array('tournament', 'tournament'),
-		'delete_tournament' => array('tournament', 'tournament')
+		'delete_tournament' => array('tournament', 'tournament'),
+		'delete_filter' => array('tournament_filter', 'tournament')
 	);
 	$_GET['action'] = (isset($_GET['action']))? $_GET['action'] : 'list_tournaments';
 	$ac_box = $actions[$_GET['action']];

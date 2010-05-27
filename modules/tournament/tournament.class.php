@@ -47,6 +47,45 @@
 			}
 		}
 		/*
+		*@function apply_filter
+		*@param integer $fid
+		*/
+		public function apply_filter($fid) {
+		    $frel = $this->get_entity(
+			    $this->get_config(), 
+				'tournament_filter_xrel', 
+				array('tournament_id', $this->get_id(), 'filter_id', $fid)
+			);
+			if (!$frel->get_id()) {
+			    $frel->set_tournament_id($this->get_id());
+				$frel->set_filter_id($fid);
+				$frel->save();
+			}
+		}
+		/*
+		*@function run_filters
+		*@param string $name
+		*@return integer
+		*/
+		public function run_filters($name) {
+		    $query = new DB_Query_SELECT();
+			$query->setup(
+			    array('filter_id'), 
+				$this->get_config()->get_db_prefix().'_tournament_filter_xrel', 
+				new DB_Condition('tournament_id', $this->get_id())
+			);
+			$filters = $this->get_modules(
+			    array('tournament_filter', 'tournament'), 
+				new DB_Condition('id', new DB_Condition_Value($query), new DB_Operator('IN'))
+			);
+		    foreach ($filters as $key => $filter) {
+			    if (!$filter->admit($name)) {
+				    return 0;
+				}
+			}
+			return 1;
+		}
+		/*
 		*@function get_date
 		*@param string $period
 		*@param string $format

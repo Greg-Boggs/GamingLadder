@@ -97,7 +97,7 @@
 	    {html_entity->loader text="Load..."}
 	</div>
 </div>
-{if $user && $tournament->is_user_joined($user->get_player_id()) && $state.value < 2}
+{if $user && $tournament->is_user_joined($user->get_player_id()) && $state.value == 1}
     <div class = "list">
         <div class = "list_header" onclick = "javascript: get_valid_games();">
 	        <strong>Report game</strong>

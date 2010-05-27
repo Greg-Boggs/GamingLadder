@@ -233,6 +233,7 @@ $smarty_cache_path = "share/cache";// path to cache...
 //List of fields, used in tournament filters
 //array(table_name.field_name => readable_field_title)
 //write table_name without any prefix.
+//!!!Player name must be contained in the table!!!
 $tournament_filter_fields = array(
     'players.country' => "Player's Country",
 	'standings_cache.games' => 'Number of played games',

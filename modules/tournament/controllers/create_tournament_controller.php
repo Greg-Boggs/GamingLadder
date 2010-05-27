@@ -28,6 +28,7 @@
 			$now = strtotime(date('Y/d/m', time()));
 			$tournament = ($tid)? $this->get_module('tournament', array('id', $tid)) : $this->get_module('tournament');
 			if ($form) {
+			    $this->html->assign('form', $form);
 			    $t = $this->get_entity($this->get_config(), 'module_tournament', array('name', $this->get_request('name')));
 			    if (!$tid) {
 			        $checker->add_checking('name', FormValidator::VAR_REQUIRED, 'Name is required!')->
@@ -148,6 +149,10 @@
 			}
 			if ($checker->check() && $form) {
 			    $tournament->save();
+			    $filters = (array)($this->get_request('filters'));
+				foreach ($filters as $key => $fid) {
+				    $tournament->apply_filter($fid);
+				}
 				$result = $this->get_entity($this->get_config(), 'tournament_result');
 				$result->set_tournament_id($tournament->get_id());
 				$result->set_title($this->get_request('winner_title'));

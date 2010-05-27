@@ -35,9 +35,12 @@
 			    echo "{'error': 'You are already joined to this tournament'}";
 				exit;
 			}
-			//TODO: check time of join...
 			if ($tournament->get_joined_participants() == $tournament->get_max_participants()) {
 			    echo "{'error': 'Sorry, but number of max. participants is reached, so you are not able to join!'}";
+				exit;
+			}
+			if (!$tournament->run_filters($user->get_name())) {
+			    echo "{'error': 'Sorry, but You do not satisfy the conditions of the tournament!'}";
 				exit;
 			}
 			$tournament->join($user->get_player_id());

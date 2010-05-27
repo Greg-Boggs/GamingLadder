@@ -6,11 +6,15 @@
 {literal}
     <script type = "text/javascript">
 	    function get_filters() {
+		    $('#loader').show();
+			var l = $('#loader');
 		    $('#filters').load(
 			    'tournament.php?action=list_filters',
 				{tid: {/literal}{if $tournament->get_id()}{$tournament->get_id()}{else}0{/if}{literal}},
 				function() {
 				    $('#filters').show();
+					$('#filters').prepend(l);
+					$('#loader').hide();
 				}
 			);
 		}
@@ -19,6 +23,7 @@
 		    $("#date_signup_end").datepicker();
 		    $("#date_play_start").datepicker();
 		    $("#date_play_end").datepicker();
+			{/literal}{if $form}get_filters();{/if}{literal}
 	    });
 	</script>
 {/literal}
@@ -119,6 +124,7 @@
 	        <strong>Apply filter</strong>
 	    </div>
 	    <div class = "list_content" id = "filters">
+		    {html_entity->loader text="Load..."}
 	    </div>
     </div>
 	<div style = "clear: both; height: 10px;">
