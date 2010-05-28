@@ -240,7 +240,7 @@ $tournament_filter_fields = array(
 	'players.HaveVersion' => 'Version of Wesnoth',
 	'players.ip' => 'IP address',
 	'players.name' => "Player's Name",
-	'standings_cache.raiting' => "Player's raiting"
+	'standings_cache.rating' => "Player's rating"
 );
 
 ?>

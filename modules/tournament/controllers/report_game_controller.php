@@ -17,14 +17,18 @@
 		*/
 		public function run() {
 		    $user = $this->acl->get_user();
+			if (!$user->get_player_id()) {
+			    echo "Access denied!";
+				exit;
+			}
 		    $tournament = $this->get_module('tournament', array('id', $this->get_request('tid')));
 			if (!$tournament->get_id()) {
 			    echo 'Unknown tournament!';
 				exit;
 			}
 			$game = $this->get_entity($this->get_config(), 'games', array('reported_on', $this->get_request('game')));
-			$existed_row = $this->get_entity($this->get_config(), 'module_tournament_table', array('game_dt', $game->get_reported_on()));
-			if ($existed_row->get_id()) {
+			$existed_game = $this->get_entity($this->get_config(), 'tournament_game', array('game_dt', $game->get_reported_on()));
+			if ($existed_game->get_id()) {
 			    echo 'Game is already used in another tournament game!';
 				exit;
 			}
@@ -57,7 +61,7 @@
 					))
 				)),
 				'AND',
-				new DB_Condition('game_dt', '0000-00-00 00:00:00'),
+				new DB_Condition('played_games', $tournament->get_games_to_play(), new DB_Operator('<')),
 				'AND',
 				new DB_Condition('tournament_id', $tournament->get_id())
 			);
@@ -67,33 +71,45 @@
 			}
 			$condition = new DB_Condition_List($arr);
 			$row = $this->get_entity($this->get_config(), 'module_tournament_table', $condition);
+			if (!$row->get_id()) {
+			    echo 'Wrong game!';
+				exit;
+			}
+			$row->set_played_games($row->get_played_games() + 1);
 			$competitor = 0;
 			if ($row->get_first_participant() == $user->get_player_id()) {
-			    $row->set_first_result(1);
+			    $row->set_first_result($row->get_first_result() + 1);
 				$competitor = $row->get_second_participant();
 			}
 			else {
-			    $row->set_second_result(1);
+			    $row->set_second_result($row->get_second_result() + 1);
 				$competitor = $row->get_first_participant();
 			}
-			$row->set_game_dt($game->get_reported_on());
-			$row->save();
-			if ($tournament->get_type()) {
+			if ($row->get_played_games() == $tournament->get_games_to_play() && $tournament->get_type()) {
 			    $this->_set_next_stage($row, $user, $competitor);
 			}
+			$existed_game->set_tournament_id($tournament->get_id());
+		    $existed_game->set_game_dt($game->get_reported_on());
+			$existed_game->save();
+			$row->save();
 			$this->html->assign('winner', $this->_check_end($tournament));
 			$this->html->assign('tid', $tournament->get_id());
 			$this->display(true);
 		}
 		
 		private function _check_end($tournament) {
-		    $row = $this->get_entity(
-			    $this->get_config(), 
-				'module_tournament_table', 
-				array('tournament_id', $tournament->get_id(), 'game_dt', '0000-00-00 00:00:00')
-			);
-		    if (!$row->get_id()) {
-			    $table = $this->get_module(array('tournament_table', 'tournament'), array('tournament_id', $tournament->get_id()));
+		    $db = new DB($this->get_config());
+		    if (!$db->select_function(
+			    $this->get_config()->get_db_prefix().'_module_tournament_table', 
+				'id',
+				'count',
+				new DB_Condition_List(array(
+				    new DB_Condition('tournament_id', $tournament->get_id()),
+					'AND',
+					new DB_Condition('played_games', $tournament->get_games_to_play(), new DB_Operator('<'))
+			    ))
+			)) {
+			    $table = $tournament->get_table();
 			    return $table->set_winner($tournament);
 			}
 			return NULL;
@@ -113,7 +129,7 @@
 					'AND',
 					new DB_Condition('tournament_id', $row->get_tournament_id()),
 					'AND',
-					new DB_Condition('game_dt', '0000-00-00 00:00:00')
+					new DB_Condition('played_games', 0)
 				))
 			);
 			//Set new stage for rows, where winner is (if participant already is in row with new stage - don't modify this)...
@@ -122,7 +138,7 @@
 			$condition = new DB_Condition_List(array(
 			    new DB_Condition('tournament_id', $row->get_tournament_id()),
 				'AND',
-				new DB_Condition('game_dt', '0000-00-00 00:00:00'),
+				new DB_Condition('played_games', 0),
 				'AND',
 				new DB_Condition_List(array(
 				    new DB_Condition('first_participant', $user->get_player_id()),
@@ -139,7 +155,7 @@
 			$condition = new DB_Condition_List(array(
 			    new DB_Condition('tournament_id', $row->get_tournament_id()),
 				'AND',
-				new DB_Condition('game_dt', '0000-00-00 00:00:00'),
+				new DB_Condition('played_games', 0),
 				'AND',
 				new DB_Condition('stage', $row->get_stage())
 			));
@@ -153,7 +169,7 @@
 				$condition = new DB_Condition_List(array(
 			        new DB_Condition('tournament_id', $row->get_tournament_id()),
 				    'AND',
-				    new DB_Condition('game_dt', '0000-00-00 00:00:00'),
+				    new DB_Condition('played_games', 0),
 				    'AND',
 				    new DB_Condition('stage', $new_stage)
 			    ));

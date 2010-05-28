@@ -43,7 +43,7 @@
 					new DB_Condition('second_participant', $user->get_player_id())
 				)),
 				'AND',
-				new DB_Condition('game_dt', '0000-00-00 00:00:00'),
+				new DB_Condition('played_games', $this->tournament->get_games_to_play(), new DB_Operator('<')),
 				'AND',
 				new DB_Condition('tournament_id', $this->tournament->get_id())
 			));
@@ -93,7 +93,7 @@
 			$condition = new DB_Condition_List(array(
 			    new DB_Condition('tournament_id', $this->tournament->get_id()),
 				'AND',
-				new DB_Condition('game_dt', '0000-00-00 00:00:00'),
+				new DB_Condition('played_games', 0),
 				'AND',
 				new DB_Condition('current', 1),
 				'AND',
@@ -142,7 +142,7 @@
 		    $query = new DB_Query_SELECT();
 		    $query->setup(
 			    array('game_dt'), 
-				$this->get_config()->get_db_prefix().'_module_tournament_table'
+				$this->get_config()->get_db_prefix().'_tournament_game'
 			);
 		    return new DB_Condition('reported_on', new DB_Condition_Value($query), new DB_Operator('IN', 1));
 		}

@@ -33,7 +33,8 @@
 					    $this->get_config()->get_db_prefix().'_module_tournament_table' => 'tournament_id',
 						$this->get_config()->get_db_prefix().'_tournament_entity' => 'tournament_id',
 						$this->get_config()->get_db_prefix().'_tournament_result' => 'tournament_id',
-						$this->get_config()->get_db_prefix().'_tournament_filter_xrel' => 'tournament_id'
+						$this->get_config()->get_db_prefix().'_tournament_filter_xrel' => 'tournament_id',
+						$this->get_config()->get_db_prefix().'_tournament_game' => 'tournament_id'
 					));
 					$this->html->assign('success', 1);
 				}

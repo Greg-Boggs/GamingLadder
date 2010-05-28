@@ -21,7 +21,7 @@
 			if (!$this->acl->get_user()->get_is_admin()) {
 			    $this->error('Access denied!');
 			}
-			$filters = $this->get_modules(array('tournament_filter', 'tournament'), NULL, array('field', 'DESC'));
+			$filters = $this->get_modules(array('tournament_filter', 'tournament'), NULL, array('field', 'ASC'));
 	        $this->html->assign('filters', $filters);
 			$this->html->assign('tid', $this->get_request('tid'));
 			$this->display(true);

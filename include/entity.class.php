@@ -36,8 +36,9 @@
 		*@param array|null $order
 		*/
 	    function __construct($config, $table_name = NULL, $params = array(), $order = NULL) {
+		    $this->table_name = $config->get_db_prefix().'_'.$table_name;
 	        if ($config && count($params)) {
-			    $this->db = $this->_get_all_from_base($config, $table_name, $params, $order);
+			    $this->db = $this->_get_all_from_base($config, $this->table_name, $params, $order);
 			    if ($this->db) {
 			        $this->properties = $this->db->get_row();
 			        $this->id = $this->properties['id'];
@@ -45,7 +46,6 @@
 			}
 			else {
 			    $this->db = new DB($config);
-		        $this->table_name = $config->get_db_prefix().'_'.$table_name;
 			}
         }
 		/*
@@ -126,8 +126,8 @@
 		*@return array
 		*/
 		public function get_entities($config, $table_name = NULL, $params = array(), $order = NULL, $limit = NULL) {
-		    $this->_get_all_from_base($config, $table_name, $params, $order, $limit);
-		    return $this->_get_list_of_entities($config, $table_name);
+		    $db = $this->_get_all_from_base($config, $config->get_db_prefix().'_'.$table_name, $params, $order, $limit);
+		    return $this->_get_list_of_entities($config, $db, $table_name);
 		}
 		/*
 		*@function get_entities_count
@@ -137,13 +137,13 @@
 		*@return integer
 		*/
 		public function get_entities_count($config, $table_name = NULL, $params = array()) {
-		    $this->_get_all_from_base($config, $table_name, $params, $order, $limit);
-		    return $this->db->get_row_count();
+		    $db = $this->_get_all_from_base($config, $config->get_db_prefix().'_'.$table_name, $params, $order, $limit);
+		    return $db->get_row_count();
 		}
 		/*
 		*@function get_entities_from
 		*@param object $config
-   	    *@param string $to_table_name
+   	         *@param string $to_table_name
 		*@param string $from_table_name
 		*@param array $params
 		*@param array|object $condition
@@ -186,53 +186,53 @@
 		/*
 		*@function _get_all_from_base
 		*@param object $config
-   	    *@param string $table_name
+   	         *@param string $table_name
 		*@param array $params
 		*@param array|null $order
 		*@param array|null $limit
 		*@return object|null
 		*/	
 		private function _get_all_from_base($config, $table_name = NULL, $params = array(), $order = NULL, $limit = NULL) {
-		    $this->db = new DB($config);
+		    $db = new DB($config);
 		    $empty = true;
 		    if (isset($table_name)) {
 			    $empty = false;
-		        $this->table_name = $config->get_db_prefix().'_'.$table_name;
-		        $this->db->query = new DB_Query_SELECT();
+		        $db->query = new DB_Query_SELECT();
 				if ($order) {
-				    $this->db->query->set_order_by($order[0], $order[1]);
+				    $db->query->set_order_by($order[0], $order[1]);
 				}
 				if ($limit) {
-				    $this->db->query->set_limit($limit[0], $limit[1]);
+				    $db->query->set_limit($limit[0], $limit[1]);
 				}
 		        if (is_object($params)) {
-		            $this->db->query->setup(array('*'), $this->table_name, $params);
+		            $db->query->setup(array('*'), $table_name, $params);
 		        }
 		        else {
-		            $this->db->query->setup(array('*'), $this->table_name);
+		            $db->query->setup(array('*'), $table_name);
 		            $c = count($params);
 		            for ($i = 0; $i < $c; $i += 2) {
 					    if ($c > 2 && $i < $c - 2) {
-		                    $this->db->query->add_condition($params[$i], $params[$i + 1], new DB_Operator('='), array('AND', false));
+		                    $db->query->add_condition($params[$i], $params[$i + 1], new DB_Operator('='), array('AND', false));
 						}
 						else {
-						    $this->db->query->add_condition($params[$i], $params[$i + 1]);
+						    $db->query->add_condition($params[$i], $params[$i + 1]);
 						}
 		    	    }
                 }
             }
-			return ($empty)? NULL : $this->db;
+			return ($empty)? NULL : $db;
 		}
 		/*
 		*@function _get_list_of_entities
 		*@param object $config
-   	    *@param string $table_name
+		*@param object $db
+   	         *@param string $table_name
 		*@return array
 		*/
-		private function _get_list_of_entities($config, $table_name) {
+		private function _get_list_of_entities($config, $db, $table_name) {
 		    $result = array();
-			if ($this->db) {
-			    $items = $this->db->get_all();
+			if ($db) {
+			    $items = $db->get_all();
 			    for ($i = 0; $i < count($items); $i ++) {
 				    $result[$i] = new Entity($config, $table_name);
 					$result[$i]->properties = $items[$i];

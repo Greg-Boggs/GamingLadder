@@ -1479,6 +1479,16 @@ div.gallerytext {
 
 /*Tournament stroke */
 
+.stroke .number_of_games_subtitle {
+    text-decoration: overline;
+}
+
+.stroke .score {
+    font-weight: bold;
+	font-size: 12px;
+}
+
+
 .stroke td{
     text-align: center;
 	border-top: 1px solid #000000;

@@ -52,24 +52,35 @@
 								{if !$the_row->get_first_result() && !$the_row->get_second_result()}
 								    &nbsp;
 								{else}
-							        {if $the_row->get_first_participant() == $participant->get_player_id()}
-									    {$the_row->get_first_result()}
-									{else}
-									    {$the_row->get_second_result()}
-									{/if}
+								    <div class = "score">
+							            {if $the_row->get_first_participant() == $participant->get_player_id()}
+									        {$the_row->get_first_result()}
+									    {else}
+									        {$the_row->get_second_result()}
+									    {/if}
+									</div>
+									<div class = "number_of_games_subtitle">
+									    game&nbsp;{$the_row->get_played_games()}&nbsp;of&nbsp;{$tournament->get_games_to_play()}
+									</div>
 								{/if}
 							{/if}
 					    </td>
 				    {/foreach}
 					{assign var="total_score" value=$table->get_total_for_participant($participant->get_player_id())}
 					<td>
-					    {$total_score.total}
+					    <div class = "score">
+						    {$total_score.total}
+						</div>
 					</td>
 					<td>
-					    {$total_score.bc}
+					    <div class = "score">
+						    {$total_score.bc}
+						</div>
 					</td>
 					<td>
-					    {$table->get_place_for_participant($participant->get_player_id())}
+					    <div class = "score">
+					        {if !$winner || $winner->get_player_id() != -1}{$table->get_place_for_participant($participant->get_player_id())}{else}-{/if}
+						</div>
 					</td>
 				</tr>
 		    {/foreach}

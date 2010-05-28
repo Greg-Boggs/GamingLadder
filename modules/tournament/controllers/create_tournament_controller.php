@@ -149,6 +149,11 @@
 			}
 			if ($checker->check() && $form) {
 			    $tournament->save();
+				$db = new DB($this->get_config());
+			    $db->delete(
+			        $this->get_config()->get_db_prefix().'_tournament_filter_xrel', 
+				    new DB_Condition('tournament_id', $tournament->get_id())
+			    );
 			    $filters = (array)($this->get_request('filters'));
 				foreach ($filters as $key => $fid) {
 				    $tournament->apply_filter($fid);
