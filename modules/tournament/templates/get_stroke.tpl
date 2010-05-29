@@ -10,18 +10,18 @@
 					</th>
 				{/section}
 		    {else}
-			    {assign var="participants" value=$table->get_ordered_participants()}
+			    {assign var="participants" value=$table->calculate_places()}
 			    <th style = "width: 3%;">
 		            &nbsp;
 		        </th>
 			    <th>
 			        &nbsp;
 			    </th>
-			    {foreach from=$participants key="key" item="smth"}
+			    {section name="key" loop=$participants.count step=1}
 				    <th valign = "bottom">
-					    {$key+1}
+					    {$smarty.section.key.index+1}
 					</th>
-				{/foreach}
+				{/section}
 				<th style = "width: 3%;" valign = "bottom">
 				    Total
 				</th>
@@ -34,26 +34,30 @@
 		    {/if}
 		</tr>
 		{if !$tournament->get_type()}
-		    {$table->get_situation()}
-	        {foreach from=$participants key="key" item="participant"}
+	        {section name="key1" loop=$participants.count}
+			    {assign var="count" value=$participants.count[key1].count}
+				{assign var="uid1" value=$participants.count[key1].uid}
+			    {assign var="participant" value=$table->get_participant_by_id($uid1)}
 		        <tr {cycle name="lines" values="class='selected',"}>
                     <td style = "border-left: 1px solid #000000;">
-				        {$key+1}
+				        {$smarty.section.key1.rownum}
 				    </td>
 				    <td>
 				        <a href = "profile.php?name={$participant->get_name()}">{$participant->get_name()}</a>
 				    </td>
-				    {foreach from=$participants item="p"}
+				    {section name="key2" loop=$participants.count}
+					    {assign var="count" value=$participants.count[key2].count}
+				        {assign var="uid2" value=$participants.count[key2].uid}
 				        <td>
-					        {if $p->get_player_id() == $participant->get_player_id()}
+					        {if $uid2 == $uid1}
 							    <img src = "images/square.png" alt = "-" />
 							{else}
-							    {assign var="the_row" value=$table->get_the_row($participant->get_player_id(), $p->get_player_id())}
+							    {assign var="the_row" value=$table->get_the_row($uid1, $uid2)}
 								{if !$the_row->get_first_result() && !$the_row->get_second_result()}
 								    &nbsp;
 								{else}
 								    <div class = "score">
-							            {if $the_row->get_first_participant() == $participant->get_player_id()}
+							            {if $the_row->get_first_participant() == $uid1}
 									        {$the_row->get_first_result()}
 									    {else}
 									        {$the_row->get_second_result()}
@@ -65,25 +69,24 @@
 								{/if}
 							{/if}
 					    </td>
-				    {/foreach}
-					{assign var="total_score" value=$table->get_total_for_participant($participant->get_player_id())}
+				    {/section}
 					<td>
 					    <div class = "score">
-						    {$total_score.total}
+						    {$participants.total[$uid1]}
 						</div>
 					</td>
 					<td>
 					    <div class = "score">
-						    {$total_score.bc}
+						    {$participants.bc[$uid1]}
 						</div>
 					</td>
 					<td>
 					    <div class = "score">
-					        {if !$winner || $winner->get_player_id() != -1}{$table->get_place_for_participant($participant->get_player_id())}{else}-{/if}
+					        {if !$winner || $winner->get_player_id() != -1}{$participants.place[$uid1]}{else}-{/if}
 						</div>
 					</td>
 				</tr>
-		    {/foreach}
+		    {/section}
 		{else}
 		    {section name="td" start=0 loop=$td_count}
 		        <td {if $smarty.section.td.index==0}style = "border-left: 1px solid #000000;"{/if}>

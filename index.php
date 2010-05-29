@@ -7,7 +7,7 @@ session_start();
 $time = time();
 require('conf/variables.php');
 require('include/smileys.inc.php');
-require('include/genericfunctions.inc.php');
+require_once('include/genericfunctions.inc.php');
 date_default_timezone_set("$cfg_ladder_timezone");
 
 ?>

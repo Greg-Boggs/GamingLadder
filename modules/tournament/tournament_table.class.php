@@ -114,10 +114,6 @@
 			    );
 				return $rows;
 			}
-			else {
-			    $this->total_score = $this->_get_total_score();
-			}
-			
 		}
 		
 		public function get_knock_out_stage_count() {
@@ -238,26 +234,39 @@
 			return $winner;
 		}
 		
-		public function get_total_for_participant($uid) {
-		    if (!$this->total_places) {
-			    $this->_calculate_places();
+		public function calculate_places() {
+		    $result = array();
+			if (!$this->total_score) {
+			    $this->_get_total_score();
 			}
-		    $result = array(
-			    'total' => $this->total_score[$uid]['count'], 
-				'bc' => $this->total_places['bc'][$uid]
-			);
+			$user_count = 0;
+			$max_count = 0;
+		    foreach ($this->total_score as $uid => $info) {
+			    $bc = $this->_get_berger_coefficient($uid, $this->total_score);
+				$result['count'][$user_count] = array(
+				    'count' => (double)($info['count'].'.'.$bc), 'uid' => $uid
+				);
+				$max_count = ($max_count <= $result['count'][$user_count]['count'])? 
+				    $result['count'][$user_count]['count'] : 
+					$max_count; 
+				$result['bc'][$uid] = $bc;
+				$result['total'][$uid] = $this->total_score[$uid]['count'];
+				$user_count++;
+			}
+			rsort($result['count']);
+			$place = 1;
+			$pre = NULL;
+			foreach ($result['count'] as $key => $info) {
+			    $place = (!$pre || $pre['count'] <= $info['count'])? $place : $place + 1;
+				$result['place'][$info['uid']] = $place;
+				$pre = $info;
+				$i++;
+			}
+			//echo "<pre>";
+			//var_dump($result);
+			//echo "</pre>";
+			$this->total_places = $result;
 			return $result;
-		}
-		
-		public function get_place_for_participant($uid) {
-		    $result = count($this->total_places['count']);
-		    foreach ($this->total_places['count'] as $key => $value) {
-			    if ($uid == $key) {
-				    return $result;
-				}
-				$result --;
-			}
-			return 0;
 		}
 		
 		private function _get_total_score() {
@@ -274,6 +283,7 @@
 				    $users[$sp]['competitors'][] = $fp;
 				}
 			}
+			$this->total_score = $users;
 			return $users;
 		}
 		
@@ -284,21 +294,6 @@
 			        $result += $players[$id]['count'];
 			    }
 			}
-			return $result;
-		}
-		
-		private function _calculate_places() {
-		    $result = array();
-			if (!$this->total_score) {
-			    $this->_get_total_score();
-			}
-		    foreach ($this->total_score as $uid => $info) {
-			    $bc = $this->_get_berger_coefficient($uid, $this->total_score);
-			    $result['count'][$uid] = (double)($info['count'].'.'.$bc);
-				$result['bc'][$uid] = $bc;
-			}
-			asort($result['count']);
-			$this->total_places = $result;
 			return $result;
 		}
 		

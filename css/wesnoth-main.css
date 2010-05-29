@@ -1222,6 +1222,27 @@ div.gallerytext {
    padding:4px 2px;   
 }
 
+/* Message Envelope */
+#envelope {
+    width: 100%;
+	text-align: right;
+	position: absolute;
+	top: 0px;
+}
+
+#envelope img {
+    width: 16px;
+}
+
+#envelope span{
+    font-size: 10px;
+    background-color: #272727;
+}
+
+#envelope span, #envelope span a{
+    color: #FFFFFF;
+}
+
 .wrapper {
     clear: both;
 }
@@ -1312,7 +1333,6 @@ div.gallerytext {
 .message_box_menu {
     width: auto;
 	height: 70px;
-	background-color: #272727;
 	border: 1px solid #585858;
 	text-align: center;
 	padding-top: 20px;
@@ -1321,6 +1341,10 @@ div.gallerytext {
 
 .message_box_menu div {
     width: 100%;
+}
+
+.message_box_menu div a {
+    color: #272727;
 }
 
 .message_box_menu div.selected_item a {

@@ -210,11 +210,11 @@
 			else {
 			    $players = $this->get_players();
 				shuffle($players);
-			    $this->_create_initial_table($players, 1);
+			    $this->_create_pairs($players);
 			}
 		}
 		
-		private function _create_initial_table($players, $stage = 0) {
+		private function _create_initial_table($players) {
 		   $pids = array();
 		   for ($i = 0; $i < count($players); $i ++) {
 			    for ($j = $i + 1; $j < count($players); $j ++) {
@@ -222,16 +222,26 @@
 					$table->set_tournament_id($this->get_id());
 					$table->set_first_participant($players[$i]->get_player_id());
 					$table->set_second_participant($players[$j]->get_player_id());
-					if ($stage) {
-					    if (!in_array($players[$i]->get_player_id(), $pids) && !in_array($players[$j]->get_player_id(), $pids)) {
-					        $table->set_stage($stage);
-							$table->set_current(1);
-							$pids[] = $players[$i]->get_player_id();
-							$pids[] = $players[$j]->get_player_id();
-						}
-				    }
 					$table->save();
 				}
+			}
+		}
+		
+		private function _create_pairs($players) {
+		   $pids = array();
+		   for ($i = 0; $i < count($players); $i ++) {
+			    $table = $this->get_entity($this->get_config(), 'module_tournament_table');
+				$table->set_tournament_id($this->get_id());
+				$table->set_first_participant($players[$i]->get_player_id());
+				if (isset($players[$i+1])) {
+					$table->set_second_participant($players[$i + 1]->get_player_id());
+			    }
+				else {
+				    $table->set_second_participant(0);
+				}
+				$table->set_current(1);
+				$table->set_stage(1);
+				$table->save();
 			}
 		}
 		

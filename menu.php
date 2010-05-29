@@ -1,6 +1,5 @@
 <?php 
 // All pages that include the menu should have started the session is they want to use logged in information
-
 if ($maintenanceMode <> true) {
 
 /*

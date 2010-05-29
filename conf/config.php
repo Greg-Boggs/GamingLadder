@@ -6,7 +6,6 @@
 	* @author Khramkov Ivan.
 	* 
 	*/
-	include_once(dirname(__FILE__).'/../include/genericfunctions.inc.php');
     class Config {
 	    /*
 		* Current config source
@@ -36,4 +35,18 @@
 			}
 		}
 	}
+	
+	//Function returns array(operation, value of param) in get_smth (set_smth) methods: exmp: get_method(get_one_param) returns array('get', 'one_param')...
+    function get_method($method_str) {
+        $result = explode('_', $method_str);
+	    if (count($result) > 2) {
+	        $tmp = $result;
+		    array_shift($result);
+		    $result = implode('_', $result);
+		    $tmp[1] = $result;
+		    $result = $tmp;
+	    }
+	    return $result;
+	}
+	
 ?>

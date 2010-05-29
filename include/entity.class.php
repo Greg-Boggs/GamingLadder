@@ -5,7 +5,6 @@
 	* @author Khramkov Ivan.
 	* 
 	*/
-	include_once('genericfunctions.inc.php');
     require_once(dirname(__FILE__).'/db.class.php');
     class Entity {
 		/*
@@ -241,5 +240,5 @@
 		    }
 			return $result;
 		}
-	}
+}
 ?>
