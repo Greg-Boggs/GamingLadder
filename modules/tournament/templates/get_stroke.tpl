@@ -4,11 +4,6 @@
 		<tr>
 		    {if $tournament->get_type()}
 			    {assign var="td_count" value=$table->get_knock_out_stage_count()}
-			    {section name="td" start=0 loop=$td_count}
-				    <th>
-					    Stage&nbsp;{$smarty.section.td.index+1}
-					</th>
-				{/section}
 		    {else}
 			    {assign var="participants" value=$table->calculate_places()}
 			    <th style = "width: 3%;">
@@ -88,44 +83,81 @@
 				</tr>
 		    {/section}
 		{else}
-		    {section name="td" start=0 loop=$td_count}
+		    <tr>
 		        <td {if $smarty.section.td.index==0}style = "border-left: 1px solid #000000;"{/if}>
-				    {assign var="stage_pairs" value=$table->get_situation($smarty.section.td.index+1)}
-				    {if $smarty.section.td.index!=$td_count}
-					    <table>
-					        {foreach from=$stage_pairs item="row"}
-							    {assign var="p1" value=$table->get_participant_by_id($row->get_first_participant())}
-								{assign var="p2" value=$table->get_participant_by_id($row->get_second_participant())}
-						        <tr>
-								    <td>    
-							            {$p1->get_name()}
-								    </td>
-									<td>
-								        <img src = "images/competitors.png" alt = "v/s" />
-									</td>
-									<td>
-								        {$p2->get_name()}
-									</td>
-									<td style = "text-align: center;">
-								        <img src = "images/forward.png" alt = "=>" />
-									</td>
-									<td>
-									    {if $row->get_game_dt()!='0000-00-00 00:00:00'}
-									        {if $row->get_first_result()}
-										        {$p1->get_name()}
-										    {else}
-										        {$p2->get_name()}
-										    {/if}
-									    {else}
-									        <strong>?</strong>
-									    {/if}
-									<td>
-							    </tr>
-						    {/foreach}
-						</table>
-					{/if}
-				</td>
-				{/section}
+			        <table cellpadding = "0" cellspacing = "0">
+				        <tr>
+					        {section name="td" start=0 loop=$td_count}
+						        <td class = "stage">
+				                    {assign var="stage_pairs" value=$table->get_situation($smarty.section.td.index+1)}
+									{assign var="lindex" value=$smarty.section.td.index+1}
+				                    <div class = "stroke_col">
+									    {if $winner && $lindex != $td_count || !$winner}
+										    <strong>Stage&nbsp;{$smarty.section.td.index+1}</strong>
+										{/if}
+				                        {foreach name="pairs" from=$stage_pairs[0] item="row"}
+							                {assign var="tindex" value=$smarty.foreach.pairs.index+1}
+					                        {assign var="p1" value=$table->get_participant_by_id($row->get_first_participant())}
+						                    {assign var="p2" value=$table->get_participant_by_id($row->get_second_participant())}
+											{if !$maxh}
+											    {assign var="maxh" value=$stage_pairs[1]*45}
+											{/if}
+							                {if $stage_pairs[1]}
+											    {assign var="h" value=$maxh/$stage_pairs[1]}
+											{else}
+											    {assign var="h" value=$maxh}
+											{/if}
+						                    {if $p2}
+							                    <div class = "pair" style = "height: {$h+10}px;">
+						                            <div class = "participant_info" style = "height: {$h}px;">
+													    <div class = "info">
+						                                    <span><a href = "profile.php?name={$p1->get_name()}">{$p1->get_name()}</a></span>
+														    <img src = "images/competitors.png" alt = "v/s" />
+														    <span><a href = "profile.php?name={$p2->get_name()}">{$p2->get_name()}</a></span>
+														</div>
+						                            </div>
+									                <div class = "line">
+									                    <div class = "score">
+										                    {$row->get_first_result()}:{$row->get_second_result()}
+										                </div>
+									                </div>
+								                </div>
+												{assign var="free" value=0}
+						                   {else}
+										       {assign var="free" value=$p1->get_name()}
+						                   {/if}
+					                   {/foreach}
+									   {if !$winner || $lindex != $td_count}
+									       <div class = "free">
+						                       <span>{if $free}<a href = "profile.php?name={$free}">{$free}</a> is free{else}&nbsp;{/if}</span>
+									       </div>
+									   {else}
+									       <div class = "participant_info" style = "height: {$h}px;">
+										       <div class = "info">
+						                           <span><strong><a href = "profile.php?name={$p1->get_name()}">{$p1->get_name()}</a></strong></span> is winner!
+						                       </div>
+										  </div>
+										  <div class = "free">
+						                       <span>&nbsp;</span>
+									       </div>
+									   {/if}
+				                   </div>
+				               </td>
+			               {/section}
+		               </tr>
+			       </table>
+		       </td>
+		   </tr>
+		   <script type = "text/javascript">
+		       {literal}
+			       $('.line').each(function(index, elem){
+			           $(elem).css({top: -$(elem).prev().height()/2 - $(elem).height() - 5});
+			       });
+				   $('.participant_info .info, .stroke_col').each(function(index, elem){
+			           $(elem).css({top: $(elem).parent().height()/2 - $(elem).height()/2});
+			       });
+			   {/literal}
+		   </script>
 		{/if}
 	</table>
 	{if $winner && $winner->get_player_id() > 0}

@@ -229,7 +229,7 @@
 		
 		private function _create_pairs($players) {
 		   $pids = array();
-		   for ($i = 0; $i < count($players); $i ++) {
+		   for ($i = 0; $i < count($players); $i +=2) {
 			    $table = $this->get_entity($this->get_config(), 'module_tournament_table');
 				$table->set_tournament_id($this->get_id());
 				$table->set_first_participant($players[$i]->get_player_id());
@@ -239,8 +239,8 @@
 				else {
 				    $table->set_second_participant(0);
 				}
-				$table->set_current(1);
 				$table->set_stage(1);
+				$table->set_current(1);
 				$table->save();
 			}
 		}

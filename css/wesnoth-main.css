@@ -1486,7 +1486,10 @@ div.gallerytext {
 
 .list {
     width: 100%;
-	overflow: auto;
+}
+
+.list_content {
+    overflow: auto;
 }
 
 .list_content * {
@@ -1507,16 +1510,48 @@ div.gallerytext {
     text-decoration: overline;
 }
 
+.stroke .pair, .stroke td.stage {
+    width: 140px;
+}
+
+.stroke .pair .line {
+    width: 40px;
+	border-bottom: 1px solid #000000;
+	position: relative;
+	float: right;
+	text-align: center;
+}
+
+.stroke .participant_info {
+    width: 100px;
+	text-align: center;
+	border: dotted 1px #100000;
+	margin-bottom: 5px;
+}
+
+.stroke .participant_info, .stroke .pair {
+    height: 40px;
+}
+
+.stroke .stroke_col, .stroke .participant_info div{
+    position: relative;
+}
+
 .stroke .score {
     font-weight: bold;
 	font-size: 12px;
 }
 
-
 .stroke td{
     text-align: center;
 	border-top: 1px solid #000000;
 	border-right: 1px solid #000000;
+}
+
+.stroke td.stage{
+    text-align: left;
+	border: 0;
+	padding: 0;
 }
 
 .stroke td table, .stroke td table td{

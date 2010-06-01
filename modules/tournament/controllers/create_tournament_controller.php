@@ -73,8 +73,12 @@
 						          'games_to_play', 
 							      FormValidator::VAR_CALL_BACK, 
 							      'Number of required games must be an integer number greater than zero!', 
-							      array('result' => (intval($this->get_request('games_to_play')) && $this->get_request('games_to_play') > 0))
-						      )->
+							      array('result' => (intval($this->get_request('games_to_play')) && $this->get_request('games_to_play') > 0)))->
+						      add_checking(
+						          'games_to_play', 
+							      FormValidator::VAR_CALL_BACK, 
+							      'Number of required games must be odd in knock out tournament!', 
+							      array('result' => (intval($this->get_request('games_to_play')) % 2 != 0 && $this->get_request('type') - 1)))->
 						      add_checking(
 						          'date_signup_end', 
 							      FormValidator::VAR_CALL_BACK, 

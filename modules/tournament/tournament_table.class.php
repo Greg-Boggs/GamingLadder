@@ -72,23 +72,8 @@
 		
 		public function get_participant_by_id($pid) {
 		    //TODO: different types of participants...
-		    return $this->get_module('user', array('player_id', $pid));
-		}
-		
-		public function get_ordered_participants() {
-		    $pids = array();
-			$participants = array();
-		    foreach($this->rows as $key => $row) {
-			    if (!in_array($row->get_first_participant(), $pids)) {
-				    $participants[] = $this->get_participant_by_id($row->get_first_participant());
-					$pids[] = $row->get_first_participant();
-				}
-				if (!in_array($row->get_second_participant(), $pids)) {
-				    $participants[] = $this->get_participant_by_id($row->get_second_participant());
-					$pids[] = $row->get_second_participant();
-				}
-			}
-			return $participants;
+			$participant = $this->get_module('user', array('player_id', $pid));
+		    return ($participant->get_player_id())? $participant : NULL;
 		}
 		
 		public function get_the_row($first_participant, $second_participant) {
@@ -105,14 +90,14 @@
 		
 		public function get_situation($stage = NULL) {
 		    if ($stage) {
-		        $pids = array();
-			    $pairs = array();
 		        $rows = $this->get_entities(
 			        $this->get_config(), 
 				    'module_tournament_table', 
-				    array('stage', $stage, 'current', 1, 'tournament_id', $this->get_tournament_id())
+				    array('stage', $stage, 'tournament_id', $this->get_tournament_id()),
+					array('second_participant', 'DESC')
 			    );
-				return $rows;
+				$count = count($rows);
+				return array($rows, (($rows[$count - 1]->get_second_participant())? $count : $count - 1));
 			}
 		}
 		
@@ -122,11 +107,7 @@
 			    $this->get_config()->get_db_prefix().'_module_tournament_table',
 				'stage',
 				'max',
-				new DB_Condition_List(array(
-				    new DB_Condition('tournament_id', $this->get_tournament_id()),
-					'AND',
-					new DB_Condition('current', 1)
-				))
+				new DB_Condition('tournament_id', $this->get_tournament_id())
 			);
 			return $this->stage;
 		}
@@ -176,15 +157,13 @@
 					'tournament_result', 
 					array('tournament_id', $tournament->get_id())
 				);
-				if (count($rows) > 1) {
+				if (count($rows) > 1 || $rows[0]->get_second_participant()) {
 				    $result->set_winner_id(-1);
 					$result->save();
 					$winner = $this->get_winner();
 				}
 				else {
-				    $result->set_winner_id(
-				        (($rows[0]->get_first_result())? $rows[0]->get_first_participant() : $rows[0]->get_second_participant())
-				    );
+				    $result->set_winner_id($rows[0]->get_first_participant());
 					$result->save();
 					$winner = $this->get_participant_by_id($result->get_winner_id());
 				}

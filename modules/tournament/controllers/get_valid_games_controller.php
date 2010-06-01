@@ -93,7 +93,7 @@
 			$condition = new DB_Condition_List(array(
 			    new DB_Condition('tournament_id', $this->tournament->get_id()),
 				'AND',
-				new DB_Condition('played_games', 0),
+				new DB_Condition('played_games', $this->tournament->get_games_to_play(), new DB_Operator('<')),
 				'AND',
 				new DB_Condition('current', 1),
 				'AND',
