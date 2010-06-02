@@ -107,8 +107,11 @@
 			    $this->get_config()->get_db_prefix().'_module_tournament_table',
 				'stage',
 				'max',
-				new DB_Condition('tournament_id', $this->get_tournament_id())
-			);
+				new DB_Condition_List(array(
+				    new DB_Condition('tournament_id', $this->get_tournament_id()),
+					'AND',
+					new DB_Condition('current', 1)
+			)));
 			return $this->stage;
 		}
 		

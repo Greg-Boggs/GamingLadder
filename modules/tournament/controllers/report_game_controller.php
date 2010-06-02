@@ -168,7 +168,7 @@
 			        if ($user->get_player_id() == $rows[$i]->get_first_participant() ||
 				        $user->get_player_id() == $rows[$i]->get_second_participant()) {
 					    //Look for the next pair
-					    if ($i % 2 == 0) {
+					    if (($i + 1) % 2 == 0) {
 				            $the_row = (isset($rows[$i - 1]))? $rows[$i - 1] : NULL; 
 					    }
 					    else {
@@ -199,7 +199,7 @@
 					        ))
 					    ))
 					);
-					if (!$next_row) {
+					if (!$next_row->get_id()) {
 					    $this->_new_free_pair($row->get_tournament_id(), $new_stage, $user->get_player_id());
 					}
 					else {

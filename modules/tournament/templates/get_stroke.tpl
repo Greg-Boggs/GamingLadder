@@ -92,55 +92,57 @@
 				                    {assign var="stage_pairs" value=$table->get_situation($smarty.section.td.index+1)}
 									{assign var="lindex" value=$smarty.section.td.index+1}
 				                    <div class = "stroke_col">
-									    {if $winner && $lindex != $td_count || !$winner}
+									    {if !$winner || $lindex != $td_count}
 										    <strong>Stage&nbsp;{$smarty.section.td.index+1}</strong>
 										{/if}
-				                        {foreach name="pairs" from=$stage_pairs[0] item="row"}
-							                {assign var="tindex" value=$smarty.foreach.pairs.index+1}
-					                        {assign var="p1" value=$table->get_participant_by_id($row->get_first_participant())}
-						                    {assign var="p2" value=$table->get_participant_by_id($row->get_second_participant())}
-											{if !$maxh}
-											    {assign var="maxh" value=$stage_pairs[1]*45}
-											{/if}
-							                {if $stage_pairs[1]}
-											    {assign var="h" value=$maxh/$stage_pairs[1]}
-											{else}
-											    {assign var="h" value=$maxh}
-											{/if}
-						                    {if $p2}
-							                    <div class = "pair" style = "height: {$h+10}px;">
-						                            <div class = "participant_info" style = "height: {$h}px;">
-													    <div class = "info">
-						                                    <span><a href = "profile.php?name={$p1->get_name()}">{$p1->get_name()}</a></span>
-														    <img src = "images/competitors.png" alt = "v/s" />
-														    <span><a href = "profile.php?name={$p2->get_name()}">{$p2->get_name()}</a></span>
-														</div>
-						                            </div>
-									                <div class = "line">
-									                    <div class = "score">
-										                    {$row->get_first_result()}:{$row->get_second_result()}
-										                </div>
-									                </div>
-								                </div>
-												{assign var="free" value=0}
-						                   {else}
-										       {assign var="free" value=$p1->get_name()}
-						                   {/if}
-					                   {/foreach}
-									   {if !$winner || $lindex != $td_count}
+				                            {foreach name="pairs" from=$stage_pairs[0] item="row"}
+							                    {assign var="tindex" value=$smarty.foreach.pairs.index+1}
+					                            {assign var="p1" value=$table->get_participant_by_id($row->get_first_participant())}
+						                        {assign var="p2" value=$table->get_participant_by_id($row->get_second_participant())}
+											    {if !$maxh}
+											        {assign var="maxh" value=$stage_pairs[1]*45}
+											    {/if}
+							                    {if $stage_pairs[1]}
+											        {assign var="h" value=$maxh/$stage_pairs[1]}
+											    {else}
+											        {assign var="h" value=$maxh}
+											    {/if}
+												{if $lindex > 1 }
+												    {assign var = "t" value = "5"}
+												{else}
+												    {assign var = "t" value = "0"}
+												{/if}
+						                        {if $p2}
+							                        <div class = "pair" style = "height: {$h+$t+5}px;">
+						                                <div class = "participant_info" style = "height: {$h+$t}px;">
+													        <div class = "info">
+						                                        <span><a href = "profile.php?name={$p1->get_name()}">{$p1->get_name()}</a></span>
+														        <img src = "images/competitors.png" alt = "v/s" />
+														        <span><a href = "profile.php?name={$p2->get_name()}">{$p2->get_name()}</a></span>
+														    </div>
+						                                </div>
+									                    <div class = "line">
+									                        <div class = "score">
+										                        {$row->get_first_result()}:{$row->get_second_result()}
+										                    </div>
+									                    </div>
+								                    </div>
+												    {assign var="free" value=0}
+						                       {else}
+											       {if !$winner || $lindex != $td_count}
+										               {assign var="free" value=$p1->get_name()}
+												   {else}
+												       <div class = "participant_info" style = "height: {$h+$t}px;">
+										                   <div class = "info">
+						                                       <span><strong><a href = "profile.php?name={$p1->get_name()}">{$p1->get_name()}</a></strong></span> is winner!
+						                                   </div>
+										              </div>
+											       {/if}
+						                       {/if}
+					                       {/foreach}
 									       <div class = "free">
 						                       <span>{if $free}<a href = "profile.php?name={$free}">{$free}</a> is free{else}&nbsp;{/if}</span>
 									       </div>
-									   {else}
-									       <div class = "participant_info" style = "height: {$h}px;">
-										       <div class = "info">
-						                           <span><strong><a href = "profile.php?name={$p1->get_name()}">{$p1->get_name()}</a></strong></span> is winner!
-						                       </div>
-										  </div>
-										  <div class = "free">
-						                       <span>&nbsp;</span>
-									       </div>
-									   {/if}
 				                   </div>
 				               </td>
 			               {/section}
