@@ -158,7 +158,7 @@
 				$result = $this->get_entity(
 				    $this->get_config(), 
 					'tournament_result', 
-					array('tournament_id', $tournament->get_id())
+					array('tournament_id', $this->get_tournament_id())
 				);
 				if (count($rows) > 1 || $rows[0]->get_second_participant()) {
 				    $result->set_winner_id(-1);
@@ -205,7 +205,7 @@
 				$result = $this->get_entity(
 				    $this->get_config(), 
 					'tournament_result', 
-					array('tournament_id', $tournament->get_id())
+					array('tournament_id', $this->get_tournament_id())
 				);
 				$result->set_winner_id($max_id);
 				$result->save();
@@ -213,6 +213,7 @@
 			}
 			$tournament->set_play_ends(time());
 			$tournament->save();
+			$tournament->send_notification('Tournament is finished!', 'tournament_notification_finished');
 			return $winner;
 		}
 		

@@ -12,6 +12,7 @@ Menu for teamladder
 	  <li><a href="team_create.php">CreateTeam</a></li>
 	  <?php } ?>
 	  <li><a href="ladder.php">Ladder</a></li>
+	  <li><a href="tournament.php">Tournaments</a></li>
 	  <li><a href="team_report.php">Report</a></li>
 	  <li><a href="team_profile.php">Profile</a></li>
     </ul>
@@ -53,6 +54,7 @@ Menu for normal ladder
 	<li><a href="players.php">Players</a></li>
 
 	<li><a href="gamehistory.php">Game History</a></li>
+	<li><a href="tournament.php">Tournaments</a></li>
 	<?php if (isset($_SESSION['username'])) { ?>
 	<li><a href="ladder.php?personalladder=<?php echo urlencode($_SESSION['username']) ?>">My Ladder</a></li>
 	<?php } ?>

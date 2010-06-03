@@ -49,7 +49,7 @@
 				$tournament->set_play_starts(time() + 33);
 				$tournament->save();
 				$tournament->build_table();
-				$tournament->send_notification('Tournament notification!', 'TODO: template...');
+				$tournament->send_notification('Tournament is started!', 'tournament_notification_started');
 			}
 			echo "{'success': 1}";
 			exit;

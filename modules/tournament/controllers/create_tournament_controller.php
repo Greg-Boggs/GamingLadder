@@ -75,11 +75,6 @@
 							      'Number of required games must be an integer number greater than zero!', 
 							      array('result' => (intval($this->get_request('games_to_play')) && $this->get_request('games_to_play') > 0)))->
 						      add_checking(
-						          'games_to_play', 
-							      FormValidator::VAR_CALL_BACK, 
-							      'Number of required games must be odd in knock out tournament!', 
-							      array('result' => (intval($this->get_request('games_to_play')) % 2 != 0 && $this->get_request('type') - 1)))->
-						      add_checking(
 						          'date_signup_end', 
 							      FormValidator::VAR_CALL_BACK, 
 							      'Malformed signup dates: write its number representation look like: '.
@@ -133,7 +128,15 @@
 							      'Play dates must be later than signup dates!', 
 							      array('result' => (strtotime($this->get_request('date_signup_end')) <= strtotime($this->get_request('date_play_start'))))
 						      );
-						}
+					if ($this->get_request('type') - 1) {
+					    $checker->add_checking(
+						    'games_to_play', 
+							FormValidator::VAR_CALL_BACK, 
+							'Number of required games must be odd in knock out tournament!', 
+							array('result' => (intval($this->get_request('games_to_play')) % 2 != 0))
+						);
+					}
+				}
 				$checker->add_checking('information', FormValidator::VAR_REQUIRED, 'Information is required!');
 				if (!$tid) {
 				    $tournament->set_type($this->get_request('type') - 1);

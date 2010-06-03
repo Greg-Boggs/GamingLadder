@@ -110,7 +110,17 @@
 			</tr>
         {/foreach}
 	</table>
+    <div style = "width: 100%; text-align: right;">
+	    <a href = "tournament.php">All tournaments</a>
+	    &nbsp;|&nbsp;
+	    <a href = "tournament.php?state={$states[0]}">New tournaments</a>
+	    &nbsp;|&nbsp;
+	    <a href = "tournament.php?state={$states[1]}">Playing tournaments</a>
+	    &nbsp;|&nbsp;
+	    <a href = "tournament.php?state={$states[2]}">Finished tournaments</a>
+	</div>
 	{if $user && $user->get_is_admin()}
+	    <br />
 	    <a href = "tournament.php?action=create_tournament" title = "Create a tournament"><img src = "images/add.png" alt = "Create a tournament" />&nbsp;Create a tournament</a>
 	{/if}
 </div>

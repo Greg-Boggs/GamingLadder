@@ -92,6 +92,19 @@
 			}
 		}
 		/*
+		*@function template
+		*@param string $template_name
+		*@param array $params
+		*@return string
+		*/
+		public function template($template_name, $params) {
+		    $template = $this->_get_template();
+			foreach ($params as $param => $value) {
+			    $template->assign($param, $value);
+			}
+			return $template->fetch($template_name.'.tpl');
+		}
+		/*
 		*@function redirect
 		*@param string $url
 		*@return string

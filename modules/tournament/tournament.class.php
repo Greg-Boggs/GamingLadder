@@ -178,13 +178,16 @@
 		/*
 		*@function send_notification
 		*@param string $title
-		*@param string $text
+		*@param string $template
 		*/
-		public function send_notification($title, $text) {
+		public function send_notification($title, $template) {
 			$players = $this->get_players();
 			foreach ($players as $key => $player) {
 			    $message = $this->get_module('message');
-				$message->set_content($text);
+				$message->set_content($this->html->template(
+				    $template, 
+					array('tournament' => $this, 'user' => $player, 'table' => $this->get_table()))
+				);
 				$message->send(
 				    0,
 					$player->get_player_id(),
