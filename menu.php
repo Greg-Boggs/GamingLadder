@@ -64,7 +64,35 @@ Menu for normal ladder
           }
     ?>
 	<li><a href="faq.php">FAQ</a></li>
-	</ul>
+<!-- Message Envelope -->
+	<!--<div id = "envelope">-->
+	  <?
+	      //Envelope for message system
+        if (isset($_SESSION['username'])) {
+            include_once('conf/config.php');
+            include_once('include/entity.class.php');
+	        $config = new Config();
+	        $user = new Entity($config, 'players', array(name, $_SESSION['username']));
+	        $dbo = new DB($config);
+	        $cond = new DB_Condition_List(array(
+                new DB_Condition('reciever_id', $user->get_player_id()),
+		        'AND',
+		        new DB_Condition('deleted_by_reciever', 0)
+	        ));
+	        $condition = new DB_Condition_List(array(
+	            $cond,
+		        'AND',
+		        new DB_Condition('read_date', 0)
+	        )); 
+	        $unread_messages = $dbo->select_function($config->get_db_prefix().'_module_topic', 'id', 'count', $condition);
+	        $all_messages = $dbo->select_function($config->get_db_prefix().'_module_topic', 'id', 'count', $cond);
+	        unset($dbo);
+	        unset($user);
+	        echo '<span>&nbsp;&nbsp&nbsp;<a href = "message.php" title = "Your message box"><img src = "images/message.png" alt = "Private Messages" title = "Private Messages" /></a>:&nbsp;<strong><a href = "message.php?unread=1" title = "Unread messages">'.$unread_messages.'</a></strong>/<a href = "message.php" title = "All messages">'.$all_messages.'</a>&nbsp;&nbsp&nbsp;</span>';
+	}
+	  ?>
+  <!--</div>-->
+  </ul>
 
 <?php 
 //next lines create an additional menu with the only purpose of accessing different ladders
