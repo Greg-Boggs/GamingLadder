@@ -6,7 +6,11 @@ require_once 'security.inc.php';
 require('./../top.php');
 
 if ($_POST[submit]) {
-    $sql = "INSERT INTO $newstable (date, title, news) VALUES ('$_POST[date]', '$_POST[titlenews]', '$_POST[news]')";
+    $date = mysql_real_escape_string($_POST[date]);
+    $title =  mysql_real_escape_string($_POST[titlenews]);
+    $news =  mysql_real_escape_string($_POST[news]);
+    
+    $sql = "INSERT INTO $newstable (date, title, news) VALUES ('$date', '$title', '$news')";
 	$result = mysql_query($sql);
 	echo "<p class='header'>News posted.</p>";
 } else {
