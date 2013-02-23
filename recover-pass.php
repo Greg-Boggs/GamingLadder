@@ -36,7 +36,7 @@ if (isset($_POST['submit']) && isset($_POST['mail']) {
 			$subject = "Ladder of Wesnoth password reset link";
 			$body = "This is your Wesnoth Ladder password reset mail. \r\n";
 			$body .= "Click the link below to activate your account: \r\n";
-			$body .= $_SERVER['HTTP_HOST'] . "recoverpass.php?passkey=$confirm_code \r\n";
+			$body .= $_SERVER['HTTP_HOST'] . "reset-pass.php?passkey=$confirm_code \r\n";
 			$body .= "If it doesnt work you can try to copy & pass it into your browser instead.\r\n";
 			$body .= "\r\n";
 						
