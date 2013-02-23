@@ -5,7 +5,7 @@ require('conf/variables.php');
 require('top.php');
 include 'include/avatars.inc.php';
 ?>
-<p class="header">Recover Pssword</p>
+<p class="header">Recover Password</p>
 <p class="text">
 <?php
 if (isset($_POST['submit']) && isset($_POST['mail']) {
@@ -16,13 +16,21 @@ if (isset($_POST['submit']) && isset($_POST['mail']) {
 	} else {
 		$confirm_code = md5(uniqid(rand()));
 
-		$sql = "SELECT * FROM $playerstable WHERE mail = '$mail'";
+		$sql = "SELECT player_id FROM $playerstable WHERE mail = '$mail'";
 		$result = mysql_query($sql,$db);
 			
 		echo "A password reset link was sent to your email.";
 							
 		// if sucessfully found email in database, send confirmation link to email
 		if($result) {
+		
+			$row = mysql_fetch_array($result);
+			$player_id = $row['player_id'];
+			
+			// store the confirmation key to later be used for login.
+			$sql = "INSERT INTO $resettable (passcode, player_id) VALUES ('$passcode', player_id)";
+			$result = mysql_query($sql,$db);
+			
 			$to = $mail;
 
 			$subject = "Ladder of Wesnoth password reset link";
@@ -47,7 +55,7 @@ if (isset($_POST['submit']) && isset($_POST['mail']) {
 <tr>
 <td>&nbsp;<input type="Text" name="mail" value="" class="text"></td>
 </tr>
-<p class="text"><input type="Submit" name="submit" value="Recover" class="text"><br><br>
+<p class="text"><input type="Submit" name="submit" value="Recover" class="text"></p>
 </form>
 </p>
 <?
