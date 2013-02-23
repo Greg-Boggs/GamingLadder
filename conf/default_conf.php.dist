@@ -24,6 +24,7 @@ define("CRONCHECK_PATH","share/cronchecks/"); // dir for where the cron check fi
   $standingscachetable = $db_prefix."_standings_cache"; // important cache, improves and makes up for mysql-sickness.
   $cronlogtable = $db_prefix."_cron_log"; // name of table that stores the info about when a fake cron job was (supposedly) ran.
   $statstable = $db_prefix."_stats"; //table that has stats logged about how many players there have been each date etc.
+  $resettable = $db_prefix."_pass_reset"; //table that has confirm keys for resets
   $mailhost = "my.smtp.server";
 
 //config security
