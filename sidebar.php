@@ -127,6 +127,28 @@ if ((mysql_num_rows($result)==0) && isset($_SESSION['username'])) {
 	
 	
 	
+// Show player of the month
+$sqlConditions = "g.reported_on >= '".date('Y-m-01 00:00:00')."' AND g.reported_on <= '".date('Y-m-32 00:00:00')."'";
+$sql = "select gg.player, sum(gg.points) as total, p.Avatar, s.rating
+from (
+select g.loser as player, g.loser_elo as elo, g.loser_points as points, g.reported_on from $gamestable g where $sqlConditions
+union
+select g.winner as player, g.winner_elo as elo, g.winner_points as points, g.reported_on from $gamestable g where $sqlConditions
+) as gg
+join $playerstable as p ON p.name = gg.player
+join $standingscachetable as s ON p.name = s.name
+group by gg.player
+order by total desc
+limit 0,1";
+$result = mysql_query($sql,$db);
+	
+echo "<br><b>Player of the month</b><br>";
+while ($bajs = mysql_fetch_array($result)) { 
+	echo "<img border='0' src='avatars/$bajs[2].gif' alt='avatar' style='margin: 8px 5px'/><a href=\"profile.php?name=$bajs[0]\">$bajs[0]</a> ($bajs[3])";
+}
+
+
+	
 // Show the top x players
 $endtime = microtime();
 $endarray = explode(" ", $endtime);
