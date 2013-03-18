@@ -1,3 +1,9 @@
+<?
+session_start();
+require('conf/variables.php');
+require('top.php');
+?>
+
 Updated: 03/17/13 - <a href="faq-old.php">Old FAQ</a></p>
 
 <p><strong>Table of Content</strong></p>
@@ -892,5 +898,7 @@ Most things in the ladder are very customizable and should have been or
 actually are properly set by your ladder administration. They alone can alter
 most of the aspects of the ladder
 
-
+<?php
+require('bottom.php');
+?>
 
