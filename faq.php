@@ -14,10 +14,7 @@ Updated: 03/17/13 - <a href="faq-old.php">Old FAQ</a></p>
 </ol>
 
 <pre><strong>Notice:</strong> The ladder is <em>not</em> in any way associated with
-the official Wesnoth forum, it's moderators and/or<br /> the developers of
-Wesnoth. Please don't use the forum to start new ladder threads and don't
-ever contact <br /> the Wesnoth staff or server admins about ladder related
-issues - they won't & can't help you.</pre>
+the official Wesnoth forum, it's moderators and/or<br /> the developers of Wesnoth. Please don't use the forum to start new ladder threads and don't ever contact <br /> the Wesnoth staff or server admins about ladder related issues - they won't & can't help you.</pre>
 
 <a name="mrules"></a><h2>Rules</h2>
 <h3>Ladder Rating & Ranking</h3>
