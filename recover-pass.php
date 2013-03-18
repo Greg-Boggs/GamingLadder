@@ -5,30 +5,33 @@ require('conf/variables.php');
 require('top.php');
 include 'include/avatars.inc.php';
 ?>
+
 <p class="header">Recover Password</p>
-<p class="text">
+<p class="text"> Type in your email and give it a second... If you don't know your email, then we can't help you.</p><p>
+
 <?php
-if (isset($_POST['submit']) && isset($_POST['mail']) {
+if (isset($_POST['submit']) && isset($_POST['mail'])) {
 	$mail = trim(strip_tags($_POST['mail']));
 
-	if ($mail == "") { 
+	if ($mail == "") {
 		echo "<p>You must enter an email to recover your password</p>";
 	} else {
 		$confirm_code = md5(uniqid(rand()));
 
 		$sql = "SELECT player_id FROM $playerstable WHERE mail = '$mail'";
 		$result = mysql_query($sql,$db);
-			
-		echo "A password reset link was sent to your email.";
-							
+
+		echo "A password reset link was sent to your email. Check your spam folder";
+		require('bottom.php');
+
 		// if sucessfully found email in database, send confirmation link to email
 		if($result) {
-		
+
 			$row = mysql_fetch_array($result);
 			$player_id = $row['player_id'];
 			
 			// store the confirmation key to later be used for login.
-			$sql = "INSERT INTO $resettable (passcode, player_id) VALUES ('$passcode', player_id)";
+			$sql = "INSERT INTO $resettable (passcode, player_id) VALUES ('$confirm_code', $player_id)";
 			$result = mysql_query($sql,$db);
 			
 			$to = $mail;
@@ -36,10 +39,11 @@ if (isset($_POST['submit']) && isset($_POST['mail']) {
 			$subject = "Ladder of Wesnoth password reset link";
 			$body = "This is your Wesnoth Ladder password reset mail. \r\n";
 			$body .= "Click the link below to activate your account: \r\n";
-			$body .= $_SERVER['HTTP_HOST'] . "reset-pass.php?passkey=$confirm_code \r\n";
+			$body .= '<a href="http://' . $_SERVER['HTTP_HOST'] . "/reset-pass.php?passkey=$confirm_code\">";
+			$body .= 'http://' . $_SERVER['HTTP_HOST'] . "/reset-pass.php?passkey=$confirm_code</a> \r\n";
 			$body .= "If it doesnt work you can try to copy & pass it into your browser instead.\r\n";
 			$body .= "\r\n";
-						
+
 			$body .= "See you in Wesnoth...\n";
 
 			// send email
@@ -49,18 +53,16 @@ if (isset($_POST['submit']) && isset($_POST['mail']) {
 } else {
 ?>
 
-
 <form method="post" action="<?php echo $_SERVER['PHP_SELF']?>">
 <table border="0" cellpadding="0">
 <tr>
-<td>&nbsp;<input type="Text" name="mail" value="" class="text"></td>
-</tr>
-<p class="text"><input type="Submit" name="submit" value="Recover" class="text"></p>
+<td>Email: <input type="Text" name="mail" value="" class="text"></td>
+<td><p class="text"><input type="Submit" name="submit" value="Recover" class="text"></p></td></tr>
 </form>
-</p>
+</table></p>
 <?
-}
 require('bottom.php');
+}
 
 function send_mail($to, $body, $subject, $fromaddress, $fromname)
 {
