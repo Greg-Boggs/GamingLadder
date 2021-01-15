@@ -5,12 +5,20 @@ require('autologin.inc.php');
 require_once 'include/genericfunctions.inc.php';
 
 // If it's an admin that's impersonating a player we need to always display the revokebuttons, thus we make sure they wont "time out" for admins :
+$approved = false;
 if (isset($_SESSION['real-username'])) {
     if ($_SESSION['real-username'] != $_SESSION['username']) {
 		$reportdays = 999999999999;
+        $approved = true;
+    }
+    else {
+        // check if player is approved
+        $real_name = mysql_escape_string($_SESSION['real-username']);
+        $sql = "SELECT * FROM $playerstable WHERE name = '$real_name' and approved='yes'";
+        $result = mysql_query($sql,$db);
+        $approved = !!mysql_num_rows($result);
     }
 }
-
 
 if (NONPUBLIC_REPLAY_COMMENTS == 1) {
 	require('logincheck.inc.php');
@@ -89,7 +97,7 @@ if ($_POST['submit'] == "Restore Game") {
 	$result = mysql_query($sql);
 }
 // If we are contesting a game
-if ($_POST['submit'] == "Contest Game") {
+if ($_POST['submit'] == "Contest Game" && $approved) {
 	$reportedOn = $_POST['reported_on'];
 	$reRankLadder = $reportedOn;
 	$sql = "UPDATE $gamestable SET contested_by_loser = 1 WHERE reported_on = '".mysql_escape_string($reportedOn)."' AND UNIX_TIMESTAMP(reported_on) > ".(time()-60*60*24*$reportdays)." AND loser = '".mysql_escape_string($_SESSION['username'])."'";
@@ -171,17 +179,19 @@ if ($game['winner'] == $_SESSION['username']) {
 	}	
 }
 if ($game['loser'] == $_SESSION['username']) {
-	if ($game['contested_by_loser'] == 1 && time() < $game['unixtime']+60*60*24*$reportdays) {
+
+    if ($game['contested_by_loser'] == 1 && time() < $game['unixtime']+60*60*24*$reportdays) {
 		echo "<form method='post' action='gamedetails.php'>";
 		echo "<input type='hidden' name='reported_on' value='".$game['reported_on']."' />";
 		echo "<input type='submit' name='submit' value='Remove Contest' />";
 		echo "</form>";
-	} else if ($game['contested_by_loser'] == 0 &&  time() < $game['unixtime']+60*60*24*$reportdays) {
+	} else if ($approved && $game['contested_by_loser'] == 0 &&  time() < $game['unixtime']+60*60*24*$reportdays) {
+
 		echo "<form method='post' action='gamedetails.php'>";
 		echo "<input type='hidden' name='reported_on' value='".$game['reported_on']."' />";
 		echo "<input type='submit' name='submit' value='Contest Game' />";
 		echo "</form>";
-	}	
+	}
 }
 
 
