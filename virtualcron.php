@@ -30,10 +30,11 @@
 // Use this e.g. to parse RSS Feeds every 30 minutes, to generate your google sitemap once a week etc.
 // Of course, prefer a real cron job if your provider allows you to use one
 //==============================================================================================
-class virtualcron{
+class virtualcron
+{
 
-var $controlFile="virtualcron.txt"; // the default url of the control file
-var $minDelay="1"; // the default delay period in minutes
+    var $controlFile = "virtualcron.txt"; // the default url of the control file
+    var $minDelay = "1"; // the default delay period in minutes
 
 //==============================================================================================
 // PUBLIC [Constructor]
@@ -42,25 +43,26 @@ var $minDelay="1"; // the default delay period in minutes
 // of this file is used to estimate the time required to be passed, in order to allow an action.
 // If there is no control file the function will try to generate one.
 //==============================================================================================
-function virtualcron($minDelay=false,$controlFile=false){
-	if ($minDelay) $this->minDelay=$minDelay;
-	if ($controlFile) $this->controlFile=$controlFile;
-$this->lastExec=0; // it will contain the UNIXTIME of the last action
-$this->nextExec=0; // it will contain the UNIXTIME of the next action
-$this->secToExec=0; // it will contain the time in seconds until of the next action
-	if (file_exists($this->controlFile)) $this->check=true;
-	else{
-		$handle=fopen($this->controlFile, "w");
-		if (!$handle) $this->check=false;
-		else{
-			if (!fwrite($handle,time())) $this->check=false;
-			else{
-					fclose($handle);
-					$this->check=true;
-			}
-		}	
-	}
-}
+    function virtualcron($minDelay = false, $controlFile = false)
+    {
+        if ($minDelay) $this->minDelay = $minDelay;
+        if ($controlFile) $this->controlFile = $controlFile;
+        $this->lastExec = 0; // it will contain the UNIXTIME of the last action
+        $this->nextExec = 0; // it will contain the UNIXTIME of the next action
+        $this->secToExec = 0; // it will contain the time in seconds until of the next action
+        if (file_exists($this->controlFile)) $this->check = true;
+        else {
+            $handle = fopen($this->controlFile, "w");
+            if (!$handle) $this->check = false;
+            else {
+                if (!fwrite($handle, time())) $this->check = false;
+                else {
+                    fclose($handle);
+                    $this->check = true;
+                }
+            }
+        }
+    }
 //==============================================================================================
 // PUBLIC allowAction() [boolean]
 // checks if the current execution time is within the delay period. Example:
@@ -68,47 +70,45 @@ $this->secToExec=0; // it will contain the time in seconds until of the next act
 // if ($vcron->allowAction()) ...do something...
 // That's all
 //==============================================================================================
-function allowAction(){
-$now=time();
-	if ($this->check) $FT=$this->getFileCreationTime($this->controlFile);
-	if ($FT){
-		$nextExec=$FT+($this->minDelay*60)-$now;
-		if ($nextExec<0){
-			$handle=fopen($this->controlFile, "w");
-			if (!$handle) return false;
-			else{
-				if (!fwrite($handle,$now)) return false;
-				else{
-					fclose($handle);
-					$this->lastExec=$now;
-					$this->nextExec=$now+($this->minDelay*60);
-					$this->secToExec=$this->minDelay*60;
-					return true;
-				}
-			}
-		}
-		else {
-			$this->lastExec=$FT;
-			$this->nextExec=$FT+$nextExec;
-			$this->secToExec=$nextExec;
-			return false;
-		}
-	}
-	else return false;
-}
+    function allowAction()
+    {
+        $now = time();
+        if ($this->check) $FT = $this->getFileCreationTime($this->controlFile);
+        if ($FT) {
+            $nextExec = $FT + ($this->minDelay * 60) - $now;
+            if ($nextExec < 0) {
+                $handle = fopen($this->controlFile, "w");
+                if (!$handle) return false;
+                else {
+                    if (!fwrite($handle, $now)) return false;
+                    else {
+                        fclose($handle);
+                        $this->lastExec = $now;
+                        $this->nextExec = $now + ($this->minDelay * 60);
+                        $this->secToExec = $this->minDelay * 60;
+                        return true;
+                    }
+                }
+            } else {
+                $this->lastExec = $FT;
+                $this->nextExec = $FT + $nextExec;
+                $this->secToExec = $nextExec;
+                return false;
+            }
+        } else return false;
+    }
 //==============================================================================================
 // PRIVATE getFileCreationTime()
 // estimates the generation or last modification time of the control file (UNIXTIME)
 //==============================================================================================
-function getFileCreationTime($filename){
-	if (function_exists("filemtime")){
-		$FT=filemtime($filename);
-	}
-	else{
-		$FT=false;
-	}
-return $FT;
-}
+    function getFileCreationTime($filename)
+    {
+        if (function_exists("filemtime")) {
+            $FT = filemtime($filename);
+        } else {
+            $FT = false;
+        }
+        return $FT;
+    }
 
 }
-?>

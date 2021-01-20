@@ -5,4 +5,3 @@ if (!isset($_SESSION['real-username']) || !isset($_SESSION['admin-login'])) {
     include 'index.php';
     exit;
 }
-?>

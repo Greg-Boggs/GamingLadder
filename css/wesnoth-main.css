@@ -1558,3 +1558,16 @@ div.gallerytext {
     border: none;
 	text-align: left;
 }
+
+td.avatar {
+  /*text-align:center;*/
+}
+td.avatar img.avatar {
+  max-height: 20px;
+}
+div.sidebar img {
+  margin: 8px 5px;
+}
+select.countries {
+  max-width: 50px;
+}
