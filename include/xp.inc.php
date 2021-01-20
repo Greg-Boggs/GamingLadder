@@ -10,53 +10,53 @@
     tracked way better by the Elo value and the rest of the ladder statistics.
 
 
-*/ 
+*/
 
 
-
-function GetLvl($wins,$losses,$XpForWin,$XpForLoss,$XpToLvl1,$LvlFactor){
-global $PlayerLvl, $CountingXp, $PlayerXp;
+function GetLvl($wins, $losses, $XpForWin, $XpForLoss, $XpToLvl1, $LvlFactor)
+{
+    global $PlayerLvl, $CountingXp, $PlayerXp;
 
 // Let's see what lvl the player is by placing his Xp on the level chart.....
 
-$PlayerLvl= 0;
-$CountingXp = $XpToLvl1;
+    $PlayerLvl = 0;
+    $CountingXp = $XpToLvl1;
 
-$XpFromWins = ($wins * $XpForWin);
-$XpFromLosses = ($losses * $XpForLoss);
-$PlayerXp = ($XpFromLosses + $XpFromWins);
-$i = 0;
-
-
-while ($i == 0) {
+    $XpFromWins = ($wins * $XpForWin);
+    $XpFromLosses = ($losses * $XpForLoss);
+    $PlayerXp = ($XpFromLosses + $XpFromWins);
+    $i = 0;
 
 
-	if ($PlayerXp > $CountingXp) {
-	
-		// increase the players level
-		$PlayerLvl++;
-	//DEB	echo "player is level : " . $PlayerLvl . "<br>";
-		
-		// Raise the limit for the next level
-			$CurrentXpLimit = $CountingXp;
-	//DEB		echo "$ countingXp: $CountingXp <br>";
-			$CountingXp = $CountingXp + $XpToLvl1 + ($LvlFactor * $PlayerLvl);
-			
+    while ($i == 0) {
+
+
+        if ($PlayerXp > $CountingXp) {
+
+            // increase the players level
+            $PlayerLvl++;
+            //DEB	echo "player is level : " . $PlayerLvl . "<br>";
+
+            // Raise the limit for the next level
+            $CurrentXpLimit = $CountingXp;
+            //DEB		echo "$ countingXp: $CountingXp <br>";
+            $CountingXp = $CountingXp + $XpToLvl1 + ($LvlFactor * $PlayerLvl);
+
 //DEB		echo "New $ countingXp: $CountingXp <br>";
 //DEB		echo "Players XP: " . $PlayerXp . "<br>";
-			
-		// DEB echo "<br><br>Xp for Lvl ". $PlayerLvl .": ". $CurrentXpLimit . " | Next lvl: ". $CountingXp;		
-	}
-	
-	if ($PlayerXp <= $CountingXp) {
-		// echo "<br> Found players lvl: <b> Player is lvl " . $PlayerLvl ."</b>";
-		// Break xp search Loop
-		$i = 1;
-	//DEB	echo "<b>PlayerXp is less than CountingXP<br></b>";
-		}
-	
-	}
-	
+
+            // DEB echo "<br><br>Xp for Lvl ". $PlayerLvl .": ". $CurrentXpLimit . " | Next lvl: ". $CountingXp;
+        }
+
+        if ($PlayerXp <= $CountingXp) {
+            // echo "<br> Found players lvl: <b> Player is lvl " . $PlayerLvl ."</b>";
+            // Break xp search Loop
+            $i = 1;
+            //DEB	echo "<b>PlayerXp is less than CountingXP<br></b>";
+        }
+
+    }
+
 // echo "Level: ".$PlayerLvl ."(". round($PlayerXp,0) ." - ".round((($PlayerXp/$CountingXp)*100),0)."% of ". $CountingXp. ")";
 
 }

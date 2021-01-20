@@ -12,28 +12,27 @@ require('top.php');
 
 // ==============
 
-$uploaddir = "uploads"; 
+$uploaddir = "uploads";
 
 // Where you want the files to upload to 
 
 //Important: Make sure this folders permissions is 0777!
 
-$allowed_ext = "jpg, gif, png, pdf, bmp"; 
+$allowed_ext = "jpg, gif, png, pdf, bmp";
 
 // These are the allowed extensions of the files that are uploaded
 
-$max_size = "5000000"; 
+$max_size = "5000000";
 
 // 50000 is the same as 50kb
 
-$max_height = "100"; 
+$max_height = "100";
 
 // This is in pixels - Leave this field empty if you don't want to upload images
 
-$max_width = "100"; 
+$max_width = "100";
 
 // This is in pixels - Leave this field empty if you don't want to upload images
-
 
 
 // Check Entension
@@ -44,69 +43,63 @@ $extension = $extension[extension];
 
 $allowed_paths = explode(", ", $allowed_ext);
 
-for($i = 0; $i < count($allowed_paths); $i++) {
+for ($i = 0; $i < count($allowed_paths); $i++) {
 
-if ($allowed_paths[$i] == "$extension") {
+    if ($allowed_paths[$i] == "$extension") {
 
-$ok = "1";
+        $ok = "1";
+
+    }
 
 }
-
-}
-
 
 
 // Check File Size
 
 if ($ok == "1") {
 
-if($_FILES['file']['size'] > $max_size)
+    if ($_FILES['file']['size'] > $max_size) {
 
-{
+        print "File size is too big!";
 
-print "File size is too big!";
+        exit;
 
-exit;
-
-}
+    }
 
 
+    /* Check Height & Width
 
-/* Check Height & Width
+    if ($max_width && $max_height) {
 
-if ($max_width && $max_height) {
+    list($width, $height, $type, $w) = getimagesize($_FILES['file']['tmp_name']);
 
-list($width, $height, $type, $w) = getimagesize($_FILES['file']['tmp_name']);
+    if($width > $max_width || $height > $max_height)
 
-if($width > $max_width || $height > $max_height)
+    {
 
-{
+    print "File height and/or width are too big!";
 
-print "File height and/or width are too big!";
+    exit;
 
-exit;
+    }
 
-}
+    }
 
-}
-
-*/
+    */
 
 // The Upload Part
 
-if(is_uploaded_file($_FILES['file']['tmp_name']))
+    if (is_uploaded_file($_FILES['file']['tmp_name'])) {
 
-{
+        move_uploaded_file($_FILES['file']['tmp_name'], $uploaddir . '/' . $_FILES['file']['name']);
 
-move_uploaded_file($_FILES['file']['tmp_name'],$uploaddir.'/'.$_FILES['file']['name']);
+    }
 
-}
-
-print "Your file has been uploaded successfully! Yay!";
+    print "Your file has been uploaded successfully! Yay!";
 
 } else {
 
-print "Incorrect file extension!";
+    print "Incorrect file extension!";
 
 }
 

@@ -1,4 +1,4 @@
-<?php 
+<?php
 require_once 'genericfunctions.inc.php';
 
 /*
@@ -20,18 +20,22 @@ We will now execute 3 queries where we will a) create a temporary table that is 
 TimerOn();
 
 
-$result = mysql_query("CREATE TEMPORARY TABLE $databasename.temp_played (
+$result = mysqli_query($db, "CREATE TEMPORARY TABLE $databasename.temp_played (
 name VARCHAR( 255 ) NOT NULL ,
 recently_played BIGINT( 11 ) NULL DEFAULT NULL
-) ENGINE = MYISAM ;", $db);
+) ENGINE = MYISAM ;");
 
 // Check result
 // This shows the actual query sent to MySQL, and the error. Useful for debugging.
 if (!$result) {
-    $message  = 'Invalid query: ' . mysql_error() . "\n";
-    $message .= 'Whole query: ' . $query;
+    $message = 'Invalid query: ' . mysqli_error($db) . "\n";
+//    $message .= 'Whole query: ' . $query;
     die($message);
-} else { if (isset($_POST['recache'])){echo "<br>1. Created temp working table.... [ ". TimerOff() . " sec ]"; }}
+} else {
+    if (isset($_POST['recache'])) {
+        echo "<br>1. Created temp working table.... [ " . TimerOff() . " sec ]";
+    }
+}
 
 // 2. Select every player that has played >= x games within y most recent days and also has played => z in total on the ladder. 
 
@@ -39,12 +43,11 @@ $MySQLgamestorank = $gamestorank;
 $MySQLgamestobeactive = GAMES_FOR_ACTIVE;
 
 
-
 TimerOn();
 
-if (isset($AdminIsReRankingTheWholeThing) != 1){
-	// Please notice that the recently_played column either shows 0 if a player has not managed to play x games within y days, or, if he has played x games or more within y days, it will actually contain the number of games. This means that only time a player has a 0 in this column is if he's considered to be incactive due to not having played enough games. If a player has played 3 games within y amount of days, and the ladder requires the player ti have played 4 games in y amount of days, then this column would show 0, and not 3, as one might easily think.
-	$result = mysql_query("insert into temp_played (name, recently_played)
+if (isset($AdminIsReRankingTheWholeThing) != 1) {
+    // Please notice that the recently_played column either shows 0 if a player has not managed to play x games within y days, or, if he has played x games or more within y days, it will actually contain the number of games. This means that only time a player has a 0 in this column is if he's considered to be incactive due to not having played enough games. If a player has played 3 games within y amount of days, and the ladder requires the player ti have played 4 games in y amount of days, then this column would show 0, and not 3, as one might easily think.
+    $result = mysqli_query($db, "insert into temp_played (name, recently_played)
 	(
 
 	SELECT userid, count(*) as cnt 
@@ -71,7 +74,7 @@ if (isset($AdminIsReRankingTheWholeThing) != 1){
 
 // SELECT * FROM `webl_games` WHERE reported_on LIKE '2007-10-04 %%:%%:%%' OR (reported_on >= ('2007-10-04' - interval 10 day) AND reported_on < '2007-10-04') order by reported_on
 
-	$result = mysql_query("insert into temp_played (name, recently_played)
+    $result = mysqli_query($db, "insert into temp_played (name, recently_played)
 	(
 
 	SELECT userid, count(*) as cnt 
@@ -79,70 +82,79 @@ if (isset($AdminIsReRankingTheWholeThing) != 1){
 	(
 	    SELECT winner as userid
 	    from  $gamestable g 
-	   where g.reported_on LIKE '". substr($rprow['reported_on'],0,10) ." %%:%%:%%'
+	   where g.reported_on LIKE '" . substr($rprow['reported_on'], 0, 10) . " %%:%%:%%'
 OR (
-g.reported_on >= ( ' ".substr($rprow['reported_on'],0,10) . "' - INTERVAL $passivedays
+g.reported_on >= ( ' " . substr($rprow['reported_on'], 0, 10) . "' - INTERVAL $passivedays
 DAY )
-AND reported_on < '". substr($rprow['reported_on'],0,10) ."'
+AND reported_on < '" . substr($rprow['reported_on'], 0, 10) . "'
 )
 	    UNION ALL 
 	    SELECT loser as userid
 	    from $gamestable g 
-   where g.reported_on LIKE '". substr($rprow['reported_on'],0,10) ." %%:%%:%%'
+   where g.reported_on LIKE '" . substr($rprow['reported_on'], 0, 10) . " %%:%%:%%'
 OR (
-g.reported_on >= ( '". substr($rprow['reported_on'],0,10) . "' - INTERVAL $passivedays 
+g.reported_on >= ( '" . substr($rprow['reported_on'], 0, 10) . "' - INTERVAL $passivedays 
 DAY )
-AND reported_on < '". substr($rprow['reported_on'],0,10) ."'
+AND reported_on < '" . substr($rprow['reported_on'], 0, 10) . "'
 )
 	) t
 	GROUP BY userid
 	HAVING COUNT(*) >= $MySQLgamestobeactive
 	);");
-	
+
 }
 
 
 if (!$result) {
-    $message  = 'Invalid query: ' . mysql_error() . "\n";
+    $message = 'Invalid query: ' . mysqli_error($db) . "\n";
     $message .= 'Whole query: ' . $query;
     die($message);
-} else { if (isset($_POST['recache'])){echo "<br>2. Calculated amount of recently played games & put them into temp table... [ ". TimerOff() . " sec ]"; }}
-
+} else {
+    if (isset($_POST['recache'])) {
+        echo "<br>2. Calculated amount of recently played games & put them into temp table... [ " . TimerOff() . " sec ]";
+    }
+}
 
 
 // 3. Now we have the results, let's update the cahce table and the inumber of most recent played games by every active player. We do that by copying the results we have in the temp table and putting them into the corresponding player in the cach table.
 
 TimerOn();
-$result = mysql_query("UPDATE temp_played p, $standingscachetable pp
+$result = mysqli_query($db, "UPDATE temp_played p, $standingscachetable pp
 SET pp.recently_played = p.recently_played
 WHERE pp.name = p.name");
 
 if (!$result) {
-    $message  = '<br><br>Invalid query: ' . mysql_error() . "\n\n";
+    $message = '<br><br>Invalid query: ' . mysqli_error($db) . "\n\n";
     $message .= 'Whole query: ' . $query;
     die($message);
-} else { 
+} else {
 
-if (isset($_POST['recache'])){echo "<br>3. Transfered number of recently played games from temp table to cache table... [ ". TimerOff() . " sec ]";; }}
+    if (isset($_POST['recache'])) {
+        echo "<br>3. Transfered number of recently played games from temp table to cache table... [ " . TimerOff() . " sec ]";;
+    }
+}
 
 
 // Update the active players by adding their ranking into the table... 
 TimerOn();
 
-$result = mysql_query("SET @r := 0;");
+$result = mysqli_query($db, "SET @r := 0;");
 
-$result = mysql_query("UPDATE  
+$result = mysqli_query($db, "UPDATE  
 $standingscachetable 
 SET rank = (@r := @r + 1)
 WHERE recently_played >= 1 AND rating >= $ladderminelo AND games > $MySQLgamestorank
 ORDER BY rating DESC, games DESC, wins ASC");
 
 if (!$result) {
-    $message  = 'Invalid query: ' . mysql_error() . "\n";
+    $message = 'Invalid query: ' . mysqli_error($db) . "\n";
     $message .= 'Whole query: ' . $query;
     die($message);
 } else {
-	
-	if (isset($_POST['recache'])){ echo "<br>4. Updated ranks of active players in cache table. [ ". TimerOff() . " sec ]";}}
+
+    if (isset($_POST['recache'])) {
+        echo "<br>4. Updated ranks of active players in cache table. [ " . TimerOff() . " sec ]";
+    }
+}
 
 ?>

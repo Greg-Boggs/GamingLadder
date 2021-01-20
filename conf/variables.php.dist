@@ -41,6 +41,6 @@ Please Notice: 	The only lines which you are supposed to config according to you
 
 // variabledb.php used to connect to the database, I've added a temporary hack here to do that in the config file, it should be
 // moved somewhere more appropriate
-$db = mysql_connect($databaseserver, $databaseuser, $databasepass);
-mysql_select_db($databasename,$db);
+$db = mysqli_connect($databaseserver, $databaseuser, $databasepass);
+mysqli_select_db($databasename,$db);
 ?>

@@ -11,49 +11,47 @@ date_default_timezone_set("$cfg_ladder_timezone");
 <p class="header">Admin section.</p>
 <?php
 if (isset($_POST['username']) && isset($_POST['password'])) {
-    $passworddb = $salt.$_POST['password'];
+    $passworddb = $salt . $_POST['password'];
     $passworddb = md5($passworddb);
     $passworddb = md5($passworddb);
 
-	$sql = "SELECT name FROM $playerstable WHERE name='$_POST[username]' AND passworddb='$passworddb' AND is_admin = 1";
-    $result = mysql_query($sql,$db);
-    $number = mysql_num_rows($result);
+    $sql = "SELECT name FROM $playerstable WHERE name='$_POST[username]' AND passworddb='$passworddb' AND is_admin = 1";
+    $result = mysqli_query($db, $sql);
+    $number = mysqli_num_rows($result);
     if ($number == 1) {
         $_SESSION['real-username'] = $_POST['username'];
         $_SESSION['username'] = $_POST['username'];
-		$_SESSION['admin-login'] = true;
+        $_SESSION['admin-login'] = true;
     }
 }
 
-if(isset($_SESSION['username']) && isset($_SESSION['admin-login'])) {
-?>
-<p class='text'>You are logged in as <b><?php echo $_SESSION['username'] ?></b>.</p>
-<?php
+if (isset($_SESSION['username']) && isset($_SESSION['admin-login'])) {
+    ?>
+    <p class='text'>You are logged in as <b><?php echo $_SESSION['username'] ?></b>.</p>
+    <?php
 } else {
     if (isset($_POST['submit']) && $_POST['submit'] == "Log in.") {
-?>
-<p class='text'>Login failed.</p>
-<?php
+        ?>
+        <p class='text'>Login failed.</p>
+        <?php
     }
-?>
-<form method="post" action="index.php">
-<table border="0" cellpadding="0">
-<tr>
-<td><p class='text'>Name:</p></td>
-<td><input type="text" name="username" size="20" class="text"></td>
-</tr>
-<tr>
-<td><p class='text'>Password:</p></td>
-<td><input type="password" name="password" size="20" class="text"></td>
-</tr>
-<tr>
-<td><input type="submit" value="Log in." name="submit" class="text"></td>
-</tr>
-</table>
-</form>
-<?php
+    ?>
+    <form method="post" action="index.php">
+        <table border="0" cellpadding="0">
+            <tr>
+                <td><p class='text'>Name:</p></td>
+                <td><input type="text" name="username" size="20" class="text"></td>
+            </tr>
+            <tr>
+                <td><p class='text'>Password:</p></td>
+                <td><input type="password" name="password" size="20" class="text"></td>
+            </tr>
+            <tr>
+                <td><input type="submit" value="Log in." name="submit" class="text"></td>
+            </tr>
+        </table>
+    </form>
+    <?php
 } // Display login form if failed, or not logged in.
-?>
-<?php
+
 require('./../bottom.php');
-?>
