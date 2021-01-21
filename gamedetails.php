@@ -31,15 +31,15 @@ if (isset($_POST['SendFeedback'])) {
     // Now we'll decide how the sql query should look like. We only want to update whatever the user changed:
 
     if ($sportsmanship != "") {
-        $query2 = "UPDATE $gamestable SET winner_stars = '$sportsmanship' WHERE reported_on = '$reported_on' AND loser = '" . mysqli_escape_string($_SESSION['username']) . "'";
+        $query2 = "UPDATE $gamestable SET winner_stars = '$sportsmanship' WHERE reported_on = '$reported_on' AND loser = '" . mysqli_escape_string($db, $_SESSION['username']) . "'";
     }
 
     if ($comment != "") {
-        $query2 = "UPDATE $gamestable SET loser_comment = '$comment' WHERE reported_on = '$reported_on' AND loser = '" . mysqli_escape_string($_SESSION['username']) . "'";
+        $query2 = "UPDATE $gamestable SET loser_comment = '$comment' WHERE reported_on = '$reported_on' AND loser = '" . mysqli_escape_string($db, $_SESSION['username']) . "'";
     }
 
     if ($sportsmanship != "" && $comment != "") {
-        $query2 = "UPDATE $gamestable SET loser_comment = '$comment', winner_stars = '$sportsmanship' WHERE reported_on = '$reported_on' AND loser = '" . mysqli_escape_string($_SESSION['username']) . "'";
+        $query2 = "UPDATE $gamestable SET loser_comment = '$comment', winner_stars = '$sportsmanship' WHERE reported_on = '$reported_on' AND loser = '" . mysqli_escape_string($db, $_SESSION['username']) . "'";
     }
 
 
