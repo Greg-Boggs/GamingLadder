@@ -85,7 +85,7 @@ if (isset($_POST['submit']) && $_POST['submit']) {
 
             <tr>
                 <td>
-                    <input type=hidden name="editname" value="<? echo $_SESSION['username'] ?>">
+                    <input type=hidden name="editname" value="<?php echo $_SESSION['username'] ?>">
                 </td>
             </tr>
 
@@ -112,23 +112,23 @@ if (isset($_POST['submit']) && $_POST['submit']) {
 
             <tr>
                 <td><p class="text"><b>Mail:</b></p></td>
-                <td><input type="Text" name="mail" value="<? echo "$row[mail]" ?>" class="text"></td>
+                <td><input type="Text" name="mail" value="<?php echo "$row[mail]" ?>" class="text"></td>
             </tr>
 
             <tr>
                 <td><p class="text">Jabber:</p></td>
-                <td><input type="Text" name="jabber" value="<? echo "$row[Jabber]" ?>" class="text"> Open source, Same
+                <td><input type="Text" name="jabber" value="<?php echo "$row[Jabber]" ?>" class="text"> Open source, Same
                     as g-mail chat.
                 </td>
             </tr>
 
             <tr>
                 <td><p class="text">Icq:</p></td>
-                <td><input type="Text" name="icq" value="<? echo "$row[icq]" ?>" class="text"></td>
+                <td><input type="Text" name="icq" value="<?php echo "$row[icq]" ?>" class="text"></td>
             </tr>
             <tr>
                 <td><p class="text">Aim:</p></td>
-                <td><input type="Text" name="aim" value="<? echo "$row[aim]" ?>" class="text"></td>
+                <td><input type="Text" name="aim" value="<?php echo "$row[aim]" ?>" class="text"></td>
             </tr>
             <tr>
                 <td><p class="text">Msn:</p></td>

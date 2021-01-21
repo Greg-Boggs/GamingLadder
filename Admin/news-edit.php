@@ -41,7 +41,7 @@ if (isset($_POST['submit']) && $_POST['submit']) {
             </tr>
             <tr>
                 <td><textarea name="news" cols="45" rows="10" wrap="VIRTUAL"
-                              class="text"><? echo $row['news'] ?></textarea></td>
+                              class="text"><?php echo $row['news'] ?></textarea></td>
                 </td>
             </tr>
             <tr>

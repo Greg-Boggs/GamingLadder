@@ -1,4 +1,4 @@
-<?
+<?php
 session_start();
 require('conf/variables.php');
 include 'include/avatars.inc.php';
@@ -74,7 +74,7 @@ require('top.php');
             </tr>
             <tr>
                 <td><input type="submit" value="Search"/></td>
-                <td><input name="player" type="text" value="<? echo $searchArray['player'] ?>" size="10"/></td>
+                <td><input name="player" type="text" value="<?php echo $searchArray['player'] ?>" size="10"/></td>
                 <td><select name="gamesdirection">
                         <option <?php if ($searchArray['gamesdirection'] == "") echo "selected='selected'"; ?> value="">
                             --
@@ -232,21 +232,21 @@ require('top.php');
                 <tr>
                     <td align="right" class="avatar"><?php echo WlAvatar::image($row['Avatar']) ?></td>
                     <td><?php echo "<a href='profile.php?name=$row[name]'>$namepage</a>" ?></td>
-                    <td><? echo $games ?></td>
-                    <td><? echo $wins ?></td>
-                    <td><? echo $losses ?></td>
-                    <td><? echo $rating ?></td>
+                    <td><?php echo $games ?></td>
+                    <td><?php echo $wins ?></td>
+                    <td><?php echo $losses ?></td>
+                    <td><?php echo $rating ?></td>
                     <td><?php $games > 0 ? printf("%.0f", $wins / $games * 100) : ''; ?></td>
-                    <td><? echo $streak ?></td>
-                    <td><? echo "<img src='graphics/flags/" .
+                    <td><?php echo $streak ?></td>
+                    <td><?php echo "<img src='graphics/flags/" .
                             str_replace(' ', '_', $row['country']) .
                             ".png' align='absmiddle' border='1'>" ?></td>
                 </tr>
-                <?
-            }
+                <?php
+}
             ?>
             </tbody>
         </table>
     </form>
-<?
+<?php
 require('bottom.php');

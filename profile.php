@@ -460,27 +460,27 @@ if ($playercached['games'] <= 0) {
             }
             ?>
         </td>
-        <td><? if ($playercached['games'] <= 0) {
+        <td><?php if ($playercached['games'] <= 0) {
                 echo BASE_RATING;
             } else {
                 echo round($playercached['rating'], 0) . " &nbsp; (" . round($hiscore_elo, 0) . " / " . round($loscore_elo, 0) . ")";
             } ?></td>
-        <td><? echo $totalpercentage ?>%</td>
-        <td><? echo "$playercached[wins]" ?></td>
-        <td><? echo "$playercached[losses]" ?></td>
-        <td><? echo "$playercached[games]" ?></td>
-        <td><? if ($playercached['games'] > 0) {
+        <td><?php echo $totalpercentage ?>%</td>
+        <td><?php echo "$playercached[wins]" ?></td>
+        <td><?php echo "$playercached[losses]" ?></td>
+        <td><?php echo "$playercached[games]" ?></td>
+        <td><?php if ($playercached['games'] > 0) {
                 echo "$avgPointsOnWin / $avgPointsOnLoss / $avgPointsPerGame";
             } else {
                 echo "-";
             } ?></td>
 
-        <td><? if ($playercached['games'] > 0) {
+        <td><?php if ($playercached['games'] > 0) {
                 echo "$playercached[streak]  &nbsp;($hiscore_streak / $loscore_streak)";
             } else {
                 echo "-";
             } ?></td>
-        <td><? echo $sportsmanship; ?></td>
+        <td><?php echo $sportsmanship; ?></td>
         <td><?php
 
             // Avoid division by zero problems...
@@ -605,7 +605,7 @@ if ($player['MsgMe'] == "Yes") {
 
     if ($player['CanPlay'] != "") { ?>
         <h2>Available to play <a style="cursor: pointer;" id="availabletoplayexpand"></a></h2>
-        <p class="text">Uses <? echo $player['HaveVersion'] ?> version of Wesnoth & can usually
+        <p class="text">Uses <?php echo $player['HaveVersion'] ?> version of Wesnoth & can usually
             play <?php echo " ($cfg_ladder_timezone)"; ?>:</p>
         <div id="availabletoplaydiv">
             <table id="availabletoplay" class="tablesorter">
