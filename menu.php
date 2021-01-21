@@ -1,6 +1,6 @@
 <?php
 // All pages that include the menu should have started the session is they want to use logged in information
-if ($maintenanceMode <> true) {
+if (isset($maintenanceMode) && $maintenanceMode <> true) {
 
     /*
     Menu for teamladder
@@ -27,16 +27,16 @@ if ($maintenanceMode <> true) {
                 <br></br>
                 <ul style="font-size: x-small;">
                     <li><b>Ladderselection:</b></li>
-                    <?
-                    foreach ($G_CFG_enabled_ladder_list as $key => $value) {
+                    <?php
+foreach ($G_CFG_enabled_ladder_list as $key => $value) {
                         echo "<li><a href=\"index.php?ladder=" . $value . "\">" . $value . "</a></li>";
                     }
                     ?>
                 </ul>
             <?php } ?>
 
-        </div> <?
-    } else {
+        </div> <?php
+} else {
 
         /*
         Menu for normal ladder
@@ -75,8 +75,8 @@ if ($maintenanceMode <> true) {
                 <br></br>
                 <ul style="font-size: x-small;">
                     <li><b>Ladderselection:</b></li>
-                    <?
-                    foreach ($G_CFG_enabled_ladder_list as $key => $value) {
+                    <?php
+foreach ($G_CFG_enabled_ladder_list as $key => $value) {
                         echo "<li><a href=\"index.php?ladder=" . $value . "\">" . $value . "</a></li>";
                     }
                     ?>

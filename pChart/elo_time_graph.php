@@ -23,7 +23,7 @@ $filename = $G_CFG_pChartimagepath . $_GET['name'] . ".png";
 // if the image already exists and it was created after the last game skip the image creating part and just display the already existent file 
 
 if (file_exists($filename) && date("Y-m-d H:i:s'.", filemtime($filename)) > $lastgamedate) { ?> <img
-        src="<? echo $G_CFG_pChartimagepath, $_GET['name'] ?>.png"> <?php } else {
+        src="<?php echo $G_CFG_pChartimagepath, $_GET['name'] ?>.png"> <?php } else {
 //if no image was found or image is older than last game create a new graph
 
 //create the object for the data
@@ -91,5 +91,5 @@ if (file_exists($filename) && date("Y-m-d H:i:s'.", filemtime($filename)) > $las
     $image->Render($G_CFG_pChartimagepath . $_GET['name'] . ".png");
 
 //and finally...display the new graph
-    ?> <img src="<? echo $G_CFG_pChartimagepath . $_GET['name'] ?>.png">  <?php
+    ?> <img src="<?php echo $G_CFG_pChartimagepath . $_GET['name'] ?>.png">  <?php
 }

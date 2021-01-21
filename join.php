@@ -1,4 +1,4 @@
-<?
+<?php
 session_start();
 $page = "join";
 require('conf/variables.php');
@@ -8,7 +8,7 @@ include 'include/avatars.inc.php';
 ?>
     <p class="header">Join.</p>
     <p class="text">
-<?
+<?php
 if (isset ($_POST['submit'])) {
     $name = check_plain(trim(strip_tags($_POST['name'])));
     $passworddb = trim(strip_tags($_POST['passworddb']));
@@ -318,7 +318,7 @@ if (isset ($_POST['submit'])) {
         <p class="text"><input type="Submit" name="submit" value="Join." class="text"><br><br>
             </form>
         </p>
-    <?
+    <?php
 }
 require('bottom.php');
 

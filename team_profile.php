@@ -406,28 +406,28 @@ if (isset($_GET['name']) == False) {
         </thead>
         <tbody>
         <tr>
-            <td><? echo $playercached['rank'] ?></td>
-            <td><? if ($playercached['games'] <= 0) {
+            <td><?php echo $playercached['rank'] ?></td>
+            <td><?php if ($playercached['games'] <= 0) {
                     echo BASE_RATING;
                 } else {
                     echo round($playercached['rating'], 0) . " &nbsp; (" . round($hiscore_elo, 0) . " / " . round($loscore_elo, 0) . ")";
                 } ?></td>
-            <td><? echo $totalpercentage ?>%</td>
-            <td><? echo "$playercached[wins]" ?></td>
-            <td><? echo "$playercached[losses]" ?></td>
-            <td><? echo "$playercached[games]" ?></td>
-            <td><? if ($playercached['games'] > 0) {
+            <td><?php echo $totalpercentage ?>%</td>
+            <td><?php echo "$playercached[wins]" ?></td>
+            <td><?php echo "$playercached[losses]" ?></td>
+            <td><?php echo "$playercached[games]" ?></td>
+            <td><?php if ($playercached['games'] > 0) {
                     echo "$avgPointsOnWin / $avgPointsOnLoss / $avgPointsPerGame";
                 } else {
                     echo "-";
                 } ?></td>
 
-            <td><? if ($playercached['games'] > 0) {
+            <td><?php if ($playercached['games'] > 0) {
                     echo "$playercached[streak]  &nbsp;($hiscore_streak / $loscore_streak)";
                 } else {
                     echo "-";
                 } ?></td>
-            <td><? echo $sportsmanship; ?></td>
+            <td><?php echo $sportsmanship; ?></td>
             <td><?php
                 // Avoid division by zero problems...
                 if ($playercached['games'] > 0) {
@@ -475,8 +475,8 @@ if (isset($_GET['name']) == False) {
         </thead>
         <tbody>
         <tr>
-            <?
-            foreach ($members as $key) {
+            <?php
+foreach ($members as $key) {
                 echo "<tr><td> <a href=\"profile.php?name=" . $key . "\">$key</a></td></tr>";
             } ?>
         </tr>
@@ -484,8 +484,8 @@ if (isset($_GET['name']) == False) {
     </table>
 
 
-    <?
-    // Only show game history & opposition break down if there are any played games...
+    <?php
+// Only show game history & opposition break down if there are any played games...
 
     if ($playercached['games'] > 0) {
 
@@ -520,7 +520,7 @@ if (isset($_GET['name']) == False) {
         <?php } ?>
 
 
-        <?
+        <?php
 //Script for the expansion/collapse of the opposition and recent games table
         ?>
 

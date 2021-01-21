@@ -61,7 +61,7 @@ include 'include/avatars.inc.php';
                 <td><p class="text"><input type="Submit" name="submit" value="Recover" class="text"></p></td></tr>
     </form>
     </table></p>
-<?
+<?php
 require('bottom.php');
 }
 

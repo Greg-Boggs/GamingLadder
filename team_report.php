@@ -408,7 +408,7 @@ if (isset($_POST['report'])) {
     <br/><br/><b>Warning: If you cheat you will be banned.</b><br/>If
     <i>accidentally</i> reported a false result, use the game details under your profile to withdraw the game.
 
-    <?
+    <?php
 }
 
 echo "<br /><br />";

@@ -1,4 +1,4 @@
-<?
+<?php
 session_start();
 require('conf/variables.php');
 require('logincheck.inc.php');//includes variables.php
@@ -214,7 +214,7 @@ else {
     </form>
 
 
-    <?
+    <?php
 }
 require('bottom.php');
 ?>

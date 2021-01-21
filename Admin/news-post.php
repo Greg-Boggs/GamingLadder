@@ -120,7 +120,7 @@ if ($_POST[submit]) {
         </table>
         <p class="text"><input type="Submit" name="submit" value="Post." class="text"><br>
     </form>
-    <?
+    <?php
 }
 require('./../bottom.php');
 ?>

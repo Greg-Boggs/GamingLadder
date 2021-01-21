@@ -1,4 +1,4 @@
-<?
+<?php
 session_start();
 // v 1.01
 require('conf/variables.php');
@@ -207,6 +207,6 @@ if (isset($_REQUEST['selectname'])) {
     </table>
 </form>
 <br/>
-<?
+<?php
 require('bottom.php');
 ?>
