@@ -151,46 +151,48 @@ $game = mysqli_fetch_array($result);
 mysqli_data_seek($result, 0);
 ?>
 
-<table class="tablesorter">
-    <?php
-    require_once 'include/gametable.inc.php';
+    <table class="tablesorter">
+        <?php
+        require_once 'include/gametable.inc.php';
 
-    echo gameTableTHead();
-    echo gameTableTBody($result);
+        echo gameTableTHead();
+        echo gameTableTBody($result);
 
-    ?>
-</table>
+        ?>
+    </table>
 
 <?php
 
 
-if ($game['winner'] == $_SESSION['username']) {
+if (isset($_SESSION['username'])) {
+    if (isset($_SESSION['username']) && $game['winner'] == $_SESSION['username']) {
 
-    if ($game['withdrawn'] == 1 && time() < $game['unixtime'] + 60 * 60 * 24 * $reportdays) {
-        echo "<form method='post' action='gamedetails.php'>";
-        echo "<input type='hidden' name='reported_on' value='" . $game['reported_on'] . "' />";
-        echo "<input type='submit' name='submit' value='Restore Game' />";
-        echo "</form>";
-    } else if ($game['withdrawn'] == 0 && time() < $game['unixtime'] + 60 * 60 * 24 * $reportdays) {
-        echo "<form method='post' action='gamedetails.php'>";
-        echo "<input type='hidden' name='reported_on' value='" . $game['reported_on'] . "' />";
-        echo "<input type='submit' name='submit' value='Withdraw Game' />";
-        echo "</form>";
+        if ($game['withdrawn'] == 1 && time() < $game['unixtime'] + 60 * 60 * 24 * $reportdays) {
+            echo "<form method='post' action='gamedetails.php'>";
+            echo "<input type='hidden' name='reported_on' value='" . $game['reported_on'] . "' />";
+            echo "<input type='submit' name='submit' value='Restore Game' />";
+            echo "</form>";
+        } else if ($game['withdrawn'] == 0 && time() < $game['unixtime'] + 60 * 60 * 24 * $reportdays) {
+            echo "<form method='post' action='gamedetails.php'>";
+            echo "<input type='hidden' name='reported_on' value='" . $game['reported_on'] . "' />";
+            echo "<input type='submit' name='submit' value='Withdraw Game' />";
+            echo "</form>";
+        }
     }
-}
-if ($game['loser'] == $_SESSION['username']) {
+    if ($game['loser'] == $_SESSION['username']) {
 
-    if ($game['contested_by_loser'] == 1 && time() < $game['unixtime'] + 60 * 60 * 24 * $reportdays) {
-        echo "<form method='post' action='gamedetails.php'>";
-        echo "<input type='hidden' name='reported_on' value='" . $game['reported_on'] . "' />";
-        echo "<input type='submit' name='submit' value='Remove Contest' />";
-        echo "</form>";
-    } else if ($approved && $game['contested_by_loser'] == 0 && time() < $game['unixtime'] + 60 * 60 * 24 * $reportdays) {
+        if ($game['contested_by_loser'] == 1 && time() < $game['unixtime'] + 60 * 60 * 24 * $reportdays) {
+            echo "<form method='post' action='gamedetails.php'>";
+            echo "<input type='hidden' name='reported_on' value='" . $game['reported_on'] . "' />";
+            echo "<input type='submit' name='submit' value='Remove Contest' />";
+            echo "</form>";
+        } else if ($approved && $game['contested_by_loser'] == 0 && time() < $game['unixtime'] + 60 * 60 * 24 * $reportdays) {
 
-        echo "<form method='post' action='gamedetails.php'>";
-        echo "<input type='hidden' name='reported_on' value='" . $game['reported_on'] . "' />";
-        echo "<input type='submit' name='submit' value='Contest Game' />";
-        echo "</form>";
+            echo "<form method='post' action='gamedetails.php'>";
+            echo "<input type='hidden' name='reported_on' value='" . $game['reported_on'] . "' />";
+            echo "<input type='submit' name='submit' value='Contest Game' />";
+            echo "</form>";
+        }
     }
 }
 
@@ -212,7 +214,12 @@ if (trim($game['loser_comment']) != "") {
 
 // Only display the feedback forms if a) a certain feedback hasn't been given by the loser and b) he tries to give the feedback within x days from the time the game was reported and c) the game isnt withdrawn or contested
 
-if ($game['loser'] == $_SESSION['username'] && ($game['loser_comment'] == "" || $game['winner_stars'] == "" || $game['is_replay'] == "0") && (ALLOW_REPLAY_UPLOAD == 1) && (time() < $game['unixtime'] + 60 * 60 * 24 * $reportdays) && $game['contested_by_loser'] == 0 && $game['withdrawn'] == 0) {
+if (isset($_SESSION['username'])
+    && $game['loser'] == $_SESSION['username']
+    && ($game['loser_comment'] == "" || $game['winner_stars'] == "" || $game['is_replay'] == "0") && (ALLOW_REPLAY_UPLOAD == 1)
+    && (time() < $game['unixtime'] + 60 * 60 * 24 * $reportdays)
+    && $game['contested_by_loser'] == 0
+    && $game['withdrawn'] == 0) {
 
     ?>
     <br/><br/>
