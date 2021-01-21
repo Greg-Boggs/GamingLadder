@@ -465,7 +465,7 @@ class DB_Query_INSERT extends DB_Query
         $values = array();
         foreach ($this->params as $var => $value) {
             $vars[] = "`" . $var . "`";
-            $values[] = "'" . mysqli_escape_string("$value") . "'";
+            $values[] = "'" . mysqli_escape_string($this->db_handle,"$value") . "'";
         }
         return "INSERT INTO `" . $this->table . "` (" . implode(',', $vars) . ") VALUES (" . implode(',', $values) . ")";
     }
@@ -499,7 +499,7 @@ class DB_Query_UPDATE extends DB_Query_SELECT
     {
         $params = "";
         foreach ($this->params as $param => $value) {
-            $params .= "`$param` = '" . mysqli_escape_string($value) . "', ";
+            $params .= "`$param` = '" . mysqli_escape_string($this->db_handle, $value) . "', ";
         }
         $params = str_replace(', |', '', $params . '|');
         $tail = (isset($this->condition)) ? "WHERE " . $this->condition->to_string() : "";
