@@ -19,7 +19,7 @@ if (isset ($_POST['submit'])) {
     $mail = check_plain(trim(strip_tags($_POST['mail'])));
     $WesVersion = check_plain($_POST['version']);
     $MsgMeToPlay = check_plain($_POST['msgme']);
-    $avatar = check_plain($_POST['Avatar']);
+    $avatar = isset($_POST['Avatar']) ? check_plain($_POST['Avatar']) : 'No avatar';
     $length = strlen($name);
 
     $CanPlay = "";
@@ -231,6 +231,7 @@ if (isset ($_POST['submit'])) {
                 <option>Yes</option>
                 <option>No</option>
             </select></td>
+    </tr>
         </table>
 
 

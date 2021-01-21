@@ -110,7 +110,7 @@ if (($rank == "0") && ($playercached['games'] >= $gamestorank) && ($playercached
 } else if (($rank == "0") && (($playercached['games'] < $gamestorank) || ($playercached['rating'] < $ladderminelo))) {
     $rank = "(unranked)";
 }
-
+$ExactActivity = array();
 GetExactActivity($_GET['name'], GAMES_FOR_ACTIVE, $passivedays, $gamestable);
 
 // Get the players elo hiscore 
@@ -119,7 +119,7 @@ $sql = "SELECT winner, winner_elo FROM $gamestable WHERE winner = '$_GET[name]' 
 $result = mysqli_query($db, $sql);
 $row = mysqli_fetch_array($result);
 
-$hiscore_elo = $row['winner_elo'];
+$hiscore_elo = !empty($row) ? $row['winner_elo'] : 0;
 
 // Get the players elo loscore 
 
@@ -127,20 +127,20 @@ $sql = "SELECT loser, loser_elo FROM $gamestable WHERE loser = '$_GET[name]' AND
 $result = mysqli_query($db, $sql);
 $row = mysqli_fetch_array($result);
 
-$loscore_elo = $row['loser_elo'];
+$loscore_elo = !empty($row) ? $row['loser_elo'] : 0;
 
 
 // Get the players best streak
 $sql = "SELECT winner, winner_streak FROM $gamestable WHERE winner = '$_GET[name]' AND contested_by_loser = '0' AND withdrawn ='0' ORDER BY winner_streak DESC LIMIT 0,1";
 $result = mysqli_query($db, $sql);
 $row = mysqli_fetch_array($result);
-$hiscore_streak = $row['winner_streak'];
+$hiscore_streak = !empty($row) ? $row['winner_streak'] : 0;
 
 // Get the players worst streak
 $sql = "SELECT loser, loser_streak FROM $gamestable WHERE loser = '$_GET[name]' AND contested_by_loser = '0' AND withdrawn ='0' ORDER BY loser_streak ASC LIMIT 0,1";
 $result = mysqli_query($db, $sql);
 $row = mysqli_fetch_array($result);
-$loscore_streak = $row['loser_streak'];
+$loscore_streak = !empty($row) ? $row['loser_streak'] : 0;
 
 // Now we want to know how many games the user has given a sportsmanship rating in. Sportsmanship rating can be given as loser or winner, so we need to add them together to get the correct count.
 $sql = mysqli_query($db, "SELECT count(*) FROM $gamestable WHERE  loser = '$_GET[name]' AND winner_stars > '0' AND contested_by_loser = '0' AND withdrawn = '0'");

@@ -21,11 +21,11 @@ if (mysqli_num_rows($result) == 1) {
     header('Content-Type: application/x-gzip');
     header('Content-Length: ' . filesize($path_file_replay . $filename));
     //header('Content-Disposition: inline; filename="'.$filename.'"');
-    if (preg_match('/MSIE 5.5/', $_ENV['HTTP_USER_AGENT']) || preg_match('/MSIE 6.0/', $_ENV['HTTP_USER_AGENT'])) {
-        header('Content-Disposition: filename="' . $filenameuser . '"');
-    } else {
+//    if (preg_match('/MSIE 5.5/', $_ENV['HTTP_USER_AGENT']) || preg_match('/MSIE 6.0/', $_ENV['HTTP_USER_AGENT'])) {
+//        header('Content-Disposition: filename="' . $filenameuser . '"');
+//    } else {
         header('Content-Disposition: attachment; filename="' . $filenameuser . '"');
-    }
+//    }
     header('Content-Transfer-Encoding: binary');
     // Output file
     readfile($path_file_replay . $filename);
