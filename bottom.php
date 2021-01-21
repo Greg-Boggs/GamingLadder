@@ -7,7 +7,7 @@
     Wesnoth.
     <br/><a href="<?php echo $GLOBALS['prefix'] ?>ip.php">dupe check</a> / <a
             href="<?php echo $GLOBALS['prefix'] ?>rss.php">rss</a> / powered by <a
-            href="https://sourceforge.net/projects/gamingladder/?abmode=1">Gaming
+            href="https://github.com/Greg-Boggs/GamingLadder">Gaming
         Ladder</a> <?php echo TRIBAL_VERSION ?> / <a href="https://sourceforge.net/pm/?group_id=224204">to-do</a><br/>
     Maintained with care by <a href="http://www.gregboggs.com">Drupal Developer</a> Greg Boggs.<br/>
     <?php echo "<br />contact: " . FOOTER_MAIL ?>
