@@ -7,7 +7,11 @@ require('./../top.php');
 
 if (isset($_POST['submit']) && $_POST['submit']) {
     $edit = intval($_POST['edit']);
-    $sql = "UPDATE $newstable SET date = '$_POST[date]', title = '$_POST[titlenews]', news = '$_POST[news]' WHERE news_id = '$edit'";
+    $date = mysqli_real_escape_string($db, $_POST['date']);
+    $title = mysqli_real_escape_string($db, $_POST['titlenews']);
+    $news = mysqli_real_escape_string($db, $_POST['news']);
+
+    $sql = "UPDATE $newstable SET date = '$date', title = '$title', news = '$news' WHERE news_id = '$edit'";
     $result = mysqli_query($db, $sql);
     echo "<p class='header'>News edited.</p>";
 } else {

@@ -5,10 +5,10 @@ require('./../conf/variables.php');
 require_once 'security.inc.php';
 require('./../top.php');
 
-if ($_POST[submit]) {
-    $date = mysqli_real_escape_string($_POST[date]);
-    $title = mysqli_real_escape_string($_POST[titlenews]);
-    $news = mysqli_real_escape_string($_POST[news]);
+if (isset($_POST['submit']) && $_POST['submit']) {
+    $date = mysqli_real_escape_string($db, $_POST['date']);
+    $title = mysqli_real_escape_string($db, $_POST['titlenews']);
+    $news = mysqli_real_escape_string($db, $_POST['news']);
 
     $sql = "INSERT INTO $newstable (date, title, news) VALUES ('$date', '$title', '$news')";
     $result = mysqli_query($db, $sql);
@@ -123,4 +123,4 @@ if ($_POST[submit]) {
     <?
 }
 require('./../bottom.php');
-?>
+
