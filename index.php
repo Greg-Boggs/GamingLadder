@@ -1,4 +1,4 @@
-<?
+<?php
 // Debug Meldungen einschalten
 error_reporting(E_ALL);
 ini_set('display_errors', TRUE);
@@ -254,7 +254,8 @@ require('top.php');
 
             echo "<h1>News</h1>";
             if (isset($_GET['readnews'])) {
-                $sql = "SELECT * FROM $newstable WHERE news_id = '$_GET[readnews]' ORDER BY news_id DESC LIMIT 0, $newsitems";
+                $newsId = intval($_GET['readnews']);
+                $sql = "SELECT * FROM $newstable WHERE news_id = '$newsId' ORDER BY news_id DESC LIMIT 0, $newsitems";
                 $result = mysqli_query($db, $sql);
                 $row = mysqli_fetch_array($result);
                 $news = nl2br($row["news"]);
@@ -300,14 +301,14 @@ require('top.php');
                 $result = mysqli_query($db, $query) or die(mysqli_error($db));
                 $row = mysqli_fetch_array($result);
 // Let's count the number of news items in the database. Rumors say this is a faster method than getrows, but I don't know.
-                $numindexnews2 = $row['COUNT(*)'] - $_GET[readnews];
+//                $numindexnews2 = $row['COUNT(*)'] - $_GET['readnews'];
+                $newsId = intval($_GET['readnews']);
 
-                $sql = "SELECT * FROM $newstable ORDER BY news_id DESC LIMIT $numindexnews2, $numindexnews";
+                $sql = "SELECT * FROM $newstable WHERE news_id < $newsId ORDER BY news_id DESC LIMIT $newsitems, $numindexnews";
             } else {
                 // This is what happens when he hasn't clicked a specific news item, not complicated at all, the variables are all in the config file.
                 $sql = "SELECT * FROM $newstable ORDER BY news_id DESC LIMIT $newsitems, $numindexnews";
             }
-
             $result = mysqli_query($db, $sql);
             while ($row = mysqli_fetch_array($result)) {
                 echo "<a href='index.php?readnews=$row[news_id]'>$row[date] - $row[title]</a><br>";
