@@ -25,7 +25,7 @@ if (NONPUBLIC_REPLAY_COMMENTS == 1) {
 
 if (isset($_POST['SendFeedback'])) {
     $sportsmanship = check_plain(trim($_POST['sportsmanship']));
-    $comment = check_plain(trim($_POST['comment']));
+    $comment = mysqli_real_escape_string($db, trim($_POST['comment']));
     $reported_on = check_plain($_GET['reported_on']);
 
     // Now we'll decide how the sql query should look like. We only want to update whatever the user changed:
@@ -85,28 +85,28 @@ if (isset($_POST['submit'])) {
     if ($_POST['submit'] == "Withdraw Game") {
         $reportedOn = $_POST['reported_on'];
         $reRankLadder = $reportedOn;
-        $sql = "UPDATE $gamestable SET withdrawn = 1 WHERE reported_on = '" . mysqli_escape_string($reportedOn) . "' AND UNIX_TIMESTAMP(reported_on) > " . (time() - 60 * 60 * 24 * $reportdays) . " AND winner = '" . mysqli_escape_string($_SESSION['username']) . "'";
+        $sql = "UPDATE $gamestable SET withdrawn = 1 WHERE reported_on = '" . mysqli_escape_string($db, $reportedOn) . "' AND UNIX_TIMESTAMP(reported_on) > " . (time() - 60 * 60 * 24 * $reportdays) . " AND winner = '" . mysqli_escape_string($db, $_SESSION['username']) . "'";
         $result = mysqli_query($db, $sql) or die("failed to remove the last game");
     }
 // If we are restoring a withdrawn game
     if ($_POST['submit'] == "Restore Game") {
         $reportedOn = $_POST['reported_on'];
         $reRankLadder = $reportedOn;
-        $sql = "UPDATE $gamestable SET withdrawn = 0 WHERE reported_on = '" . mysqli_escape_string($reportedOn) . "' AND UNIX_TIMESTAMP(reported_on) > " . (time() - 60 * 60 * 24 * $reportdays) . " AND winner = '" . mysqli_escape_string($_SESSION['username']) . "'";
+        $sql = "UPDATE $gamestable SET withdrawn = 0 WHERE reported_on = '" . mysqli_escape_string($db, $reportedOn) . "' AND UNIX_TIMESTAMP(reported_on) > " . (time() - 60 * 60 * 24 * $reportdays) . " AND winner = '" . mysqli_escape_string($db, $_SESSION['username']) . "'";
         $result = mysqli_query($db, $sql);
     }
 // If we are contesting a game
     if ($_POST['submit'] == "Contest Game" && $approved) {
         $reportedOn = $_POST['reported_on'];
         $reRankLadder = $reportedOn;
-        $sql = "UPDATE $gamestable SET contested_by_loser = 1 WHERE reported_on = '" . mysqli_escape_string($reportedOn) . "' AND UNIX_TIMESTAMP(reported_on) > " . (time() - 60 * 60 * 24 * $reportdays) . " AND loser = '" . mysqli_escape_string($_SESSION['username']) . "'";
+        $sql = "UPDATE $gamestable SET contested_by_loser = 1 WHERE reported_on = '" . mysqli_escape_string($db, $reportedOn) . "' AND UNIX_TIMESTAMP(reported_on) > " . (time() - 60 * 60 * 24 * $reportdays) . " AND loser = '" . mysqli_escape_string($db, $_SESSION['username']) . "'";
         $result = mysqli_query($db, $sql);
     }
 // If we are contesting a game
     if ($_POST['submit'] == "Remove Contest") {
         $reportedOn = $_POST['reported_on'];
         $reRankLadder = $reportedOn;
-        $sql = "UPDATE $gamestable SET contested_by_loser = 0 WHERE reported_on = '" . mysqli_escape_string($reportedOn) . "' AND UNIX_TIMESTAMP(reported_on) > " . (time() - 60 * 60 * 24 * $reportdays) . " AND loser = '" . mysqli_escape_string($_SESSION['username']) . "'";
+        $sql = "UPDATE $gamestable SET contested_by_loser = 0 WHERE reported_on = '" . mysqli_escape_string($db, $reportedOn) . "' AND UNIX_TIMESTAMP(reported_on) > " . (time() - 60 * 60 * 24 * $reportdays) . " AND loser = '" . mysqli_escape_string($db, $_SESSION['username']) . "'";
         $result = mysqli_query($db, $sql);
     }
 }
@@ -272,4 +272,3 @@ if ($game['loser'] == $_SESSION['username'] && ($game['loser_comment'] == "" || 
 }
 echo "<br /><br />";
 require('bottom.php');
-?>
