@@ -186,7 +186,7 @@ if (isset($_POST['report'])) {
 
         $username = $_SESSION['username'];
         $sportsmanship = check_plain(trim($_POST['sportsmanship']));
-        $comment = check_plain(trim($_POST['comment']));
+        $comment = mysqli_real_escape_string($db,trim($_POST['comment']));
 
         if ($sportsmanship != "") {
 
