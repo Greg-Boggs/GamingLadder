@@ -19,7 +19,7 @@ if (isset($_POST['submit']) && $_POST['submit']) {
             </tr>
         </table>
         <p class="text">
-            <input type='hidden' name='edit' value="<? echo $_GET['edit'] ?>">
+            <input type='hidden' name='edit' value="<?php echo $_GET['edit'] ?>">
             <input type="Submit" name="submit" value="Delete." class="text"><br>
     </form>
     <?php

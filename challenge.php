@@ -91,13 +91,13 @@ $row2 = mysqli_fetch_array($result2);
     <table>
 
         <tr>
-            <td><h2 valign="bottom"><? echo $row['name'] . " (" . $row['rating'] . ")"; ?>
+            <td><h2 valign="bottom"><?php echo $row['name'] . " (" . $row['rating'] . ")"; ?>
                     &nbsp;<?php echo WlAvatar::image($row['Avatar']) ?></h2></td>
 
             <td><h2 valign="bottom">&nbsp;&nbsp;&nbsp; vs. &nbsp;&nbsp;&nbsp; </h2></td>
 
             <td><h2 valign="bottom"><?php echo WlAvatar::image($row2['Avatar']) ?>
-                    &nbsp;<? echo "$row2[name] ($row2[rating])"; ?></h2></td>
+                    &nbsp;<?php echo "$row2[name] ($row2[rating])"; ?></h2></td>
         </tr>
 
     </table>
@@ -113,6 +113,6 @@ $row2 = mysqli_fetch_array($result2);
     </form>
 
 
-<?
+<?php
 require('bottom.php');
 

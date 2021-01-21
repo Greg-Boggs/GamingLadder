@@ -1,4 +1,4 @@
-<?
+<?php
 session_start();
 $page = "join";
 require('conf/variables.php');
@@ -8,7 +8,7 @@ include 'include/avatars.inc.php';
 ?>
     <p class="header">Join.</p>
     <p class="text">
-<?
+<?php
 if (isset ($_POST['submit'])) {
     $name = check_plain(trim(strip_tags($_POST['name'])));
     $passworddb = trim(strip_tags($_POST['passworddb']));
@@ -232,94 +232,94 @@ if (isset ($_POST['submit'])) {
                 <option>No</option>
             </select></td>
     </tr>
-    </table>
+        </table>
 
 
-    <p class="text">I can usually play these times (GMT):</p>
-    <table width="100%">
+        <p class="text">I can usually play these times (GMT):</p>
+        <table width="100%">
 
 
-        <tr>
+            <tr>
 
-            <td></td>
-            <td>Morning</td>
-            <td>Noon</td>
-            <td>Afternoon</td>
-            <td>Evening</td>
-            <td>Night</td>
-        </tr>
-
-
-        <tr>
-            <td bgcolor="#E7D9C0">Monday</td>
-            <td bgcolor="#E7D9C0"><input type="checkbox" name="MonM" value="MonM"/></td>
-            <td bgcolor="#E7D9C0"><input type="checkbox" name="MonN" value="MonN"/></td>
-            <td bgcolor="#E7D9C0"><input type="checkbox" name="MonA" value="MonA"/></td>
-            <td bgcolor="#E7D9C0"><input type="checkbox" name="MonE" value="MonE"/></td>
-            <td bgcolor="#E7D9C0"><input type="checkbox" name="MonNi" value="MonG"/></td>
-        </tr>
+                <td></td>
+                <td>Morning</td>
+                <td>Noon</td>
+                <td>Afternoon</td>
+                <td>Evening</td>
+                <td>Night</td>
+            </tr>
 
 
-        <tr>
-            <td>Tuesday</td>
-            <td><input type="checkbox" name="TueM" value="TueM"/></td>
-            <td><input type="checkbox" name="TueN" value="TueN"/></td>
-            <td><input type="checkbox" name="TueA" value="TueA"/></td>
-            <td><input type="checkbox" name="TueE" value="TueE"/></td>
-            <td><input type="checkbox" name="TueNi" value="TueG"/></td>
-        </tr>
+            <tr>
+                <td bgcolor="#E7D9C0">Monday</td>
+                <td bgcolor="#E7D9C0"><input type="checkbox" name="MonM" value="MonM"/></td>
+                <td bgcolor="#E7D9C0"><input type="checkbox" name="MonN" value="MonN"/></td>
+                <td bgcolor="#E7D9C0"><input type="checkbox" name="MonA" value="MonA"/></td>
+                <td bgcolor="#E7D9C0"><input type="checkbox" name="MonE" value="MonE"/></td>
+                <td bgcolor="#E7D9C0"><input type="checkbox" name="MonNi" value="MonG"/></td>
+            </tr>
 
 
-        <tr>
-            <td bgcolor="#E7D9C0">Wednesday</td>
-            <td bgcolor="#E7D9C0"><input type="checkbox" name="WedM" value="WedM"/></td>
-            <td bgcolor="#E7D9C0"><input type="checkbox" name="WedN" value="WedN"/></td>
-            <td bgcolor="#E7D9C0"><input type="checkbox" name="WedA" value="WedA"/></td>
-            <td bgcolor="#E7D9C0"><input type="checkbox" name="WedE" value="WedE"/></td>
-            <td bgcolor="#E7D9C0"><input type="checkbox" name="WedNi" value="WedG"/></td>
-        </tr>
+            <tr>
+                <td>Tuesday</td>
+                <td><input type="checkbox" name="TueM" value="TueM"/></td>
+                <td><input type="checkbox" name="TueN" value="TueN"/></td>
+                <td><input type="checkbox" name="TueA" value="TueA"/></td>
+                <td><input type="checkbox" name="TueE" value="TueE"/></td>
+                <td><input type="checkbox" name="TueNi" value="TueG"/></td>
+            </tr>
 
-        <tr>
-            <td>Thursday</td>
-            <td><input type="checkbox" name="ThuM" value="ThuM"/></td>
-            <td><input type="checkbox" name="ThuN" value="ThuN"/></td>
-            <td><input type="checkbox" name="ThuA" value="ThuA"/></td>
-            <td><input type="checkbox" name="ThuE" value="ThuE"/></td>
-            <td><input type="checkbox" name="ThuNi" value="ThuG"/></td>
-        </tr>
 
-        <tr>
-            <td bgcolor="#E7D9C0">Friday</td>
-            <td bgcolor="#E7D9C0"><input type="checkbox" name="FriM" value="FriM"/></td>
-            <td bgcolor="#E7D9C0"><input type="checkbox" name="FriN" value="FriN"/></td>
-            <td bgcolor="#E7D9C0"><input type="checkbox" name="FriA" value="FriA"/></td>
-            <td bgcolor="#E7D9C0"><input type="checkbox" name="FriE" value="FriE"/></td>
-            <td bgcolor="#E7D9C0"><input type="checkbox" name="FriNi" value="FriG"/></td>
-        </tr>
+            <tr>
+                <td bgcolor="#E7D9C0">Wednesday</td>
+                <td bgcolor="#E7D9C0"><input type="checkbox" name="WedM" value="WedM"/></td>
+                <td bgcolor="#E7D9C0"><input type="checkbox" name="WedN" value="WedN"/></td>
+                <td bgcolor="#E7D9C0"><input type="checkbox" name="WedA" value="WedA"/></td>
+                <td bgcolor="#E7D9C0"><input type="checkbox" name="WedE" value="WedE"/></td>
+                <td bgcolor="#E7D9C0"><input type="checkbox" name="WedNi" value="WedG"/></td>
+            </tr>
 
-        <tr>
-            <td>Saturday</td>
-            <td><input type="checkbox" name="SatM" value="SatM"/></td>
-            <td><input type="checkbox" name="SatN" value="SatN"/></td>
-            <td><input type="checkbox" name="SatA" value="SatA"/></td>
-            <td><input type="checkbox" name="SatE" value="SatE"/></td>
-            <td><input type="checkbox" name="SatNi" value="SatG"/></td>
-        </tr>
+            <tr>
+                <td>Thursday</td>
+                <td><input type="checkbox" name="ThuM" value="ThuM"/></td>
+                <td><input type="checkbox" name="ThuN" value="ThuN"/></td>
+                <td><input type="checkbox" name="ThuA" value="ThuA"/></td>
+                <td><input type="checkbox" name="ThuE" value="ThuE"/></td>
+                <td><input type="checkbox" name="ThuNi" value="ThuG"/></td>
+            </tr>
 
-        <tr>
-            <td bgcolor="#E7D9C0">Sunday</td>
-            <td bgcolor="#E7D9C0"><input type="checkbox" name="SunM" value="SunM"/></td>
-            <td bgcolor="#E7D9C0"><input type="checkbox" name="SunN" value="SunN"/></td>
-            <td bgcolor="#E7D9C0"><input type="checkbox" name="SunA" value="SunA"/></td>
-            <td bgcolor="#E7D9C0"><input type="checkbox" name="SunE" value="SunE"/></td>
-            <td bgcolor="#E7D9C0"><input type="checkbox" name="SunNi" value="SunG"/></td>
+            <tr>
+                <td bgcolor="#E7D9C0">Friday</td>
+                <td bgcolor="#E7D9C0"><input type="checkbox" name="FriM" value="FriM"/></td>
+                <td bgcolor="#E7D9C0"><input type="checkbox" name="FriN" value="FriN"/></td>
+                <td bgcolor="#E7D9C0"><input type="checkbox" name="FriA" value="FriA"/></td>
+                <td bgcolor="#E7D9C0"><input type="checkbox" name="FriE" value="FriE"/></td>
+                <td bgcolor="#E7D9C0"><input type="checkbox" name="FriNi" value="FriG"/></td>
+            </tr>
 
-    </table>
+            <tr>
+                <td>Saturday</td>
+                <td><input type="checkbox" name="SatM" value="SatM"/></td>
+                <td><input type="checkbox" name="SatN" value="SatN"/></td>
+                <td><input type="checkbox" name="SatA" value="SatA"/></td>
+                <td><input type="checkbox" name="SatE" value="SatE"/></td>
+                <td><input type="checkbox" name="SatNi" value="SatG"/></td>
+            </tr>
 
-    <p class="text"><input type="Submit" name="submit" value="Join." class="text"><br><br>
-        </form>
-    </p>
-    <?
+            <tr>
+                <td bgcolor="#E7D9C0">Sunday</td>
+                <td bgcolor="#E7D9C0"><input type="checkbox" name="SunM" value="SunM"/></td>
+                <td bgcolor="#E7D9C0"><input type="checkbox" name="SunN" value="SunN"/></td>
+                <td bgcolor="#E7D9C0"><input type="checkbox" name="SunA" value="SunA"/></td>
+                <td bgcolor="#E7D9C0"><input type="checkbox" name="SunE" value="SunE"/></td>
+                <td bgcolor="#E7D9C0"><input type="checkbox" name="SunNi" value="SunG"/></td>
+
+        </table>
+
+        <p class="text"><input type="Submit" name="submit" value="Join." class="text"><br><br>
+            </form>
+        </p>
+    <?php
 }
 require('bottom.php');
 
