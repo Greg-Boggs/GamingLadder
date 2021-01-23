@@ -2,3 +2,4 @@ replays/*
 .idea
 conf/default_conf.php
 conf/variables.php
+sendgrid.env
