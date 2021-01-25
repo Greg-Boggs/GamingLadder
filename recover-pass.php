@@ -4,6 +4,7 @@ $page = "Recover password";
 require('conf/variables.php');
 require('top.php');
 include 'include/avatars.inc.php';
+require 'vendor/autoload.php';
 ?>
 
 <p class="header">Recover Password</p>
@@ -19,11 +20,9 @@ include 'include/avatars.inc.php';
         } else {
             $confirm_code = md5(uniqid(rand()));
 
-            $sql = "SELECT player_id FROM $playerstable WHERE mail = '$mail'";
+            $sql = "SELECT player_id, name FROM $playerstable WHERE mail = '$mail'";
             $result = mysqli_query($db, $sql);
 
-            echo "A password reset link was sent to your email. Check your spam folder";
-            require('bottom.php');
 
             // if sucessfully found email in database, send confirmation link to email
             if ($result) {
@@ -49,7 +48,31 @@ include 'include/avatars.inc.php';
 
                 // send email
                 $sentmail = send_mail($to, $body, $subject, $laddermailsender, $titlebar);
+                $email = new \SendGrid\Mail\Mail();
+                $email->setFrom($laddermailsender, $titlebar);
+                $email->setSubject($subject);
+                $email->addTo($to, $player_id = $row['name']);
+                $email->addContent("text/plain", strip_tags($body));
+                $email->addContent(
+                    "text/html", $body
+                );
+                $sendgrid = new \SendGrid(SENDGRID_KEY);
+                try {
+                    $response = $sendgrid->send($email);
+//                    print $response->statusCode() . "\n";
+//                    print_r($response->headers());
+//                    print $response->body() . "\n";
+                    echo "A password reset link was sent to your email. Check your spam folder";
+
+                } catch (Exception $e) {
+                    echo 'Mail has not been sent, an error happened ' . $e->getMessage() . "\n";
+                }
             }
+            else {
+                echo "No matching player for this email";
+            }
+            require('bottom.php');
+
         }
     } else {
     ?>
