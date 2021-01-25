@@ -54,8 +54,11 @@ if (isset($_POST['SendFeedback'])) {
         // To the the file extension of the file we use the handy pathinfo php function/array.
         $file_info = pathinfo($_FILES["uploadedfile"]["name"]);
         // Only save the file if it's right size and right extension and the replay upload feature is ENABLED:
-        if (($_FILES["uploadedfile"]["size"] <= MAX_REPLAYSIZE) && ($file_info['extension'] == $replayfileextension) && (ALLOW_REPLAY_UPLOAD == 1)) {
-            $filename = preg_replace("(\:|\s|\-)", "", $reported_on, -1) . ".gz";
+        if (
+                ($_FILES["uploadedfile"]["size"] <= MAX_REPLAYSIZE)
+                && in_array($file_info['extension'], ALLOWED_REPLAYS_EXTENSION)
+        ) {
+            $filename = preg_replace("(\:|\s|\-)", "", $reported_on, -1) . ".".$file_info['extension'];
             if (move_uploaded_file($_FILES['uploadedfile']['tmp_name'], $path_file_replay . $filename)) {
                 $query2 = "UPDATE $gamestable SET replay_filename = '" . $filename . "' WHERE reported_on = '" . $reported_on . "'";
                 $result2 = mysqli_query($db, $query2) or die("fail");
@@ -63,8 +66,8 @@ if (isset($_POST['SendFeedback'])) {
         } else {
             $failure = true;
             $maxfilesizekb = (MAX_REPLAYSIZE / 1000);
-            if ($file_info['extension'] != $replayfileextension) {
-                $error = "You attempted to upload a replay but failed. The file you uploaded wasn't of the correct type. Instead of a *." . $replayfileextension . " file you uploaded a " . $file_info['extension'] . "-file. Please only upload valid replays.<br /><br /><b>Notice:</b> The game has <i>not</i> been reported. Try again.";
+            if (in_array($file_info['extension'], ALLOWED_REPLAYS_EXTENSION)) {
+                $error = "You attempted to upload a replay but failed. The file you uploaded wasn't of the correct type. Instead of a " . implode(' or ', ALLOWED_REPLAYS_EXTENSION) . " file you uploaded a " . $file_info['extension'] . "-file. Please only upload valid replays.<br /><br /><b>Notice:</b> The game has <i>not</i> been reported. Try again.";
             }
             if ($_FILES["uploadedfile"]["size"] > MAX_REPLAYSIZE) {
                 $uploadefilesizekb = ($_FILES["uploadedfile"]["size"] / 1000);
@@ -237,7 +240,7 @@ if (isset($_SESSION['username'])
                 <input type="hidden" name="MAX_REPLAYSIZE" value="<?php echo(MAX_REPLAYSIZE * 10); ?>"/>
 
                 <tr>
-                    <td>.<?php echo $replayfileextension ?> replay to upload</td>
+                    <td>replay to upload (format <?php echo implode(' or ', ALLOWED_REPLAYS_EXTENSION); ?>)</td>
                     <td><input name="uploadedfile" type="file"/></td>
                 </tr>
 
