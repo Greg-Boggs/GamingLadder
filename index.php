@@ -50,14 +50,12 @@ if (isset($_POST['user']) AND isset($_POST['pass'])) {
     $passworddb = md5($passworddb);
     $passworddb = md5($passworddb);
 
-    print_r($passworddb);
-    print_r($row);
     //echo "<br>Form: $fname / $fpass";
     $sql = "SELECT * FROM $playerstable WHERE name='$fname' AND passworddb='$passworddb'";
     $result = mysqli_query($db, $sql);
     $bajs = mysqli_fetch_array($result);
     //echo "<br>Test 2";
-    if ("$bajs[player_id]" > 0) {
+    if (is_array($bajs) && $bajs['player_id'] > 0) {
 
         // Set cookies... 776000 sec = 3 months before they expire.
         setcookie("LadderofWesnoth1", $bajs['name'], $time + 7776000);
