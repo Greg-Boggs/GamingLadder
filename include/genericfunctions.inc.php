@@ -87,3 +87,25 @@ if (!function_exists('TimerOn')) {
         return htmlspecialchars($text, ENT_QUOTES, 'UTF-8');
     }
 }
+
+function send_mail($to, $body, $subject, $laddermailsender, $titlebar) {
+  $email = new \SendGrid\Mail\Mail();
+
+  $email->setFrom($laddermailsender, $titlebar);
+  $email->setSubject($subject);
+  $email->addTo($to);
+  $email->addContent("text/plain", strip_tags($body));
+  $sendgrid = new \SendGrid(SENDGRID_KEY);
+  try {
+    $response = $sendgrid->send($email);
+    if (isset($_GET['debug'])) {
+      print $response->statusCode() . "\n";
+      print_r($response->headers());
+      print $response->body() . "\n";
+    }
+    echo "A password reset link was sent to your email. Check your spam folder";
+
+  } catch (Exception $e) {
+    echo 'Mail has not been sent, an error happened ' . $e->getMessage() . "\n";
+  }
+}
