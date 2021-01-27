@@ -5,6 +5,8 @@ require('conf/variables.php');
 require('top.php');
 include 'include/avatars.inc.php';
 require 'vendor/autoload.php';
+include 'include/genericfunctions.inc.php';
+
 ?>
 
 <p class="header">Recover Password</p>
