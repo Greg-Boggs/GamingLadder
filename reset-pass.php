@@ -4,6 +4,7 @@ $page = "Reset password";
 require('conf/variables.php');
 require('top.php');
 include 'include/avatars.inc.php';
+include 'include/genericfunctions.inc.php';
 
 echo '<p class="header">Reset Password</p>';
 echo '<p class="text">';
