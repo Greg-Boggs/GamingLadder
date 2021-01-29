@@ -56,11 +56,11 @@ the official Wesnoth forum, it's moderators and/or<br/> the developers of Wesnot
     </li>
     <li>The name of the game <em>must start</em> with the prefix <em>(L)</em> or
         <em>(Ladder)</em>. It's recommended but not mandatory to let it be followed by
-        <em>http://wesnoth.gamingladder.info/</em> and don't forget your <em>ladder nick &
+        <em>http://wesnoth.gamingladder.info/</em>. Don't forget your <em>ladder nick &
             your Elo rating</em>. The ranking <em>may</em> be rounded to nearest hundredth
         (1545 becomes 1500). An example of a ladder game name according to the above
         would be: <em>(L) http://wesnoth.gamingladder.info/ (eyerouge 1600)</em> Another
-        example is: <em>(L) doodle 1545 vs Rick 1800</em></li>
+        example is: <em>(L) doodle 1545 vs Rick 1800</em></li>. When joining a game make sure your opponent is aware of your ELO.
     <li>Only the current stable and development versions of Battle for Wesnoth
         for your platform are legal for you. Always make sure both you and your
         opponent use the same version before the game begins to avoid all kinds of
