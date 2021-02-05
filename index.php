@@ -26,6 +26,13 @@ if (isset($_POST['user']) AND isset($_POST['pass'])) {
     $row = mysqli_fetch_array($result);
 
 
+    if (empty($row)) {
+        require('top.php');
+        echo "<b>The nickname you entered doesn't exist.</b><br><br>";
+        require('bottom.php');
+        exit;
+    }
+
     if ($row['Confirmation'] != "" AND $row['Confirmation'] == "Deleted") {
         require('top.php');
         echo "<b>You can't login because your account was deleted either on your request or by admin.</b><br><br>Feel free to contact us if you want to re-enable your account: All the data associated with it has been saved and can easily be restored by admin.";
