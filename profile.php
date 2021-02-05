@@ -78,10 +78,19 @@ date_default_timezone_set("$cfg_ladder_timezone");
 
 
 // Get profile info, like avatar, country etc... Don't mix up the different results that are dumped in $player, which is info from the playerstable, with $playercached, which is info from the cached table and only about results etc.
+$player='';
+if(isset($_GET['name'])){
+    $mysqlname = check_plain($_GET['name']);
+    $result = mysqli_query($db, "SELECT * FROM $playerstable WHERE name = '$mysqlname' LIMIT 1");
+    $player = mysqli_fetch_array($result);
+}
 
-$mysqlname = check_plain($_GET['name']);
-$result = mysqli_query($db, "SELECT * FROM $playerstable WHERE name = '$mysqlname' LIMIT 1");
-$player = mysqli_fetch_array($result);
+if (empty($player)) {
+    echo "<h1>Thou shall not name the wrong follower.....<br></h1>Translates into: You have tried to view the profile of a player that has never existed on the ladder. Please check the spelling in the url or enter the name of one that does.<br/><br/>";
+
+    require 'bottom.php';
+    exit;
+}
 
 
 // Get My Ladder Rank
@@ -151,7 +160,7 @@ $sql = mysqli_query($db, "SELECT count(*) FROM $gamestable WHERE  winner = '$_GE
 $number = mysqli_fetch_row($sql);
 $userhasrated = $userhasrated + $number[0];
 // Let's turn them into a percentage of the users total amount of played games:
-@$userhasrated = round((($userhasrated / $playercached[games]) * 100), 0) . "%";
+@$userhasrated = round((($userhasrated / $playercached['games']) * 100), 0) . "%";
 
 // Let's see how many times others have rated the user....
 $sql = mysqli_query($db, "SELECT count(*) FROM $gamestable WHERE  loser = '$_GET[name]' AND loser_stars > '0' AND contested_by_loser = '0' AND withdrawn = '0'");
@@ -162,7 +171,7 @@ $sql = mysqli_query($db, "SELECT count(*) FROM $gamestable WHERE  winner = '$_GE
 $number = mysqli_fetch_row($sql);
 $userwasrated = $userwasrated + $number[0];
 // Let's turn them into a percentage of the users total amount of played games:
-@$userwasrated = round((($userwasrated / $playercached[games]) * 100), 0) . "%";
+@$userwasrated = round((($userwasrated / $playercached['games']) * 100), 0) . "%";
 
 
 // Now let's see what the user has given other users as a sportsmanship rating, in average:
@@ -635,23 +644,23 @@ if ($player['MsgMe'] == "Yes") {
                         <td style="text-align: right; font-weight: bold"><?php echo $name ?></td>
 
                         <td><?php $pos1 = strpos("$player[CanPlay]", $abbrev . "M");
-                            if ($pos1 != FALSE) {
+                            if ($pos1 !== FALSE) {
                                 echo "<img border=\"0\" height='20px' src=\"images/streakplus.gif\" />";
                             } ?></td>
                         <td><?php $pos1 = strpos("$player[CanPlay]", $abbrev . "N");
-                            if ($pos1 != FALSE) {
+                            if ($pos1 !== FALSE) {
                                 echo "<img border=\"0\" height='20px' src=\"images/streakplus.gif\" />";
                             } ?></td>
                         <td><?php $pos1 = strpos("$player[CanPlay]", $abbrev . "A");
-                            if ($pos1 != FALSE) {
+                            if ($pos1 !== FALSE) {
                                 echo "<img border=\"0\" height='20px' src=\"images/streakplus.gif\" />";
                             } ?></td>
                         <td><?php $pos1 = strpos("$player[CanPlay]", $abbrev . "E");
-                            if ($pos1 != FALSE) {
+                            if ($pos1 !== FALSE) {
                                 echo "<img border=\"0\" height='20px' src=\"images/streakplus.gif\" />";
                             } ?></td>
                         <td><?php $pos1 = strpos("$player[CanPlay]", $abbrev . "G");
-                            if ($pos1 != FALSE) {
+                            if ($pos1 !== FALSE) {
                                 echo "<img border=\"0\" height='20px' src=\"images/streakplus.gif\" />";
                             } ?></td>
                     </tr>

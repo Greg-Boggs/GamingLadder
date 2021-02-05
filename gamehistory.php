@@ -5,22 +5,27 @@ require('conf/variables.php');
 require_once 'include/gametable.inc.php';
 
 // Handle all of the cookie management before we attempt to do anything else
-$searchArray = array_merge(
-    [
-        'reporteddirection' => '',
-        'reportdate' => '',
-        'winner' => '',
-        'loser' => '',
-        'loserratingdirection' => '',
-        'winnerratingdirection' => '',
-        'winnerrating' => '',
-        'loserrating' => '',
-        'replay' => '',
-        'playerand' => '',
-        'ratingand' => '',
-    ],
-    unserialize(base64_decode($_COOKIE['gamehistoryoptions']))
-);
+
+$searchArray = [
+    'reporteddirection' => '',
+    'reportdate' => '',
+    'winner' => '',
+    'loser' => '',
+    'loserratingdirection' => '',
+    'winnerratingdirection' => '',
+    'winnerrating' => '',
+    'loserrating' => '',
+    'replay' => '',
+    'playerand' => '',
+    'ratingand' => '',
+];
+if(isset($_COOKIE['gamehistoryoptions'])){
+    $cookieSearch = unserialize(base64_decode($_COOKIE['gamehistoryoptions']));
+    if(is_array($cookieSearch)){
+        $searchArray = array_merge($searchArray, $cookieSearch);
+    }
+}
+
 if (isset($_GET['reporteddirection'])) $searchArray['reporteddirection'] = $_GET['reporteddirection'];
 if (isset($_GET['reportdate'])) $searchArray['reportdate'] = $_GET['reportdate'];
 if (isset($_GET['reportdate'])) $searchArray['reportdate'] = $_GET['reportdate'];

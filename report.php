@@ -6,6 +6,32 @@ require('logincheck.inc.php'); //this file calls variable.conf.php
 include 'include/genericfunctions.inc.php';
 date_default_timezone_set("$cfg_ladder_timezone");
 
+
+function getUserIP()
+{
+    if (isset($_SERVER["HTTP_CF_CONNECTING_IP"]) && filter_var($_SERVER["HTTP_CF_CONNECTING_IP"], FILTER_VALIDATE_IP)) {
+        return $_SERVER["HTTP_CF_CONNECTING_IP"];
+    } elseif (isset($_SERVER["HTTP_X_FORWARDED_FOR"]) && filter_var($_SERVER["HTTP_X_FORWARDED_FOR"], FILTER_VALIDATE_IP)) {
+        return $_SERVER["HTTP_X_FORWARDED_FOR"];
+    }
+    return $_SERVER['REMOTE_ADDR'];
+}
+
+function logreport($player)
+{
+    file_put_contents(
+        __DIR__ . '/logs/reports.log',
+        sprintf(
+            "%s - %s - %s - %s - \"%s\"\n",
+            date('Y-m-d H:i:s'),
+            $player,
+            getUserIP(),
+            isset($_SERVER['HTTP_CF_IPCOUNTRY']) ? $_SERVER['HTTP_CF_IPCOUNTRY'] : '?',
+            $_SERVER['HTTP_USER_AGENT']
+        ),
+        FILE_APPEND
+    );
+}
 // We have ajax lower down on the page, we handle it here and then exit.
 // This keeps the ajax code with the page that is calling it.
 // Unfortunately we are stuck with 'q' as the query variable as it's hardcoded into the jquery autocomplete module.
@@ -127,6 +153,7 @@ if (isset($_POST['report'])) {
         exit;
     } else {
 
+        logreport($winner);
 
         // Save replay into system and name into db
         // We use the tmp_name to detect if somebody actually filled in a file for upload.

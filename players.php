@@ -215,35 +215,37 @@ require('top.php');
             $sql .= " ORDER BY name ASC LIMIT 250";
 
             $result = mysqli_query($db, $sql);
-            while ($row = mysqli_fetch_array($result)) {
-                if ($row["approved"] == "no") {
-                    $namepage = "<span style='color: #FF0000'>$row[name]</span>";
-                } else {
-                    $namepage = $row['name'];
+            if($result){
+                while ($row = mysqli_fetch_array($result)) {
+                    if ($row["approved"] == "no") {
+                        $namepage = "<span style='color: #FF0000'>$row[name]</span>";
+                    } else {
+                        $namepage = $row['name'];
+                    }
+
+                    $games = $row['games'] == "" ? 0 : $row['games'];
+                    $wins = $row['wins'] == "" ? 0 : $row['wins'];
+                    $losses = $row ['losses'] == "" ? 0 : $row['losses'];
+                    $rating = $row['rating'] == "" ? BASE_RATING : $row['rating'];
+                    $streak = $row['streak'] == "" ? 0 : $row['streak'];
+
+                    ?>
+                    <tr>
+                        <td align="right" class="avatar"><?php echo WlAvatar::image($row['Avatar']) ?></td>
+                        <td><?php echo "<a href='profile.php?name=$row[name]'>$namepage</a>" ?></td>
+                        <td><?php echo $games ?></td>
+                        <td><?php echo $wins ?></td>
+                        <td><?php echo $losses ?></td>
+                        <td><?php echo $rating ?></td>
+                        <td><?php $games > 0 ? printf("%.0f", $wins / $games * 100) : ''; ?></td>
+                        <td><?php echo $streak ?></td>
+                        <td><?php echo "<img src='graphics/flags/" .
+                                str_replace(' ', '_', $row['country']) .
+                                ".png' align='absmiddle' border='1'>" ?></td>
+                    </tr>
+                    <?php
                 }
-
-                $games = $row['games'] == "" ? 0 : $row['games'];
-                $wins = $row['wins'] == "" ? 0 : $row['wins'];
-                $losses = $row ['losses'] == "" ? 0 : $row['losses'];
-                $rating = $row['rating'] == "" ? BASE_RATING : $row['rating'];
-                $streak = $row['streak'] == "" ? 0 : $row['streak'];
-
-                ?>
-                <tr>
-                    <td align="right" class="avatar"><?php echo WlAvatar::image($row['Avatar']) ?></td>
-                    <td><?php echo "<a href='profile.php?name=$row[name]'>$namepage</a>" ?></td>
-                    <td><?php echo $games ?></td>
-                    <td><?php echo $wins ?></td>
-                    <td><?php echo $losses ?></td>
-                    <td><?php echo $rating ?></td>
-                    <td><?php $games > 0 ? printf("%.0f", $wins / $games * 100) : ''; ?></td>
-                    <td><?php echo $streak ?></td>
-                    <td><?php echo "<img src='graphics/flags/" .
-                            str_replace(' ', '_', $row['country']) .
-                            ".png' align='absmiddle' border='1'>" ?></td>
-                </tr>
-                <?php
-}
+            }
             ?>
             </tbody>
         </table>
