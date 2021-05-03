@@ -47,20 +47,17 @@ the official Wesnoth forum, it's moderators and/or<br/> the developers of Wesnot
         with whoever that is participating in the ladder and that wants to compete
         with you. To find an opponent for a ladder game you'd have to contact people
         in the ladder and/or create (ladder) games on the official server. You can
-        find players by using the ladder <a href="friends.php">in-game friends list</a>,
-        contacting them via some kind of <a href="http://www.pidgin.im">instant
-            messenger</a> and also email challenge them via their profile.
+        find players by using the ladder Discord https://discord.gg/Ud3sKzf and also email challenge them via their profile.
     </li>
     <li>Game must be played on one of the <em>Official Servers</em> using the
         original unmodified software.
     </li>
-    <li>The name of the game <em>must start</em> with the prefix <em>(L)</em> or
-        <em>(Ladder)</em>. It's recommended but not mandatory to let it be followed by
-        <em>http://wesnoth.gamingladder.info/</em>. Don't forget your <em>ladder nick &
-            your Elo rating</em>. The ranking <em>may</em> be rounded to nearest hundredth
-        (1545 becomes 1500). An example of a ladder game name according to the above
-        would be: <em>(L) http://wesnoth.gamingladder.info/ (eyerouge 1600)</em> Another
-        example is: <em>(L) doodle 1545 vs Rick 1800</em></li>. When joining a game make sure your opponent is aware of your ELO.
+    <li>The name of the game <em>must start</em> with <em>(Ladder)</em>. It should then be followed by your Elo score.
+        The ranking <em>may</em> be rounded to nearest hundredth (1545 becomes 1500).
+        It's recommended but not mandatory to add the ladder website as well <em>http://wesnoth.gamingladder.info/</em>. 
+        This is to encourage new players to find the Ladder website.
+         An example of a ladder game name according to the above would be: <em>Ladder http://wesnoth.gamingladder.info/ (eyerouge 1600)</em> Another
+         When joining a game make sure your opponent is aware of your ELO.
     <li>Only the current stable and development versions of Battle for Wesnoth
         for your platform are legal for you. Always make sure both you and your
         opponent use the same version before the game begins to avoid all kinds of
@@ -72,24 +69,12 @@ the official Wesnoth forum, it's moderators and/or<br/> the developers of Wesnot
     <li>The loading of Saved Games isn't allowed unless you both explicitly agree
         that it is or the rules suggest it.
     </li>
-    <li>Currently the only legit era is the <em>Default</em> one. No other eras are
-        accepted. Once a Ladder Era is created it will be used for Ladder games.
+    <li>Currently you may use either the Ladder Era or the default era. No other eras are
+        accepted. Once the Ladder Era is out of its tasting phase it will be the only era allowed.
     </li>
-    <li>a) In the case where the development version is used all official 2-
-        player maps associated with the specific game version and that come with the
-        game are allowed if they're made for a 1vs1 common game duel. This means that
-        survival maps are not allowed and neither are the following maps: Wesbowl.
-        b) If you however use the stable version of the game then you have to use
-        the update version of the official maps. You can do this very easily by just
-        visiting the add-on server from within the game. When doing so you'll see an
-        amazing list with extra content created by the great Wesnoth community. Among
-        this content you'll find and entry called Rushed By Yetis. That's the one
-        you'd want to install. Once done you're all set for new challenging ladder
-        games.
-    </li>
-    <li>Use map settings: On</li>
-    <li>Time limits <em>must be activated</em> and set according to the
-        following.
+    <li>Use map settings: On Shuffle Sides: On</li>
+    <li>Time limits are not required, but if you do please set according to the
+        following:
         <ul>
             <li>Reservoir: 300</li>
             <li>Init. Limit: 300</li>
