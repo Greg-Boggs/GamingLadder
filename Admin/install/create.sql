@@ -9,6 +9,8 @@ CREATE TABLE `webl_games` (
   `game_id` int(10) NOT NULL auto_increment,
   `winner` varchar(40) default NULL,
   `loser` varchar(40) default NULL,
+  `faction1` varchar(40) default NULL,
+  `faction2` varchar(40) default NULL,
   `date` varchar(40) default NULL,
   `elo_change` int(10),
   PRIMARY KEY  (`game_id`)

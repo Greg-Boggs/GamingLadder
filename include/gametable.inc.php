@@ -9,6 +9,7 @@ function gameTableTHead()
 <th>Reported</th>
 <th>Winner</th>
 <th>Loser</th>
+<th>Factions</th>
 <th  title=\"W. Elo rating after game (points earned due to the game)\">W Rating</th>
 <th title=\"L. Elo rating after game (points lost due to the game)\">L Rating</th>
 <th title=\"W. Rank when & before game was played\">W Rank</th>
@@ -68,6 +69,7 @@ function gameTableTBody($result, $playerName = null)
             $text .= $sdel . "<a href=\"profile.php?name=$row[loser]\">$row[loser]</a>" . $loserContested . $edel;
         }
         $text .= "</td>";
+        $text .= "<td>" . $row['faction1'] . "<br>" . $row['faction2'] . "</td>";
         $text .= "<td>" . $sdel . $row['winner_elo'] . $winnerProvisional . " (" . $row['winner_points'] . ")" . $edel . "</td>";
         $text .= "<td>" . $sdel . $row['loser_elo'] . $loserProvisional . " (" . $row['loser_points'] . ")" . $edel . "</td>";
         $text .= "<td>" . $sdel . (isset($row['w_rank']) ? $row['w_rank'] : '') . $edel . "</td>";
