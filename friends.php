@@ -43,7 +43,7 @@ require('top.php');
 <h2>Linux Automated Friends Update</h2>
 <i>by mr-russ</i>
 <p><img src="graphics/penguin.png" class="alignright">If you want to get the latest friendslist easier and automagically
-    you can download it in text form by requesting <?php echo $directory ?>/friends.php?download. This will return a
+    you can download it in text form by requesting <code><?php echo $directory ?>/friends.php?download</code>. This will return a
     text string with the <i>ladder</i> friends in it.</p>
 <p>WARNING: The following comes without warranty and my delete your preferences file, but some have had success with the
     following shell script on linux. The script below will update your friends list with all of the ladder players. It
