@@ -341,7 +341,7 @@ if (isset($_POST['report'])) {
                         <select size="1" name="faction1">
                             <option selected="selected" value="">-- please select winners faction --</option>
                             <?php
-                                foreach ($Factions as $f) {
+                                foreach ($factions as $f) {
                                     echo "<option>$f</option>";
                                 }
                             ?>
@@ -349,7 +349,7 @@ if (isset($_POST['report'])) {
                         <select size="1" name="faction2">
                             <option selected="selected" value="">-- please select loosers faction --</option>
                             <?php
-                                foreach ($Factions as $f) {
+                                foreach ($factions as $f) {
                                     echo "<option>$f</option>";
                                 }
                             ?>

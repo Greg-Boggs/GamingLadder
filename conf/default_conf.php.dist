@@ -123,7 +123,7 @@ define("XP_SYS_TITLE_RANGE_MULTIPLIER", 1.025); // This is the multiplier for ho
 
 $XpTitle = array(1 => "Peasant", 2 => "Recruit", 3 => "Soldier", 4 => "Veteran", 5 => "Captain", 6 => "General", 7 => "Hero", 8 => "Legend", 9 => "Titan", 10 => "Third Angel", 11 => "Second Angel", 12 => "First Angel", 13 => "Demi God", 14 => "Minor God", 15 => "God"); // These are the 15 titles that a player can acquire and that are a summary of his lvl / xp. Only edit the text that's within the " "-signs! If you copy the syntax it's easy to add a 16:th title and so on, but it's not recomended that you do since they'll lose their function in the end.
 
-$Factions = array_merge("Drakes", "Knalgan Alliance", "Loyalists", "Northerners", "Rebels", "Undead");
+$factions = array("Drakes", "Knalgan Alliance", "Loyalists", "Northerners", "Rebels", "Undead");
 
 //config etc ------------------------------------------------------
 

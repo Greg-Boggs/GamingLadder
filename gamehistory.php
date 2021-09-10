@@ -111,7 +111,7 @@ if (isset($_REQUEST['selectname'])) {
             <td>
                 <select size="1" name="faction">
                     <?php
-                        foreach (array_merge('', $Factions) as $f) {
+                        foreach (array_merge('', $factions) as $f) {
                             $sel = $searchArray['faction'] == $f? 'selected="selected"' : "";
                             echo "<option $sel>$f</option>";
                         }
