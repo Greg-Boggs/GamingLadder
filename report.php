@@ -132,6 +132,10 @@ if (isset($_POST['report'])) {
         exit;
     }
 
+    // Todo: it would be cool if those could be parsed from the replay file some day. It's in there!
+    $faction1 = preg_replace('/[^a-z\s]/i', '', trim($_POST['faction1']));
+    $faction2 = preg_replace('/[^a-z\s]/i', '', trim($_POST['faction2']));
+
     $draw = false;
     $failure = false;
     $error = "";
@@ -140,7 +144,7 @@ if (isset($_POST['report'])) {
         require_once 'include/elo.class.php';
 
         $elo = new Elo($db);
-        $result = $elo->ReportNewGame($winner, $loser, $draw);
+        $result = $elo->ReportNewGame($winner, $loser, $draw, NULL, $faction1, $faction2);
         $cloneresult = $result;
         if ($result === false) {
             $failure = true;
@@ -327,6 +331,30 @@ if (isset($_POST['report'])) {
                     <td><?php echo $_SESSION['username']; ?> won over</td>
 
                     <td><input type="text" name="losername" id="CityAjax" value="" style="width: 200px;"/></td>
+                    <br/>
+                </tr>
+
+                <tr>
+                    <td>Factions:</td>
+
+                    <td>
+                        <select size="1" name="faction1">
+                            <option selected="selected" value="">-- please select winners faction --</option>
+                            <?php
+                                foreach ($factions as $f) {
+                                    echo "<option>$f</option>";
+                                }
+                            ?>
+                        </select>
+                        <select size="1" name="faction2">
+                            <option selected="selected" value="">-- please select loosers faction --</option>
+                            <?php
+                                foreach ($factions as $f) {
+                                    echo "<option>$f</option>";
+                                }
+                            ?>
+                        </select>
+                    </td>
                     <br/>
                 </tr>
 

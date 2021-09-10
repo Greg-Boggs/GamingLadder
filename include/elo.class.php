@@ -47,7 +47,7 @@ class Elo
         return $row;
     }
 
-    function ReportNewGame($winner, $loser, $draw = false)
+    function ReportNewGame($winner, $loser, $draw = false, $replay = NULL, $faction1, $faction2)
     {
         global $gamestable;
 
@@ -59,8 +59,8 @@ class Elo
             $insertDraw = 'false';
         }
 
-        $sql = "INSERT INTO $gamestable (winner, loser, reported_on, contested_by_loser, draw, withdrawn)
-                VALUES ('$winner', '$loser', '$reportTime', 0, " . $insertDraw . ", 0)";
+        $sql = "INSERT INTO $gamestable (winner, loser, faction1, faction2, reported_on, contested_by_loser, draw, withdrawn)
+                VALUES ('$winner', '$loser', '$faction1', '$faction2', '$reportTime', 0, " . $insertDraw . ", 0)";
 
         $result = mysqli_query($this->dbConn, $sql);
 

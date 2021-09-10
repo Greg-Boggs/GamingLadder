@@ -16,7 +16,7 @@ $sql = "ALTER TABLE $playerstable ADD UNIQUE(name) ";
 mysqli_query($db, $sql);
 echo"Players table<br>";
 
-$sql = "CREATE TABLE $gamestable (game_id int(10) NOT NULL auto_increment, winner varchar(40), loser varchar(40), date varchar(40), recorded varchar(10), PRIMARY KEY (game_id))";
+$sql = "CREATE TABLE $gamestable (game_id int(10) NOT NULL auto_increment, winner varchar(40), loser varchar(40), faction1 varchar(40), faction2 varchar(40), date varchar(40), recorded varchar(10), PRIMARY KEY (game_id))";
 mysqli_query($db, $sql);
 echo"Games table<br>";
 
