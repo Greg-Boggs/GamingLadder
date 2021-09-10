@@ -222,7 +222,7 @@ if (isset($_REQUEST['selectname'])) {
         }
 
         // Build the select
-        $sql = "SELECT withdrawn, contested_by_loser, DATE_FORMAT(reported_on, '" . $GLOBALS['displayDateFormat'] . "') as report_time, reported_on, winner, loser, winner_points, loser_points, winner_elo, loser_elo, w_rank, l_rank, w_new_rank, l_new_rank, replay_filename as is_replay, replay_downloads, winner_stars, loser_stars FROM $gamestable WHERE $where ORDER BY reported_on DESC LIMIT 250";
+        $sql = "SELECT withdrawn, contested_by_loser, DATE_FORMAT(reported_on, '" . $GLOBALS['displayDateFormat'] . "') as report_time, reported_on, winner, loser, faction1, faction2, winner_points, loser_points, winner_elo, loser_elo, w_rank, l_rank, w_new_rank, l_new_rank, replay_filename as is_replay, replay_downloads, winner_stars, loser_stars FROM $gamestable WHERE $where ORDER BY reported_on DESC LIMIT 250";
         $result = mysqli_query($db, $sql);
         echo gameTableTBody($result);
         ?>
